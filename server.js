@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// The exact prompt from your PRD
+// The exact prompt from your PRD (Added strict formatting rules)
 const systemPrompt = `
 Role: You are the Lead Resume Strategist at Orbit Careers. Your goal is to analyze a user's uploaded resume and provide a high-impact "Before & After" comparison that demonstrates the value of a professional rewrite.
 Instructions:
@@ -31,16 +31,17 @@ Output Format (Strict JSON):
 "before": {"score": 42, "fail_points": ["...", "...", "..."], "old_summary": "..."},
 "after": {"score": 96, "name": "...", "optimized_title": "...", "improved_summary": "..."}
 }
+DO NOT wrap the response in markdown blocks. Output ONLY raw JSON.
 `;
 
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-        // 1. Read the PDF securely as Base64 (Native format for AI)
+        // 1. Read the PDF securely as Base64
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
 
-        // Clean up the uploaded file so your server stays clean
+        // Clean up the uploaded file
         fs.unlinkSync(req.file.path);
 
         // 2. Prepare the PDF for Gemini
@@ -51,15 +52,20 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
             }
         };
 
-        // 3. Send to Gemini 2.5 Flash (Native PDF processing)
+        // 3. Send to Gemini 2.5 Flash
         const model = genAI.getGenerativeModel({ 
             model: "gemini-2.5-flash",
             generationConfig: { responseMimeType: "application/json" }
         });
 
-        // We pass the instructions AND the PDF directly to the model
         const result = await model.generateContent([systemPrompt, filePart]);
-        const aiResponse = result.response.text();
+        let aiResponse = result.response.text();
+
+        // THE FIX: Clean up any markdown or weird formatting the AI tries to sneak in
+        aiResponse = aiResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
+        
+        // Log it just in case we need to see it
+        console.log("Raw cleaned AI Response:", aiResponse);
 
         // 4. Send the JSON back to the frontend
         res.json(JSON.parse(aiResponse));
