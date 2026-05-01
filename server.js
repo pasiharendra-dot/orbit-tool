@@ -11,24 +11,26 @@ const port = 3000;
 // Setup file uploads
 const upload = multer({ dest: 'uploads/' });
 
-// Serve your HTML file
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// The exact prompt from your PRD (Added strict formatting rules)
+// THE NEW AI BRAIN: Strictly focused on JD matching
 const systemPrompt = `
-Role: You are the Lead Resume Strategist at Orbit Careers. Your goal is to analyze a user's uploaded resume and provide a high-impact "Before & After" comparison that demonstrates the value of a professional rewrite.
+Role: You are an Enterprise ATS (Applicant Tracking System) AI used by Fortune 500 companies (like Taleo or Workday), and the Lead Strategist at Orbit Careers. 
+Your goal is to cross-reference the user's uploaded resume against the provided Job Description (JD) and provide a harsh but fair "Before & After" comparison.
+
 Instructions:
-Parse: Extract the user's name, current job title, and existing professional summary.
-Score (Before): Assign an ATS score between 35-55. Identify 3 critical "fail points" (e.g., "Lack of quantifiable metrics", "Passive language", "Poor keyword density").
-Rewrite (After):
-Generate a Modern Header (Name, LinkedIn Placeholder, Optimized Title).
-Create a 90+ Score Summary: Use the "Action-Result" framework. Max 4 lines. Ensure it sounds human but is packed with high-value keywords for their specific industry.
+1. Parse: Extract the user's name, current job title, and existing professional summary.
+2. Score (Before): Calculate a strict ATS Match Score (0-100) based strictly on how well the original resume matches the target JD. Identify 3 critical "fail points" specifically related to missing keywords from the JD, poor formatting, or lack of quantifiable metrics.
+3. Rewrite (After): 
+   - Generate a Modern Header.
+   - Create a 90+ Score Summary optimized EXACTLY for the provided JD. Embed the most critical keywords from the JD naturally using the "Action-Result" framework. Max 4 lines.
+
 Output Format (Strict JSON):
 {
-"before": {"score": 42, "fail_points": ["...", "...", "..."], "old_summary": "..."},
+"before": {"score": 42, "fail_points": ["Missing JD keyword: 'Cross-functional leadership'", "Passive language", "Poor keyword density"], "old_summary": "..."},
 "after": {"score": 96, "name": "...", "optimized_title": "...", "improved_summary": "..."}
 }
 DO NOT wrap the response in markdown blocks. Output ONLY raw JSON.
@@ -37,37 +39,28 @@ DO NOT wrap the response in markdown blocks. Output ONLY raw JSON.
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+        
+        // Grab the JD from the frontend
+        const jobDescription = req.body.jobDescription;
+        if (!jobDescription) return res.status(400).json({ error: 'Job description is required' });
 
-        // 1. Read the PDF securely as Base64
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
-
-        // Clean up the uploaded file
         fs.unlinkSync(req.file.path);
 
-        // 2. Prepare the PDF for Gemini
-        const filePart = {
-            inlineData: {
-                data: pdfBase64,
-                mimeType: "application/pdf"
-            }
-        };
+        const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
 
-        // 3. Send to Gemini 2.5 Flash
         const model = genAI.getGenerativeModel({ 
             model: "gemini-2.5-flash",
             generationConfig: { responseMimeType: "application/json" }
         });
 
-        const result = await model.generateContent([systemPrompt, filePart]);
+        // Feed the JD and the PDF to the AI
+        const promptWithJD = `Here is the target Job Description:\n${jobDescription}\n\nAnalyze the attached resume against this JD.`;
+        
+        const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
         let aiResponse = result.response.text();
 
-        // THE FIX: Clean up any markdown or weird formatting the AI tries to sneak in
         aiResponse = aiResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
-        
-        // Log it just in case we need to see it
-        console.log("Raw cleaned AI Response:", aiResponse);
-
-        // 4. Send the JSON back to the frontend
         res.json(JSON.parse(aiResponse));
 
     } catch (error) {
