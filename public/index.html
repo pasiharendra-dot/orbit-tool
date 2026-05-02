@@ -11,87 +11,55 @@
         tailwind.config = { theme: { extend: { colors: { orbitBlue: '#007BFF', orbitBg: '#F8FAFC' } } } }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .fade-in { animation: fadeIn 0.8s ease-in-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
 </head>
 <body class="bg-orbitBg min-h-screen flex flex-col">
 
     <nav class="bg-white border-b border-gray-200 py-4 px-8 shadow-sm">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-orbitBlue tracking-tight">Orbit Careers</h1>
-            <span class="text-sm text-gray-500 font-medium">ATS Matcher Tool</span>
+            <h1 class="text-2xl font-bold text-orbitBlue">Orbit Careers</h1>
         </div>
     </nav>
 
     <main class="flex-grow flex flex-col items-center py-12 px-4">
-        
-        <div id="upload-section" class="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-10 text-center transition-all duration-300">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">Beat the ATS Algorithm</h2>
-            <p class="text-gray-600 mb-8 font-medium">Over 75% of resumes are rejected by bots. Let Orbit Careers optimize yours.</p>
+        <div id="upload-section" class="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-10 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2 text-center">Beat the ATS Algorithm</h2>
+            <p class="text-gray-600 mb-8">Professional Resume Optimization Engine</p>
             
             <div class="mb-6 text-left">
-                <label class="block text-gray-800 text-sm font-bold mb-2">1. Paste Your Target Job Description <span class="text-gray-400 font-normal">(Optional)</span></label>
-                <textarea id="job-description-input" rows="4" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orbitBlue focus:border-transparent transition resize-none text-sm" placeholder="Paste JD here, or leave blank for a general industry optimization..."></textarea>
+                <label class="block text-gray-800 text-sm font-bold mb-2">1. Job Description (Optional)</label>
+                <textarea id="job-description-input" rows="4" class="w-full p-4 border rounded-xl text-sm" placeholder="Paste JD here..."></textarea>
             </div>
 
             <div class="text-left mb-2">
-                <label class="block text-gray-800 text-sm font-bold">2. Upload Your Current Resume</label>
+                <label class="block text-gray-800 text-sm font-bold">2. Upload Resume (PDF)</label>
             </div>
 
             <input type="file" id="fileInput" class="hidden" accept=".pdf" onchange="handleFileUpload(event)">
-            
-            <div class="border-2 border-dashed border-orbitBlue bg-blue-50 rounded-xl p-8 cursor-pointer hover:bg-blue-100 transition" onclick="document.getElementById('fileInput').click()">
-                <svg class="mx-auto h-10 w-10 text-orbitBlue mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                <p class="text-lg font-semibold text-orbitBlue">Click to select PDF</p>
+            <div class="border-2 border-dashed border-orbitBlue bg-blue-50 rounded-xl p-8 cursor-pointer" onclick="document.getElementById('fileInput').click()">
+                <p class="text-lg font-semibold text-orbitBlue">Click to upload PDF</p>
             </div>
         </div>
 
         <div id="loading-section" class="hidden flex flex-col items-center mt-20">
             <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-orbitBlue mb-4"></div>
-            <p class="text-lg text-gray-600 font-medium">Orbit AI is writing your native Word Document...</p>
+            <p class="text-lg text-gray-600">Orbit AI is strictly optimizing your resume...</p>
         </div>
 
-        <div id="results-section" class="hidden max-w-[1300px] w-full mt-8 fade-in">
-            <h3 class="text-2xl font-bold text-center text-gray-800 mb-8">Your ATS Makeover Preview</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div id="results-section" class="hidden max-w-[1300px] w-full mt-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white rounded-2xl shadow-lg border-t-4 border-red-500 p-8 sticky top-8">
-                    <div class="flex justify-between items-center mb-4 border-b pb-4">
-                        <h4 class="text-xl font-bold text-gray-800">Original Match</h4>
-                        <span id="before-score" class="bg-red-100 text-red-700 px-3 py-1 rounded-full font-bold text-sm">Score: --/100</span>
-                    </div>
-                    <div class="mb-6">
-                        <p class="text-sm font-semibold text-red-600 mb-2">Critical Fail Points Identified:</p>
-                        <ul id="fail-points" class="list-disc list-inside text-sm text-gray-600 space-y-2"></ul>
-                    </div>
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">ATS Audit</h4>
+                    <span id="before-score" class="bg-red-100 text-red-700 px-3 py-1 rounded-full font-bold text-sm">Score: --/100</span>
+                    <ul id="fail-points" class="list-disc list-inside text-sm text-gray-600 space-y-2 mt-4"></ul>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden relative h-[500px]">
-                    <div class="flex justify-between items-center bg-gray-50 px-6 py-4 border-b border-gray-200">
-                        <h4 class="text-xl font-bold text-gray-800">Orbit Enhanced Preview</h4>
-                        <span id="after-score" class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold text-sm">Score: --/100</span>
-                    </div>
-                    
-                    <div class="p-6 pb-24"> 
-                        <div class="text-center mb-6">
-                            <h1 id="preview-name" class="text-2xl font-bold uppercase tracking-wider text-gray-950 mb-1">[Name]</h1>
-                            <div class="w-full border-t-2 border-orbitBlue my-2"></div>
-                            <p id="preview-title" class="text-sm font-bold uppercase text-gray-900">[Optimized Title]</p>
-                            <div class="w-full border-t-2 border-orbitBlue my-2"></div>
-                        </div>
-                        <p id="preview-summary" class="text-xs text-gray-800 leading-relaxed mb-6">Summary updated and formatted for Word Doc delivery.</p>
-                        <div class="blur-sm select-none"><p class="text-xs">Confidential work history and optimized bullet points hidden in preview mode...</p></div>
-                    </div>
-
-                    <div class="absolute bottom-0 left-0 right-0 bg-white p-6 border-t shadow-[0_-10px_20px_rgba(0,0,0,0.05)] text-center">
-                        <button onclick="downloadWord()" class="bg-orbitBlue hover:bg-blue-700 text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg w-full flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Download Editable Resume (.docx)
-                        </button>
-                    </div>
+                <div class="bg-white rounded-2xl shadow-2xl border p-8 text-center">
+                    <h4 class="text-xl font-bold mb-4">Optimization Preview</h4>
+                    <span id="after-score" class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold text-sm">Score: --/100</span>
+                    <p class="text-xs text-gray-500 mt-8 mb-8">Experience context preserved. Formatting strictly optimized for ATS readability.</p>
+                    <button onclick="downloadWord()" class="bg-orbitBlue text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg w-full">
+                        Download Editable (.docx)
+                    </button>
                 </div>
             </div>
         </div>
@@ -114,81 +82,42 @@
 
             try {
                 const response = await fetch('/api/analyze', { method: 'POST', body: formData });
-                if (!response.ok) throw new Error("Server error");
                 const data = await response.json();
-
                 window.resumeData = data.after;
-                // UI now pulls dynamic scores
                 document.getElementById('before-score').innerText = `Score: ${data.before.score}/100`;
-                
                 const failPointsList = document.getElementById('fail-points');
                 failPointsList.innerHTML = '';
-                data.before.fail_points.forEach(point => {
-                    failPointsList.innerHTML += `<li><span class="text-red-500 font-bold mr-1">✗</span> ${point}</li>`;
-                });
-
+                data.before.fail_points.forEach(point => { failPointsList.innerHTML += `<li>✗ ${point}</li>`; });
                 document.getElementById('after-score').innerText = `Score: ${data.after.score}/100`;
-                document.getElementById('preview-name').innerText = data.after.name;
-                document.getElementById('preview-title').innerText = data.after.optimized_title;
-
                 document.getElementById('loading-section').style.display = 'none';
                 document.getElementById('results-section').style.display = 'block';
             } catch (error) {
-                alert("Something went wrong! Please try again.");
+                alert("Error analyzing. Try again.");
                 document.getElementById('loading-section').style.display = 'none';
                 document.getElementById('upload-section').style.display = 'block';
             }
         }
 
-        // ==========================================
-        // DOCX GENERATOR
-        // ==========================================
         function downloadWord() {
-            if (!window.resumeData) return alert("No resume data found.");
-
+            if (!window.resumeData) return;
             const data = window.resumeData;
             const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType } = docx;
 
-            const FONT_BODY = "Calibri";
-            const SIZE_BODY = 19;     // 9.5 pt
-            const SIZE_HEADING = 22;  // 11 pt
-            const SIZE_TITLE = 24;    // 12 pt
-            const SIZE_NAME = 40;     // 20 pt
+            const FONT = "Calibri";
+            const SIZE_BODY = 19;
+            const COLOR_GREY = "D3D3D3"; // Light Grey
 
-            // FIX 1: Only a bottom border for headers (a single line divider)
+            // FIX: Line ABOVE the header
             function createHeader(title) {
                 return new Paragraph({
                     spacing: { before: 200, after: 100 },
                     border: {
-                        bottom: { color: "000000", space: 1, style: "single", size: 6 } // Removed top border
+                        top: { color: COLOR_GREY, space: 1, style: "single", size: 6 } 
                     },
-                    children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: SIZE_HEADING, font: FONT_BODY }) ]
+                    children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: 22, font: FONT }) ]
                 });
             }
 
-            // Skills Grid Logic
-            const skillsTableRows = [];
-            if (data.core_skills && data.core_skills.length > 0) {
-                for (let i = 0; i < data.core_skills.length; i += 4) {
-                    const chunk = data.core_skills.slice(i, i + 4);
-                    while (chunk.length < 4) chunk.push(""); 
-                    
-                    skillsTableRows.push(new TableRow({
-                        children: chunk.map(skill => new TableCell({
-                            width: { size: 25, type: WidthType.PERCENTAGE },
-                            borders: { top: { style: "none" }, bottom: { style: "none" }, left: { style: "none" }, right: { style: "none" } },
-                            children: [
-                                new Paragraph({
-                                    spacing: { before: 20, after: 20 },
-                                    children: [ new TextRun({ text: skill, size: SIZE_BODY, font: FONT_BODY, color: "444444" }) ]
-                                })
-                            ]
-                        }))
-                    }));
-                }
-            }
-
-            // FIX 2: Split contact details dynamically
             const contactLine1 = [data.phone, data.email].filter(Boolean).join("  |  ");
             const contactLine2 = [data.location, data.linkedin].filter(Boolean).join("  |  ");
 
@@ -196,127 +125,75 @@
                 sections: [{
                     properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } },
                     children: [
-                        // HEADER
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: SIZE_NAME, font: FONT_BODY }) ]
+                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 40, font: FONT }) ]
                         }),
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             spacing: { before: 50, after: 50 },
-                            children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: SIZE_TITLE, font: FONT_BODY, color: "444444" }) ]
+                            children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 24, font: FONT, color: "444444" }) ]
                         }),
                         
-                        // Contact Info Split Lines
-                        ...(contactLine1 ? [new Paragraph({
+                        // CONTACT BOX: Line above and below
+                        new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            spacing: { after: 20 },
-                            children: [ new TextRun({ text: contactLine1, size: SIZE_BODY, font: FONT_BODY, color: "444444" }) ]
-                        })] : []),
-                        ...(contactLine2 ? [new Paragraph({
+                            border: { top: { color: COLOR_GREY, style: "single", size: 6 } },
+                            spacing: { before: 100 },
+                            children: [ new TextRun({ text: contactLine1, size: SIZE_BODY, font: FONT, color: "444444" }) ]
+                        }),
+                        new Paragraph({
                             alignment: AlignmentType.CENTER,
+                            border: { bottom: { color: COLOR_GREY, style: "single", size: 6 } },
                             spacing: { after: 200 },
-                            children: [ new TextRun({ text: contactLine2, size: SIZE_BODY, font: FONT_BODY, color: "444444" }) ]
-                        })] : []),
+                            children: [ new TextRun({ text: contactLine2, size: SIZE_BODY, font: FONT, color: "444444" }) ]
+                        }),
 
-                        // SUMMARY
-                        createHeader("Professional Summary"),
-                        ...(data.improved_summary || []).map(paragraphText => new Paragraph({
+                        createHeader("Professional Overview"),
+                        ...(data.improved_summary || []).map(p => new Paragraph({
                             alignment: AlignmentType.JUSTIFIED,
                             spacing: { before: 40, after: 80, line: 240 },
-                            children: [ new TextRun({ text: paragraphText, size: SIZE_BODY, font: FONT_BODY }) ]
+                            children: [ new TextRun({ text: p, size: SIZE_BODY, font: FONT }) ]
                         })),
 
-                        // KEY ACHIEVEMENTS
-                        ...(data.key_achievements && data.key_achievements.length > 0 ? [
-                            createHeader("Key Achievements"),
-                            ...data.key_achievements.map(achievement => new Paragraph({
-                                alignment: AlignmentType.JUSTIFIED,
-                                bullet: { level: 0 },
-                                spacing: { before: 40, after: 40, line: 240 },
-                                children: [ new TextRun({ text: achievement, size: SIZE_BODY, font: FONT_BODY }) ]
-                            }))
-                        ] : []),
+                        createHeader("Key Achievements"),
+                        ...(data.key_achievements || []).map(a => new Paragraph({
+                            bullet: { level: 0 },
+                            spacing: { before: 40, after: 40 },
+                            children: [ new TextRun({ text: a, size: SIZE_BODY, font: FONT }) ]
+                        })),
 
-                        // CORE SKILLS (4-COLUMN GRID)
-                        ...(data.core_skills && data.core_skills.length > 0 ? [
-                            createHeader("Professional Skills"),
-                            new Table({
-                                width: { size: 100, type: WidthType.PERCENTAGE },
-                                borders: { insideVertical: { style: "none" }, insideHorizontal: { style: "none" }, top: { style: "none" }, bottom: { style: "none" }, left: { style: "none" }, right: { style: "none" } },
-                                rows: skillsTableRows
-                            })
-                        ] : []),
+                        createHeader("Professional Skills"),
+                        new Paragraph({
+                            spacing: { before: 100, after: 100 },
+                            children: [ new TextRun({ text: (data.core_skills || []).join("  |  "), size: SIZE_BODY, font: FONT }) ]
+                        }),
 
-                        // WORK EXPERIENCE
                         createHeader("Work Experience"),
                         ...(data.experience || []).flatMap(job => [
                             new Paragraph({
                                 spacing: { before: 150, after: 50 },
                                 children: [
-                                    new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, font: FONT_BODY }),
-                                    new TextRun({ text: ` | ${job.location}`, size: SIZE_BODY, font: FONT_BODY }),
-                                    new TextRun({ text: ` — ${job.title}`, italics: true, size: SIZE_BODY, font: FONT_BODY }),
-                                    new TextRun({ text: `  (${job.dates})`, size: SIZE_BODY, font: FONT_BODY, bold: true, color: "444444" })
+                                    new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, font: FONT }),
+                                    new TextRun({ text: ` — ${job.title} (${job.dates})`, size: SIZE_BODY, font: FONT })
                                 ]
                             }),
-                            ...job.bullets.map(bullet => {
-                                let prefix = "";
-                                let restOfText = bullet;
-                                
-                                if (bullet.includes(" – ")) {
-                                    const parts = bullet.split(" – ");
-                                    prefix = parts[0] + " – ";
-                                    restOfText = parts.slice(1).join(" – ");
-                                } else if (bullet.includes(" - ")) {
-                                    const parts = bullet.split(" - ");
-                                    prefix = parts[0] + " - ";
-                                    restOfText = parts.slice(1).join(" - ");
-                                }
-
-                                return new Paragraph({
-                                    alignment: AlignmentType.JUSTIFIED,
-                                    bullet: { level: 0 },
-                                    spacing: { before: 40, after: 40, line: 240 },
-                                    children: [
-                                        ...(prefix ? [new TextRun({ text: prefix, bold: true, size: SIZE_BODY, font: FONT_BODY })] : []),
-                                        new TextRun({ text: restOfText, size: SIZE_BODY, font: FONT_BODY })
-                                    ]
-                                });
-                            })
+                            ...job.bullets.map(b => new Paragraph({
+                                bullet: { level: 0 },
+                                alignment: AlignmentType.JUSTIFIED,
+                                children: [ new TextRun({ text: b, size: SIZE_BODY, font: FONT }) ]
+                            }))
                         ]),
 
-                        // EDUCATION
                         createHeader("Education"),
                         ...(data.education || []).map(edu => new Paragraph({
-                            spacing: { before: 100, after: 50 },
-                            children: [
-                                new TextRun({ text: `${edu.institution}`, bold: true, size: SIZE_BODY, font: FONT_BODY }),
-                                new TextRun({ text: ` | ${edu.degree}`, italics: true, size: SIZE_BODY, font: FONT_BODY }),
-                                new TextRun({ text: `  (${edu.date})`, size: SIZE_BODY, font: FONT_BODY, color: "444444" })
-                            ]
-                        })),
-
-                        // CERTIFICATIONS
-                        ...(data.certifications && data.certifications.length > 0 ? [
-                            createHeader("Certifications & Personal Details"),
-                            ...data.certifications.map(cert => new Paragraph({
-                                bullet: { level: 0 },
-                                spacing: { before: 40, after: 40 },
-                                children: [ new TextRun({ text: cert, size: SIZE_BODY, font: FONT_BODY }) ]
-                            })),
-                            ...(data.personal_details ? [
-                                new Paragraph({
-                                    spacing: { before: 80, after: 40 },
-                                    children: [ new TextRun({ text: `Additional Details: ${data.personal_details}`, size: SIZE_BODY, font: FONT_BODY, italics: true }) ]
-                                })
-                            ] : [])
-                        ] : [])
+                            children: [ new TextRun({ text: `${edu.institution} | ${edu.degree} (${edu.date})`, size: SIZE_BODY, font: FONT }) ]
+                        }))
                     ]
                 }]
             });
 
-            Packer.toBlob(doc).then(blob => { saveAs(blob, "Orbit_ATS_Optimized_Resume.docx"); });
+            Packer.toBlob(doc).then(blob => { saveAs(blob, "Orbit_Optimized_Resume.docx"); });
         }
     </script>
 </body>
