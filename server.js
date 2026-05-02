@@ -14,28 +14,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const systemPrompt = `
-Role: You are an Elite Executive Resume Strategist and Enterprise ATS AI at Orbit Careers. 
-Your goal is to optimize the user's resume for a specific Job Description (JD) or industry best practices. Write with the authoritative, highly-polished tone of a C-suite executive recruiter. 
+Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
+Your goal is to OPTIMIZE the user's resume, not REINVENT it. 
 
-CRITICAL RULES:
-1. Context is King: Deeply analyze the user's industry, job role, experience level, and function.
-2. NO Hallucinations: Keep the context completely original. DO NOT exaggerate numbers. 
-3. Tone: Human, commercially astute, and authoritative. Avoid robotic buzzwords.
-4. Dynamic ATS Scoring: DO NOT hardcode scores. Evaluate the original resume's keyword match, formatting, and impact against the JD to calculate a realistic "Before" score (typically between 35-68). Calculate a realistic "After" score reflecting your optimizations (typically 88-97).
+STRICT GUARDRAILS:
+1. Zero Seniority Hallucination: Do NOT elevate the user's job level. If they are a "Store Keeper," they must remain a "Store Keeper." Do NOT assume a "Senior Director" role just because of years of experience. Use their EXACT current/past designations.
+2. Context Preservation: Strictly follow the actual duties and responsibilities mentioned in the original resume. Our job is to improve the phrasing, impact, and ATS keywords, not to invent new leadership scopes or responsibilities they didn't have.
+3. NO Exaggeration: Keep metrics and impact realistic to the specific role level.
 
-Instructions & Layout Flow:
-1. Header & Contact: Extract Name, Phone, Email, Location, LinkedIn, and Personal Details. 
-2. Resume Title: Generate a high-impact title using "[Target Job Role] | [Value Proposition]". CRITICAL: Maximum 80 characters.
-3. Professional Summary: Write exactly 2 to 3 paragraphs (maximum 7 lines total). 
-   - Paragraph 1: Executive identity, years of experience, geographic/operational scope.
-   - Paragraph 2: Core expertise, strategic value, industries served.
-   - Paragraph 3: Leadership style, high-level business impact.
-4. Key Achievements: Extract the top 3-4 quantifiable milestones. Do not invent numbers.
-5. Core Skills: Extract EXACTLY 8 to 16 hard skills, methodologies, and industry keywords.
-6. Work Experience: Extract all jobs. For each job, rewrite 4-6 responsibilities using the "Categorized Impact Format". 
-   - Structure: "[Focus Area] – [Action Verb + Strategic Task + Quantifiable/Business Impact]". 
-   - ALWAYS use a spaced en-dash (" – ").
-7. Education & Certifications: Extract degrees, institutions, dates, and professional certifications.
+Instructions & Layout:
+1. Header: Extract Name, Phone, Email, Location, LinkedIn. 
+2. Resume Title: [Exact Current Role] | [Value Proposition]. Limit to 80 chars.
+3. Professional Summary: 2-3 paragraphs (max 7 lines). Paragraph 1 must reflect their ACTUAL seniority level and industry context.
+4. Key Achievements: Extract 3-4 real wins. 
+5. Core Skills: Extract 8-16 keywords.
+6. Work Experience: 4-6 bullets using "Categorized Impact Format". 
+   - Structure: "[Focus Area] – [Action Verb + Task + Result]". Use en-dash (" – ").
+7. Education & Certifications: Extract degrees and certificates.
 
 Output Format (Strict JSON):
 {
@@ -45,45 +40,38 @@ Output Format (Strict JSON):
     "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
     "personal_details": "...",
     "optimized_title": "...",
-    "improved_summary": ["Paragraph 1...", "Paragraph 2...", "Paragraph 3..."],
-    "key_achievements": ["...", "...", "..."],
-    "core_skills": ["...", "...", "..."],
+    "improved_summary": ["..."],
+    "key_achievements": ["..."],
+    "core_skills": ["..."],
     "experience": [
-      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["Focus Area – Description..."] }
+      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["..."] }
     ],
     "education": [
       { "degree": "...", "institution": "...", "date": "..." }
     ],
-    "certifications": ["...", "...", "..."]
+    "certifications": ["..."]
   }
 }
-DO NOT wrap the response in markdown blocks. Output ONLY raw JSON.
+DO NOT wrap in markdown. Output ONLY raw JSON.
 `;
 
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-        
-        const jobDescription = req.body.jobDescription || "No specific JD provided. Optimize for general industry standards and high-impact leadership keywords.";
+        const jobDescription = req.body.jobDescription || "Optimize for general industry standards.";
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
         fs.unlinkSync(req.file.path);
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
-
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash", generationConfig: { responseMimeType: "application/json" } });
-        const promptWithJD = `Target Context:\n${jobDescription}\n\nAnalyze and rewrite the attached resume.`;
-        
+        const promptWithJD = `Target Context:\n${jobDescription}\n\nAnalyze and optimize this resume without elevating the seniority level:`;
         const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
         let aiResponse = result.response.text();
-
         aiResponse = aiResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
         res.json(JSON.parse(aiResponse));
-
     } catch (error) {
-        console.error("Error analyzing resume:", error);
+        console.error("Error:", error);
         res.status(500).json({ error: 'Failed to analyze resume' });
     }
 });
 
-app.listen(port, () => {
-    console.log(`Orbit Careers Engine running at http://localhost:${port}`);
-});
+app.listen(port, () => { console.log(`Engine running at http://localhost:${port}`); });
