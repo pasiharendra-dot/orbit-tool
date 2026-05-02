@@ -6,6 +6,7 @@
     <title>ATS Resume Matcher | Orbit Careers</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- DOCX GENERATION LIBRARIES -->
     <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     
@@ -101,7 +102,6 @@
     </main>
 
     <script>
-        // Store the AI data globally so the Word generator can use it
         window.resumeData = null;
 
         async function handleFileUpload(event) {
@@ -122,7 +122,6 @@
                 if (!response.ok) throw new Error("Server error");
                 const data = await response.json();
 
-                // Save data for the Word generator
                 window.resumeData = data.after;
 
                 document.getElementById('before-score').innerText = `Score: ${data.before.score}/100`;
@@ -149,7 +148,7 @@
         }
 
         // ==========================================
-        // NATIVE .DOCX GENERATOR
+        // NATIVE .DOCX GENERATOR (UPDATED MARGINS & JUSTIFICATION)
         // ==========================================
         function downloadWord() {
             if (!window.resumeData) {
@@ -158,9 +157,8 @@
             }
 
             const data = window.resumeData;
-            const { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } = docx;
+            const { Document, Packer, Paragraph, TextRun, AlignmentType } = docx;
 
-            // Helper to create the Katherine Cooper style section headers
             function createHeader(title) {
                 return new Paragraph({
                     spacing: { before: 300, after: 150 },
@@ -172,43 +170,39 @@
                 });
             }
 
-            // Construct the Word Document
             const doc = new Document({
                 sections: [{
                     properties: {
                         page: {
-                            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 } // Native 1-inch margins
+                            // 720 Twips = Exactly 0.5 inches on all sides
+                            margin: { top: 720, right: 720, bottom: 720, left: 720 } 
                         }
                     },
                     children: [
-                        // Header: Name
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), size: 48, font: "Arial" }) ]
                         }),
                         
-                        // Header: Title
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             spacing: { before: 100, after: 100 },
                             children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 22, font: "Arial", color: "444444" }) ]
                         }),
 
-                        // Header: Contact Info
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             spacing: { after: 300 },
                             children: [ new TextRun({ text: `${data.phone || ""}  |  ${data.email || ""}  |  ${data.location || ""}  |  ${data.linkedin || ""}`, size: 18, font: "Arial", color: "444444" }) ]
                         }),
 
-                        // Section: Overview
                         createHeader("Professional Overview"),
                         new Paragraph({
+                            alignment: AlignmentType.JUSTIFIED, // Distribute text evenly
                             spacing: { before: 100, after: 200, line: 300 },
                             children: [ new TextRun({ text: data.improved_summary || "", size: 21, font: "Arial" }) ]
                         }),
 
-                        // Section: Experience
                         createHeader("Work Experience"),
                         ...(data.experience || []).flatMap(job => [
                             new Paragraph({
@@ -221,13 +215,13 @@
                                 ]
                             }),
                             ...job.bullets.map(bullet => new Paragraph({
+                                alignment: AlignmentType.JUSTIFIED, // Distribute bullet text evenly
                                 bullet: { level: 0 },
                                 spacing: { before: 50, after: 50 },
                                 children: [ new TextRun({ text: bullet, size: 21, font: "Arial" }) ]
                             }))
                         ]),
 
-                        // Section: Education
                         createHeader("Education"),
                         ...(data.education || []).map(edu => new Paragraph({
                             spacing: { before: 100, after: 50 },
@@ -238,9 +232,9 @@
                             ]
                         })),
 
-                        // Section: Certifications
                         createHeader("Certifications & Core Skills"),
                         ...(data.certifications || []).map(cert => new Paragraph({
+                            alignment: AlignmentType.JUSTIFIED,
                             bullet: { level: 0 },
                             spacing: { before: 50, after: 50 },
                             children: [ new TextRun({ text: cert, size: 21, font: "Arial" }) ]
@@ -249,7 +243,6 @@
                 }]
             });
 
-            // Generate and Save the File
             Packer.toBlob(doc).then(blob => {
                 saveAs(blob, "Orbit_ATS_Optimized_Resume.docx");
             });
