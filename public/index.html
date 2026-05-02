@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATS Resume Matcher | Orbit Careers</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- DOCX GENERATION LIBRARIES -->
     <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    
     <script>
         tailwind.config = { theme: { extend: { colors: { orbitBlue: '#007BFF', orbitBg: '#F8FAFC' } } } }
     </script>
@@ -85,7 +82,7 @@
                             <p id="preview-title" class="text-sm font-bold uppercase text-gray-900">[Optimized Title]</p>
                             <div class="w-full border-t-2 border-orbitBlue my-2"></div>
                         </div>
-                        <p id="preview-summary" class="text-xs text-gray-800 leading-relaxed mb-6"></p>
+                        <p id="preview-summary" class="text-xs text-gray-800 leading-relaxed mb-6">Summary updated and formatted for Word Doc delivery.</p>
                         <div class="blur-sm select-none"><p class="text-xs">Confidential work history and optimized bullet points hidden in preview mode...</p></div>
                     </div>
 
@@ -134,7 +131,6 @@
                 document.getElementById('after-score').innerText = `Score: ${data.after.score}/100`;
                 document.getElementById('preview-name').innerText = data.after.name;
                 document.getElementById('preview-title').innerText = data.after.optimized_title;
-                document.getElementById('preview-summary').innerText = data.after.improved_summary;
 
                 document.getElementById('loading-section').style.display = 'none';
                 document.getElementById('results-section').style.display = 'block';
@@ -148,7 +144,7 @@
         }
 
         // ==========================================
-        // NATIVE .DOCX GENERATOR (UPDATED MARGINS & JUSTIFICATION)
+        // DOCX GENERATOR: BOLD PREFIXES & NEW SECTIONS
         // ==========================================
         function downloadWord() {
             if (!window.resumeData) {
@@ -172,37 +168,54 @@
 
             const doc = new Document({
                 sections: [{
-                    properties: {
-                        page: {
-                            // 720 Twips = Exactly 0.5 inches on all sides
-                            margin: { top: 720, right: 720, bottom: 720, left: 720 } 
-                        }
-                    },
+                    properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } },
                     children: [
+                        // HEADER
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), size: 48, font: "Arial" }) ]
+                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, font: "Arial" }) ]
                         }),
-                        
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             spacing: { before: 100, after: 100 },
                             children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 22, font: "Arial", color: "444444" }) ]
                         }),
-
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             spacing: { after: 300 },
                             children: [ new TextRun({ text: `${data.phone || ""}  |  ${data.email || ""}  |  ${data.location || ""}  |  ${data.linkedin || ""}`, size: 18, font: "Arial", color: "444444" }) ]
                         }),
 
-                        createHeader("Professional Overview"),
-                        new Paragraph({
-                            alignment: AlignmentType.JUSTIFIED, // Distribute text evenly
-                            spacing: { before: 100, after: 200, line: 300 },
-                            children: [ new TextRun({ text: data.improved_summary || "", size: 21, font: "Arial" }) ]
-                        }),
+                        // SUMMARY (Mapped as separate paragraphs)
+                        createHeader("Professional Summary"),
+                        ...(data.improved_summary || []).map(paragraphText => new Paragraph({
+                            alignment: AlignmentType.JUSTIFIED,
+                            spacing: { before: 50, after: 150, line: 300 },
+                            children: [ new TextRun({ text: paragraphText, size: 21, font: "Arial" }) ]
+                        })),
 
+                        // KEY ACHIEVEMENTS
+                        ...(data.key_achievements && data.key_achievements.length > 0 ? [
+                            createHeader("Key Achievements"),
+                            ...data.key_achievements.map(achievement => new Paragraph({
+                                alignment: AlignmentType.JUSTIFIED,
+                                bullet: { level: 0 },
+                                spacing: { before: 50, after: 50 },
+                                children: [ new TextRun({ text: achievement, size: 21, font: "Arial" }) ]
+                            }))
+                        ] : []),
+
+                        // CORE SKILLS
+                        ...(data.core_skills && data.core_skills.length > 0 ? [
+                            createHeader("Core Skills"),
+                            new Paragraph({
+                                alignment: AlignmentType.JUSTIFIED,
+                                spacing: { before: 100, after: 100 },
+                                children: [ new TextRun({ text: data.core_skills.join("  |  "), size: 21, font: "Arial" }) ]
+                            })
+                        ] : []),
+
+                        // WORK EXPERIENCE (With Bold Prefix Logic)
                         createHeader("Work Experience"),
                         ...(data.experience || []).flatMap(job => [
                             new Paragraph({
@@ -214,14 +227,34 @@
                                     new TextRun({ text: `  (${job.dates})`, size: 20, font: "Arial", bold: true, color: "444444" })
                                 ]
                             }),
-                            ...job.bullets.map(bullet => new Paragraph({
-                                alignment: AlignmentType.JUSTIFIED, // Distribute bullet text evenly
-                                bullet: { level: 0 },
-                                spacing: { before: 50, after: 50 },
-                                children: [ new TextRun({ text: bullet, size: 21, font: "Arial" }) ]
-                            }))
+                            ...job.bullets.map(bullet => {
+                                // Logic to bold the "Focus Area" prefix
+                                let prefix = "";
+                                let restOfText = bullet;
+                                
+                                if (bullet.includes(" – ")) {
+                                    const parts = bullet.split(" – ");
+                                    prefix = parts[0] + " – ";
+                                    restOfText = parts.slice(1).join(" – ");
+                                } else if (bullet.includes(" - ")) {
+                                    const parts = bullet.split(" - ");
+                                    prefix = parts[0] + " - ";
+                                    restOfText = parts.slice(1).join(" - ");
+                                }
+
+                                return new Paragraph({
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    bullet: { level: 0 },
+                                    spacing: { before: 50, after: 50 },
+                                    children: [
+                                        ...(prefix ? [new TextRun({ text: prefix, bold: true, size: 21, font: "Arial" })] : []),
+                                        new TextRun({ text: restOfText, size: 21, font: "Arial" })
+                                    ]
+                                });
+                            })
                         ]),
 
+                        // EDUCATION
                         createHeader("Education"),
                         ...(data.education || []).map(edu => new Paragraph({
                             spacing: { before: 100, after: 50 },
@@ -232,20 +265,26 @@
                             ]
                         })),
 
-                        createHeader("Certifications & Core Skills"),
-                        ...(data.certifications || []).map(cert => new Paragraph({
-                            alignment: AlignmentType.JUSTIFIED,
-                            bullet: { level: 0 },
-                            spacing: { before: 50, after: 50 },
-                            children: [ new TextRun({ text: cert, size: 21, font: "Arial" }) ]
-                        }))
+                        // CERTIFICATIONS
+                        ...(data.certifications && data.certifications.length > 0 ? [
+                            createHeader("Certifications & Personal Details"),
+                            ...data.certifications.map(cert => new Paragraph({
+                                bullet: { level: 0 },
+                                spacing: { before: 50, after: 50 },
+                                children: [ new TextRun({ text: cert, size: 21, font: "Arial" }) ]
+                            })),
+                            ...(data.personal_details ? [
+                                new Paragraph({
+                                    spacing: { before: 100, after: 50 },
+                                    children: [ new TextRun({ text: `Additional Details: ${data.personal_details}`, size: 21, font: "Arial", italics: true }) ]
+                                })
+                            ] : [])
+                        ] : [])
                     ]
                 }]
             });
 
-            Packer.toBlob(doc).then(blob => {
-                saveAs(blob, "Orbit_ATS_Optimized_Resume.docx");
-            });
+            Packer.toBlob(doc).then(blob => { saveAs(blob, "Orbit_ATS_Optimized_Resume.docx"); });
         }
     </script>
 </body>
