@@ -5,18 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATS Resume Matcher | Orbit Careers</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
+    <!-- PDF GENERATION LIBRARY -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        orbitBlue: '#007BFF',
-                        orbitBg: '#F8FAFC',
-                        orbitGreen: '#10B981'
-                    }
-                }
-            }
+            theme: { extend: { colors: { orbitBlue: '#007BFF', orbitBg: '#F8FAFC' } } }
         }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -37,6 +32,7 @@
 
     <main class="flex-grow flex flex-col items-center py-12 px-4">
         
+        <!-- Upload Section -->
         <div id="upload-section" class="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-10 text-center transition-all duration-300">
             <h2 class="text-3xl font-bold text-gray-800 mb-2">Beat the ATS Algorithm</h2>
             <p class="text-gray-600 mb-8 font-medium">Over 75% of resumes are rejected by bots before a human ever sees them. Let Orbit Careers test yours.</p>
@@ -56,120 +52,107 @@
                 <svg class="mx-auto h-10 w-10 text-orbitBlue mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
                 <p class="text-lg font-semibold text-orbitBlue">Click to select PDF</p>
             </div>
-            
-            <div class="mt-6 flex items-center justify-center space-x-2 text-xs text-gray-500">
-                <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                <span>Bank-grade encryption. We never store your data.</span>
-            </div>
         </div>
 
+        <!-- Loading State -->
         <div id="loading-section" class="hidden flex flex-col items-center mt-20">
             <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-orbitBlue mb-4"></div>
             <p class="text-lg text-gray-600 font-medium">Orbit AI is auditing your resume against the JD...</p>
         </div>
 
+        <!-- Results Section (Preview Only) -->
         <div id="results-section" class="hidden max-w-[1300px] w-full mt-8 fade-in">
             <h3 class="text-2xl font-bold text-center text-gray-800 mb-8">Your ATS Makeover Preview</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                 
+                <!-- Left: Before -->
                 <div class="bg-white rounded-2xl shadow-lg border-t-4 border-red-500 p-8 sticky top-8">
                     <div class="flex justify-between items-center mb-4 border-b pb-4">
-                        <div>
-                            <h4 class="text-xl font-bold text-gray-800">Original Resume</h4>
-                            <p class="text-xs font-semibold text-gray-500 mt-1 uppercase tracking-wider">Matched against your provided JD</p>
-                        </div>
-                        <span id="before-score" class="bg-red-100 text-red-700 px-3 py-1 rounded-full font-bold text-sm">ATS Score: --/100</span>
+                        <h4 class="text-xl font-bold text-gray-800">Original Match</h4>
+                        <span id="before-score" class="bg-red-100 text-red-700 px-3 py-1 rounded-full font-bold text-sm">Score: --/100</span>
                     </div>
-                    
-                    <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-6 flex items-start">
-                        <svg class="w-5 h-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                        <p class="text-xs text-red-800"><strong>Warning:</strong> Enterprise ATS systems like Taleo and Workday would likely auto-reject this resume due to missing critical keywords from the job description.</p>
-                    </div>
-
                     <div class="mb-6">
                         <p class="text-sm font-semibold text-red-600 mb-2">Critical Fail Points Identified:</p>
-                        <ul id="fail-points" class="list-disc list-inside text-sm text-gray-600 space-y-2">
-                            </ul>
-                    </div>
-                    
-                    <div class="bg-gray-50 p-4 rounded-lg text-sm text-gray-500 font-mono leading-relaxed border border-gray-200">
-                        <p id="old-summary" class="mb-4"></p>
+                        <ul id="fail-points" class="list-disc list-inside text-sm text-gray-600 space-y-2"></ul>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden relative h-[600px]">
-                    
-                    <div class="flex justify-between items-center bg-gray-50 px-6 py-4 border-b border-gray-200 sticky top-0 z-10">
+                <!-- Right: After Preview -->
+                <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden relative h-[500px]">
+                    <div class="flex justify-between items-center bg-gray-50 px-6 py-4 border-b border-gray-200">
                         <h4 class="text-xl font-bold text-gray-800">Orbit Enhanced Preview</h4>
-                        <span id="after-score" class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold text-sm flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                            Score: --/100
-                        </span>
+                        <span id="after-score" class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold text-sm">Score: --/100</span>
                     </div>
-
+                    
                     <div class="p-6 pb-24"> 
                         <div class="text-center mb-6">
-                            <h1 id="user-name" class="text-2xl font-bold uppercase tracking-wider text-gray-950 mb-1">[Name]</h1>
-                            <p class="text-xs font-medium text-gray-700 mb-2">Ph: [Phone] | Email: <span class="text-orbitBlue underline">[Email]</span> | Add: [Address]</p>
+                            <h1 id="preview-name" class="text-2xl font-bold uppercase tracking-wider text-gray-950 mb-1">[Name]</h1>
                             <div class="w-full border-t-2 border-orbitBlue my-2"></div>
-                            <p id="optimized-title" class="text-sm font-bold uppercase text-gray-900">[Optimized Job Title]</p>
+                            <p id="preview-title" class="text-sm font-bold uppercase text-gray-900">[Optimized Title]</p>
                             <div class="w-full border-t-2 border-orbitBlue my-2"></div>
                         </div>
-
-                        <div class="mb-6">
-                            <div class="text-center mb-3">
-                                <div class="w-24 border-t-2 border-gray-950 mx-auto mb-1"></div>
-                                <h2 class="text-sm font-bold uppercase tracking-wide text-gray-950">Professional Summary</h2>
-                                <div class="w-24 border-t-2 border-gray-950 mx-auto mt-1"></div>
-                            </div>
-                            
-                            <ul class="list-disc list-inside text-xs text-gray-800 space-y-1.5 leading-relaxed">
-                                <li id="improved-summary-text"></li>
-                                <span class="blur-sm select-none text-gray-500">Quantifiable achievement here: Directed global scaling of SaaS products, resulting in 150% growth in subscriber revenue. Facilitated seamless operations by leveraging expert skills.</span>
-                            </ul>
-                        </div>
-
-                        <div class="mb-6 blur-sm select-none">
-                            <div class="text-center mb-3">
-                                <div class="w-24 border-t-2 border-gray-950 mx-auto mb-1"></div>
-                                <h2 class="text-sm font-bold uppercase tracking-wide text-gray-950">Core Competencies</h2>
-                                <div class="w-24 border-t-2 border-gray-950 mx-auto mt-1"></div>
-                            </div>
-                            <div class="grid grid-cols-3 gap-x-4 text-xs text-gray-800">
-                                <ul class="list-disc list-inside space-y-1"><li>Executive Leadership</li><li>Market Intelligence</li></ul>
-                                <ul class="list-disc list-inside space-y-1"><li>Process Optimization</li><li>Cross-Functional Alignment</li></ul>
-                                <ul class="list-disc list-inside space-y-1"><li>Vendor Relationships</li><li>Data-Driven Strategy</li></ul>
-                            </div>
-                        </div>
+                        <p id="preview-summary" class="text-xs text-gray-800 leading-relaxed mb-6"></p>
+                        <div class="blur-sm select-none"><p class="text-xs">Confidential work history and optimized bullet points hidden in preview mode...</p></div>
                     </div>
 
-                    <div class="absolute bottom-0 left-0 right-0 bg-white p-6 border-t border-gray-200 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] text-center z-20">
-                        <h5 class="text-xl font-bold text-gray-800 mb-2">Curious about your full transformation?</h5>
-                        <p class="text-sm text-gray-600 mb-5 max-w-md mx-auto">This preview shows your optimized header and summary. The rest of your resume has been professionally reconstructed to hit the exact keywords for this job.</p>
-                        
-                        <button onclick="payWithRazorpay()" class="bg-orbitBlue hover:bg-blue-700 text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105 w-full flex justify-center items-center">
-                            Unlock Full ATS Resume (₹999)
+                    <!-- DOWNLOAD CTA -->
+                    <div class="absolute bottom-0 left-0 right-0 bg-white p-6 border-t shadow-[0_-10px_20px_rgba(0,0,0,0.05)] text-center">
+                        <button onclick="downloadPDF()" class="bg-orbitBlue hover:bg-blue-700 text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg w-full">
+                            Download Full ATS Resume (Test Delivery)
                         </button>
-                        <p class="text-xs text-gray-500 mt-2 flex items-center justify-center">
-                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
-                            Secure checkout via Razorpay. Delivered instantly.
-                        </p>
                     </div>
                 </div>
             </div>
         </div>
+
     </main>
 
+    <!-- ========================================== -->
+    <!-- HIDDEN PDF TEMPLATE (TEMPLATE 3: KATHERINE)-->
+    <!-- Positioned off-screen so the user never sees the raw HTML -->
+    <!-- ========================================== -->
+    <div style="position: absolute; left: -9999px; top: -9999px;">
+        <div id="resume-canvas" class="bg-white text-gray-900" style="width: 794px; min-height: 1123px; padding: 48px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+            
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 id="render-name" class="text-[36px] font-light tracking-[0.25em] uppercase text-gray-900 mb-2 leading-none">Name</h1>
+                <h2 id="render-title" class="text-[14px] font-medium tracking-[0.2em] text-gray-600 uppercase">Title</h2>
+                
+                <div class="mt-3 text-[12px] text-gray-600 flex justify-center items-center space-x-2">
+                    <span id="render-phone">Phone</span> | 
+                    <span id="render-email">Email</span> | 
+                    <span id="render-location">Location</span> | 
+                    <span id="render-linkedin">LinkedIn</span>
+                </div>
+            </div>
+
+            <!-- Professional Overview -->
+            <div class="mb-6">
+                <h3 class="text-[12px] font-bold tracking-[0.15em] text-gray-800 uppercase border-y border-gray-300 py-2 mb-3">Professional Overview</h3>
+                <p id="render-summary" class="text-[13px] text-gray-700 leading-relaxed text-justify"></p>
+            </div>
+
+            <!-- Work Experience (Injected via JS) -->
+            <div class="mb-6">
+                <h3 class="text-[12px] font-bold tracking-[0.15em] text-gray-800 uppercase border-y border-gray-300 py-2 mb-4">Work Experience</h3>
+                <div id="render-experience-list">
+                    <!-- Jobs go here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIC SCRIPT -->
     <script>
-        // 1. FILE UPLOAD & AI PROCESSING LOGIC
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             const jdText = document.getElementById('job-description-input').value.trim();
 
             if (!jdText) {
                 alert("Please paste your target Job Description first!");
-                document.getElementById('fileInput').value = ''; // Reset input
+                document.getElementById('fileInput').value = ''; 
                 return;
             }
             if (!file) return;
@@ -179,35 +162,60 @@
 
             const formData = new FormData();
             formData.append('resume', file);
-            formData.append('jobDescription', jdText); // Send JD to backend
+            formData.append('jobDescription', jdText);
 
             try {
-                const response = await fetch('/api/analyze', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) throw new Error("Server error processing PDF");
-
+                const response = await fetch('/api/analyze', { method: 'POST', body: formData });
+                if (!response.ok) throw new Error("Server error");
                 const data = await response.json();
 
-                // Inject "Before" UI
-                document.getElementById('before-score').innerText = `ATS Score: ${data.before.score}/100`;
-                document.getElementById('old-summary').innerText = data.before.old_summary;
-                
+                // 1. Populate the User Preview UI
+                document.getElementById('before-score').innerText = `Score: ${data.before.score}/100`;
                 const failPointsList = document.getElementById('fail-points');
                 failPointsList.innerHTML = '';
                 data.before.fail_points.forEach(point => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<span class="text-red-500 font-bold mr-1">✗</span> ${point}`;
-                    failPointsList.appendChild(li);
+                    failPointsList.innerHTML += `<li><span class="text-red-500 font-bold mr-1">✗</span> ${point}</li>`;
                 });
 
-                // Inject "After" UI
                 document.getElementById('after-score').innerText = `Score: ${data.after.score}/100`;
-                document.getElementById('user-name').innerText = data.after.name;
-                document.getElementById('optimized-title').innerText = data.after.optimized_title;
-                document.getElementById('improved-summary-text').innerText = data.after.improved_summary;
+                document.getElementById('preview-name').innerText = data.after.name;
+                document.getElementById('preview-title').innerText = data.after.optimized_title;
+                document.getElementById('preview-summary').innerText = data.after.improved_summary;
+
+                // 2. Populate the Hidden PDF Template (The Payload)
+                document.getElementById('render-name').innerText = data.after.name;
+                document.getElementById('render-title').innerText = data.after.optimized_title;
+                document.getElementById('render-phone').innerText = data.after.phone || "Phone Not Found";
+                document.getElementById('render-email').innerText = data.after.email || "Email Not Found";
+                document.getElementById('render-location').innerText = data.after.location || "Location Not Found";
+                document.getElementById('render-linkedin').innerText = data.after.linkedin || "LinkedIn Not Found";
+                document.getElementById('render-summary').innerText = data.after.improved_summary;
+
+                // Build the Work History HTML dynamically
+                let expHTML = "";
+                if (data.after.experience && data.after.experience.length > 0) {
+                    data.after.experience.forEach(job => {
+                        let bulletsHTML = "";
+                        job.bullets.forEach(bullet => {
+                            bulletsHTML += `<li class="mb-1">${bullet}</li>`;
+                        });
+                        
+                        expHTML += `
+                            <div class="mb-5">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <div class="text-[13px] text-gray-800">
+                                        <span class="font-bold">${job.company}</span> | ${job.location}, <span class="italic">${job.title}</span>
+                                    </div>
+                                    <div class="text-[11px] font-medium text-gray-600 uppercase tracking-wider">${job.dates}</div>
+                                </div>
+                                <ul class="list-disc pl-4 text-[13px] text-gray-700 leading-relaxed">
+                                    ${bulletsHTML}
+                                </ul>
+                            </div>
+                        `;
+                    });
+                }
+                document.getElementById('render-experience-list').innerHTML = expHTML;
 
                 document.getElementById('loading-section').style.display = 'none';
                 document.getElementById('results-section').style.display = 'block';
@@ -220,96 +228,20 @@
             }
         }
 
-        // 2. RAZORPAY CHECKOUT LOGIC
-        function payWithRazorpay() {
-            var options = {
-                "key": "YOUR_KEY_ID_HERE", // IMPORTANT: Put your rzp_test_... key here!
-                "amount": "99900", // ₹999.00 in paise
-                "currency": "INR",
-                "name": "Orbit Careers",
-                "description": "Full ATS Resume Unlock",
-                "image": "https://orbitcareers.com/favicon.ico", 
-                "handler": function (response){
-                    // This runs when the payment is successful
-                    alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-                    // Next step: Hook this up to send the email!
-                },
-                "prefill": {
-                    "name": document.getElementById('user-name').innerText, // Pre-fills their name from AI
-                },
-                "theme": {
-                    "color": "#007BFF" 
-                }
+        // 3. TRIGGER PDF DOWNLOAD
+        function downloadPDF() {
+            const element = document.getElementById('resume-canvas');
+            const opt = {
+                margin:       0,
+                filename:     'Orbit_ATS_Optimized_Resume.pdf',
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'px', format: [794, 1123], orientation: 'portrait' } // A4 Pixel Ratio
             };
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
-        }
-<!-- ========================================== -->
-    <!-- HIDDEN PDF TEMPLATE (TEMPLATE 3: KATHERINE)-->
-    <!-- ========================================== -->
-    <div id="pdf-export-container" class="hidden">
-        <!-- We strictly define the width to 800px so the PDF generator captures a perfect A4 ratio -->
-        <div id="resume-canvas" class="bg-white w-[800px] p-12 mx-auto text-gray-900" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
             
-            <!-- Header -->
-            <div class="text-center mb-8">
-                <!-- High tracking (letter-spacing) mimics the premium executive look -->
-                <h1 id="render-name" class="text-[40px] font-light tracking-[0.25em] uppercase text-gray-900 mb-2 leading-none">Firstname Lastname</h1>
-                <h2 id="render-title" class="text-sm font-medium tracking-[0.2em] text-gray-600 uppercase">Optimized Professional Title</h2>
-                
-                <div class="mt-4 text-[11px] text-gray-600 flex justify-center items-center space-x-2">
-                    <span id="render-phone">+1 234-567-8900</span>
-                    <span>|</span>
-                    <span id="render-email">email@example.com</span>
-                    <span>|</span>
-                    <span id="render-location">City, State</span>
-                    <span>|</span>
-                    <span id="render-linkedin">linkedin.com/in/username</span>
-                </div>
-            </div>
-
-            <!-- Professional Overview -->
-            <div class="mb-6">
-                <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-800 uppercase border-y border-gray-300 py-1.5 mb-3">Professional Overview</h3>
-                <p id="render-summary" class="text-[13px] text-gray-700 leading-relaxed text-justify">
-                    <!-- AI Injects Summary Here -->
-                </p>
-            </div>
-
-            <!-- Work Experience -->
-            <div class="mb-6">
-                <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-800 uppercase border-y border-gray-300 py-1.5 mb-4">Work Experience</h3>
-                
-                <!-- The JS will duplicate this block for every job the user has -->
-                <div id="render-experience-list">
-                    <div class="mb-5">
-                        <div class="flex justify-between items-baseline mb-1.5">
-                            <div class="text-[13px] text-gray-800">
-                                <span class="font-bold">Company Name</span> | Location, <span class="italic">Job Title</span>
-                            </div>
-                            <div class="text-[11px] font-medium text-gray-600 uppercase tracking-wider">Start Date - End Date</div>
-                        </div>
-                        <ul class="list-disc pl-4 text-[13px] text-gray-700 space-y-1.5 leading-relaxed">
-                            <li>Bullet point one demonstrating quantified achievements.</li>
-                            <li>Bullet point two showing leadership and cross-functional skills.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Education (Optional/Placeholder) -->
-            <div class="mb-6">
-                <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-800 uppercase border-y border-gray-300 py-1.5 mb-4">Education</h3>
-                <div class="flex justify-between items-baseline">
-                    <div class="text-[13px] text-gray-800">
-                        <span class="font-bold">University Name</span> | <span class="italic">Degree Title</span>
-                    </div>
-                    <div class="text-[11px] font-medium text-gray-600 uppercase tracking-wider">Graduation Year</div>
-                </div>
-            </div>
-
-        </div>
-    </div>        
+            // Generate and save the PDF automatically
+            html2pdf().set(opt).from(element).save();
+        }
     </script>
 </body>
 </html>
