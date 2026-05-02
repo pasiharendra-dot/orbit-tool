@@ -21,16 +21,17 @@ CRITICAL RULES:
 1. Context is King: Deeply analyze the user's industry, job role, experience level, and function.
 2. NO Hallucinations: Keep the context completely original. DO NOT exaggerate numbers. 
 3. Tone: Human, commercially astute, and authoritative. Avoid robotic buzzwords.
+4. Dynamic ATS Scoring: DO NOT hardcode scores. Evaluate the original resume's keyword match, formatting, and impact against the JD to calculate a realistic "Before" score (typically between 35-68). Calculate a realistic "After" score reflecting your optimizations (typically 88-97).
 
 Instructions & Layout Flow:
 1. Header & Contact: Extract Name, Phone, Email, Location, LinkedIn, and Personal Details. 
-2. Resume Title: Generate a high-impact title using "[Target Job Role] | [Value Proposition]". CRITICAL: This title MUST be extremely concise (Maximum 80 characters) so it fits perfectly on a single line.
+2. Resume Title: Generate a high-impact title using "[Target Job Role] | [Value Proposition]". CRITICAL: Maximum 80 characters.
 3. Professional Summary: Write exactly 2 to 3 paragraphs (maximum 7 lines total). 
    - Paragraph 1: Executive identity, years of experience, geographic/operational scope.
    - Paragraph 2: Core expertise, strategic value, industries served.
    - Paragraph 3: Leadership style, high-level business impact.
 4. Key Achievements: Extract the top 3-4 quantifiable milestones. Do not invent numbers.
-5. Core Skills: Extract EXACTLY 8 to 16 hard skills, methodologies, and industry keywords (this allows for even 4-column grids). Keep skills to 1-3 words max.
+5. Core Skills: Extract EXACTLY 8 to 16 hard skills, methodologies, and industry keywords.
 6. Work Experience: Extract all jobs. For each job, rewrite 4-6 responsibilities using the "Categorized Impact Format". 
    - Structure: "[Focus Area] – [Action Verb + Strategic Task + Quantifiable/Business Impact]". 
    - ALWAYS use a spaced en-dash (" – ").
@@ -38,9 +39,9 @@ Instructions & Layout Flow:
 
 Output Format (Strict JSON):
 {
-  "before": {"score": 42, "fail_points": ["...", "...", "..."]},
+  "before": {"score": 45, "fail_points": ["...", "...", "..."]},
   "after": {
-    "score": 96,
+    "score": 94,
     "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
     "personal_details": "...",
     "optimized_title": "...",
