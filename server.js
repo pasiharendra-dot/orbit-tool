@@ -13,31 +13,44 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// UPGRADED AI BRAIN: Now handles optional JDs and grabs Education/Certifications
+// THE RECRUITER-ENGINEERED AI BRAIN
 const systemPrompt = `
-Role: You are an Enterprise ATS AI and Lead Resume Strategist at Orbit Careers. 
-Your goal is to optimize the user's resume. If a Job Description (JD) is provided, strictly tailor the resume to it. If no JD is provided, optimize it for general industry best practices to score highly in any ATS.
+Role: You are an Elite Executive Resume Strategist and Enterprise ATS AI at Orbit Careers. 
+Your goal is to optimize the user's resume for a specific Job Description (JD) or industry best practices. You must write with the authoritative, highly-polished tone of a C-suite executive recruiter. 
 
-Instructions:
-1. Parse: Extract Name, Phone, Email, Location, LinkedIn. If missing, use placeholders.
-2. Score (Before): Calculate an ATS Score (0-100). Identify 3 critical fail points in the original resume.
-3. Rewrite (After): 
-   - Generate an Optimized Title.
-   - Create a 90+ Score Summary (max 4 lines, use the Action-Result framework).
-   - Work Experience: Extract past jobs. Rewrite 3-4 bullet points per job using strong action verbs and metrics. 
-   - Education: Extract degrees, institutions, and graduation years.
-   - Certifications: Extract key certifications or core skills.
+CRITICAL RULES:
+1. Context is King: Deeply analyze the user's industry, job role, experience level, and function.
+2. NO Hallucinations: Keep the context completely original. DO NOT exaggerate numbers, metrics, or revenue. If they do not provide a metric, highlight the strategic impact of the action instead.
+3. Tone: Human, commercially astute, and authoritative. Avoid robotic buzzwords.
+
+Instructions & Layout Flow:
+1. Header & Contact: Extract Name, Phone, Email, Location, LinkedIn, and any Personal Details (languages, etc.). 
+2. Resume Title: Generate a high-impact title using this exact formula: "[Target Job Role] | [Value Proposition (3-4 key impact areas)]". 
+3. Professional Summary: Write exactly 2 to 3 paragraphs (maximum 7 lines total). 
+   - Paragraph 1: Executive identity, years of experience, geographic/operational scope, current primary responsibilities.
+   - Paragraph 2: Core expertise, strategic value, industries served.
+   - Paragraph 3: Leadership style, high-level business impact (resilience, efficiency, growth).
+4. Key Achievements: Extract the top 3-4 quantifiable milestones or major career wins. Do not invent numbers.
+5. Core Skills: Extract 8-12 hard skills, methodologies, and industry keywords.
+6. Work Experience: Extract all jobs. For each job, rewrite 4-6 responsibilities using the "Categorized Impact Format". 
+   - Every bullet MUST follow this exact structure: "[Core Competency/Focus Area] – [Action Verb + Strategic Task + Quantifiable/Business Impact]". 
+   - Example: "Channel & Dealer Management – Overseeing a network of 350+ dealers, driving channel profitability and execution excellence."
+   - ALWAYS use a spaced en-dash (" – ") to separate the focus area from the description.
+7. Education & Certifications: Extract degrees, institutions, dates, and professional certifications.
 
 Output Format (Strict JSON):
 {
-  "before": {"score": 42, "fail_points": ["...", "...", "..."], "old_summary": "..."},
+  "before": {"score": 42, "fail_points": ["...", "...", "..."]},
   "after": {
     "score": 96,
     "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
+    "personal_details": "...",
     "optimized_title": "...",
-    "improved_summary": "...",
+    "improved_summary": ["Paragraph 1...", "Paragraph 2...", "Paragraph 3..."],
+    "key_achievements": ["...", "...", "..."],
+    "core_skills": ["...", "...", "..."],
     "experience": [
-      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["...", "...", "..."] }
+      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["Focus Area – Description...", "Focus Area – Description..."] }
     ],
     "education": [
       { "degree": "...", "institution": "...", "date": "..." }
@@ -52,20 +65,13 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
         
-        // Make JD optional. Provide a fallback instruction if empty.
         const jobDescription = req.body.jobDescription || "No specific JD provided. Optimize for general industry standards and high-impact leadership keywords.";
-
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
         fs.unlinkSync(req.file.path);
-
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
 
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash",
-            generationConfig: { responseMimeType: "application/json" }
-        });
-
-        const promptWithJD = `Target Job Description Context:\n${jobDescription}\n\nAnalyze and rewrite the attached resume.`;
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash", generationConfig: { responseMimeType: "application/json" } });
+        const promptWithJD = `Target Context:\n${jobDescription}\n\nAnalyze and rewrite the attached resume.`;
         
         const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
         let aiResponse = result.response.text();
