@@ -118,6 +118,7 @@
                 const data = await response.json();
 
                 window.resumeData = data.after;
+                // UI now pulls dynamic scores
                 document.getElementById('before-score').innerText = `Score: ${data.before.score}/100`;
                 
                 const failPointsList = document.getElementById('fail-points');
@@ -140,7 +141,7 @@
         }
 
         // ==========================================
-        // DOCX GENERATOR: 9.5pt CALIBRI & 4-COLUMN SKILLS GRID
+        // DOCX GENERATOR
         // ==========================================
         function downloadWord() {
             if (!window.resumeData) return alert("No resume data found.");
@@ -154,33 +155,28 @@
             const SIZE_TITLE = 24;    // 12 pt
             const SIZE_NAME = 40;     // 20 pt
 
+            // FIX 1: Only a bottom border for headers (a single line divider)
             function createHeader(title) {
                 return new Paragraph({
                     spacing: { before: 200, after: 100 },
                     border: {
-                        top: { color: "000000", space: 1, style: "single", size: 6 },
-                        bottom: { color: "000000", space: 1, style: "single", size: 6 }
+                        bottom: { color: "000000", space: 1, style: "single", size: 6 } // Removed top border
                     },
                     children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: SIZE_HEADING, font: FONT_BODY }) ]
                 });
             }
 
-            // Logic to chunk skills array into rows of 4 for the Table grid
+            // Skills Grid Logic
             const skillsTableRows = [];
             if (data.core_skills && data.core_skills.length > 0) {
                 for (let i = 0; i < data.core_skills.length; i += 4) {
                     const chunk = data.core_skills.slice(i, i + 4);
-                    // Pad array to ensure 4 columns even if short
                     while (chunk.length < 4) chunk.push(""); 
                     
                     skillsTableRows.push(new TableRow({
                         children: chunk.map(skill => new TableCell({
                             width: { size: 25, type: WidthType.PERCENTAGE },
-                            // Remove all borders to match the clean image layout
-                            borders: {
-                                top: { style: "none" }, bottom: { style: "none" },
-                                left: { style: "none" }, right: { style: "none" }
-                            },
+                            borders: { top: { style: "none" }, bottom: { style: "none" }, left: { style: "none" }, right: { style: "none" } },
                             children: [
                                 new Paragraph({
                                     spacing: { before: 20, after: 20 },
@@ -191,6 +187,10 @@
                     }));
                 }
             }
+
+            // FIX 2: Split contact details dynamically
+            const contactLine1 = [data.phone, data.email].filter(Boolean).join("  |  ");
+            const contactLine2 = [data.location, data.linkedin].filter(Boolean).join("  |  ");
 
             const doc = new Document({
                 sections: [{
@@ -206,11 +206,18 @@
                             spacing: { before: 50, after: 50 },
                             children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: SIZE_TITLE, font: FONT_BODY, color: "444444" }) ]
                         }),
-                        new Paragraph({
+                        
+                        // Contact Info Split Lines
+                        ...(contactLine1 ? [new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            spacing: { after: 20 },
+                            children: [ new TextRun({ text: contactLine1, size: SIZE_BODY, font: FONT_BODY, color: "444444" }) ]
+                        })] : []),
+                        ...(contactLine2 ? [new Paragraph({
                             alignment: AlignmentType.CENTER,
                             spacing: { after: 200 },
-                            children: [ new TextRun({ text: `${data.phone || ""}  |  ${data.email || ""}  |  ${data.location || ""}  |  ${data.linkedin || ""}`, size: SIZE_BODY, font: FONT_BODY, color: "444444" }) ]
-                        }),
+                            children: [ new TextRun({ text: contactLine2, size: SIZE_BODY, font: FONT_BODY, color: "444444" }) ]
+                        })] : []),
 
                         // SUMMARY
                         createHeader("Professional Summary"),
