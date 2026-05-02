@@ -9,23 +9,24 @@ const app = express();
 const port = 3000;
 
 const upload = multer({ dest: 'uploads/' });
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// THE UPGRADED BRAIN: Now rewrites the ENTIRE work history
+// UPGRADED AI BRAIN: Now handles optional JDs and grabs Education/Certifications
 const systemPrompt = `
 Role: You are an Enterprise ATS AI and Lead Resume Strategist at Orbit Careers. 
-Your goal is to cross-reference the user's resume against the Job Description (JD) and provide a strict "Before" review and a fully rewritten 90+ "After" resume.
+Your goal is to optimize the user's resume. If a Job Description (JD) is provided, strictly tailor the resume to it. If no JD is provided, optimize it for general industry best practices to score highly in any ATS.
 
 Instructions:
-1. Parse: Extract their Name, Phone, Email, Location, and LinkedIn. (If missing, use placeholders like "555-555-5555" or "City, State").
-2. Score (Before): Calculate an ATS Score (0-100) based strictly on how well the original matches the JD. Identify 3 critical fail points.
+1. Parse: Extract Name, Phone, Email, Location, LinkedIn. If missing, use placeholders.
+2. Score (Before): Calculate an ATS Score (0-100). Identify 3 critical fail points in the original resume.
 3. Rewrite (After): 
-   - Generate an Optimized Title based on the JD.
-   - Create a 90+ Score Summary (max 4 lines, inject JD keywords).
-   - Work Experience: Extract their past jobs (up to 4). For EACH job, rewrite 3-4 bullet points using the "Action-Result" framework. You MUST naturally inject the most critical keywords from the JD into these new bullet points.
+   - Generate an Optimized Title.
+   - Create a 90+ Score Summary (max 4 lines, use the Action-Result framework).
+   - Work Experience: Extract past jobs. Rewrite 3-4 bullet points per job using strong action verbs and metrics. 
+   - Education: Extract degrees, institutions, and graduation years.
+   - Certifications: Extract key certifications or core skills.
 
 Output Format (Strict JSON):
 {
@@ -36,14 +37,12 @@ Output Format (Strict JSON):
     "optimized_title": "...",
     "improved_summary": "...",
     "experience": [
-      {
-        "company": "...",
-        "location": "...",
-        "title": "...",
-        "dates": "...",
-        "bullets": ["...", "...", "..."]
-      }
-    ]
+      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["...", "...", "..."] }
+    ],
+    "education": [
+      { "degree": "...", "institution": "...", "date": "..." }
+    ],
+    "certifications": ["...", "...", "..."]
   }
 }
 DO NOT wrap the response in markdown blocks. Output ONLY raw JSON.
@@ -53,8 +52,8 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
         
-        const jobDescription = req.body.jobDescription;
-        if (!jobDescription) return res.status(400).json({ error: 'Job description is required' });
+        // Make JD optional. Provide a fallback instruction if empty.
+        const jobDescription = req.body.jobDescription || "No specific JD provided. Optimize for general industry standards and high-impact leadership keywords.";
 
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
         fs.unlinkSync(req.file.path);
@@ -66,7 +65,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
             generationConfig: { responseMimeType: "application/json" }
         });
 
-        const promptWithJD = `Here is the target Job Description:\n${jobDescription}\n\nAnalyze the attached resume against this JD.`;
+        const promptWithJD = `Target Job Description Context:\n${jobDescription}\n\nAnalyze and rewrite the attached resume.`;
         
         const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
         let aiResponse = result.response.text();
