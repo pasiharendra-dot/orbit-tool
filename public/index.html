@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATS Resume Matcher | Orbit Careers</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
     <script>
         tailwind.config = { theme: { extend: { colors: { orbitBlue: '#007BFF', orbitBg: '#F8FAFC' } } } }
     </script>
@@ -50,7 +53,7 @@
 
         <div id="loading-section" class="hidden flex flex-col items-center mt-20">
             <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-orbitBlue mb-4"></div>
-            <p class="text-lg text-gray-600 font-medium">Orbit AI is auditing your resume...</p>
+            <p class="text-lg text-gray-600 font-medium">Orbit AI is writing your native Word Document...</p>
         </div>
 
         <div id="results-section" class="hidden max-w-[1300px] w-full mt-8 fade-in">
@@ -86,58 +89,21 @@
                     </div>
 
                     <div class="absolute bottom-0 left-0 right-0 bg-white p-6 border-t shadow-[0_-10px_20px_rgba(0,0,0,0.05)] text-center">
-                        <button onclick="downloadPDF()" class="bg-orbitBlue hover:bg-blue-700 text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg w-full">
-                            Download Full ATS Resume
+                        <button onclick="downloadWord()" class="bg-orbitBlue hover:bg-blue-700 text-white text-lg font-bold py-3 px-8 rounded-full shadow-lg w-full flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Download Editable Resume (.docx)
                         </button>
+                        <p class="text-xs text-gray-500 mt-3 font-medium">Native Word format guarantees 100% ATS readability and allows final tweaks.</p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- ========================================== -->
-    <!-- HIDDEN PDF TEMPLATE (Strictly Black Text, Let html2pdf Handle Margins) -->
-    <!-- ========================================== -->
-    <div style="position: absolute; left: -9999px; top: -9999px;">
-        <!-- Removed padding, adjusted width to A4 scale, changed to text-black -->
-        <div id="resume-canvas" class="bg-white text-black" style="width: 210mm; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-            
-            <div class="text-center mb-5">
-                <h1 id="render-name" class="text-[32px] font-light tracking-[0.25em] uppercase text-black mb-1 leading-none">Name</h1>
-                <h2 id="render-title" class="text-[13px] font-medium tracking-[0.2em] text-black uppercase">Title</h2>
-                
-                <div class="mt-2 text-[11px] text-black flex justify-center items-center space-x-2">
-                    <span id="render-phone">Phone</span> | 
-                    <span id="render-email">Email</span> | 
-                    <span id="render-location">Location</span> | 
-                    <span id="render-linkedin">LinkedIn</span>
-                </div>
-            </div>
-
-            <div class="mb-5">
-                <h3 class="text-[11px] font-bold tracking-[0.15em] text-black uppercase border-y border-black py-1.5 mb-2">Professional Overview</h3>
-                <p id="render-summary" class="text-[12px] text-black leading-relaxed text-justify"></p>
-            </div>
-
-            <div class="mb-5">
-                <h3 class="text-[11px] font-bold tracking-[0.15em] text-black uppercase border-y border-black py-1.5 mb-3">Work Experience</h3>
-                <div id="render-experience-list"></div>
-            </div>
-
-            <div class="mb-5">
-                <h3 class="text-[11px] font-bold tracking-[0.15em] text-black uppercase border-y border-black py-1.5 mb-3">Education</h3>
-                <div id="render-education-list"></div>
-            </div>
-
-            <div class="mb-5">
-                <h3 class="text-[11px] font-bold tracking-[0.15em] text-black uppercase border-y border-black py-1.5 mb-3">Certifications & Core Skills</h3>
-                <ul id="render-certifications-list" class="list-disc pl-4 text-[12px] text-black leading-relaxed"></ul>
-            </div>
-
-        </div>
-    </div>
-
     <script>
+        // Store the AI data globally so the Word generator can use it
+        window.resumeData = null;
+
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             const jdText = document.getElementById('job-description-input').value.trim();
@@ -149,12 +115,15 @@
 
             const formData = new FormData();
             formData.append('resume', file);
-            if (jdText) formData.append('jobDescription', jdText); // Optional now
+            if (jdText) formData.append('jobDescription', jdText);
 
             try {
                 const response = await fetch('/api/analyze', { method: 'POST', body: formData });
                 if (!response.ok) throw new Error("Server error");
                 const data = await response.json();
+
+                // Save data for the Word generator
+                window.resumeData = data.after;
 
                 document.getElementById('before-score').innerText = `Score: ${data.before.score}/100`;
                 const failPointsList = document.getElementById('fail-points');
@@ -168,53 +137,6 @@
                 document.getElementById('preview-title').innerText = data.after.optimized_title;
                 document.getElementById('preview-summary').innerText = data.after.improved_summary;
 
-                // PDF INJECTION (Pure Black Text)
-                document.getElementById('render-name').innerText = data.after.name;
-                document.getElementById('render-title').innerText = data.after.optimized_title;
-                document.getElementById('render-phone').innerText = data.after.phone || "";
-                document.getElementById('render-email').innerText = data.after.email || "";
-                document.getElementById('render-location').innerText = data.after.location || "";
-                document.getElementById('render-linkedin').innerText = data.after.linkedin || "";
-                document.getElementById('render-summary').innerText = data.after.improved_summary;
-
-                // Experience
-                let expHTML = "";
-                if (data.after.experience && data.after.experience.length > 0) {
-                    data.after.experience.forEach(job => {
-                        let bulletsHTML = "";
-                        job.bullets.forEach(bullet => { bulletsHTML += `<li class="mb-1">${bullet}</li>`; });
-                        expHTML += `
-                            <div class="mb-4">
-                                <div class="flex justify-between items-baseline mb-1">
-                                    <div class="text-[12px] text-black"><span class="font-bold">${job.company}</span> | ${job.location}, <span class="italic">${job.title}</span></div>
-                                    <div class="text-[10px] font-bold text-black uppercase tracking-wider">${job.dates}</div>
-                                </div>
-                                <ul class="list-disc pl-4 text-[12px] text-black leading-relaxed">${bulletsHTML}</ul>
-                            </div>`;
-                    });
-                }
-                document.getElementById('render-experience-list').innerHTML = expHTML;
-
-                // Education
-                let eduHTML = "";
-                if (data.after.education && data.after.education.length > 0) {
-                    data.after.education.forEach(edu => {
-                        eduHTML += `
-                            <div class="flex justify-between items-baseline mb-2">
-                                <div class="text-[12px] text-black"><span class="font-bold">${edu.institution}</span> | <span class="italic">${edu.degree}</span></div>
-                                <div class="text-[10px] font-bold text-black uppercase tracking-wider">${edu.date}</div>
-                            </div>`;
-                    });
-                }
-                document.getElementById('render-education-list').innerHTML = eduHTML;
-
-                // Certifications
-                let certHTML = "";
-                if (data.after.certifications && data.after.certifications.length > 0) {
-                    data.after.certifications.forEach(cert => { certHTML += `<li>${cert}</li>`; });
-                }
-                document.getElementById('render-certifications-list').innerHTML = certHTML;
-
                 document.getElementById('loading-section').style.display = 'none';
                 document.getElementById('results-section').style.display = 'block';
 
@@ -226,17 +148,111 @@
             }
         }
 
-        function downloadPDF() {
-            const element = document.getElementById('resume-canvas');
-            // The Margin fix! 15mm applied perfectly to all pages natively.
-            const opt = {
-                margin:       15, 
-                filename:     'Orbit_ATS_Optimized_Resume.pdf',
-                image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' } 
-            };
-            html2pdf().set(opt).from(element).save();
+        // ==========================================
+        // NATIVE .DOCX GENERATOR
+        // ==========================================
+        function downloadWord() {
+            if (!window.resumeData) {
+                alert("No resume data found.");
+                return;
+            }
+
+            const data = window.resumeData;
+            const { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } = docx;
+
+            // Helper to create the Katherine Cooper style section headers
+            function createHeader(title) {
+                return new Paragraph({
+                    spacing: { before: 300, after: 150 },
+                    border: {
+                        top: { color: "000000", space: 1, style: "single", size: 6 },
+                        bottom: { color: "000000", space: 1, style: "single", size: 6 }
+                    },
+                    children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: 24, font: "Arial" }) ]
+                });
+            }
+
+            // Construct the Word Document
+            const doc = new Document({
+                sections: [{
+                    properties: {
+                        page: {
+                            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 } // Native 1-inch margins
+                        }
+                    },
+                    children: [
+                        // Header: Name
+                        new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), size: 48, font: "Arial" }) ]
+                        }),
+                        
+                        // Header: Title
+                        new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            spacing: { before: 100, after: 100 },
+                            children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 22, font: "Arial", color: "444444" }) ]
+                        }),
+
+                        // Header: Contact Info
+                        new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            spacing: { after: 300 },
+                            children: [ new TextRun({ text: `${data.phone || ""}  |  ${data.email || ""}  |  ${data.location || ""}  |  ${data.linkedin || ""}`, size: 18, font: "Arial", color: "444444" }) ]
+                        }),
+
+                        // Section: Overview
+                        createHeader("Professional Overview"),
+                        new Paragraph({
+                            spacing: { before: 100, after: 200, line: 300 },
+                            children: [ new TextRun({ text: data.improved_summary || "", size: 21, font: "Arial" }) ]
+                        }),
+
+                        // Section: Experience
+                        createHeader("Work Experience"),
+                        ...(data.experience || []).flatMap(job => [
+                            new Paragraph({
+                                spacing: { before: 200, after: 100 },
+                                children: [
+                                    new TextRun({ text: `${job.company}`, bold: true, size: 22, font: "Arial" }),
+                                    new TextRun({ text: ` | ${job.location}`, size: 22, font: "Arial" }),
+                                    new TextRun({ text: ` — ${job.title}`, italics: true, size: 22, font: "Arial" }),
+                                    new TextRun({ text: `  (${job.dates})`, size: 20, font: "Arial", bold: true, color: "444444" })
+                                ]
+                            }),
+                            ...job.bullets.map(bullet => new Paragraph({
+                                bullet: { level: 0 },
+                                spacing: { before: 50, after: 50 },
+                                children: [ new TextRun({ text: bullet, size: 21, font: "Arial" }) ]
+                            }))
+                        ]),
+
+                        // Section: Education
+                        createHeader("Education"),
+                        ...(data.education || []).map(edu => new Paragraph({
+                            spacing: { before: 100, after: 50 },
+                            children: [
+                                new TextRun({ text: `${edu.institution}`, bold: true, size: 22, font: "Arial" }),
+                                new TextRun({ text: ` | ${edu.degree}`, italics: true, size: 22, font: "Arial" }),
+                                new TextRun({ text: `  (${edu.date})`, size: 20, font: "Arial", color: "444444" })
+                            ]
+                        })),
+
+                        // Section: Certifications
+                        createHeader("Certifications & Core Skills"),
+                        ...(data.certifications || []).map(cert => new Paragraph({
+                            bullet: { level: 0 },
+                            spacing: { before: 50, after: 50 },
+                            children: [ new TextRun({ text: cert, size: 21, font: "Arial" }) ]
+                        }))
+                    ]
+                }]
+            });
+
+            // Generate and Save the File
+            Packer.toBlob(doc).then(blob => {
+                saveAs(blob, "Orbit_ATS_Optimized_Resume.docx");
+            });
         }
     </script>
 </body>
