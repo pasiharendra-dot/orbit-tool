@@ -104,91 +104,161 @@
             const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType } = docx;
 
             const FONT = "Calibri";
-            const SIZE_BODY = 19;
-            const COLOR_GREY = "D3D3D3"; // Light Grey
-
-            // FIX: Line ABOVE the header
+            const SIZE_BODY = 19;     // 9.5 pt
+            const SIZE_HEADING = 22;  // 11 pt
+            
+            // Reverted to Bottom Border to match screenshot
             function createHeader(title) {
                 return new Paragraph({
-                    spacing: { before: 200, after: 100 },
+                    spacing: { before: 240, after: 120 },
                     border: {
-                        top: { color: COLOR_GREY, space: 1, style: "single", size: 6 } 
+                        bottom: { color: "000000", space: 5, style: "single", size: 12 } 
                     },
-                    children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: 22, font: FONT }) ]
+                    children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: SIZE_HEADING, font: FONT }) ]
                 });
             }
 
-            const contactLine1 = [data.phone, data.email].filter(Boolean).join("  |  ");
-            const contactLine2 = [data.location, data.linkedin].filter(Boolean).join("  |  ");
+            const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
+
+            // Skills Grid Logic
+            const skillsTableRows = [];
+            if (data.core_skills && data.core_skills.length > 0) {
+                for (let i = 0; i < data.core_skills.length; i += 4) {
+                    const chunk = data.core_skills.slice(i, i + 4);
+                    while (chunk.length < 4) chunk.push(""); 
+                    skillsTableRows.push(new TableRow({
+                        children: chunk.map(skill => new TableCell({
+                            width: { size: 25, type: WidthType.PERCENTAGE },
+                            borders: { top: { style: "none" }, bottom: { style: "none" }, left: { style: "none" }, right: { style: "none" } },
+                            children: [
+                                new Paragraph({
+                                    spacing: { before: 20, after: 20 },
+                                    children: [ new TextRun({ text: skill, size: SIZE_BODY, font: FONT, color: "444444" }) ]
+                                })
+                            ]
+                        }))
+                    }));
+                }
+            }
 
             const doc = new Document({
                 sections: [{
                     properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } },
                     children: [
+                        // HEADER (Matches Screenshot)
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 40, font: FONT }) ]
+                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, font: FONT }) ]
                         }),
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            spacing: { before: 50, after: 50 },
-                            children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 24, font: FONT, color: "444444" }) ]
-                        }),
-                        
-                        // CONTACT BOX: Line above and below
-                        new Paragraph({
-                            alignment: AlignmentType.CENTER,
-                            border: { top: { color: COLOR_GREY, style: "single", size: 6 } },
-                            spacing: { before: 100 },
-                            children: [ new TextRun({ text: contactLine1, size: SIZE_BODY, font: FONT, color: "444444" }) ]
+                            spacing: { before: 80, after: 80 },
+                            children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 22, font: FONT, color: "444444" }) ]
                         }),
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            border: { bottom: { color: COLOR_GREY, style: "single", size: 6 } },
+                            border: { bottom: { color: "000000", style: "single", size: 12, space: 15 } },
                             spacing: { after: 200 },
-                            children: [ new TextRun({ text: contactLine2, size: SIZE_BODY, font: FONT, color: "444444" }) ]
+                            children: [ new TextRun({ text: contactLine, size: SIZE_BODY, font: FONT, color: "444444" }) ]
                         }),
 
-                        createHeader("Professional Overview"),
+                        // SUMMARY
+                        createHeader("Professional Summary"),
                         ...(data.improved_summary || []).map(p => new Paragraph({
                             alignment: AlignmentType.JUSTIFIED,
-                            spacing: { before: 40, after: 80, line: 240 },
+                            spacing: { before: 60, after: 60, line: 240 },
                             children: [ new TextRun({ text: p, size: SIZE_BODY, font: FONT }) ]
                         })),
 
-                        createHeader("Key Achievements"),
-                        ...(data.key_achievements || []).map(a => new Paragraph({
-                            bullet: { level: 0 },
-                            spacing: { before: 40, after: 40 },
-                            children: [ new TextRun({ text: a, size: SIZE_BODY, font: FONT }) ]
-                        })),
+                        // KEY ACHIEVEMENTS
+                        ...(data.key_achievements && data.key_achievements.length > 0 ? [
+                            createHeader("Key Achievements"),
+                            ...data.key_achievements.map(a => new Paragraph({
+                                bullet: { level: 0 },
+                                alignment: AlignmentType.JUSTIFIED,
+                                spacing: { before: 40, after: 40 },
+                                children: [ new TextRun({ text: a, size: SIZE_BODY, font: FONT }) ]
+                            }))
+                        ] : []),
 
-                        createHeader("Professional Skills"),
-                        new Paragraph({
-                            spacing: { before: 100, after: 100 },
-                            children: [ new TextRun({ text: (data.core_skills || []).join("  |  "), size: SIZE_BODY, font: FONT }) ]
-                        }),
+                        // CORE SKILLS
+                        ...(data.core_skills && data.core_skills.length > 0 ? [
+                            createHeader("Professional Skills"),
+                            new Table({
+                                width: { size: 100, type: WidthType.PERCENTAGE },
+                                borders: { insideVertical: { style: "none" }, insideHorizontal: { style: "none" }, top: { style: "none" }, bottom: { style: "none" }, left: { style: "none" }, right: { style: "none" } },
+                                rows: skillsTableRows
+                            })
+                        ] : []),
 
+                        // WORK EXPERIENCE (Company Top Left, Dates Top Right, Designation Below)
                         createHeader("Work Experience"),
                         ...(data.experience || []).flatMap(job => [
                             new Paragraph({
-                                spacing: { before: 150, after: 50 },
+                                spacing: { before: 150, after: 20 },
+                                tabStops: [{ type: "right", position: 10800 }], // Pushes the dates perfectly to the right margin
                                 children: [
                                     new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, font: FONT }),
-                                    new TextRun({ text: ` — ${job.title} (${job.dates})`, size: SIZE_BODY, font: FONT })
+                                    new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, font: FONT })
                                 ]
                             }),
-                            ...job.bullets.map(b => new Paragraph({
-                                bullet: { level: 0 },
-                                alignment: AlignmentType.JUSTIFIED,
-                                children: [ new TextRun({ text: b, size: SIZE_BODY, font: FONT }) ]
-                            }))
+                            new Paragraph({
+                                spacing: { before: 0, after: 80 },
+                                children: [
+                                    new TextRun({ text: `${job.title}`, bold: true, size: SIZE_BODY, font: FONT, color: "444444" })
+                                ]
+                            }),
+                            ...job.bullets.map(bullet => {
+                                let prefix = "";
+                                let restOfText = bullet;
+                                
+                                if (bullet.includes(" – ")) {
+                                    const parts = bullet.split(" – ");
+                                    prefix = parts[0] + " – ";
+                                    restOfText = parts.slice(1).join(" – ");
+                                } else if (bullet.includes(" - ")) {
+                                    const parts = bullet.split(" - ");
+                                    prefix = parts[0] + " - ";
+                                    restOfText = parts.slice(1).join(" - ");
+                                }
+
+                                return new Paragraph({
+                                    alignment: AlignmentType.JUSTIFIED,
+                                    bullet: { level: 0 },
+                                    spacing: { before: 40, after: 40, line: 240 },
+                                    children: [
+                                        ...(prefix ? [new TextRun({ text: prefix, bold: true, size: SIZE_BODY, font: FONT })] : []),
+                                        new TextRun({ text: restOfText, size: SIZE_BODY, font: FONT })
+                                    ]
+                                });
+                            })
                         ]),
 
+                        // EDUCATION
                         createHeader("Education"),
                         ...(data.education || []).map(edu => new Paragraph({
-                            children: [ new TextRun({ text: `${edu.institution} | ${edu.degree} (${edu.date})`, size: SIZE_BODY, font: FONT }) ]
-                        }))
+                            spacing: { before: 100, after: 50 },
+                            children: [
+                                new TextRun({ text: `${edu.institution}`, bold: true, size: SIZE_BODY, font: FONT }),
+                                new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: SIZE_BODY, font: FONT, color: "444444" })
+                            ]
+                        })),
+
+                        // CERTIFICATIONS
+                        ...(data.certifications && data.certifications.length > 0 ? [
+                            createHeader("Certifications & Personal Details"),
+                            ...data.certifications.map(cert => new Paragraph({
+                                bullet: { level: 0 },
+                                spacing: { before: 40, after: 40 },
+                                children: [ new TextRun({ text: cert, size: SIZE_BODY, font: FONT }) ]
+                            })),
+                            ...(data.personal_details ? [
+                                new Paragraph({
+                                    spacing: { before: 80, after: 40 },
+                                    children: [ new TextRun({ text: `Additional Details: ${data.personal_details}`, size: SIZE_BODY, font: FONT, italics: true }) ]
+                                })
+                            ] : [])
+                        ] : [])
                     ]
                 }]
             });
