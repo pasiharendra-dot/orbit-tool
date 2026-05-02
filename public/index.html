@@ -244,6 +244,72 @@
             var rzp1 = new Razorpay(options);
             rzp1.open();
         }
+<!-- ========================================== -->
+    <!-- HIDDEN PDF TEMPLATE (TEMPLATE 3: KATHERINE)-->
+    <!-- ========================================== -->
+    <div id="pdf-export-container" class="hidden">
+        <!-- We strictly define the width to 800px so the PDF generator captures a perfect A4 ratio -->
+        <div id="resume-canvas" class="bg-white w-[800px] p-12 mx-auto text-gray-900" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+            
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <!-- High tracking (letter-spacing) mimics the premium executive look -->
+                <h1 id="render-name" class="text-[40px] font-light tracking-[0.25em] uppercase text-gray-900 mb-2 leading-none">Firstname Lastname</h1>
+                <h2 id="render-title" class="text-sm font-medium tracking-[0.2em] text-gray-600 uppercase">Optimized Professional Title</h2>
+                
+                <div class="mt-4 text-[11px] text-gray-600 flex justify-center items-center space-x-2">
+                    <span id="render-phone">+1 234-567-8900</span>
+                    <span>|</span>
+                    <span id="render-email">email@example.com</span>
+                    <span>|</span>
+                    <span id="render-location">City, State</span>
+                    <span>|</span>
+                    <span id="render-linkedin">linkedin.com/in/username</span>
+                </div>
+            </div>
+
+            <!-- Professional Overview -->
+            <div class="mb-6">
+                <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-800 uppercase border-y border-gray-300 py-1.5 mb-3">Professional Overview</h3>
+                <p id="render-summary" class="text-[13px] text-gray-700 leading-relaxed text-justify">
+                    <!-- AI Injects Summary Here -->
+                </p>
+            </div>
+
+            <!-- Work Experience -->
+            <div class="mb-6">
+                <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-800 uppercase border-y border-gray-300 py-1.5 mb-4">Work Experience</h3>
+                
+                <!-- The JS will duplicate this block for every job the user has -->
+                <div id="render-experience-list">
+                    <div class="mb-5">
+                        <div class="flex justify-between items-baseline mb-1.5">
+                            <div class="text-[13px] text-gray-800">
+                                <span class="font-bold">Company Name</span> | Location, <span class="italic">Job Title</span>
+                            </div>
+                            <div class="text-[11px] font-medium text-gray-600 uppercase tracking-wider">Start Date - End Date</div>
+                        </div>
+                        <ul class="list-disc pl-4 text-[13px] text-gray-700 space-y-1.5 leading-relaxed">
+                            <li>Bullet point one demonstrating quantified achievements.</li>
+                            <li>Bullet point two showing leadership and cross-functional skills.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education (Optional/Placeholder) -->
+            <div class="mb-6">
+                <h3 class="text-[11px] font-bold tracking-[0.15em] text-gray-800 uppercase border-y border-gray-300 py-1.5 mb-4">Education</h3>
+                <div class="flex justify-between items-baseline">
+                    <div class="text-[13px] text-gray-800">
+                        <span class="font-bold">University Name</span> | <span class="italic">Degree Title</span>
+                    </div>
+                    <div class="text-[11px] font-medium text-gray-600 uppercase tracking-wider">Graduation Year</div>
+                </div>
+            </div>
+
+        </div>
+    </div>        
     </script>
 </body>
 </html>
