@@ -91,7 +91,6 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                             Download Editable Resume (.docx)
                         </button>
-                        <p class="text-xs text-gray-500 mt-3 font-medium">Native Word format guarantees 100% ATS readability and allows final tweaks.</p>
                     </div>
                 </div>
             </div>
@@ -104,7 +103,6 @@
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             const jdText = document.getElementById('job-description-input').value.trim();
-
             if (!file) return;
 
             document.getElementById('upload-section').style.display = 'none';
@@ -120,8 +118,8 @@
                 const data = await response.json();
 
                 window.resumeData = data.after;
-
                 document.getElementById('before-score').innerText = `Score: ${data.before.score}/100`;
+                
                 const failPointsList = document.getElementById('fail-points');
                 failPointsList.innerHTML = '';
                 data.before.fail_points.forEach(point => {
@@ -134,9 +132,7 @@
 
                 document.getElementById('loading-section').style.display = 'none';
                 document.getElementById('results-section').style.display = 'block';
-
             } catch (error) {
-                console.error('Error:', error);
                 alert("Something went wrong! Please try again.");
                 document.getElementById('loading-section').style.display = 'none';
                 document.getElementById('upload-section').style.display = 'block';
@@ -144,26 +140,56 @@
         }
 
         // ==========================================
-        // DOCX GENERATOR: BOLD PREFIXES & NEW SECTIONS
+        // DOCX GENERATOR: 9.5pt CALIBRI & 4-COLUMN SKILLS GRID
         // ==========================================
         function downloadWord() {
-            if (!window.resumeData) {
-                alert("No resume data found.");
-                return;
-            }
+            if (!window.resumeData) return alert("No resume data found.");
 
             const data = window.resumeData;
-            const { Document, Packer, Paragraph, TextRun, AlignmentType } = docx;
+            const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType } = docx;
+
+            const FONT_BODY = "Calibri";
+            const SIZE_BODY = 19;     // 9.5 pt
+            const SIZE_HEADING = 22;  // 11 pt
+            const SIZE_TITLE = 24;    // 12 pt
+            const SIZE_NAME = 40;     // 20 pt
 
             function createHeader(title) {
                 return new Paragraph({
-                    spacing: { before: 300, after: 150 },
+                    spacing: { before: 200, after: 100 },
                     border: {
                         top: { color: "000000", space: 1, style: "single", size: 6 },
                         bottom: { color: "000000", space: 1, style: "single", size: 6 }
                     },
-                    children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: 24, font: "Arial" }) ]
+                    children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: SIZE_HEADING, font: FONT_BODY }) ]
                 });
+            }
+
+            // Logic to chunk skills array into rows of 4 for the Table grid
+            const skillsTableRows = [];
+            if (data.core_skills && data.core_skills.length > 0) {
+                for (let i = 0; i < data.core_skills.length; i += 4) {
+                    const chunk = data.core_skills.slice(i, i + 4);
+                    // Pad array to ensure 4 columns even if short
+                    while (chunk.length < 4) chunk.push(""); 
+                    
+                    skillsTableRows.push(new TableRow({
+                        children: chunk.map(skill => new TableCell({
+                            width: { size: 25, type: WidthType.PERCENTAGE },
+                            // Remove all borders to match the clean image layout
+                            borders: {
+                                top: { style: "none" }, bottom: { style: "none" },
+                                left: { style: "none" }, right: { style: "none" }
+                            },
+                            children: [
+                                new Paragraph({
+                                    spacing: { before: 20, after: 20 },
+                                    children: [ new TextRun({ text: skill, size: SIZE_BODY, font: FONT_BODY, color: "444444" }) ]
+                                })
+                            ]
+                        }))
+                    }));
+                }
             }
 
             const doc = new Document({
@@ -173,25 +199,25 @@
                         // HEADER
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, font: "Arial" }) ]
+                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: SIZE_NAME, font: FONT_BODY }) ]
                         }),
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            spacing: { before: 100, after: 100 },
-                            children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 22, font: "Arial", color: "444444" }) ]
+                            spacing: { before: 50, after: 50 },
+                            children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: SIZE_TITLE, font: FONT_BODY, color: "444444" }) ]
                         }),
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            spacing: { after: 300 },
-                            children: [ new TextRun({ text: `${data.phone || ""}  |  ${data.email || ""}  |  ${data.location || ""}  |  ${data.linkedin || ""}`, size: 18, font: "Arial", color: "444444" }) ]
+                            spacing: { after: 200 },
+                            children: [ new TextRun({ text: `${data.phone || ""}  |  ${data.email || ""}  |  ${data.location || ""}  |  ${data.linkedin || ""}`, size: SIZE_BODY, font: FONT_BODY, color: "444444" }) ]
                         }),
 
-                        // SUMMARY (Mapped as separate paragraphs)
+                        // SUMMARY
                         createHeader("Professional Summary"),
                         ...(data.improved_summary || []).map(paragraphText => new Paragraph({
                             alignment: AlignmentType.JUSTIFIED,
-                            spacing: { before: 50, after: 150, line: 300 },
-                            children: [ new TextRun({ text: paragraphText, size: 21, font: "Arial" }) ]
+                            spacing: { before: 40, after: 80, line: 240 },
+                            children: [ new TextRun({ text: paragraphText, size: SIZE_BODY, font: FONT_BODY }) ]
                         })),
 
                         // KEY ACHIEVEMENTS
@@ -200,35 +226,34 @@
                             ...data.key_achievements.map(achievement => new Paragraph({
                                 alignment: AlignmentType.JUSTIFIED,
                                 bullet: { level: 0 },
-                                spacing: { before: 50, after: 50 },
-                                children: [ new TextRun({ text: achievement, size: 21, font: "Arial" }) ]
+                                spacing: { before: 40, after: 40, line: 240 },
+                                children: [ new TextRun({ text: achievement, size: SIZE_BODY, font: FONT_BODY }) ]
                             }))
                         ] : []),
 
-                        // CORE SKILLS
+                        // CORE SKILLS (4-COLUMN GRID)
                         ...(data.core_skills && data.core_skills.length > 0 ? [
-                            createHeader("Core Skills"),
-                            new Paragraph({
-                                alignment: AlignmentType.JUSTIFIED,
-                                spacing: { before: 100, after: 100 },
-                                children: [ new TextRun({ text: data.core_skills.join("  |  "), size: 21, font: "Arial" }) ]
+                            createHeader("Professional Skills"),
+                            new Table({
+                                width: { size: 100, type: WidthType.PERCENTAGE },
+                                borders: { insideVertical: { style: "none" }, insideHorizontal: { style: "none" }, top: { style: "none" }, bottom: { style: "none" }, left: { style: "none" }, right: { style: "none" } },
+                                rows: skillsTableRows
                             })
                         ] : []),
 
-                        // WORK EXPERIENCE (With Bold Prefix Logic)
+                        // WORK EXPERIENCE
                         createHeader("Work Experience"),
                         ...(data.experience || []).flatMap(job => [
                             new Paragraph({
-                                spacing: { before: 200, after: 100 },
+                                spacing: { before: 150, after: 50 },
                                 children: [
-                                    new TextRun({ text: `${job.company}`, bold: true, size: 22, font: "Arial" }),
-                                    new TextRun({ text: ` | ${job.location}`, size: 22, font: "Arial" }),
-                                    new TextRun({ text: ` — ${job.title}`, italics: true, size: 22, font: "Arial" }),
-                                    new TextRun({ text: `  (${job.dates})`, size: 20, font: "Arial", bold: true, color: "444444" })
+                                    new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, font: FONT_BODY }),
+                                    new TextRun({ text: ` | ${job.location}`, size: SIZE_BODY, font: FONT_BODY }),
+                                    new TextRun({ text: ` — ${job.title}`, italics: true, size: SIZE_BODY, font: FONT_BODY }),
+                                    new TextRun({ text: `  (${job.dates})`, size: SIZE_BODY, font: FONT_BODY, bold: true, color: "444444" })
                                 ]
                             }),
                             ...job.bullets.map(bullet => {
-                                // Logic to bold the "Focus Area" prefix
                                 let prefix = "";
                                 let restOfText = bullet;
                                 
@@ -245,10 +270,10 @@
                                 return new Paragraph({
                                     alignment: AlignmentType.JUSTIFIED,
                                     bullet: { level: 0 },
-                                    spacing: { before: 50, after: 50 },
+                                    spacing: { before: 40, after: 40, line: 240 },
                                     children: [
-                                        ...(prefix ? [new TextRun({ text: prefix, bold: true, size: 21, font: "Arial" })] : []),
-                                        new TextRun({ text: restOfText, size: 21, font: "Arial" })
+                                        ...(prefix ? [new TextRun({ text: prefix, bold: true, size: SIZE_BODY, font: FONT_BODY })] : []),
+                                        new TextRun({ text: restOfText, size: SIZE_BODY, font: FONT_BODY })
                                     ]
                                 });
                             })
@@ -259,9 +284,9 @@
                         ...(data.education || []).map(edu => new Paragraph({
                             spacing: { before: 100, after: 50 },
                             children: [
-                                new TextRun({ text: `${edu.institution}`, bold: true, size: 22, font: "Arial" }),
-                                new TextRun({ text: ` | ${edu.degree}`, italics: true, size: 22, font: "Arial" }),
-                                new TextRun({ text: `  (${edu.date})`, size: 20, font: "Arial", color: "444444" })
+                                new TextRun({ text: `${edu.institution}`, bold: true, size: SIZE_BODY, font: FONT_BODY }),
+                                new TextRun({ text: ` | ${edu.degree}`, italics: true, size: SIZE_BODY, font: FONT_BODY }),
+                                new TextRun({ text: `  (${edu.date})`, size: SIZE_BODY, font: FONT_BODY, color: "444444" })
                             ]
                         })),
 
@@ -270,13 +295,13 @@
                             createHeader("Certifications & Personal Details"),
                             ...data.certifications.map(cert => new Paragraph({
                                 bullet: { level: 0 },
-                                spacing: { before: 50, after: 50 },
-                                children: [ new TextRun({ text: cert, size: 21, font: "Arial" }) ]
+                                spacing: { before: 40, after: 40 },
+                                children: [ new TextRun({ text: cert, size: SIZE_BODY, font: FONT_BODY }) ]
                             })),
                             ...(data.personal_details ? [
                                 new Paragraph({
-                                    spacing: { before: 100, after: 50 },
-                                    children: [ new TextRun({ text: `Additional Details: ${data.personal_details}`, size: 21, font: "Arial", italics: true }) ]
+                                    spacing: { before: 80, after: 40 },
+                                    children: [ new TextRun({ text: `Additional Details: ${data.personal_details}`, size: SIZE_BODY, font: FONT_BODY, italics: true }) ]
                                 })
                             ] : [])
                         ] : [])
