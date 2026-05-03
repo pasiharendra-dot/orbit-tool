@@ -87,27 +87,19 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
         let aiResponse = result.response.text();
         
-        // AGGRESSIVE JSON CLEANUP (This prevents the 500 crash)
-        aiResponse = aiResponse.trim();
-        // Remove markdown formatting if the AI ignores instructions
-        if (aiResponse.startsWith("```json")) {
-            aiResponse = aiResponse.replace(/^```json/, "");
+        // ULTIMATE JSON CLEANUP: Mathematically extract only the JSON brackets
+        const startIndex = aiResponse.indexOf('{');
+        const endIndex = aiResponse.lastIndexOf('}');
+        
+        if (startIndex !== -1 && endIndex !== -1) {
+            aiResponse = aiResponse.substring(startIndex, endIndex + 1);
         }
-        if (aiResponse.startsWith("```")) {
-            aiResponse = aiResponse.replace(/^```/, "");
-        }
-        if (aiResponse.endsWith("```")) {
-            aiResponse = aiResponse.replace(/
-```$/, "");
-        }
-        aiResponse = aiResponse.trim();
 
         const parsedData = JSON.parse(aiResponse);
         res.json(parsedData);
         
     } catch (error) {
         console.error("CRITICAL BACKEND ERROR:", error);
-        // We now return a 500 with the actual error message so you can see it if it fails again
         res.status(500).json({ error: 'Failed to analyze resume', details: error.message });
     }
 });
