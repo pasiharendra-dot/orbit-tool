@@ -269,25 +269,23 @@
             }
         }
 
-        // DOCX GENERATOR LOGIC
+// ==========================================
+        // DOCX GENERATOR: "EXECUTIVE BLUE" THEME
+        // ==========================================
         function downloadWord() {
             if (!window.resumeData) return;
             const data = window.resumeData;
             
-            // --- SILENTLY UPDATE GOOGLE SHEETS ON DOWNLOAD ---
+            // Log successful generation
             try {
                 fetch(GOOGLE_TRACKER_URL, {
                     method: "POST",
                     body: JSON.stringify({
-                        name: data.name,
-                        email: data.email,
-                        phone: data.phone,
-                        beforeScore: window.beforeScoreTracker,
-                        afterScore: data.score || "N/A",
-                        action: "SUCCESS - Downloaded Docx"
+                        name: data.name, email: data.email, phone: data.phone,
+                        beforeScore: window.beforeScoreTracker, afterScore: data.score || "N/A", action: "SUCCESS - Downloaded Docx"
                     })
                 });
-            } catch(e) { console.log("Tracker silent fail"); }
+            } catch(e) { }
 
             const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType } = docx;
 
@@ -295,11 +293,16 @@
             const SIZE_BODY = 19;     
             const SIZE_HEADING = 22;  
             
+            // THEME COLORS (Hex codes without the #)
+            const COLOR_PRIMARY = "0056D2"; // Orbit Blue
+            const COLOR_SUBTEXT = "444444"; // Dark Grey
+            
+            // Header now uses the Primary Color for both Text and the Underline
             function createHeader(title) {
                 return new Paragraph({
                     spacing: { before: 240, after: 120 },
-                    border: { bottom: { color: "000000", space: 5, style: "single", size: 12 } },
-                    children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: SIZE_HEADING, font: FONT }) ]
+                    border: { bottom: { color: COLOR_PRIMARY, space: 5, style: "single", size: 12 } },
+                    children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: SIZE_HEADING, font: FONT, color: COLOR_PRIMARY }) ]
                 });
             }
 
@@ -317,7 +320,7 @@
                             children: [
                                 new Paragraph({
                                     spacing: { before: 20, after: 20 },
-                                    children: [ new TextRun({ text: skill, size: SIZE_BODY, font: FONT, color: "444444" }) ]
+                                    children: [ new TextRun({ text: skill, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ]
                                 })
                             ]
                         }))
@@ -329,20 +332,23 @@
                 sections: [{
                     properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } },
                     children: [
+                        // NAME (Now in Orbit Blue)
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
-                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, font: FONT }) ]
+                            children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, font: FONT, color: COLOR_PRIMARY }) ]
                         }),
+                        // TITLE
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             spacing: { before: 80, after: 80 },
-                            children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 22, font: FONT, color: "444444" }) ]
+                            children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 22, font: FONT, color: COLOR_SUBTEXT }) ]
                         }),
+                        // CONTACT INFO
                         new Paragraph({
                             alignment: AlignmentType.CENTER,
                             border: { bottom: { color: "000000", style: "single", size: 12, space: 15 } },
                             spacing: { after: 200 },
-                            children: [ new TextRun({ text: contactLine, size: SIZE_BODY, font: FONT, color: "444444" }) ]
+                            children: [ new TextRun({ text: contactLine, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ]
                         }),
 
                         createHeader("Professional Summary"),
@@ -383,7 +389,7 @@
                             }),
                             new Paragraph({
                                 spacing: { before: 0, after: 80 },
-                                children: [ new TextRun({ text: `${job.title}`, bold: true, size: SIZE_BODY, font: FONT, color: "444444" }) ]
+                                children: [ new TextRun({ text: `${job.title}`, bold: true, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ]
                             }),
                             ...job.bullets.map(bullet => {
                                 let prefix = "";
@@ -410,7 +416,7 @@
                             spacing: { before: 100, after: 50 },
                             children: [
                                 new TextRun({ text: `${edu.institution}`, bold: true, size: SIZE_BODY, font: FONT }),
-                                new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: SIZE_BODY, font: FONT, color: "444444" })
+                                new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT })
                             ]
                         })),
 
