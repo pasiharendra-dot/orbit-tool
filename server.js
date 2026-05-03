@@ -28,7 +28,6 @@ app.post('/api/create-order', async (req, res) => {
     } catch (error) { res.status(500).json({ error: 'Failed to create payment order' }); }
 });
 
-// RESTORED STRICT PROMPT: Retains the original elite writing style
 const systemPrompt = `
 Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
 Your goal is to OPTIMIZE the user's resume, not REINVENT it. Write with the authoritative, highly-polished tone of a C-suite executive recruiter.
@@ -87,7 +86,14 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         fs.unlinkSync(req.file.path);
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash", generationConfig: { responseMimeType: "application/json" } });
+        // THE FIX IS HERE: We added temperature: 0.0 to lock the engine's creativity
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-2.5-flash", 
+            generationConfig: { 
+                responseMimeType: "application/json",
+                temperature: 0.0 
+            } 
+        });
         
         const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information to Integrate:\n${extraInfo}\n\nAnalyze and optimize this resume:`;
         const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
