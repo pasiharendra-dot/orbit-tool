@@ -330,9 +330,10 @@
                         new Paragraph({ alignment: AlignmentType.CENTER, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, font: FONT, color: COLOR_DARK_BLUE }) ] }),
                         new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 80, after: 80 }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), bold: true, size: 22, font: FONT, color: COLOR_SUBTEXT }) ] }),
                         
+                        // FIX: Reduced 'space' parameter from 15 to 1 to remove the visual gap
                         new Paragraph({ 
                             alignment: AlignmentType.CENTER, 
-                            border: { bottom: { color: COLOR_LIGHT_BLUE, style: BorderStyle.SINGLE, size: 12, space: 15 } }, 
+                            border: { bottom: { color: COLOR_LIGHT_BLUE, style: BorderStyle.SINGLE, size: 12, space: 1 } }, 
                             spacing: { after: 200 }, 
                             children: [ new TextRun({ text: contactLine, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] 
                         }),
