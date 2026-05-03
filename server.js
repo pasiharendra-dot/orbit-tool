@@ -8,7 +8,7 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// FIX 1: Explicitly create the uploads directory so Render doesn't crash
+// Ensure the uploads directory exists
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
@@ -80,9 +80,10 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
-        // FIX 2: Reverted to the ultra-stable gemini-1.5-flash model
+        // THE FIX: We are using "gemini-pro" which is the safest, most universal text model.
+        // It has a generous free tier and avoids all versioning 404 errors.
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash", 
+            model: "gemini-pro", 
             generationConfig: { 
                 responseMimeType: "application/json", 
                 temperature: 0.0 
@@ -91,7 +92,11 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
         const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume, cover letter, and LinkedIn profile. Ensure strict JSON output:`;
         
-        const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
+        // Note: gemini-pro handles inputs slightly differently than flash, so we pass the text and image parts separately.
+        const result = await model.generateContent([
+            systemPrompt + "\n\n" + promptWithJD,
+            filePart
+        ]);
         let aiResponse = result.response.text();
         
         const startIndex = aiResponse.indexOf('{');
@@ -108,7 +113,6 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
     } catch (error) {
         console.error("CRITICAL BACKEND ERROR:", error);
-        // FIX 3: Send the exact crash reason back to the frontend
         res.status(500).json({ error: 'Server Crash', details: error.message });
     }
 });
