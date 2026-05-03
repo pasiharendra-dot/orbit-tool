@@ -80,10 +80,10 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
-        // THE FIX: We are using "gemini-pro" which is the safest, most universal text model.
-        // It has a generous free tier and avoids all versioning 404 errors.
+        // THE FIX: Using the correct model, AND passing the system prompt the modern way
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-pro", 
+            model: "gemini-1.5-flash",
+            systemInstruction: systemPrompt,
             generationConfig: { 
                 responseMimeType: "application/json", 
                 temperature: 0.0 
@@ -92,13 +92,11 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
         const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume, cover letter, and LinkedIn profile. Ensure strict JSON output:`;
         
-        // Note: gemini-pro handles inputs slightly differently than flash, so we pass the text and image parts separately.
-        const result = await model.generateContent([
-            systemPrompt + "\n\n" + promptWithJD,
-            filePart
-        ]);
+        // Pass only the user prompt and the file (System prompt is now handled above)
+        const result = await model.generateContent([promptWithJD, filePart]);
         let aiResponse = result.response.text();
         
+        // Robust JSON extraction
         const startIndex = aiResponse.indexOf('{');
         const endIndex = aiResponse.lastIndexOf('}');
         
