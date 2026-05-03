@@ -16,17 +16,17 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const systemPrompt = `
 Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
-Your goal is to OPTIMIZE the user's resume, write a targeted Cover Letter, and create a LinkedIn profile document based on strict templates.
+Your goal is to OPTIMIZE the user's resume, write a targeted Cover Letter, and create a LinkedIn profile document.
 
 STRICT GUARDRAILS:
 1. Zero Seniority Hallucination: Do NOT elevate the user's job level.
 2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026.
-3. Cover Letter: Write 4 paragraphs targeting the job description. Do NOT include placeholder addresses, just the core content.
+3. Cover Letter: Write 4 paragraphs targeting the job description. Do NOT include placeholder addresses.
 4. LinkedIn: Write a 1st-person About section, select 3-4 top experience highlights, and extract 10-15 core skills.
 
 Output Format (Strict JSON):
 {
-  "before": {"score": 45, "fail_points": ["...", "...", "..."]},
+  "before": {"score": 45, "fail_points": ["Point 1", "Point 2", "Point 3"]},
   "after": {
     "score": 94,
     "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
@@ -42,11 +42,10 @@ Output Format (Strict JSON):
     ],
     "certifications": ["..."],
     "personal_details": [
-      { "label": "Date of Birth", "value": "..." },
-      { "label": "Nationality", "value": "..." }
+      { "label": "Date of Birth", "value": "..." }
     ],
     "cover_letter": {
-      "target_company": "[Company Name]",
+      "target_company": "...",
       "target_role": "...",
       "paragraphs": ["..."]
     },
@@ -60,7 +59,7 @@ Output Format (Strict JSON):
     }
   }
 }
-DO NOT wrap in markdown. Output ONLY raw JSON.
+DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 `;
 
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
@@ -70,23 +69,46 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
+        // Always clean up the uploaded file to save server space
         fs.unlinkSync(req.file.path);
+        
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
         const model = genAI.getGenerativeModel({ 
             model: "gemini-2.5-flash", 
-            generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
+            generationConfig: { 
+                responseMimeType: "application/json", 
+                temperature: 0.0 
+            } 
         });
         
-        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume, cover letter, and LinkedIn profile:`;
-        const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
+        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume, cover letter, and LinkedIn profile. Ensure strict JSON output:`;
         
+        const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
         let aiResponse = result.response.text();
-        aiResponse = aiResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
-        res.json(JSON.parse(aiResponse));
+        
+        // AGGRESSIVE JSON CLEANUP (This prevents the 500 crash)
+        aiResponse = aiResponse.trim();
+        // Remove markdown formatting if the AI ignores instructions
+        if (aiResponse.startsWith("```json")) {
+            aiResponse = aiResponse.replace(/^```json/, "");
+        }
+        if (aiResponse.startsWith("```")) {
+            aiResponse = aiResponse.replace(/^```/, "");
+        }
+        if (aiResponse.endsWith("```")) {
+            aiResponse = aiResponse.replace(/
+```$/, "");
+        }
+        aiResponse = aiResponse.trim();
+
+        const parsedData = JSON.parse(aiResponse);
+        res.json(parsedData);
+        
     } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ error: 'Failed to analyze resume' });
+        console.error("CRITICAL BACKEND ERROR:", error);
+        // We now return a 500 with the actual error message so you can see it if it fails again
+        res.status(500).json({ error: 'Failed to analyze resume', details: error.message });
     }
 });
 
