@@ -6,9 +6,15 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
+// FIX 1: Explicitly create the uploads directory so Render doesn't crash
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
 const upload = multer({ dest: 'uploads/' });
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); 
 
@@ -64,18 +70,19 @@ DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+        if (!req.file) throw new Error("No file received by the server.");
+        
         const jobDescription = req.body.jobDescription || "Optimize for general industry standards.";
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
-        // Always clean up the uploaded file to save server space
         fs.unlinkSync(req.file.path);
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
+        // FIX 2: Reverted to the ultra-stable gemini-1.5-flash model
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash", 
+            model: "gemini-1.5-flash", 
             generationConfig: { 
                 responseMimeType: "application/json", 
                 temperature: 0.0 
@@ -87,12 +94,13 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
         let aiResponse = result.response.text();
         
-        // ULTIMATE JSON CLEANUP: Mathematically extract only the JSON brackets
         const startIndex = aiResponse.indexOf('{');
         const endIndex = aiResponse.lastIndexOf('}');
         
         if (startIndex !== -1 && endIndex !== -1) {
             aiResponse = aiResponse.substring(startIndex, endIndex + 1);
+        } else {
+            throw new Error("AI did not return valid JSON format.");
         }
 
         const parsedData = JSON.parse(aiResponse);
@@ -100,8 +108,9 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
     } catch (error) {
         console.error("CRITICAL BACKEND ERROR:", error);
-        res.status(500).json({ error: 'Failed to analyze resume', details: error.message });
+        // FIX 3: Send the exact crash reason back to the frontend
+        res.status(500).json({ error: 'Server Crash', details: error.message });
     }
 });
 
-app.listen(port, () => { console.log(`Engine running at http://localhost:${port}`); });
+app.listen(port, () => { console.log(`Engine running at port ${port}`); });
