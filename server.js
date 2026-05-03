@@ -82,7 +82,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
         // FIX 2: Reverted to the ultra-stable gemini-1.5-flash model
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash-latest", 
+            model: "gemini-1.5-flash", 
             generationConfig: { 
                 responseMimeType: "application/json", 
                 temperature: 0.0 
