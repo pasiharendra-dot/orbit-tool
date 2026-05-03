@@ -8,7 +8,7 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Ensure the uploads directory exists
+// Ensure the uploads directory exists for Render
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
@@ -80,9 +80,9 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
-        // THE FIX: Using the correct model, AND passing the system prompt the modern way
+        // Locked securely back to your working 2.5 model
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash",
             systemInstruction: systemPrompt,
             generationConfig: { 
                 responseMimeType: "application/json", 
@@ -92,11 +92,10 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
         const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume, cover letter, and LinkedIn profile. Ensure strict JSON output:`;
         
-        // Pass only the user prompt and the file (System prompt is now handled above)
         const result = await model.generateContent([promptWithJD, filePart]);
         let aiResponse = result.response.text();
         
-        // Robust JSON extraction
+        // Unbreakable JSON extraction logic
         const startIndex = aiResponse.indexOf('{');
         const endIndex = aiResponse.lastIndexOf('}');
         
