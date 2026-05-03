@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const OpenAI = require('openai');
+const pdf = require('pdf-parse');
 const fs = require('fs');
 const path = require('path');
 
@@ -18,7 +19,9 @@ const upload = multer({ dest: 'uploads/' });
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); 
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 const systemPrompt = `
 Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
@@ -30,7 +33,7 @@ STRICT GUARDRAILS:
 3. Cover Letter: Write 4 paragraphs targeting the job description. Do NOT include placeholder addresses.
 4. LinkedIn: Write a 1st-person About section, select 3-4 top experience highlights, and extract 10-15 core skills.
 
-Output Format (Strict JSON):
+Output Format: You MUST return a JSON object with this exact structure:
 {
   "before": {"score": 45, "fail_points": ["Point 1", "Point 2", "Point 3"]},
   "after": {
@@ -65,7 +68,6 @@ Output Format (Strict JSON):
     }
   }
 }
-DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 `;
 
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
@@ -75,37 +77,32 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const jobDescription = req.body.jobDescription || "Optimize for general industry standards.";
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
-        const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
+        // Read the uploaded PDF file
+        const dataBuffer = fs.readFileSync(req.file.path);
+        
+        // Extract the raw text from the PDF
+        const pdfData = await pdf(dataBuffer);
+        const resumeText = pdfData.text;
+        
+        // Clean up the temp file
         fs.unlinkSync(req.file.path);
         
-        const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
-        
-        // Locked securely back to your working 2.5 model
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash",
-            systemInstruction: systemPrompt,
-            generationConfig: { 
-                responseMimeType: "application/json", 
-                temperature: 0.0 
-            } 
+        const userPrompt = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nOriginal Resume Text to Optimize:\n${resumeText}\n\nAnalyze and optimize this resume, cover letter, and LinkedIn profile according to the JSON format.`;
+
+        // OpenAI API Call
+        const response = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            response_format: { type: "json_object" }, // FORCES perfect JSON output
+            temperature: 0.0,
+            messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: userPrompt }
+            ]
         });
         
-        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume, cover letter, and LinkedIn profile. Ensure strict JSON output:`;
-        
-        const result = await model.generateContent([promptWithJD, filePart]);
-        let aiResponse = result.response.text();
-        
-        // Unbreakable JSON extraction logic
-        const startIndex = aiResponse.indexOf('{');
-        const endIndex = aiResponse.lastIndexOf('}');
-        
-        if (startIndex !== -1 && endIndex !== -1) {
-            aiResponse = aiResponse.substring(startIndex, endIndex + 1);
-        } else {
-            throw new Error("AI did not return valid JSON format.");
-        }
-
+        const aiResponse = response.choices[0].message.content;
         const parsedData = JSON.parse(aiResponse);
+        
         res.json(parsedData);
         
     } catch (error) {
