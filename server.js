@@ -16,15 +16,13 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const systemPrompt = `
 Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
-Your goal is to OPTIMIZE the user's resume, write a highly targeted Cover Letter, and create a LinkedIn profile makeover.
+Your goal is to OPTIMIZE the user's resume, write a targeted Cover Letter, and create a LinkedIn profile document based on strict templates.
 
 STRICT GUARDRAILS:
-1. Zero Seniority Hallucination: Do NOT elevate the user's job level. 
-2. Context Preservation: Strictly follow actual duties. 
-3. Dynamic ATS Scoring: Calculate a realistic "Before" (35-68) and "After" (88-97) score.
-4. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026.
-5. Cover Letter: Write a 3-paragraph executive cover letter based on their target job and top achievements.
-6. LinkedIn: Write a high-impact LinkedIn Headline (under 120 chars) and an engaging, 1st-person "About" section.
+1. Zero Seniority Hallucination: Do NOT elevate the user's job level.
+2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026.
+3. Cover Letter: Write 4 paragraphs targeting the job description. Do NOT include placeholder addresses, just the core content.
+4. LinkedIn: Write a 1st-person About section, select 3-4 top experience highlights, and extract 10-15 core skills.
 
 Output Format (Strict JSON):
 {
@@ -44,11 +42,22 @@ Output Format (Strict JSON):
     ],
     "certifications": ["..."],
     "personal_details": [
-      { "label": "Date of Birth", "value": "..." }
+      { "label": "Date of Birth", "value": "..." },
+      { "label": "Nationality", "value": "..." }
     ],
-    "cover_letter": "...",
-    "linkedin_headline": "...",
-    "linkedin_about": "..."
+    "cover_letter": {
+      "target_company": "[Company Name]",
+      "target_role": "...",
+      "paragraphs": ["..."]
+    },
+    "linkedin": {
+      "headline": "...",
+      "about_paragraphs": ["..."],
+      "experience_highlights": [
+        { "company": "...", "location": "...", "dates": "...", "title": "...", "bullets": ["..."] }
+      ],
+      "skills": ["..."]
+    }
   }
 }
 DO NOT wrap in markdown. Output ONLY raw JSON.
@@ -69,7 +78,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
             generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
         });
         
-        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume, and generate the cover letter and LinkedIn copy:`;
+        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume, cover letter, and LinkedIn profile:`;
         const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
         
         let aiResponse = result.response.text();
