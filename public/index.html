@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script>
-        tailwind.config = { theme: { extend: { colors: { orbitBlue: '#0F3B68', orbitLightBlue: '#5C9CE6', orbitDark: '#0A192F', whatsapp: '#25D366' } } } }
+        tailwind.config = { theme: { extend: { colors: { orbitBlue: '#0F3B68', orbitLightBlue: '#5C9CE6', orbitDark: '#0A192F', orbitLight: '#F3F4F6', whatsapp: '#25D366' } } } }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -21,53 +21,189 @@
 </head>
 <body class="min-h-screen flex flex-col relative pb-10">
 
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/910000000000" target="_blank" class="fixed bottom-6 right-6 bg-whatsapp text-white p-4 rounded-full shadow-[0_10px_20px_rgba(37,211,102,0.3)] hover:scale-110 transition-transform z-50 flex items-center justify-center">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824v.001z" fill-rule="evenodd" clip-rule="evenodd"/></svg>
+    </a>
+
+    <!-- NAVIGATION WITH TRUST SEAL -->
     <nav class="bg-white border-b border-gray-100 py-4 px-8 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-extrabold text-orbitDark tracking-tight">Orbit <span class="text-orbitLightBlue">Careers</span></h1>
-            <div class="flex items-center space-x-2 bg-blue-50 px-4 py-1.5 rounded-full border border-blue-100">
+            <div class="hidden md:flex items-center space-x-2 bg-blue-50 px-4 py-1.5 rounded-full border border-blue-100">
+                <svg class="w-4 h-4 text-[#0F3B68]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                 <span class="text-xs font-bold text-[#0F3B68] uppercase tracking-wider">Certified by Global Recruiters</span>
             </div>
         </div>
     </nav>
 
+    <!-- MAIN CONTENT -->
     <main class="flex-grow flex flex-col items-center">
         
+        <!-- UPLOAD SECTION (WITH RESTORED SOCIAL PROOF) -->
         <div id="upload-section" class="w-full flex flex-col items-center fade-in">
             <div class="bg-gradient-hero w-full pt-16 pb-36 px-4 text-center text-white relative overflow-hidden">
-                <h2 class="text-4xl md:text-5xl font-extrabold mb-4">Stop Getting Rejected by Bots.</h2>
-                <p class="text-lg md:text-xl font-medium text-blue-100 max-w-2xl mx-auto mb-8">Upload your resume. Our AI will rewrite and format it into a perfect, ATS-compliant Word Document in 60 seconds.</p>
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-4 relative z-10">Stop Getting Rejected by Bots.</h2>
+                <p class="text-lg md:text-xl font-medium text-blue-100 max-w-2xl mx-auto relative z-10 mb-8">Upload your resume. Our recruiter-trained AI will rewrite and format it into a perfect, ATS-compliant Word Document in 60 seconds.</p>
+                
+                <!-- RESTORED METRICS STRIP -->
+                <div class="flex flex-wrap justify-center gap-4 md:gap-12 relative z-10 border-t border-white/20 pt-6 max-w-4xl mx-auto">
+                    <div class="flex flex-col items-center"><span class="text-3xl font-extrabold">25,000+</span><span class="text-xs uppercase tracking-wider text-blue-200 mt-1">Resumes Optimized</span></div>
+                    <div class="flex flex-col items-center"><span class="text-3xl font-extrabold">4.9/5</span><span class="text-xs uppercase tracking-wider text-blue-200 mt-1">Average Rating</span></div>
+                    <div class="flex flex-col items-center"><span class="text-3xl font-extrabold">100%</span><span class="text-xs uppercase tracking-wider text-blue-200 mt-1">ATS Parsable</span></div>
+                </div>
             </div>
 
+            <!-- UPLOAD PANEL -->
             <div class="glass-panel max-w-3xl w-full rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-10 -mt-20 relative z-20 border border-gray-100 mx-4">
                 <div class="mb-6">
-                    <label class="flex items-center text-gray-800 text-sm font-bold mb-2">Target Job Description</label>
-                    <textarea id="job-description-input" rows="3" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm" placeholder="Paste the job requirements here..."></textarea>
+                    <label class="flex items-center text-gray-800 text-sm font-bold mb-2">
+                        <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">1</span> 
+                        Target Job Description <span class="text-gray-400 font-normal ml-1">(Optional)</span>
+                    </label>
+                    <textarea id="job-description-input" rows="3" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent transition resize-none text-sm" placeholder="Paste the responsibilities and requirements of the job you want here..."></textarea>
                 </div>
+
                 <div class="mb-6">
-                    <label class="flex items-center text-gray-800 text-sm font-bold mb-2">Additional Information</label>
-                    <textarea id="extra-info-input" rows="2" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm" placeholder="Add missing jobs, new awards, extra dates..."></textarea>
+                    <label class="flex items-center text-gray-800 text-sm font-bold mb-2">
+                        <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">2</span> 
+                        Additional Information <span class="text-gray-400 font-normal ml-1">(Optional)</span>
+                    </label>
+                    <textarea id="extra-info-input" rows="2" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent transition resize-none text-sm" placeholder="Add missing jobs, new awards, extra dates, or skills to include..."></textarea>
                 </div>
+
+                <div class="mb-2">
+                    <label class="flex items-center text-gray-800 text-sm font-bold">
+                        <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">3</span> 
+                        Upload Current Resume
+                    </label>
+                </div>
+
                 <input type="file" id="fileInput" class="hidden" accept=".pdf" onchange="handleFileUpload(event)">
-                <div class="border-2 border-dashed border-blue-200 bg-blue-50/50 rounded-xl p-10 cursor-pointer hover:bg-blue-100 transition flex flex-col items-center justify-center" onclick="document.getElementById('fileInput').click()">
+                <div class="border-2 border-dashed border-blue-200 bg-blue-50/50 rounded-xl p-10 cursor-pointer hover:bg-blue-100 transition group flex flex-col items-center justify-center" onclick="document.getElementById('fileInput').click()">
+                    <div class="bg-white p-3 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                        <svg class="h-8 w-8 text-[#0F3B68]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                    </div>
                     <p class="text-lg font-bold text-orbitDark">Click to upload PDF</p>
+                    <p class="text-sm text-gray-500 mt-1">Bank-Grade Encryption. Data Auto-Deletes.</p>
+                </div>
+            </div>
+
+            <!-- RESTORED COMPANY STRIP -->
+            <div class="w-full max-w-4xl mt-16 text-center overflow-hidden">
+                <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">Our Users Have Been Hired At</p>
+                <div class="flex justify-center gap-8 md:gap-16 items-center opacity-60 grayscale">
+                    <span class="text-xl font-extrabold tracking-tighter">amazon</span>
+                    <span class="text-2xl font-bold tracking-tight text-blue-800">Deloitte.</span>
+                    <span class="text-2xl font-extrabold">TCS</span>
+                    <span class="text-xl font-bold">Infosys</span>
+                    <span class="text-xl font-bold tracking-tight">Capgemini</span>
+                </div>
+            </div>
+            
+            <!-- RESTORED TESTIMONIALS -->
+            <div class="w-full max-w-5xl mt-24 mb-10 px-4">
+                <h3 class="text-2xl font-bold text-center text-orbitDark mb-10">Don't just take our word for it.</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex items-center mb-4 text-yellow-400">★★★★★</div>
+                        <p class="text-sm text-gray-600 mb-6 italic">"I was getting instantly rejected for months. Orbit rewrote my bullet points completely. Got 3 interviews in the first week of using the new Word doc."</p>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-[#0F3B68] font-bold text-sm mr-3">SK</div>
+                            <div><p class="text-sm font-bold text-gray-900">Sandeep K.</p><p class="text-xs text-gray-500">Sales Director</p></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex items-center mb-4 text-yellow-400">★★★★★</div>
+                        <p class="text-sm text-gray-600 mb-6 italic">"The format is incredibly clean. I didn't have to fiddle with margins or spacing at all. The AI perfectly captured my actual work experience without making things up."</p>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-sm mr-3">PR</div>
+                            <div><p class="text-sm font-bold text-gray-900">Priya R.</p><p class="text-xs text-gray-500">Project Manager</p></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex items-center mb-4 text-yellow-400">★★★★★</div>
+                        <p class="text-sm text-gray-600 mb-6 italic">"Best investment I've made in my career. It passed the Taleo ATS scanner at my dream company with a 92% match. Highly recommend for senior professionals."</p>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-700 font-bold text-sm mr-3">VM</div>
+                            <div><p class="text-sm font-bold text-gray-900">Vishnu M.</p><p class="text-xs text-gray-500">Procurement Head</p></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- LOADING STATE -->
         <div id="loading-section" class="hidden flex flex-col items-center mt-32 w-full px-4 mb-32">
             <div class="relative w-20 h-20 mb-6">
+                <div class="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
                 <div class="absolute inset-0 border-4 border-orbitLightBlue rounded-full border-t-transparent animate-spin"></div>
             </div>
-            <h3 class="text-2xl font-bold text-orbitDark mb-2">Building Your Career Arsenal...</h3>
-            <p class="text-gray-500 font-medium">Generating Resume, Cover Letter, and LinkedIn Profile.</p>
+            <h3 class="text-2xl font-bold text-orbitDark mb-2">Analyzing against ATS Algorithms...</h3>
+            <p class="text-gray-500 font-medium text-center">Applying recruiter-certified frameworks and structuring the document.</p>
         </div>
 
-        <div id="results-section" class="hidden max-w-6xl w-full mt-10 mb-20 px-4 fade-in">
-            <h3 class="text-3xl font-extrabold text-center text-orbitDark mb-2">Your Profile is Ready</h3>
-            <p class="text-center text-gray-600 mb-10 font-medium">Select a package below to download your assets.</p>
+        <!-- RESULTS SECTION -->
+        <div id="results-section" class="hidden max-w-[1200px] w-full mt-10 mb-20 px-4 fade-in">
+            <h3 class="text-3xl font-extrabold text-center text-orbitDark mb-2">Your ATS Makeover is Ready</h3>
+            <p class="text-center text-gray-600 mb-10 font-medium">Review your original audit and select a package below to download your assets.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- RESTORED SIDE-BY-SIDE PREVIEW (THE USP) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-16">
                 
+                <!-- Left: The Brutal Audit -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-red-500"></div>
+                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                        <div><h4 class="text-lg font-bold text-gray-800 uppercase tracking-wide">Original Match</h4></div>
+                        <span id="before-score" class="bg-red-50 text-red-600 border border-red-200 px-4 py-1.5 rounded-full font-extrabold text-sm shadow-sm">Score: --/100</span>
+                    </div>
+                    
+                    <div class="bg-red-50/50 rounded-lg p-4 mb-6">
+                        <p class="text-sm font-bold text-red-700 mb-3">⚠️ Critical Fail Points Identified:</p>
+                        <ul id="fail-points" class="text-sm text-gray-700 space-y-3 leading-relaxed"></ul>
+                    </div>
+                </div>
+
+                <!-- Right: The Beautiful Preview -->
+                <div class="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-200 overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-green-500"></div>
+                    <div class="flex justify-between items-center bg-gray-50 px-8 py-5 border-b border-gray-200">
+                        <h4 class="text-lg font-bold text-gray-800 uppercase tracking-wide">✅ Optimized Preview</h4>
+                        <span id="after-score" class="bg-green-50 text-green-700 border border-green-200 px-4 py-1.5 rounded-full font-extrabold text-sm shadow-sm">Score: --/100</span>
+                    </div>
+                    
+                    <div class="p-8 pb-32"> 
+                        <div class="text-center mb-6">
+                            <h1 id="preview-name" class="text-2xl font-bold uppercase tracking-widest text-[#0F3B68] mb-1">[Name]</h1>
+                            <p id="preview-title" class="text-sm font-bold uppercase tracking-wider text-gray-600 mb-4">[Optimized Title]</p>
+                            <div class="w-full border-t border-[#5C9CE6] mb-4"></div>
+                        </div>
+                        
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1">Professional Summary</h3>
+                        <p id="preview-summary" class="text-sm text-gray-700 leading-relaxed text-justify mb-4"></p>
+                        
+                        <div class="relative">
+                            <div class="blur-md select-none opacity-50">
+                                <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Achievements & Awards</h3>
+                                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div><div class="h-2 w-5/6 bg-gray-300 rounded mb-2"></div>
+                            </div>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <div class="bg-white/90 p-3 rounded-full shadow-lg text-[#0F3B68] mb-2">📄</div>
+                                <p class="text-xs font-bold text-gray-800 uppercase tracking-wider">Full Resume Hidden</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm p-4 border-t border-gray-100 text-center">
+                        <p class="text-sm font-bold text-orbitBlue uppercase tracking-wide">👇 Select a package below to unlock</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TIERED PRICING GRID -->
+            <div id="pricing-tier" class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Package 1 -->
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 flex flex-col text-center hover:border-orbitBlue transition">
                     <h4 class="text-xl font-bold text-orbitDark mb-2">Basic</h4>
@@ -114,10 +250,10 @@
                         <li>✅ Human Writer Audit</li>
                         <li>✅ Everything in Elite</li>
                     </ul>
-                    <a href="https://wa.me/910000000000?text=Please%20share%20your%20current%20resume%20for%20a%20quick%20review%2C%20and%20we%20shall%20connect%20over%20a%20call%20to%20discuss%20the%20further%20process." target="_blank" class="w-full py-3 bg-whatsapp hover:bg-green-600 text-white font-bold rounded-xl shadow-md transition block text-center">Chat with Expert</a>
+                    <a href="https://wa.me/910000000000?text=Please%20share%20your%20current%20resume%20for%20a%20quick%20review%2C%20and%20we%20shall%20connect%20over%20a%20call%20to%20discuss%20the%20further%20process" target="_blank" class="w-full py-3 bg-whatsapp hover:bg-green-600 text-white font-bold rounded-xl shadow-md transition block text-center">Chat with Expert</a>
                 </div>
-
             </div>
+
         </div>
 
         <!-- LINKEDIN MODAL -->
@@ -135,8 +271,11 @@
     </main>
 
     <script>
-        const GOOGLE_TRACKER_URL = "YOUR_GOOGLE_SCRIPT_URL_HERE"; 
+        // ADD YOUR GOOGLE SCRIPT URL HERE!
+        const GOOGLE_TRACKER_URL = "https://script.google.com/macros/s/AKfycbxq5u9yJhF1j0Sg_Nws0awK3VrvwQGcoumZphjb752GSYUS_4OWeo23tNyhqLAd2rZO/exec"; 
+        
         window.resumeData = null;
+        window.beforeScoreTracker = "N/A";
 
         async function handleFileUpload(event) {
             const file = event.target.files[0];
@@ -155,30 +294,62 @@
 
             try {
                 const response = await fetch('/api/analyze', { method: 'POST', body: formData });
+                if (!response.ok) throw new Error("Server error");
                 const data = await response.json();
+
                 window.resumeData = data.after;
+                window.beforeScoreTracker = data.before.score;
                 
+                document.getElementById('before-score').innerText = `Score: ${data.before.score}/100`;
+                const failPointsList = document.getElementById('fail-points');
+                failPointsList.innerHTML = '';
+                data.before.fail_points.forEach(point => { 
+                    failPointsList.innerHTML += `<li class="flex items-start"><span class="text-red-500 font-bold mr-2 mt-0.5">✗</span><span>${point}</span></li>`; 
+                });
+
+                document.getElementById('after-score').innerText = `Score: ${data.after.score}/100`;
+                document.getElementById('preview-name').innerText = data.after.name;
+                document.getElementById('preview-title').innerText = data.after.optimized_title;
+                
+                if (data.after.improved_summary && data.after.improved_summary.length > 0) {
+                    document.getElementById('preview-summary').innerText = data.after.improved_summary[0];
+                }
+
                 document.getElementById('loading-section').style.display = 'none';
                 document.getElementById('results-section').style.display = 'block';
+
+                try {
+                    fetch(GOOGLE_TRACKER_URL, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            name: data.after.name, email: data.after.email, phone: data.after.phone,
+                            beforeScore: data.before.score, afterScore: data.after.score, action: "Lead Captured"
+                        })
+                    });
+                } catch(e) { }
+
             } catch (error) {
-                alert("Error analyzing resume.");
+                alert("Error analyzing resume. Please try again.");
+                document.getElementById('loading-section').style.display = 'none';
+                document.getElementById('upload-section').style.display = 'flex';
             }
         }
 
         // TIER 1: Resume Only
         function downloadWord() {
-            generateDocx(window.resumeData, "Orbit_Optimized_Resume.docx");
+            generateDocx(window.resumeData, "Orbit_Optimized_Resume.docx", "SUCCESS - Basic Tier");
         }
 
         // TIER 2: Resume + Cover Letter
         function downloadPro() {
-            generateDocx(window.resumeData, "Orbit_Optimized_Resume.docx");
+            generateDocx(window.resumeData, "Orbit_Optimized_Resume.docx", "SUCCESS - Pro Tier");
             generateCoverLetterDocx();
         }
 
         // TIER 3: Resume + CL + LinkedIn
         function downloadElite() {
-            downloadPro();
+            generateDocx(window.resumeData, "Orbit_Optimized_Resume.docx", "SUCCESS - Elite Tier");
+            generateCoverLetterDocx();
             document.getElementById('li-headline').innerText = window.resumeData.linkedin_headline || "Headline not generated.";
             document.getElementById('li-about').innerText = window.resumeData.linkedin_about || "About section not generated.";
             document.getElementById('linkedin-modal').style.display = 'flex';
@@ -199,7 +370,17 @@
         }
 
         // Core Resume Generator Logic
-        function generateDocx(data, filename) {
+        function generateDocx(data, filename, trackAction) {
+            try {
+                fetch(GOOGLE_TRACKER_URL, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        name: data.name, email: data.email, phone: data.phone,
+                        beforeScore: window.beforeScoreTracker, afterScore: data.score || "N/A", action: trackAction
+                    })
+                });
+            } catch(e) { }
+
             const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle, TableLayoutType } = docx;
             const FONT = "Calibri"; const SIZE_BODY = 19; const SIZE_HEADING = 22;  
             const COLOR_DARK_BLUE = "0F3B68"; const COLOR_LIGHT_BLUE = "5C9CE6"; const COLOR_SUBTEXT = "444444"; 
@@ -215,7 +396,7 @@
             const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
             
             const skillsTableRows = [];
-            if (data.core_skills) {
+            if (data.core_skills && data.core_skills.length > 0) {
                 for (let i = 0; i < data.core_skills.length; i += 4) {
                     const chunk = data.core_skills.slice(i, i + 4);
                     while (chunk.length < 4) chunk.push(""); 
@@ -237,8 +418,8 @@
                         new Paragraph({ alignment: AlignmentType.CENTER, border: { bottom: { color: COLOR_LIGHT_BLUE, style: BorderStyle.SINGLE, size: 12, space: 4 } }, spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: contactLine, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] }),
                         createHeader("Professional Summary"),
                         ...(data.improved_summary || []).map(p => new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { before: 60, after: 60, line: 240 }, children: [ new TextRun({ text: p, size: SIZE_BODY, font: FONT }) ] })),
-                        ...(data.achievements_and_awards ? [ createHeader("Achievements & Awards"), ...data.achievements_and_awards.map(a => new Paragraph({ bullet: { level: 0 }, alignment: AlignmentType.JUSTIFIED, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: a, size: SIZE_BODY, font: FONT }) ] })) ] : []),
-                        ...(data.core_skills ? [ createHeader("Professional Skills"), new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, layout: TableLayoutType.FIXED, columnWidths: [2616, 2616, 2616, 2616], borders: { insideVertical: { style: BorderStyle.NONE }, insideHorizontal: { style: BorderStyle.NONE }, top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } }, rows: skillsTableRows }) ] : []),
+                        ...(data.achievements_and_awards && data.achievements_and_awards.length > 0 ? [ createHeader("Achievements & Awards"), ...data.achievements_and_awards.map(a => new Paragraph({ bullet: { level: 0 }, alignment: AlignmentType.JUSTIFIED, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: a, size: SIZE_BODY, font: FONT }) ] })) ] : []),
+                        ...(data.core_skills && data.core_skills.length > 0 ? [ createHeader("Professional Skills"), new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, layout: TableLayoutType.FIXED, columnWidths: [2616, 2616, 2616, 2616], borders: { insideVertical: { style: BorderStyle.NONE }, insideHorizontal: { style: BorderStyle.NONE }, top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } }, rows: skillsTableRows }) ] : []),
                         createHeader("Work Experience"),
                         ...(data.experience || []).flatMap(job => [
                             new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 10460 }], children: [ new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, font: FONT }) ] }),
@@ -247,8 +428,8 @@
                         ]),
                         createHeader("Education"),
                         ...(data.education || []).map(edu => new Paragraph({ spacing: { before: 100, after: 50 }, children: [ new TextRun({ text: `${edu.institution}`, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] })),
-                        ...(data.personal_details ? [ createHeader("Personal Details"), ...data.personal_details.map(d => new Paragraph({ spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: `${d.label}: `, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: d.value, size: SIZE_BODY, font: FONT }) ] })) ] : []),
-                        ...(data.certifications ? [ createHeader("Certifications"), ...data.certifications.map(c => new Paragraph({ bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: c, size: SIZE_BODY, font: FONT }) ] })) ] : [])
+                        ...(data.personal_details && data.personal_details.length > 0 ? [ createHeader("Personal Details"), ...data.personal_details.map(d => new Paragraph({ spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: `${d.label}: `, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: d.value, size: SIZE_BODY, font: FONT }) ] })) ] : []),
+                        ...(data.certifications && data.certifications.length > 0 ? [ createHeader("Certifications"), ...data.certifications.map(c => new Paragraph({ bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: c, size: SIZE_BODY, font: FONT }) ] })) ] : [])
                     ]
                 }]
             });
