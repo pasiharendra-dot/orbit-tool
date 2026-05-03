@@ -4,7 +4,6 @@ const multer = require('multer');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const fs = require('fs');
 const path = require('path');
-const Razorpay = require('razorpay');
 
 const app = express();
 const port = 3000;
@@ -15,40 +14,17 @@ app.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET
-});
-
-app.post('/api/create-order', async (req, res) => {
-    try {
-        const options = { amount: 99900, currency: "INR", receipt: "orbit_receipt_" + Math.random().toString(36).substring(7) };
-        const order = await razorpay.orders.create(options);
-        res.json(order);
-    } catch (error) { res.status(500).json({ error: 'Failed to create payment order' }); }
-});
-
 const systemPrompt = `
 Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
-Your goal is to OPTIMIZE the user's resume, not REINVENT it. Write with the authoritative, highly-polished tone of a C-suite executive recruiter.
+Your goal is to OPTIMIZE the user's resume, write a highly targeted Cover Letter, and create a LinkedIn profile makeover.
 
 STRICT GUARDRAILS:
-1. Zero Seniority Hallucination: Do NOT elevate the user's job level. Use their EXACT current/past designations.
-2. Context Preservation: Strictly follow the actual duties. Do not invent new leadership scopes.
-3. Dynamic ATS Scoring: Calculate a realistic "Before" score (35-68) and "After" score (88-97).
-4. Years of Experience (YoE) Calculation: If the exact YoE isn't stated, calculate it mathematically by subtracting the start year of their oldest job from the current year (2026). State this clearly in the Professional Summary.
-5. Extra Context Integration: If the user provides "Additional Information" (e.g. new jobs, missing dates, awards), seamlessly integrate it into the correct sections without sounding disjointed.
-
-Instructions & Layout:
-1. Header: Extract Name, Phone, Email, Location, LinkedIn.
-2. Resume Title: [Exact Current Role] | [Value Proposition]. Limit to 80 chars.
-3. Professional Summary: 2-3 paragraphs (max 7 lines). Paragraph 1 MUST include the calculated YoE.
-4. Achievements & Awards: Extract 3-5 major wins. Scrape the entire resume for any awards, honors, or recognitions and include them here.
-5. Core Skills: Extract EXACTLY 8 to 16 keywords.
-6. Work Experience: 4-6 bullets using "Categorized Impact Format".
-   - Structure: "[Focus Area] – [Action Verb + Task + Result]". Use en-dash (" – ").
-7. Education & Certifications: Extract degrees and certificates.
-8. Personal Details: Extract personal info (Date of Birth, Nationality, Address, etc.) into a strict label/value list.
+1. Zero Seniority Hallucination: Do NOT elevate the user's job level. 
+2. Context Preservation: Strictly follow actual duties. 
+3. Dynamic ATS Scoring: Calculate a realistic "Before" (35-68) and "After" (88-97) score.
+4. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026.
+5. Cover Letter: Write a 3-paragraph executive cover letter based on their target job and top achievements.
+6. LinkedIn: Write a high-impact LinkedIn Headline (under 120 chars) and an engaging, 1st-person "About" section.
 
 Output Format (Strict JSON):
 {
@@ -68,9 +44,11 @@ Output Format (Strict JSON):
     ],
     "certifications": ["..."],
     "personal_details": [
-      { "label": "Date of Birth", "value": "..." },
-      { "label": "Nationality", "value": "..." }
-    ]
+      { "label": "Date of Birth", "value": "..." }
+    ],
+    "cover_letter": "...",
+    "linkedin_headline": "...",
+    "linkedin_about": "..."
   }
 }
 DO NOT wrap in markdown. Output ONLY raw JSON.
@@ -86,16 +64,12 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         fs.unlinkSync(req.file.path);
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
-        // THE FIX IS HERE: We added temperature: 0.0 to lock the engine's creativity
         const model = genAI.getGenerativeModel({ 
             model: "gemini-2.5-flash", 
-            generationConfig: { 
-                responseMimeType: "application/json",
-                temperature: 0.0 
-            } 
+            generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
         });
         
-        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information to Integrate:\n${extraInfo}\n\nAnalyze and optimize this resume:`;
+        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume, and generate the cover letter and LinkedIn copy:`;
         const result = await model.generateContent([systemPrompt, promptWithJD, filePart]);
         
         let aiResponse = result.response.text();
