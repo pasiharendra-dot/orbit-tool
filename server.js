@@ -8,7 +8,6 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Ensure the uploads directory exists for Render
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
@@ -27,7 +26,10 @@ Your singular goal is to OPTIMIZE the user's resume for ATS systems and executiv
 STRICT GUARDRAILS:
 1. Zero Seniority Hallucination: Do NOT elevate the user's job level.
 2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026. State this in the summary.
-3. Format: Rewrite bullet points to be action-driven and results-oriented.
+3. Work Experience Format: You MUST format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". 
+   - Example 1: "Subcontracting Strategy & Execution: Managed subcontracting activities for 4 large EPC projects (~₹10,000 Cr), covering planning, evaluations, and negotiations."
+   - Example 2: "Technical & Commercial Evaluation: Reviewed subcontractor capabilities, scope compliance, and commercial terms to support management approvals."
+   - DO NOT include bullet point characters (like • or ·) in the JSON string itself. The frontend UI will add the bullets.
 
 Output Format: You MUST return a JSON object with this exact structure:
 {
@@ -61,13 +63,11 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const jobDescription = req.body.jobDescription || "Optimize for general industry standards.";
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
-        // Let Gemini read the PDF natively
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
         fs.unlinkSync(req.file.path);
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
-        // Configured for your flawless 2.5 model
         const model = genAI.getGenerativeModel({ 
             model: "gemini-2.5-flash",
             systemInstruction: systemPrompt,
@@ -82,7 +82,6 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const result = await model.generateContent([promptWithJD, filePart]);
         let aiResponse = result.response.text();
         
-        // Unbreakable JSON extraction logic
         const startIndex = aiResponse.indexOf('{');
         const endIndex = aiResponse.lastIndexOf('}');
         
