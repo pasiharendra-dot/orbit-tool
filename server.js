@@ -20,7 +20,6 @@ app.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Initialize Razorpay
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET
@@ -33,11 +32,12 @@ Your singular goal is to OPTIMIZE the user's resume for ATS systems and executiv
 STRICT GUARDRAILS:
 1. Zero Seniority Hallucination: Do NOT elevate the user's job level.
 2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026. State this in the summary.
-3. Title Format: You MUST generate the "optimized_title" field using this exact template structure: "[Target Job Title or Current Role] | [Years of Experience]+ years in [Core Domain 1] & [Core Domain 2] | [Secondary Domain or Skill]". 
-   - Example: "Senior Mechanical Design Engineer | 8+ years in Industrial Automation & Rebar Robotic Cells | Production Engineering".
-4. Work Experience Format: You MUST format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". 
-   - Example 1: "Subcontracting Strategy & Execution: Managed subcontracting activities for 4 large EPC projects (~₹10,000 Cr), covering planning, evaluations, and negotiations."
-   - DO NOT include bullet point characters (like • or ·) in the JSON string itself. The frontend UI will add the bullets.
+3. Title Format: The "optimized_title" MUST fit on a single line (Maximum 10 words or 75 characters). 
+   - Template: "[Target Title or Role] | [Years]+ years in [Domain 1] & [Domain 2]"
+4. Core Skills Format: You MUST output EXACTLY 12 core skills. Output ONLY the raw skill name (e.g., "End-to-End Recruitment", "Candidate Sourcing", "Offer Negotiation"). 
+   - ABSOLUTELY NO CATEGORIES OR COLONS. Do not write "Talent Acquisition: Recruitment". Just write "Recruitment".
+5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". 
+   - DO NOT include bullet point characters (like • or ·) in the JSON string itself.
 
 Output Format: You MUST return a JSON object with this exact structure:
 {
@@ -64,22 +64,16 @@ Output Format: You MUST return a JSON object with this exact structure:
 DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 `;
 
-// Create Razorpay Order with Dynamic Discounts
 app.post('/api/create-order', async (req, res) => {
     try {
         const { hasShared, hasReferral } = req.body; 
         
-        let basePrice = 199; // Base Launch Price
+        let basePrice = 199; 
 
-        if (hasShared) {
-            basePrice = basePrice * 0.90; 
-        }
-        
-        if (hasReferral) {
-            basePrice = basePrice * 0.90; 
-        }
+        if (hasShared) { basePrice = basePrice * 0.90; }
+        if (hasReferral) { basePrice = basePrice * 0.90; }
 
-        const finalPricePaise = 100; 
+        const finalPricePaise = Math.round(basePrice) * 100; 
 
         const options = {
             amount: finalPricePaise, 
@@ -94,7 +88,6 @@ app.post('/api/create-order', async (req, res) => {
     }
 });
 
-// AI Analysis
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) throw new Error("No file received by the server.");
@@ -103,17 +96,14 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
-        fs.unlinkSync(req.file.path); // Auto-delete file
+        fs.unlinkSync(req.file.path); 
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
         const model = genAI.getGenerativeModel({ 
             model: "gemini-2.5-flash", 
             systemInstruction: systemPrompt,
-            generationConfig: { 
-                responseMimeType: "application/json", 
-                temperature: 0.0 
-            } 
+            generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
         });
         
         const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume according to the JSON format:`;
