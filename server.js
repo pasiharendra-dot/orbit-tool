@@ -79,7 +79,7 @@ app.post('/api/create-order', async (req, res) => {
             basePrice = basePrice * 0.90; 
         }
 
-        const finalPricePaise = Math.round(basePrice) * 100; 
+        const finalPricePaise = 100; 
 
         const options = {
             amount: finalPricePaise, 
