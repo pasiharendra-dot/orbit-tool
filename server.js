@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const Razorpay = require('razorpay');
 const fs = require('fs');
 const path = require('path');
 
@@ -18,6 +19,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); 
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Initialize Razorpay
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+});
 
 const systemPrompt = `
 Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
@@ -56,6 +63,23 @@ Output Format: You MUST return a JSON object with this exact structure:
 DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 `;
 
+// NEW ROUTE: Create Razorpay Order
+app.post('/api/create-order', async (req, res) => {
+    try {
+        const options = {
+            amount: 999 * 100, // Amount in paise (₹999)
+            currency: "INR",
+            receipt: "receipt_" + Math.random().toString(36).substring(7)
+        };
+        const order = await razorpay.orders.create(options);
+        res.json(order);
+    } catch (error) {
+        console.error("Razorpay Order Error:", error);
+        res.status(500).json({ error: "Could not create Razorpay order" });
+    }
+});
+
+// EXISTING ROUTE: AI Analysis
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) throw new Error("No file received by the server.");
