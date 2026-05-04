@@ -33,9 +33,10 @@ Your singular goal is to OPTIMIZE the user's resume for ATS systems and executiv
 STRICT GUARDRAILS:
 1. Zero Seniority Hallucination: Do NOT elevate the user's job level.
 2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026. State this in the summary.
-3. Work Experience Format: You MUST format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". 
+3. Title Format: You MUST generate the "optimized_title" field using this exact template structure: "[Target Job Title or Current Role] | [Years of Experience]+ years in [Core Domain 1] & [Core Domain 2] | [Secondary Domain or Skill]". 
+   - Example: "Senior Mechanical Design Engineer | 8+ years in Industrial Automation & Rebar Robotic Cells | Production Engineering".
+4. Work Experience Format: You MUST format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". 
    - Example 1: "Subcontracting Strategy & Execution: Managed subcontracting activities for 4 large EPC projects (~₹10,000 Cr), covering planning, evaluations, and negotiations."
-   - Example 2: "Technical & Commercial Evaluation: Reviewed subcontractor capabilities, scope compliance, and commercial terms to support management approvals."
    - DO NOT include bullet point characters (like • or ·) in the JSON string itself. The frontend UI will add the bullets.
 
 Output Format: You MUST return a JSON object with this exact structure:
@@ -63,7 +64,7 @@ Output Format: You MUST return a JSON object with this exact structure:
 DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 `;
 
-// NEW ROUTE: Create Razorpay Order
+// Create Razorpay Order
 app.post('/api/create-order', async (req, res) => {
     try {
         const options = {
@@ -79,7 +80,7 @@ app.post('/api/create-order', async (req, res) => {
     }
 });
 
-// EXISTING ROUTE: AI Analysis
+// AI Analysis
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) throw new Error("No file received by the server.");
@@ -93,7 +94,7 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash",
+            model: "gemini-2.5-flash", // Back to 2.5-flash!
             systemInstruction: systemPrompt,
             generationConfig: { 
                 responseMimeType: "application/json", 
