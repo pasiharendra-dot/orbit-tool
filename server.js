@@ -64,16 +64,30 @@ Output Format: You MUST return a JSON object with this exact structure:
 DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 `;
 
-// Create Razorpay Order
+// Create Razorpay Order with Dynamic Discounts
 app.post('/api/create-order', async (req, res) => {
     try {
+        const { hasShared, hasReferral } = req.body; 
+        
+        let basePrice = 199; // Base Launch Price
+
+        if (hasShared) {
+            basePrice = basePrice * 0.90; 
+        }
+        
+        if (hasReferral) {
+            basePrice = basePrice * 0.90; 
+        }
+
+        const finalPricePaise = Math.round(basePrice) * 100; 
+
         const options = {
-            amount: 999 * 100, // Amount in paise (₹999)
+            amount: finalPricePaise, 
             currency: "INR",
             receipt: "receipt_" + Math.random().toString(36).substring(7)
         };
         const order = await razorpay.orders.create(options);
-        res.json(order);
+        res.json({ id: order.id, amount: order.amount, calculatedPrice: Math.round(basePrice) });
     } catch (error) {
         console.error("Razorpay Order Error:", error);
         res.status(500).json({ error: "Could not create Razorpay order" });
@@ -89,12 +103,12 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
         const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
-        fs.unlinkSync(req.file.path);
+        fs.unlinkSync(req.file.path); // Auto-delete file
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash", // Back to 2.5-flash!
+            model: "gemini-2.5-flash", 
             systemInstruction: systemPrompt,
             generationConfig: { 
                 responseMimeType: "application/json", 
