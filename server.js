@@ -1,14 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
-const OpenAI = require('openai');
-const pdf = require('pdf-parse');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const fs = require('fs');
 const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Ensure the uploads directory exists for Render
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
@@ -18,9 +18,7 @@ const upload = multer({ dest: 'uploads/' });
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); 
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const systemPrompt = `
 Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
@@ -53,6 +51,7 @@ Output Format: You MUST return a JSON object with this exact structure:
     ]
   }
 }
+DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 `;
 
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
@@ -62,27 +61,38 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         const jobDescription = req.body.jobDescription || "Optimize for general industry standards.";
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
-        const dataBuffer = fs.readFileSync(req.file.path);
-        const pdfData = await pdf(dataBuffer);
-        const resumeText = pdfData.text;
-        
+        // Let Gemini read the PDF natively
+        const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
         fs.unlinkSync(req.file.path);
         
-        const userPrompt = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nOriginal Resume Text to Optimize:\n${resumeText}\n\nAnalyze and optimize this resume according to the JSON format.`;
-
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            response_format: { type: "json_object" }, 
-            temperature: 0.0,
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: userPrompt }
-            ]
+        const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
+        
+        // Configured for your flawless 2.5 model
+        const model = genAI.getGenerativeModel({ 
+            model: "gemini-2.5-flash",
+            systemInstruction: systemPrompt,
+            generationConfig: { 
+                responseMimeType: "application/json", 
+                temperature: 0.0 
+            } 
         });
         
-        const aiResponse = response.choices[0].message.content;
-        const parsedData = JSON.parse(aiResponse);
+        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume according to the JSON format:`;
         
+        const result = await model.generateContent([promptWithJD, filePart]);
+        let aiResponse = result.response.text();
+        
+        // Unbreakable JSON extraction logic
+        const startIndex = aiResponse.indexOf('{');
+        const endIndex = aiResponse.lastIndexOf('}');
+        
+        if (startIndex !== -1 && endIndex !== -1) {
+            aiResponse = aiResponse.substring(startIndex, endIndex + 1);
+        } else {
+            throw new Error("AI did not return valid JSON format.");
+        }
+
+        const parsedData = JSON.parse(aiResponse);
         res.json(parsedData);
         
     } catch (error) {
