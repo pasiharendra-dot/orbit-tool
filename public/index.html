@@ -296,7 +296,17 @@
                 </button>
             </div>
         </div>
-        
+
+        <!-- LIVE FOMO NOTIFICATION -->
+        <div id="live-notification" class="fixed bottom-6 left-6 bg-white border-l-4 border-whatsapp shadow-2xl rounded-r-lg p-4 z-50 transform translate-y-32 opacity-0 transition-all duration-500 flex items-center max-w-[260px] pointer-events-none">
+            <div class="bg-green-100 rounded-full p-2 mr-3 flex-shrink-0">
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            </div>
+            <div>
+                <p id="notify-name" class="text-sm font-bold text-orbitDark leading-tight">Ramesh P.</p>
+                <p class="text-xs text-gray-500 mt-0.5">Just downloaded their ATS Resume</p>
+            </div>
+        </div>
         <footer class="w-full bg-white border-t border-gray-200 pt-12 pb-8 mt-auto">
             <div class="max-w-7xl mx-auto px-4 md:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
@@ -439,7 +449,42 @@
         window.addEventListener('DOMContentLoaded', () => {
             if (window.hasReferral) updatePriceDisplay();
         });
+        
+// ==========================================
+        // FOMO SOCIAL PROOF NOTIFICATION SYSTEM
+        // ==========================================
+        const fomoFirstNames = ["Rahul", "Priya", "Amit", "Sneha", "Vikram", "Neha", "Ramesh", "Karthik", "Siddharth", "Pooja", "Anjali", "Sandeep", "Deepak", "Ayesha", "Manoj", "Divya", "Arjun", "Ravi", "Swati", "Tarun", "Kavya", "Gaurav", "Nisha", "Rohan"];
+        const fomoLastInitials = [" S.", " P.", " M.", " K.", " R.", " T.", " V.", " D.", " N.", " L.", " C.", " B.", " A."];
 
+        function triggerFomoPopup() {
+            const notif = document.getElementById('live-notification');
+            const nameEl = document.getElementById('notify-name');
+            
+            // 1. Generate a random name
+            const randomFirst = fomoFirstNames[Math.floor(Math.random() * fomoFirstNames.length)];
+            const randomLast = fomoLastInitials[Math.floor(Math.random() * fomoLastInitials.length)];
+            nameEl.innerText = randomFirst + randomLast;
+
+            // 2. Slide up and fade in
+            notif.classList.remove('translate-y-32', 'opacity-0');
+            notif.classList.add('translate-y-0', 'opacity-100');
+
+            // 3. Hide after 4.5 seconds
+            setTimeout(() => {
+                notif.classList.remove('translate-y-0', 'opacity-100');
+                notif.classList.add('translate-y-32', 'opacity-0');
+            }, 4500);
+
+            // 4. Schedule the next popup randomly between 6 to 12 seconds later (feels natural)
+            const nextTime = Math.floor(Math.random() * (12000 - 6000 + 1)) + 6000;
+            setTimeout(triggerFomoPopup, nextTime);
+        }
+
+        // Start the loop 3 seconds after the page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(triggerFomoPopup, 3000);
+        });
+        
         async function initiateCheckout() {
             try {
                 const response = await fetch('/api/create-order', { 
