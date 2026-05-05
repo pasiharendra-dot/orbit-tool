@@ -449,8 +449,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             if (window.hasReferral) updatePriceDisplay();
         });
-        
-// ==========================================
+        // ==========================================
         // FOMO SOCIAL PROOF NOTIFICATION SYSTEM
         // ==========================================
         const fomoFirstNames = ["Rahul", "Priya", "Amit", "Sneha", "Vikram", "Neha", "Ramesh", "Karthik", "Siddharth", "Pooja", "Anjali", "Sandeep", "Deepak", "Ayesha", "Manoj", "Divya", "Arjun", "Ravi", "Swati", "Tarun", "Kavya", "Gaurav", "Nisha", "Rohan"];
@@ -469,20 +468,21 @@
             notif.classList.remove('translate-y-32', 'opacity-0');
             notif.classList.add('translate-y-0', 'opacity-100');
 
-            // 3. Hide after 4.5 seconds
+            // 3. Hide after 4 seconds
             setTimeout(() => {
                 notif.classList.remove('translate-y-0', 'opacity-100');
                 notif.classList.add('translate-y-32', 'opacity-0');
-            }, 4500);
-
-            // 4. Schedule the next popup randomly between 6 to 12 seconds later (feels natural)
-            const nextTime = Math.floor(Math.random() * (12000 - 6000 + 1)) + 6000;
-            setTimeout(triggerFomoPopup, nextTime);
+                
+                // 4. Wait 8 to 15 seconds AFTER hiding before showing the next one
+                const timeHidden = Math.floor(Math.random() * (15000 - 8000 + 1)) + 8000;
+                setTimeout(triggerFomoPopup, timeHidden);
+                
+            }, 4000); 
         }
 
-        // Start the loop 3 seconds after the page loads
+        // Start the first popup 4 seconds after the page loads
         window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(triggerFomoPopup, 3000);
+            setTimeout(triggerFomoPopup, 4000);
         });
         
         async function initiateCheckout() {
