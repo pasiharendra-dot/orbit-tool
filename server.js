@@ -32,8 +32,7 @@ Your singular goal is to OPTIMIZE the user's resume for ATS systems and executiv
 STRICT GUARDRAILS:
 1. Zero Seniority Hallucination: Do NOT elevate the user's job level.
 2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026. State this in the summary.
-3. Title Format: The "optimized_title" MUST fit on a single line (Maximum 10 words or 75 characters). 
-   - Template: "[Target Title or Role] | [Years]+ years in [Domain 1] & [Domain 2]"
+3. Title Format: The "optimized_title" MUST fit on a single line. You MUST use this exact template structure: "[Target Job Title or Current Role] | [Years of Experience]+ years in [Core Domain 1] & [Core Domain 2] | [Secondary Domain or Skill]" (e.g., "Senior Mechanical Design Engineer | 8+ years in Industrial Automation & Rebar Robotic Cells | Production Engineering").
 4. Core Skills Format: You MUST output EXACTLY 12 core skills. Output ONLY the raw skill name (e.g., "End-to-End Recruitment", "Candidate Sourcing", "Offer Negotiation"). 
    - ABSOLUTELY NO CATEGORIES OR COLONS. Do not write "Talent Acquisition: Recruitment". Just write "Recruitment".
 5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". 
@@ -88,6 +87,51 @@ app.post('/api/create-order', async (req, res) => {
     }
 });
 
+// Smart AI Generator with Automatic Retries and Model Fallback
+async function generateAIResponseWithRetry(promptWithJD, filePart) {
+    const maxRetries = 3;
+    const baseDelay = 2000; // 2 seconds
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            const model = genAI.getGenerativeModel({ 
+                model: "gemini-2.5-flash", 
+                systemInstruction: systemPrompt,
+                generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
+            });
+            
+            console.log(`AI Attempt ${attempt} (2.5-flash)...`);
+            const result = await model.generateContent([promptWithJD, filePart]);
+            return result.response.text();
+
+        } catch (error) {
+            console.warn(`Attempt ${attempt} failed:`, error.message);
+            
+            if (error.status === 503 && attempt < maxRetries) {
+                console.log(`Traffic jam detected. Waiting ${baseDelay}ms to retry...`);
+                await new Promise(resolve => setTimeout(resolve, baseDelay));
+                continue;
+            }
+            
+            if (attempt === maxRetries) {
+                console.log("Triggering Emergency Fallback to 1.5-flash model...");
+                try {
+                    const fallbackModel = genAI.getGenerativeModel({ 
+                        model: "gemini-1.5-flash", 
+                        systemInstruction: systemPrompt,
+                        generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
+                    });
+                    const fallbackResult = await fallbackModel.generateContent([promptWithJD, filePart]);
+                    return fallbackResult.response.text();
+                } catch (fallbackError) {
+                    throw new Error(`Both models failed. Last error: ${fallbackError.message}`);
+                }
+            }
+            throw error;
+        }
+    }
+}
+
 app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) throw new Error("No file received by the server.");
@@ -99,17 +143,9 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         fs.unlinkSync(req.file.path); 
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
-        
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-2.5-flash", 
-            systemInstruction: systemPrompt,
-            generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
-        });
-        
         const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume according to the JSON format:`;
         
-        const result = await model.generateContent([promptWithJD, filePart]);
-        let aiResponse = result.response.text();
+        let aiResponse = await generateAIResponseWithRetry(promptWithJD, filePart);
         
         const startIndex = aiResponse.indexOf('{');
         const endIndex = aiResponse.lastIndexOf('}');
