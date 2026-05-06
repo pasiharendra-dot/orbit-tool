@@ -1,17 +1,585 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>Refund Policy | GetPerfectResume.com</title><script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund Policy - GetPerfectResume.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a4d2e;
+            --primary-light: #2d6a4f;
+            --accent: #f77f00;
+            --text-dark: #1e1e1e;
+            --text-medium: #4a4a4a;
+            --text-light: #707070;
+            --bg-cream: #faf8f5;
+            --bg-white: #ffffff;
+            --border: #e5e0d8;
+            --shadow: rgba(26, 77, 46, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-dark);
+            background: var(--bg-cream);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            opacity: 0.95;
+            margin-bottom: 0.5rem;
+        }
+
+        .last-updated {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .content-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 4px 24px var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .toc {
+            background: var(--bg-cream);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem 2rem;
+            margin-bottom: 3rem;
+            border-radius: 8px;
+        }
+
+        .toc h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin: 0.5rem 0;
+        }
+
+        .toc a {
+            color: var(--text-medium);
+            text-decoration: none;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+            display: inline-block;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+            padding-left: 0.5rem;
+        }
+
+        h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 3rem 0 1.5rem 0;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--text-medium);
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        ul, ol {
+            color: var(--text-medium);
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            font-size: 1.05rem;
+        }
+
+        strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: #fff8f0;
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0.75rem;
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #2563eb;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .info-box p {
+            margin-bottom: 0.75rem;
+            color: #1e3a8a;
+        }
+
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .success-box {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .success-box p {
+            margin-bottom: 0;
+            color: #15803d;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .content-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Step boxes */
+        .step-box {
+            background: var(--bg-cream);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--accent);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .step-box h4 {
+            font-family: 'Crimson Pro', serif;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            padding-top: 0.5rem;
+        }
+
+        .step-box p {
+            margin-bottom: 0;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 p-8 font-sans">
-    <div class="max-w-3xl mx-auto bg-white p-10 rounded-2xl shadow-sm border border-gray-100">
-        <a href="/" class="text-blue-600 text-sm font-bold mb-6 inline-block">← Back to Home</a>
-        <h1 class="text-3xl font-extrabold mb-6">Refund & Cancellation Policy</h1>
-        <div class="space-y-4 text-gray-700 text-sm leading-relaxed">
-            <p><strong>1. AI Resume Makeover (Digital Download):</strong> Because this service provides instant delivery of a digital good (.docx file), we do not offer refunds or cancellations once the payment is successful and the document has been generated and downloaded.</p>
-            <p><strong>2. Expert Human Review:</strong> If you purchase the Expert Human Review package, you may request a full refund within 24 hours of purchase, provided the 1-on-1 career strategy call has not yet occurred and our team has not begun the manual audit of your document.</p>
-            <p><strong>3. Failed Transactions:</strong> If your payment method is charged but the resume generation fails due to a server error, please contact us immediately. A full refund will be initiated to the original payment method within 5-7 business days.</p>
+<body>
+<section class="hero">
+        <div class="hero-content">
+            <h1>Refund Policy</h1>
+            <p>Fair and transparent refund terms for our customers</p>
+            <p class="last-updated">Last Updated: January 2025</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="content-card">
+            <div class="highlight-box">
+                <p><strong>No-Refund Policy:</strong> GetPerfectResume.com operates a strict no-refund policy because our service delivers your rewritten resume instantly and automatically. All files are deleted immediately after delivery. Please review this policy carefully before making a purchase.</p>
+            </div>
+
+            <div class="toc">
+                <h2>Table of Contents</h2>
+                <ul>
+                    <li><a href="#overview">1. Refund Policy Overview</a></li>
+                    <li><a href="#eligibility">2. Exceptions to No-Refund Policy</a></li>
+                    <li><a href="#non-refundable">3. Non-Refundable Situations</a></li>
+                    <li><a href="#process">4. How to Request a Refund (Exceptions Only)</a></li>
+                    <li><a href="#timeline">5. Refund Processing Timeline</a></li>
+                    <li><a href="#cancellation">6. Understanding Our Service Model</a></li>
+                    <li><a href="#trials">7. Quality Assurance</a></li>
+                    <li><a href="#chargebacks">8. Chargebacks and Disputes</a></li>
+                    <li><a href="#modifications">9. Policy Modifications</a></li>
+                    <li><a href="#contact">10. Contact Us</a></li>
+                </ul>
+            </div>
+
+            <h2 id="overview">1. Refund Policy Overview</h2>
+            <p>At GetPerfectResume.com, we provide an instant resume rewriting service. Because our service delivers your rewritten resume immediately upon upload and payment, and we delete all files from our servers right after delivery, <strong>we operate a strict no-refund policy</strong>.</p>
+            <p>By using our service, you acknowledge and agree that:</p>
+            <ul>
+                <li>The rewritten resume is delivered to you instantly and automatically</li>
+                <li>Once delivered, the service has been fully rendered</li>
+                <li>All files are immediately deleted from our servers after delivery</li>
+                <li>Refunds cannot be issued for completed, delivered services</li>
+            </ul>
+            <p>This policy applies to all purchases made through our website.</p>
+
+            <h2 id="eligibility">2. Exceptions to No-Refund Policy</h2>
+            <p>While we maintain a strict no-refund policy due to the immediate delivery of our service, we may consider refunds only in the following exceptional circumstances:</p>
+
+            <h3>2.1 Technical Failures</h3>
+            <p>A refund may be issued if:</p>
+            <ul>
+                <li>You were charged but did not receive your rewritten resume due to a technical error on our end</li>
+                <li>The service failed to process your upload and you received no deliverable</li>
+                <li>Our system experienced a critical failure that prevented service delivery</li>
+            </ul>
+            <p><strong>Note:</strong> You must contact us within 24 hours of the failed transaction with proof of payment to request a refund for technical failures.</p>
+
+            <h3>2.2 Duplicate or Unauthorized Charges</h3>
+            <p>Refunds will be issued for:</p>
+            <ul>
+                <li>Duplicate charges for the same service</li>
+                <li>Unauthorized charges that you did not approve</li>
+                <li>Billing errors clearly attributable to our system</li>
+            </ul>
+
+            <h3>2.3 Service Not Rendered</h3>
+            <p>If you were charged but our service was completely unavailable and you received no rewritten resume, a refund may be issued upon verification.</p>
+
+            <h2 id="non-refundable">3. Non-Refundable Situations</h2>
+            <p>Refunds will <strong>NOT</strong> be provided in the following cases:</p>
+
+            <h3>3.1 After Service Delivery</h3>
+            <ul>
+                <li>You received your rewritten resume successfully</li>
+                <li>You downloaded or accessed the rewritten resume</li>
+                <li>You are dissatisfied with the quality or style of the rewriting</li>
+                <li>You changed your mind after receiving the deliverable</li>
+                <li>You made an error in uploading the wrong file</li>
+            </ul>
+
+            <h3>3.2 Quality Disputes</h3>
+            <ul>
+                <li>Subjective dissatisfaction with writing style or format choices</li>
+                <li>Preference for different wording or phrasing</li>
+                <li>Disagreement with suggested improvements</li>
+                <li>Expectations not aligned with service description</li>
+            </ul>
+
+            <h3>3.3 User Error</h3>
+            <ul>
+                <li>Uploading an incorrect or incomplete resume file</li>
+                <li>Providing poor quality or unreadable source material</li>
+                <li>Losing the downloaded file after delivery</li>
+                <li>Technical issues on your device or internet connection</li>
+            </ul>
+
+            <h3>3.4 Change of Mind</h3>
+            <ul>
+                <li>Deciding you no longer need the service after purchase</li>
+                <li>Finding a different service provider</li>
+                <li>No longer requiring a resume</li>
+            </ul>
+
+            <div class="highlight-box">
+                <p><strong>Important:</strong> By using our service, you acknowledge that the resume rewriting and delivery happens instantly and automatically. Once the service is rendered and the file is delivered to you, the transaction is complete and cannot be reversed.</p>
+            </div>
+
+            <h2 id="process">4. How to Request a Refund (Exceptions Only)</h2>
+            <p>If you believe you qualify for one of the exceptional circumstances listed above, please follow these steps:</p>
+
+            <div class="step-box">
+                <div class="step-number">1</div>
+                <h4>Contact Support Immediately</h4>
+                <p>Email us at <strong>support@getperfectresume.com</strong> within <strong>24 hours</strong> of the transaction</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-number">2</div>
+                <h4>Provide Transaction Details</h4>
+                <p>Include your order/transaction ID, payment receipt, account email, and a detailed explanation of the technical failure or billing error</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-number">3</div>
+                <h4>Submit Evidence</h4>
+                <p>Provide screenshots, error messages, or other documentation that supports your claim of technical failure or unauthorized charges</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-number">4</div>
+                <h4>Wait for Review</h4>
+                <p>Our team will investigate your claim within 2-3 business days and verify the technical issue or billing error</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-number">5</div>
+                <h4>Receive Decision</h4>
+                <p>You will be notified via email whether your refund request has been approved or denied, with a detailed explanation</p>
+            </div>
+
+            <h3>Required Information for Refund Requests:</h3>
+            <ul>
+                <li>Full name associated with the account</li>
+                <li>Email address used for registration</li>
+                <li>Transaction ID or receipt number</li>
+                <li>Exact date and time of purchase</li>
+                <li>Detailed description of the technical failure or billing error</li>
+                <li>Supporting documentation (screenshots, error messages, etc.)</li>
+            </ul>
+
+            <div class="info-box">
+                <p><strong>Important:</strong> Refund requests submitted more than 24 hours after the transaction will not be considered unless there are exceptional circumstances beyond your control.</p>
+            </div>
+
+            <h2 id="timeline">5. Refund Processing Timeline</h2>
+            <p>In the rare event that your refund request is approved:</p>
+            <ul>
+                <li><strong>Processing Time:</strong> 5-7 business days from approval</li>
+                <li><strong>Credit/Debit Cards:</strong> Refunds typically appear within 5-10 business days, depending on your bank</li>
+                <li><strong>PayPal:</strong> Refunds typically appear within 3-5 business days</li>
+                <li><strong>Other Payment Methods:</strong> Timeline varies by provider, typically 7-14 business days</li>
+            </ul>
+
+            <div class="highlight-box">
+                <p><strong>Note:</strong> Approved refunds are processed promptly, but the time it takes for the refund to appear in your account depends on your financial institution or payment provider.</p>
+            </div>
+
+            <h2 id="cancellation">6. Understanding Our Service Model</h2>
+            <p>GetPerfectResume.com operates on a pay-per-use model:</p>
+
+            <h3>6.1 How It Works</h3>
+            <ul>
+                <li>You upload your resume and make a one-time payment</li>
+                <li>Our system immediately processes and rewrites your resume</li>
+                <li>You receive an editable copy of the rewritten resume instantly</li>
+                <li>All files are deleted from our servers immediately after delivery</li>
+            </ul>
+
+            <h3>6.2 No Subscriptions</h3>
+            <p>We do not operate on a subscription model. Each resume rewrite is a separate, one-time transaction. You only pay when you need our service.</p>
+
+            <h3>6.3 Multiple Uses</h3>
+            <p>If you need to rewrite another resume or update your existing one in the future, you would make a new purchase at that time.</p>
+
+            <h2 id="trials">7. Quality Assurance</h2>
+            <p>While we cannot offer refunds after service delivery, we are committed to quality:</p>
+
+            <h3>7.1 Our Commitment</h3>
+            <ul>
+                <li>Professional resume rewriting by experienced writers</li>
+                <li>Improved formatting, structure, and content optimization</li>
+                <li>Fast, automated delivery of your rewritten resume</li>
+                <li>Editable file format so you can make further changes</li>
+            </ul>
+
+            <h3>7.2 Service Expectations</h3>
+            <ul>
+                <li>Review our service description and samples before purchasing</li>
+                <li>Ensure your uploaded resume is complete and readable</li>
+                <li>Understand that the rewriting style may differ from your original</li>
+                <li>Be prepared to make personal adjustments to the editable copy we provide</li>
+            </ul>
+
+            <h3>7.3 Contact Support</h3>
+            <p>If you have concerns about the quality or formatting of your rewritten resume, please contact our support team. While we cannot offer refunds, we are happy to provide guidance on how to customize the editable copy to better meet your needs.</p>
+
+            <h2 id="chargebacks">8. Chargebacks and Disputes</h2>
+            <p>We strongly encourage you to contact us directly before initiating a chargeback with your bank or payment provider.</p>
+
+            <h3>8.1 Why Contact Us First</h3>
+            <ul>
+                <li>We can verify whether you received the service and resolve legitimate issues quickly</li>
+                <li>We can provide proof of service delivery if there's a misunderstanding</li>
+                <li>Chargebacks may result in account suspension or termination</li>
+                <li>We may be able to assist with technical issues or questions about your delivery</li>
+            </ul>
+
+            <h3>8.2 Chargeback Consequences</h3>
+            <p>If you initiate a chargeback:</p>
+            <ul>
+                <li>Your account will be immediately suspended pending investigation</li>
+                <li>We will provide evidence to your bank that the service was delivered as promised</li>
+                <li>If the chargeback is found to be illegitimate, your account may be permanently terminated</li>
+                <li>You may be held responsible for any fees or costs associated with the chargeback dispute</li>
+                <li>Future access to our services may be denied</li>
+            </ul>
+
+            <h3>8.3 Legitimate Chargebacks</h3>
+            <p>Chargebacks are appropriate for:</p>
+            <ul>
+                <li>Fraudulent or unauthorized charges you did not make</li>
+                <li>You were charged but received absolutely no service or deliverable</li>
+                <li>Technical failure where we cannot provide proof of delivery</li>
+            </ul>
+
+            <div class="info-box">
+                <p><strong>Service Verification:</strong> We maintain logs of all service deliveries. If you claim non-delivery, we can verify whether the rewritten resume was successfully delivered to you before processing any dispute.</p>
+            </div>
+
+            <h2 id="modifications">9. Policy Modifications</h2>
+            <p>We reserve the right to modify this Refund Policy at any time. Changes will:</p>
+            <ul>
+                <li>Be posted on this page with an updated "Last Updated" date</li>
+                <li>Take effect immediately for new purchases</li>
+                <li>Not affect refund requests for purchases made before the change</li>
+                <li>Be communicated to active subscribers via email if material changes are made</li>
+            </ul>
+
+            <h2 id="contact">10. Contact Us</h2>
+            <p>If you have questions about our Refund Policy or believe you qualify for an exceptional refund due to technical failure or billing error, please contact us:</p>
+
+            <div class="info-box">
+                <p><strong>For Refund Claims (Technical Failures Only):</strong></p>
+                <p>Email: <strong>support@getperfectresume.com</strong><br>
+                Subject Line: "Refund Request - Technical Failure"<br>
+                <strong>Important:</strong> Contact within 24 hours of transaction</p>
+            </div>
+
+            <div class="info-box">
+                <p><strong>For General Questions:</strong></p>
+                <p>Email: <strong>support@getperfectresume.com</strong><br>
+                Website: <a href="https://getperfectresume.com" style="color: #2563eb; text-decoration: underline;">https://getperfectresume.com</a></p>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 3rem;">
+                <p><strong>Our Commitment:</strong> While we cannot offer refunds after service delivery due to the instant, automated nature of our service, we are committed to providing high-quality resume rewriting. We provide an editable file so you can customize the final result to perfectly match your needs.</p>
+            </div>
+
+            <div class="info-box">
+                <p><strong>Questions Before Purchase?</strong> If you have any questions about our service, delivery process, or this refund policy, please contact us at support@getperfectresume.com <strong>before</strong> making a purchase. We're happy to help you understand exactly what to expect.</p>
+            </div>
         </div>
     </div>
+
 </body>
 </html>
