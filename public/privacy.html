@@ -1,18 +1,552 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>Privacy Policy | GetPerfectResume.com</title><script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - GetPerfectResume.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a4d2e;
+            --primary-light: #2d6a4f;
+            --accent: #f77f00;
+            --text-dark: #1e1e1e;
+            --text-medium: #4a4a4a;
+            --text-light: #707070;
+            --bg-cream: #faf8f5;
+            --bg-white: #ffffff;
+            --border: #e5e0d8;
+            --shadow: rgba(26, 77, 46, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-dark);
+            background: var(--bg-cream);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            opacity: 0.95;
+            margin-bottom: 0.5rem;
+        }
+
+        .last-updated {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .content-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 4px 24px var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .toc {
+            background: var(--bg-cream);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem 2rem;
+            margin-bottom: 3rem;
+            border-radius: 8px;
+        }
+
+        .toc h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin: 0.5rem 0;
+        }
+
+        .toc a {
+            color: var(--text-medium);
+            text-decoration: none;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+            display: inline-block;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+            padding-left: 0.5rem;
+        }
+
+        h2 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 3rem 0 1.5rem 0;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--text-medium);
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        ul, ol {
+            color: var(--text-medium);
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            font-size: 1.05rem;
+        }
+
+        strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: #fff8f0;
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+        }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #2563eb;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .info-box p {
+            margin-bottom: 0;
+            color: #1e3a8a;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .content-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--accent);
+            color: white;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 p-8 font-sans">
-    <div class="max-w-3xl mx-auto bg-white p-10 rounded-2xl shadow-sm border border-gray-100">
-        <a href="/" class="text-blue-600 text-sm font-bold mb-6 inline-block">← Back to Home</a>
-        <h1 class="text-3xl font-extrabold mb-6">Privacy Policy</h1>
-        <p class="text-sm text-gray-500 mb-6">Last updated: May 2026</p>
-        <div class="space-y-4 text-gray-700 text-sm leading-relaxed">
-            <p><strong>1. Data Auto-Deletion (Core Policy):</strong> GetPerfectResume.com (operated by Orbit Careers) employs a strict zero-retention policy for your documents. The PDF you upload is temporarily loaded into our server memory exclusively for AI processing. The moment the processing is complete, your original PDF is permanently and automatically deleted from our servers (`fs.unlinkSync` protocol). We do not store, sell, or manually review your uploaded resumes unless you specifically opt into the "Expert Human Review" package.</p>
-            <p><strong>2. Information We Collect:</strong> We collect your Name, Email, and Phone Number (extracted automatically by the AI or provided by you) for the sole purpose of delivering your optimized resume and providing customer support.</p>
-            <p><strong>3. Payment Processing:</strong> All payments are processed securely via Razorpay. We do not store or process your credit card information on our servers.</p>
+<body>
+<section class="hero">
+        <div class="hero-content">
+            <h1>Privacy Policy</h1>
+            <p>Your privacy and data security are our top priorities</p>
+            <p class="last-updated">Last Updated: January 2025</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="content-card">
+            <div class="info-box">
+                <p><strong>Your Privacy Matters:</strong> At GetPerfectResume.com, we are committed to protecting your personal information and being transparent about how we collect, use, and safeguard your data.</p>
+            </div>
+
+            <div class="toc">
+                <h2>Table of Contents</h2>
+                <ul>
+                    <li><a href="#introduction">1. Introduction</a></li>
+                    <li><a href="#information">2. Information We Collect</a></li>
+                    <li><a href="#how-we-use">3. How We Use Your Information</a></li>
+                    <li><a href="#sharing">4. Information Sharing and Disclosure</a></li>
+                    <li><a href="#data-security">5. Data Security</a></li>
+                    <li><a href="#data-retention">6. Data Retention</a></li>
+                    <li><a href="#your-rights">7. Your Rights and Choices</a></li>
+                    <li><a href="#cookies">8. Cookies and Tracking Technologies</a></li>
+                    <li><a href="#third-party">9. Third-Party Services</a></li>
+                    <li><a href="#children">10. Children's Privacy</a></li>
+                    <li><a href="#international">11. International Data Transfers</a></li>
+                    <li><a href="#updates">12. Changes to This Policy</a></li>
+                    <li><a href="#contact">13. Contact Us</a></li>
+                </ul>
+            </div>
+
+            <h2 id="introduction">1. Introduction</h2>
+            <p>Welcome to GetPerfectResume.com, powered by Orbit Careers. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our resume building services.</p>
+            <p>By using our services, you agree to the collection and use of information in accordance with this policy. If you do not agree with our policies and practices, please do not use our services.</p>
+
+            <h2 id="information">2. Information We Collect</h2>
+            <p>We collect several types of information from and about users of our service:</p>
+
+            <h3>2.1 Information You Provide to Us</h3>
+            <ul>
+                <li><strong>Account Information:</strong> Name, email address, password, and other registration details</li>
+                <li><strong>Resume Upload:</strong> You upload your resume for rewriting. We process it immediately and provide you with an editable copy. Your original and rewritten resume files are deleted from our servers immediately after delivery.</li>
+                <li><strong>Payment Information:</strong> Billing address and payment method details (processed securely through third-party payment processors)</li>
+                <li><strong>Communications:</strong> Information you provide when you contact customer support or communicate with us</li>
+            </ul>
+
+            <h3>2.2 Information We Collect Automatically</h3>
+            <p>When you access our service, we automatically collect certain information:</p>
+            <ul>
+                <li><strong>Usage Data:</strong> Pages visited, features used, time spent on the platform, and interaction patterns</li>
+                <li><strong>Device Information:</strong> IP address, browser type, operating system, device type, and unique device identifiers</li>
+                <li><strong>Location Data:</strong> General geographic location based on your IP address</li>
+                <li><strong>Cookies and Similar Technologies:</strong> Data collected through cookies, web beacons, and similar tracking technologies</li>
+                <li><strong>Log Data:</strong> Server logs including access times, pages viewed, and system activity</li>
+            </ul>
+
+            <h3>2.3 Information from Third Parties</h3>
+            <p>We may receive information about you from third parties, such as:</p>
+            <ul>
+                <li>Social media platforms if you choose to connect your account</li>
+                <li>Analytics providers who help us understand how users interact with our service</li>
+                <li>Payment processors who handle transaction information</li>
+                <li>Marketing partners who help us reach potential customers</li>
+            </ul>
+
+            <h2 id="how-we-use">3. How We Use Your Information</h2>
+            <p>We use the information we collect for various purposes:</p>
+
+            <h3>3.1 To Provide and Maintain Our Service</h3>
+            <ul>
+                <li>Create and manage your account</li>
+                <li>Process your uploaded resume and generate a rewritten, editable copy</li>
+                <li>Deliver the rewritten resume to you (files are deleted immediately after delivery)</li>
+                <li>Provide customer support and respond to inquiries</li>
+                <li>Send service-related notifications and updates</li>
+            </ul>
+
+            <h3>3.2 To Process Payments</h3>
+            <ul>
+                <li>Process subscription payments and manage billing</li>
+                <li>Prevent fraudulent transactions</li>
+                <li>Issue refunds when applicable</li>
+            </ul>
+
+            <h3>3.3 To Improve Our Service</h3>
+            <ul>
+                <li>Analyze usage patterns to enhance user experience</li>
+                <li>Develop new features and functionality</li>
+                <li>Conduct research and analytics</li>
+                <li>Troubleshoot technical issues</li>
+            </ul>
+
+            <h3>3.4 To Communicate With You</h3>
+            <ul>
+                <li>Send important account and service updates</li>
+                <li>Respond to your questions and requests</li>
+                <li>Send marketing communications (with your consent)</li>
+                <li>Request feedback and reviews</li>
+            </ul>
+
+            <h3>3.5 For Legal and Security Purposes</h3>
+            <ul>
+                <li>Comply with legal obligations and regulations</li>
+                <li>Protect our rights, privacy, safety, and property</li>
+                <li>Detect and prevent fraud, abuse, and security incidents</li>
+                <li>Enforce our Terms & Conditions</li>
+            </ul>
+
+            <h2 id="sharing">4. Information Sharing and Disclosure</h2>
+            <p>We do not sell your personal information. We may share your information in the following circumstances:</p>
+
+            <h3>4.1 Service Providers</h3>
+            <p>We share information with trusted third-party service providers who assist us in operating our business:</p>
+            <ul>
+                <li>Cloud hosting providers for data storage</li>
+                <li>Payment processors for billing and transactions</li>
+                <li>Email service providers for communications</li>
+                <li>Analytics providers for usage insights</li>
+                <li>Customer support tools</li>
+            </ul>
+            <p>These service providers are contractually obligated to protect your information and use it only for the purposes we specify.</p>
+
+            <h3>4.2 Business Transfers</h3>
+            <p>If we are involved in a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction. We will provide notice before your information is transferred and becomes subject to a different privacy policy.</p>
+
+            <h3>4.3 Legal Requirements</h3>
+            <p>We may disclose your information if required by law or in response to:</p>
+            <ul>
+                <li>Valid legal processes (subpoenas, court orders, etc.)</li>
+                <li>Government or regulatory requests</li>
+                <li>Protection of our legal rights</li>
+                <li>Prevention of fraud or security threats</li>
+            </ul>
+
+            <h3>4.4 With Your Consent</h3>
+            <p>We may share your information with third parties when you explicitly give us permission to do so.</p>
+
+            <div class="highlight-box">
+                <p><strong>Important:</strong> We will NEVER share your resume content with third parties for marketing purposes or sell your personal information to data brokers. Your resume files are deleted immediately after we deliver the rewritten copy to you.</p>
+            </div>
+
+            <h2 id="data-security">5. Data Security</h2>
+            <p>We implement appropriate technical and organizational measures to protect your personal information:</p>
+
+            <h3>5.1 Security Measures</h3>
+            <ul>
+                <li><strong>Encryption:</strong> All data transmitted between your device and our servers is encrypted using SSL/TLS</li>
+                <li><strong>Secure Storage:</strong> Your data is stored on secure servers with restricted access</li>
+                <li><strong>Access Controls:</strong> Strict internal policies limit employee access to personal data</li>
+                <li><strong>Regular Audits:</strong> We conduct regular security assessments and vulnerability testing</li>
+                <li><strong>Password Protection:</strong> User passwords are encrypted using industry-standard hashing algorithms</li>
+            </ul>
+
+            <h3>5.2 Your Responsibility</h3>
+            <p>While we implement strong security measures, you also play a role in protecting your information:</p>
+            <ul>
+                <li>Use a strong, unique password for your account</li>
+                <li>Do not share your login credentials with others</li>
+                <li>Log out of your account when using shared devices</li>
+                <li>Enable two-factor authentication if available</li>
+                <li>Report any suspicious activity immediately</li>
+            </ul>
+
+            <div class="info-box">
+                <p><strong>Note:</strong> No method of transmission over the internet is 100% secure. While we strive to protect your data, we cannot guarantee absolute security.</p>
+            </div>
+
+            <h2 id="data-retention">6. Data Retention</h2>
+            <p>We have a strict data retention policy designed to protect your privacy:</p>
+            <ul>
+                <li><strong>Resume Files:</strong> All uploaded resume files are deleted immediately after we provide you with the rewritten, editable copy. We do not store your resume content on our servers.</li>
+                <li><strong>Account Information:</strong> We retain only basic account information (email, name) while your account is active</li>
+                <li><strong>Payment Records:</strong> Transaction records are retained for accounting and legal compliance purposes only</li>
+                <li><strong>Deleted Accounts:</strong> After account deletion, we retain minimal information for legal and regulatory compliance (typically 30-90 days)</li>
+                <li><strong>Legal Requirements:</strong> Some data may be retained longer if required by law</li>
+            </ul>
+            <p>You can request deletion of your account at any time by contacting us.</p>
+
+            <h2 id="your-rights">7. Your Rights and Choices</h2>
+            <p>You have certain rights regarding your personal information:</p>
+
+            <h3>7.1 Access and Correction</h3>
+            <ul>
+                <li>Access your personal information through your account settings</li>
+                <li>Update or correct inaccurate information</li>
+                <li>Request a copy of your data in a portable format</li>
+            </ul>
+
+            <h3>7.2 Deletion</h3>
+            <ul>
+                <li>Request deletion of your account and personal information</li>
+                <li>Delete specific resume content or drafts</li>
+                <li>Note: Some information may be retained for legal compliance</li>
+            </ul>
+
+            <h3>7.3 Marketing Communications</h3>
+            <ul>
+                <li>Opt-out of marketing emails by clicking "unsubscribe" in any promotional email</li>
+                <li>Manage communication preferences in your account settings</li>
+                <li>Note: You will still receive essential service-related communications</li>
+            </ul>
+
+            <h3>7.4 Cookie Preferences</h3>
+            <ul>
+                <li>Manage cookie settings through your browser</li>
+                <li>Opt-out of certain tracking technologies</li>
+                <li>Note: Disabling cookies may affect service functionality</li>
+            </ul>
+
+            <h3>7.5 Regional Privacy Rights</h3>
+            <p><strong>For EU/EEA Users (GDPR):</strong></p>
+            <ul>
+                <li>Right to access, rectification, and erasure</li>
+                <li>Right to data portability</li>
+                <li>Right to restrict processing</li>
+                <li>Right to object to processing</li>
+                <li>Right to withdraw consent</li>
+                <li>Right to lodge a complaint with a supervisory authority</li>
+            </ul>
+
+            <p><strong>For California Users (CCPA):</strong></p>
+            <ul>
+                <li>Right to know what personal information is collected</li>
+                <li>Right to know if personal information is sold or disclosed</li>
+                <li>Right to say no to the sale of personal information</li>
+                <li>Right to access personal information</li>
+                <li>Right to equal service and price</li>
+            </ul>
+
+            <h2 id="cookies">8. Cookies and Tracking Technologies</h2>
+            <p>We use cookies and similar tracking technologies to enhance your experience:</p>
+
+            <h3>8.1 Types of Cookies We Use</h3>
+            <ul>
+                <li><strong>Essential Cookies:</strong> Required for the service to function properly (account authentication, security)</li>
+                <li><strong>Performance Cookies:</strong> Help us understand how you use our service and improve performance</li>
+                <li><strong>Functionality Cookies:</strong> Remember your preferences and settings</li>
+                <li><strong>Analytics Cookies:</strong> Collect anonymous usage statistics</li>
+                <li><strong>Marketing Cookies:</strong> Track your activity for advertising purposes (with consent)</li>
+            </ul>
+
+            <h3>8.2 Managing Cookies</h3>
+            <p>You can control cookies through your browser settings. However, disabling cookies may limit your ability to use certain features of our service.</p>
+
+            <h2 id="third-party">9. Third-Party Services</h2>
+            <p>Our service may contain links to third-party websites or integrate with third-party services. We are not responsible for the privacy practices of these third parties. We encourage you to read their privacy policies.</p>
+
+            <h3>Third-Party Services We Use:</h3>
+            <ul>
+                <li>Payment processors (e.g., Stripe, PayPal)</li>
+                <li>Analytics services (e.g., Google Analytics)</li>
+                <li>Cloud hosting providers</li>
+                <li>Email service providers</li>
+                <li>Customer support platforms</li>
+            </ul>
+
+            <h2 id="children">10. Children's Privacy</h2>
+            <p>Our service is not intended for individuals under the age of 16. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately, and we will delete the information.</p>
+
+            <h2 id="international">11. International Data Transfers</h2>
+            <p>Your information may be transferred to and processed in countries other than your country of residence. These countries may have different data protection laws. When we transfer your data internationally, we ensure appropriate safeguards are in place, such as:</p>
+            <ul>
+                <li>Standard contractual clauses approved by regulatory authorities</li>
+                <li>Ensuring service providers comply with international privacy frameworks</li>
+                <li>Implementing appropriate technical and organizational measures</li>
+            </ul>
+
+            <h2 id="updates">12. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. When we make changes:</p>
+            <ul>
+                <li>We will update the "Last Updated" date at the top of this page</li>
+                <li>We will notify you via email or through a prominent notice on our website</li>
+                <li>For material changes, we will provide at least 30 days' notice</li>
+            </ul>
+            <p>We encourage you to review this Privacy Policy periodically to stay informed about how we protect your information.</p>
+
+            <h2 id="contact">13. Contact Us</h2>
+            <p>If you have questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
+            <ul>
+                <li><strong>Email:</strong> privacy@getperfectresume.com</li>
+                <li><strong>Support Email:</strong> support@getperfectresume.com</li>
+                <li><strong>Website:</strong> <a href="https://getperfectresume.com" style="color: var(--primary); text-decoration: underline;">https://getperfectresume.com</a></li>
+            </ul>
+
+            <div class="highlight-box" style="margin-top: 3rem;">
+                <p><strong>Data Protection Officer:</strong> For privacy-related inquiries, you can reach our Data Protection Officer at privacy@getperfectresume.com</p>
+            </div>
+
+            <div class="info-box">
+                <p><strong>Your Trust Matters:</strong> We are committed to earning and maintaining your trust through transparent data practices and robust security measures. Thank you for choosing GetPerfectResume.com.</p>
+            </div>
         </div>
     </div>
+
 </body>
 </html>
