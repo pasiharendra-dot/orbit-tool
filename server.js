@@ -165,4 +165,15 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
     }
 });
 
+// Clean URL for Blog Index
+app.get('/blog', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'blog.html'));
+});
+
+// Clean URL for Blog Posts
+app.get('/blog/:postName', (req, res) => {
+    const postName = req.params.postName;
+    res.sendFile(path.join(__dirname, 'public', 'blog', `${postName}.html`));
+});
+
 app.listen(port, () => { console.log(`Engine running at port ${port}`); });
