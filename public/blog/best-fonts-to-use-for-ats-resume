@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>The 5 Best (and Worst) Fonts to Use for an ATS-Scanned Resume | GetPerfectResume</title>
+    <meta name="description" content="Stop failing ATS scans due to bad typography. Discover the 5 best fonts for ATS, the technical reasons parsers reject custom fonts, and how to optimize your resume's readability.">
+    <meta name="keywords" content="best fonts for ATS, ATS friendly fonts, resume typography, Applicant Tracking System fonts, best resume font 2026, worst resume fonts, Orbit Careers, GetPerfectResume">
+    <meta name="author" content="Orbit Careers">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    
+    <link rel="canonical" href="https://getperfectresume.com/blog/best-fonts-for-ats.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://getperfectresume.com/blog/best-fonts-for-ats.html">
+    <meta property="og:title" content="The 5 Best (and Worst) Fonts to Use for an ATS-Scanned Resume">
+    <meta property="og:description" content="Discover the hidden technical reasons why your custom resume font is causing ATS parsers to reject your application.">
+    <meta property="og:image" content="https://getperfectresume.com/logo.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The 5 Best (and Worst) Fonts to Use for an ATS-Scanned Resume">
+    <meta name="twitter:description" content="Discover the hidden technical reasons why your custom resume font is causing ATS parsers to reject your application.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "The 5 Best (and Worst) Fonts to Use for an ATS-Scanned Resume",
+      "author": {
+        "@type": "Organization",
+        "name": "Orbit Careers",
+        "url": "https://getperfectresume.com"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "GetPerfectResume",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://getperfectresume.com/logo.png"
+        }
+      },
+      "datePublished": "2026-05-08",
+      "dateModified": "2026-05-08",
+      "description": "Stop failing ATS scans due to bad typography. Discover the 5 best fonts for ATS, the technical reasons parsers reject custom fonts, and how to optimize your resume's readability.",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://getperfectresume.com/blog/best-fonts-for-ats.html"
+      }
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .content-highlight { background: linear-gradient(120deg, #dbeafe 0%, #dbeafe 100%); background-repeat: no-repeat; background-size: 100% 30%; background-position: 0 90%; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <nav class="bg-white border-b py-4 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-6 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-green-600 tracking-tight">GetPerfectResume<span class="text-gray-400">.blog</span></a>
+            <div class="hidden md:flex space-x-6">
+                <a href="/cover-letter.html" class="text-sm font-semibold text-gray-600 hover:text-green-600">Cover Letter</a>
+                <a href="/linkedin.html" class="text-sm font-semibold text-gray-600 hover:text-green-600">LinkedIn Optimization</a>
+                <a href="/blog" class="text-sm font-semibold text-green-600">All Articles</a>
+            </div>
+            <a href="/" class="md:hidden text-sm font-semibold text-gray-600 hover:text-green-600">← Back</a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        
+        <article class="bg-white p-8 md:p-12 shadow-sm rounded-2xl border border-gray-100">
+            <header class="mb-10 border-b pb-8">
+                <div class="flex items-center space-x-2 mb-4">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">ATS Formatting</span>
+                    <span class="text-gray-400 text-sm">12 Min Read</span>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4 mb-6 leading-tight">The 5 Best (and Worst) Fonts to Use for an <span class="content-highlight">ATS-Scanned Resume</span></h1>
+                
+                <div class="flex items-center mt-6">
+                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden mr-4">
+                        <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-gray-900 font-bold">Orbit Careers Editorial Team</p>
+                        <p class="text-gray-500 text-sm">Executive Resume Strategists</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-8">
+                
+                <p class="text-xl text-gray-600 font-medium leading-relaxed">When candidates design their resumes, they often spend hours agonizing over aesthetics. They download sleek, custom fonts from the internet, hoping a unique typographical flair will make their application stand out in a sea of standard templates. Unfortunately, in the highly automated world of modern recruitment, this visual creativity is likely causing your resume to be instantly rejected.</p>
+                
+                <p>Throughout our extensive executive experience managing global hiring pipelines, we have seen countless elite candidates completely eliminated from consideration not because of their lack of skills, but because of their choice of font. Finding the <strong>best fonts for ATS</strong> (Applicant Tracking Systems) is not an art—it is a strict technical science.</p>
+
+                <p>In this guide, we will dive deep into the parsing logic of Applicant Tracking Systems, reveal why custom typography breaks resume formatting, and outline the 5 best (and worst) fonts you should be using to guarantee your application actually reaches a human being.</p>
+
+                <hr class="border-gray-200 my-10">
+
+                <h2 class="text-3xl font-bold text-gray-900 mt-10 mb-4">The Technical Reality: How ATS Parsers Read Fonts</h2>
+                
+                <p>To understand why typography matters, you must look at your resume the way a machine does. An ATS like Workday, Greenhouse, or Taleo does not "see" your document. It does not appreciate the elegant curves of your custom sans-serif typeface. Instead, a resume parser relies on <strong>character encoding</strong> (specifically Unicode mappings) to extract text.</p>
+
+                <p>When you use a standard, universally installed system font, the ATS easily recognizes the Unicode value for every single letter. It knows that the binary code for a capital "A" translates to a capital "A."</p>
+
+                <div class="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-400 my-8">
+                    <h4 class="font-bold text-blue-900 mb-2">The Custom Font Disaster (Unicode Corruption)</h4>
+                    <p class="text-sm text-blue-800">If you download a custom font from a third-party website, the Unicode mapping may not align with standard system architectures. When the ATS parser tries to scrape the text, it encounters characters it doesn't recognize. Instead of reading "Project Manager," the parser translates your text into corrupted symbols: <strong>"Pr??ect M&^ager."</strong> The system instantly scores you a 0% match for the job description, and you are auto-rejected.</p>
+                </div>
+
+                <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-3">The Font Substitution Problem</h3>
+                <p>Beyond parsing corruption, there is the issue of human readability. If you manage to get past the bot, a recruiter will eventually open your resume on their local machine. If they do not have your custom font installed on their computer, their word processor (Microsoft Word) or browser will execute an automatic <strong>font substitution</strong>.</p>
+                
+                <p>Word will forcefully swap your sleek downloaded font for a default like Calibri. Because every font has different kerning (the spacing between letters) and line height, this substitution will instantly shift your margins, push your bullet points out of alignment, and likely spill your carefully crafted one-page resume onto two or three broken pages.</p>
+                
+                <p>To survive both the ATS parser and the recruiter's eye, your font must be <strong>universally installed across all operating systems</strong> (Windows, macOS, and Linux).</p>
+
+                <hr class="border-gray-200 my-10">
+
+                <h2 class="text-3xl font-bold text-gray-900 mt-10 mb-4">The 5 Best Fonts for ATS-Scanned Resumes</h2>
+                
+                <p>The golden rule of resume typography is: <strong>Boring is safe, and safe gets interviews.</strong> The best fonts for ATS are the ones that have been pre-installed on virtually every computer shipped in the last twenty years. Here are the top five elite choices for executive and professional resumes.</p>
+
+                <div class="space-y-8 mt-8">
+                    <!-- Font 1 -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2 font-sans" style="font-family: Arial, sans-serif;">1. Arial</h3>
+                        <p class="text-gray-600 mb-3"><strong>Classification:</strong> Sans-Serif | <strong>Vibe:</strong> Clean, Modern, Objective</p>
+                        <p class="text-gray-700">Arial is the undisputed heavyweight champion of ATS compatibility. It is arguably the most universal sans-serif font in the world. Because of its clean, uniform stroke width and generous letter spacing, ATS parsers read Arial with absolute 100% accuracy. While designers might consider it "bland," recruiters consider it highly legible. It is the safest choice for IT, engineering, and corporate roles.</p>
+                    </div>
+
+                    <!-- Font 2 -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2" style="font-family: Calibri, sans-serif;">2. Calibri</h3>
+                        <p class="text-gray-600 mb-3"><strong>Classification:</strong> Sans-Serif | <strong>Vibe:</strong> Friendly, Contemporary, Crisp</p>
+                        <p class="text-gray-700">Calibri was the default font for Microsoft Word for over a decade. It renders beautifully on both screens and printed paper. Its slightly rounded edges make it feel a bit warmer than Arial. ATS parsers handle Calibri flawlessly, and because it is slightly more condensed than Arial, it allows you to fit a bit more data onto a single page without sacrificing readability or looking cluttered.</p>
+                    </div>
+
+                    <!-- Font 3 -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2 font-serif" style="font-family: 'Times New Roman', Times, serif;">3. Times New Roman</h3>
+                        <p class="text-gray-600 mb-3"><strong>Classification:</strong> Serif | <strong>Vibe:</strong> Traditional, Academic, Authoritative</p>
+                        <p class="text-gray-700">Many modern candidates shy away from Times New Roman, assuming it looks outdated. However, for executive positions, legal roles, academia, and finance, the traditional serif implies authority and stability. More importantly, Times New Roman is the baseline standard for text encoding. No Applicant Tracking System in the history of recruitment has ever failed to read Times New Roman.</p>
+                    </div>
+
+                    <!-- Font 4 -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2 font-serif" style="font-family: Garamond, serif;">4. Garamond</h3>
+                        <p class="text-gray-600 mb-3"><strong>Classification:</strong> Serif | <strong>Vibe:</strong> Elegant, Sophisticated, Executive</p>
+                        <p class="text-gray-700">If you want the authority of a serif font but find Times New Roman too ubiquitous, Garamond is the elite alternative. It is highly respected in C-suite environments and publishing. Garamond is visually elegant and universally installed. However, note that Garamond runs small; you will need to bump the font size up by 1 or 2 points (e.g., use 11pt or 12pt instead of 10pt) to maintain perfect ATS and human legibility.</p>
+                    </div>
+
+                    <!-- Font 5 -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">5. Helvetica</h3>
+                        <p class="text-gray-600 mb-3"><strong>Classification:</strong> Sans-Serif | <strong>Vibe:</strong> Professional, Premium, Balanced</p>
+                        <p class="text-gray-700">Helvetica is the darling of the corporate design world. It is exceptionally clean, symmetric, and highly readable. While it is native to macOS rather than Windows (Windows users usually default to Arial), standard ATS parsers easily translate Helvetica's text encoding. It is an excellent choice for marketing, product management, and sales resumes where a premium aesthetic is desired without breaking the underlying code.</p>
+                    </div>
+                </div>
+
+                <hr class="border-gray-200 my-10">
+
+                <h2 class="text-3xl font-bold text-gray-900 mt-10 mb-4">The 5 Worst Fonts for Resumes (Instant Rejection)</h2>
+                
+                <p>Just as the right font can guarantee smooth parsing, the wrong font will act as a brick wall between you and the hiring manager. If your resume currently utilizes any of the following, you must reformat it immediately.</p>
+
+                <ul class="list-none space-y-4 my-8">
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-red-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <span class="text-gray-800 text-lg"><strong>1. Downloaded "Google Fonts" or Custom Typefaces:</strong> Fonts like Roboto, Montserrat, or Open Sans are beautiful for web design, but if they are not natively installed on the recruiter's local machine, your Word document will break via font substitution, and older parsers may scramble the text.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-red-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <span class="text-gray-800 text-lg"><strong>2. Any Script or Cursive Font:</strong> Fonts like Brush Script, Lucida Handwriting, or Pacifico are completely unreadable to basic OCR software. An ATS cannot distinguish the connected letters, resulting in a jumbled mess.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-red-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <span class="text-gray-800 text-lg"><strong>3. Century Gothic (and Overly Wide Fonts):</strong> While Century Gothic is universally installed, its ultra-wide letter spacing is disastrous for resumes. It takes up far too much horizontal space, forcing you to cut critical achievements just to fit your text on one page.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-red-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <span class="text-gray-800 text-lg"><strong>4. Impact / Arial Black:</strong> These ultra-heavy fonts are designed for billboard headlines, not dense professional documents. Using them for your name or section headers screams unprofessionalism and causes terrible optical fatigue for recruiters.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-red-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <span class="text-gray-800 text-lg"><strong>5. Comic Sans:</strong> This goes without saying. Never, under any professional circumstances, use Comic Sans on a resume.</span>
+                    </li>
+                </ul>
+
+                <h2 class="text-3xl font-bold text-gray-900 mt-12 mb-4">Sizing, Kerning, and the Golden Rules of Spacing</h2>
+                <p>Choosing an ATS friendly font is only step one; how you size and space it dictates whether the human recruiter will actually read your content. ATS parsers also evaluate white space to identify where a section ends and a new one begins.</p>
+                
+                <ul class="list-disc pl-6 space-y-3 mb-6 text-gray-700">
+                    <li><strong>Ideal Font Size:</strong> Your body text should never drop below <strong>10.5 points</strong> or exceed <strong>12 points</strong>. Anything smaller than 10.5 looks like a massive wall of unreadable text to a human. Anything larger than 12 points looks juvenile and wastes valuable real estate.</li>
+                    <li><strong>Section Headers:</strong> Your H2 headers (e.g., "Professional Experience", "Education") should be 14pt to 16pt and bolded. The ATS uses these enlarged, bolded markers to map your data structure.</li>
+                    <li><strong>Line Spacing:</strong> Keep your line spacing between <strong>1.0 and 1.15</strong>. Do not double-space your resume. Ensure there is a clear break (spacing after paragraphs) between different job entries so the parser knows where one role ends and the next begins.</li>
+                </ul>
+
+                <div class="bg-yellow-50 p-6 rounded-xl border-l-4 border-yellow-400 my-8">
+                    <h4 class="font-bold text-yellow-900 mb-2">The Hidden Danger of "Justified" Text Alignment</h4>
+                    <p class="text-sm text-yellow-800">Never justify your text (making it flush on both the left and right margins). Word processors achieve this by stretching the spaces between words. Older ATS parsers interpret these stretched spaces as a completely new column or line break, severing your sentences in half. Always use <strong>Left-Aligned</strong> text.</p>
+                </div>
+
+                <hr class="border-gray-200 my-12">
+
+                <h2 class="text-3xl font-bold text-gray-900 mt-10 mb-4">Stop Wrestling with Formatting. Let Technology Do It.</h2>
+                <p>Ensuring your resume uses perfectly mapped universal fonts, correct point sizes, exact line spacing, and safe margins is incredibly tedious. You could spend hours tweaking a Microsoft Word document, only to accidentally shift a margin that pushes a single bullet point onto page two.</p>
+                
+                <p>You shouldn't be an expert in typography; you should be an expert in your career.</p>
+
+                <p>At <strong>Orbit Careers</strong>, we realized that technical formatting nuances were holding brilliant candidates back. That is why we engineered <strong>GetPerfectResume</strong>. Our platform completely removes the guesswork from resume formatting.</p>
+
+                <ul class="list-none space-y-4 my-8">
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span class="text-gray-800 text-lg"><strong>Ironclad Universal Typography:</strong> Our AI generates resumes exclusively using rigorously tested, universally installed, 100% ATS-compliant fonts. Zero mapping errors. Zero character corruption.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span class="text-gray-800 text-lg"><strong>Native .docx Export:</strong> We don't output risky PDFs that rely on OCR. You receive a flawlessly structured, natively parseable Microsoft Word document designed for modern hiring algorithms.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span class="text-gray-800 text-lg"><strong>Done in 60 Seconds:</strong> Upload your messy, poorly formatted resume. Our recruiter-trained engine aligns it to your target job, fixes the typography, optimizes the layout, and delivers a perfect file instantly.</span>
+                    </li>
+                </ul>
+
+                <div class="bg-gray-900 rounded-2xl p-8 md:p-12 text-center mt-12 shadow-xl transform hover:-translate-y-1 transition-transform duration-300">
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">Never Fail an ATS Font Scan Again</h3>
+                    <p class="text-gray-300 mb-8 max-w-xl mx-auto text-lg">Upload your current resume. Our AI engine will instantly translate your data into the perfect font, format, and structure—generating an impenetrable, ATS-proof .docx file in under 60 seconds.</p>
+                    <a href="/" class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-gray-900 bg-green-400 rounded-full hover:bg-green-300 transition-colors duration-300">
+                        Generate Your Perfect Resume Now
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-white border-t py-12 text-center text-gray-500 text-sm mt-12">
+        <div class="max-w-4xl mx-auto px-6">
+            <p class="mb-4 font-semibold text-gray-900">GetPerfectResume by Orbit Careers</p>
+            <div class="space-x-4 mb-6">
+                <a href="/" class="hover:text-green-600 transition">Resume AI</a>
+                <a href="/cover-letter.html" class="hover:text-green-600 transition">Cover Letter AI</a>
+                <a href="/linkedin.html" class="hover:text-green-600 transition">LinkedIn Optimizer</a>
+            </div>
+            <p>&copy; 2026 GetPerfectResume.com. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
