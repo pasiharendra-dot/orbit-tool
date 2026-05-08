@@ -1,8 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   <url>
-      <loc>https://getperfectresume.com/</loc>
-      <changefreq>weekly</changefreq>
-      <priority>1.0</priority>
-   </url>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://getperfectresume.com/</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/about.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/contact.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/terms.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/privacy.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/refund.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/why-resume-rejected.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/how-to-check-ats-compatibility.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/ats-friendly-resume-format.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/pdf-vs-word-resume.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/chatgpt-rejected-ai-optimizer.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/best-fonts-for-ats.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/resume-keywords.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/multi-column-resume-truth.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/ats-resume-checker.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/beat-the-ats.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/graphics-on-resume.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/how-far-back-should-a-resume-go.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/action-verbs-for-resume.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/one-page-vs-two-page-resume.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/professional-summary-examples.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/employment-gap-on-resume.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/resume-for-career-change.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/freelance-work-on-resume.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/list-certifications-on-resume.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/quantifiable-achievements-resume.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/resume-objective-statement.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/optimize-linkedin-profile.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/linkedin-headline-examples.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/linkedin-about-section.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/open-to-work-linkedin-banner.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/linkedin-skills-section-ranking.html</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://getperfectresume.com/blog/resume-keywords</loc>
+  <lastmod>2026-05-08T14:26:54+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
 </urlset>
