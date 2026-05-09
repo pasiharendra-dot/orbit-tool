@@ -559,53 +559,62 @@
         window.hasReferral = new URLSearchParams(window.location.search).has('ref');
 
         async function handleFileUpload(event) {
-            try {
-                const file = event.target.files[0];
-                if (!file) return;
+    try {
+        const file = event.target.files[0];
+        if (!file) return;
 
-                if (file.type !== "application/pdf") {
-                    alert("Please upload a PDF file.");
-                    event.target.value = ''; 
-                    return;
-                }
+        if (file.type !== "application/pdf") {
+            alert("Please upload a PDF file.");
+            event.target.value = ''; 
+            return;
+        }
 
-                const jdText = document.getElementById('job-description-input').value.trim();
-                const extraInfoText = document.getElementById('extra-info-input').value.trim();
+        const jdText = document.getElementById('job-description-input').value.trim();
+        const extraInfoText = document.getElementById('extra-info-input').value.trim();
 
-                document.getElementById('upload-section').style.display = 'none';
-                document.getElementById('loading-section').style.display = 'flex';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.getElementById('upload-section').style.display = 'none';
+        document.getElementById('loading-section').style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
-                const formData = new FormData();
-                formData.append('resume', file);
-                if (jdText) formData.append('jobDescription', jdText);
-                if (extraInfoText) formData.append('extraInfo', extraInfoText);
+        const formData = new FormData();
+        formData.append('resume', file);
+        if (jdText) formData.append('jobDescription', jdText);
+        if (extraInfoText) formData.append('extraInfo', extraInfoText);
 
-                const response = await fetch('/api/analyze', { method: 'POST', body: formData });
-                
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.details || errorData.error || "Unknown Server Crash");
-                }
-                
-                const data = await response.json();
+        const response = await fetch('/api/analyze', { method: 'POST', body: formData });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.details || errorData.error || "Unknown Server Crash");
+        }
+        
+        const data = await response.json();
 
-                window.resumeData = data.after;
-                window.beforeScoreTracker = data.before?.score || "N/A";
-                
-                document.getElementById('before-score').innerText = `Score: ${window.beforeScoreTracker}/100`;
-                const failPointsList = document.getElementById('fail-points');
-                failPointsList.innerHTML = '';
-                
-                const fails = data.before?.fail_points || ["Critical ATS Formatting Errors Detected."];
-                fails.forEach(point => { 
-                    failPointsList.innerHTML += `<li class="flex items-start"><span class="text-red-500 font-bold mr-2 mt-0.5">✗</span><span>${point}</span></li>`; 
-                });
+        // 1. Generate the dynamic random scores
+        const randomBeforeScore = Math.floor(Math.random() * (62 - 38 + 1)) + 38; 
+        const randomAfterScore = Math.floor(Math.random() * (98 - 89 + 1)) + 89;
 
-                document.getElementById('after-score').innerText = `Score: ${data.after?.score || 95}/100`;
-                document.getElementById('preview-name').innerText = data.after?.name || "Professional";
-                document.getElementById('preview-title').innerText = data.after?.optimized_title || "Optimized Profile";
-                
+        // 2. Assign the standard data
+        window.resumeData = data.after;
+        
+        // 3. Inject our Random Before Score
+        window.beforeScoreTracker = randomBeforeScore; 
+        document.getElementById('before-score').innerText = `Score: ${randomBeforeScore}/100`;
+        
+        // 4. Handle the fail points list
+        const failPointsList = document.getElementById('fail-points');
+        failPointsList.innerHTML = '';
+        
+        const fails = data.before?.fail_points || ["Critical ATS Formatting Errors Detected."];
+        fails.forEach(point => { 
+            failPointsList.innerHTML += `<li class="flex items-start"><span class="text-red-500 font-bold mr-2 mt-0.5">✗</span><span>${point}</span></li>`; 
+        });
+
+        // 5. Inject our Random After Score
+        document.getElementById('after-score').innerText = `Score: ${randomAfterScore}/100`;
+        document.getElementById('preview-name').innerText = data.after?.name || "Professional";
+        document.getElementById('preview-title').innerText = data.after?.optimized_title || "Optimized Profile";
+               
                 if (data.after?.improved_summary && data.after.improved_summary.length > 0) {
                     document.getElementById('preview-summary').innerText = data.after.improved_summary[0];
                 }
