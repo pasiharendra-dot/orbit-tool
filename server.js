@@ -1,19 +1,47 @@
 require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
+const rateLimit = require('express-rate-limit'); 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Razorpay = require('razorpay');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto'); // <-- SECURITY ADDITION: Required for verifying Razorpay signatures
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
-const upload = multer({ dest: 'uploads/' });
+// ==========================================
+// SECURITY CONFIGURATIONS
+// ==========================================
+
+// 1. Rate Limiter (Wallet Drain Protection)
+const uploadLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Limit each IP to 5 requests per windowMs
+    standardHeaders: true, 
+    legacyHeaders: false, 
+    message: { error: "Too many resumes uploaded from this device. Please wait 15 minutes and try again." }
+});
+
+// 2. Secure Multer Configuration (Server Crash Protection)
+const upload = multer({ 
+    storage: multer.memoryStorage(), // Keeps file in RAM, prevents hard drive filling up
+    limits: { 
+        fileSize: 5 * 1024 * 1024 // Hard limit: 5MB maximum file size
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === 'application/pdf') {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type. Only PDFs are allowed.'));
+        }
+    }
+});
+
+// ==========================================
+// MIDDLEWARE & SETUP
+// ==========================================
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); 
@@ -87,6 +115,35 @@ app.post('/api/create-order', async (req, res) => {
     }
 });
 
+// ==========================================
+// SECURITY ADDITION: Razorpay Payment Verification
+// ==========================================
+app.post('/api/payment/verify', (req, res) => {
+    try {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+        
+        // Use the exact Razorpay secret from your environment variables
+        const secret = process.env.RAZORPAY_KEY_SECRET; 
+
+        // Generate the expected cryptographic signature
+        const generated_signature = crypto
+            .createHmac('sha256', secret)
+            .update(razorpay_order_id + "|" + razorpay_payment_id)
+            .digest('hex');
+
+        // Compare what we generated with what Razorpay sent us
+        if (generated_signature === razorpay_signature) {
+            res.status(200).json({ status: "success", message: "Payment is authentic." });
+        } else {
+            res.status(400).json({ error: "Invalid payment signature. Potential fraud attempt." });
+        }
+    } catch (error) {
+        console.error("Payment Verification Error:", error);
+        res.status(500).json({ error: "Server error during payment verification" });
+    }
+});
+// ==========================================
+
 // Smart AI Generator with Automatic Retries and Model Fallback
 async function generateAIResponseWithRetry(promptWithJD, filePart) {
     const maxRetries = 3;
@@ -132,15 +189,15 @@ async function generateAIResponseWithRetry(promptWithJD, filePart) {
     }
 }
 
-app.post('/api/analyze', upload.single('resume'), async (req, res) => {
+app.post('/api/analyze', uploadLimiter, upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) throw new Error("No file received by the server.");
         
         const jobDescription = req.body.jobDescription || "Optimize for general industry standards.";
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
-        const pdfBase64 = fs.readFileSync(req.file.path).toString("base64");
-        fs.unlinkSync(req.file.path); 
+        // Use req.file.buffer directly from memory storage
+        const pdfBase64 = req.file.buffer.toString("base64");
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume according to the JSON format:`;
@@ -161,6 +218,12 @@ app.post('/api/analyze', upload.single('resume'), async (req, res) => {
         
     } catch (error) {
         console.error("CRITICAL BACKEND ERROR:", error);
+        
+        // Handle multer file size error cleanly
+        if (error.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({ error: 'File Too Large', details: 'The uploaded PDF exceeds the 5MB limit.' });
+        }
+        
         res.status(500).json({ error: 'Server Crash', details: error.message });
     }
 });
