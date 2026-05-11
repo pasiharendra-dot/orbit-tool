@@ -285,6 +285,9 @@
                         </div>
                     </div>
 
+                    <div class="mb-4 flex gap-2">
+    <input type="text" id="promo-code-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent uppercase text-sm" placeholder="Have a University Promo Code?">
+</div>
                     <button onclick="initiateCheckout()" class="w-full py-4 bg-orbitBlue hover:bg-blue-800 text-white font-bold rounded-xl shadow-md transition text-lg flex justify-center items-center">
                         <span>Unlock & Download</span>
                     </button>
@@ -755,17 +758,22 @@ document.addEventListener('DOMContentLoaded', toggleTargetRole);
         });
         
         async function initiateCheckout() {
-            try {
-                const response = await fetch('/api/create-order', { 
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        hasShared: window.hasShared, 
-                        hasReferral: window.hasReferral 
-                    })
-                });
-                const orderData = await response.json();
+    try {
+        // 1. Grab the promo code from the input box we added earlier
+        const promoInput = document.getElementById('promo-code-input');
+        const userPromo = promoInput ? promoInput.value : "";
 
+        // 2. Send it to the server inside the body
+        const response = await fetch('/api/create-order', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                hasShared: window.hasShared, 
+                hasReferral: window.hasReferral,
+                promoCode: userPromo // <-- THIS IS THE MAGIC ADDITION
+            })
+        });
+        const orderData = await response.json();
                 if (!orderData || !orderData.id) {
                     throw new Error("Failed to create order. Please try again.");
                 }
