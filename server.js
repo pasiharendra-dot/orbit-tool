@@ -178,10 +178,27 @@ DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 
 app.post('/api/create-order', async (req, res) => {
     try {
-        const { hasShared, hasReferral } = req.body; 
+        const { hasShared, hasReferral, promoCode } = req.body; 
         
-        let basePrice = 1; 
+        let basePrice = 199; 
 
+        // ==========================================
+        // THE PROMO CODE ENGINE
+        // ==========================================
+        if (promoCode) {
+            const cleanCode = promoCode.toUpperCase().trim();
+            
+            // University / Affiliate Tier (Drops price to ₹99)
+            if (cleanCode === "SYMBIOSIS99" || cleanCode === "NMIMS99" || cleanCode === "LAUNCH99") {
+                basePrice = 99;
+            } 
+            // Founder / Testing Tier (Drops price to ₹1)
+            else if (cleanCode === "FOUNDER") {
+                basePrice = 1;
+            }
+        }
+
+        // Apply social sharing discounts (if you are still using them)
         if (hasShared) { basePrice = basePrice * 0.90; }
         if (hasReferral) { basePrice = basePrice * 0.90; }
 
