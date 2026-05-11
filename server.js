@@ -53,6 +53,11 @@ const razorpay = new Razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
+// ==========================================
+// AI PROMPTS
+// ==========================================
+
+// 1. Existing System Prompt (For Mid & Senior Level)
 const systemPrompt = `
 Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
 Your singular goal is to OPTIMIZE the user's resume for ATS systems and executive recruiters.
@@ -64,6 +69,83 @@ STRICT GUARDRAILS:
 4. Core Skills Format: You MUST output EXACTLY 12 core skills. Output ONLY the raw skill name (e.g., "End-to-End Recruitment", "Candidate Sourcing", "Offer Negotiation"). 
    - ABSOLUTELY NO CATEGORIES OR COLONS. Do not write "Talent Acquisition: Recruitment". Just write "Recruitment".
 5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". 
+   - DO NOT include bullet point characters (like • or ·) in the JSON string itself.
+
+Output Format: You MUST return a JSON object with this exact structure:
+{
+  "before": {"score": 45, "fail_points": ["Point 1", "Point 2", "Point 3"]},
+  "after": {
+    "score": 94,
+    "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
+    "optimized_title": "...",
+    "improved_summary": ["..."],
+    "achievements_and_awards": ["..."],
+    "core_skills": ["..."],
+    "experience": [
+      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["..."] }
+    ],
+    "education": [
+      { "degree": "...", "institution": "...", "date": "..." }
+    ],
+    "certifications": ["..."],
+    "personal_details": [
+      { "label": "Date of Birth", "value": "..." }
+    ]
+  }
+}
+DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
+`;
+
+// 2. Entry Level Prompt (1-3 Years)
+const entryLevelPrompt = `
+Role: You are an Expert Early-Career Strategist at Orbit Careers. 
+Your singular goal is to OPTIMIZE an entry-level professional's resume (1-3 years experience) for ATS systems.
+
+STRICT GUARDRAILS:
+1. The Hybrid Approach: Blend their early-career execution with a strong emphasis on their degree and technical skills. 
+2. No Hallucinations: Do not invent leadership or strategy roles. Focus on collaboration, execution, process adherence, and fast learning.
+3. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "[Target Job Title] | [Degree or Certification] | Focus in [Core Skill 1] & [Core Skill 2]".
+4. Core Skills Format: You MUST output EXACTLY 12 core skills. Blend foundational tools with soft skills. Output ONLY the raw skill name. 
+   - ABSOLUTELY NO CATEGORIES OR COLONS.
+5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence explaining daily execution and adherence to goals]". 
+   - DO NOT include bullet point characters (like • or ·) in the JSON string itself.
+
+Output Format: You MUST return a JSON object with this exact structure:
+{
+  "before": {"score": 45, "fail_points": ["Point 1", "Point 2", "Point 3"]},
+  "after": {
+    "score": 94,
+    "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
+    "optimized_title": "...",
+    "improved_summary": ["..."],
+    "achievements_and_awards": ["..."],
+    "core_skills": ["..."],
+    "experience": [
+      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["..."] }
+    ],
+    "education": [
+      { "degree": "...", "institution": "...", "date": "..." }
+    ],
+    "certifications": ["..."],
+    "personal_details": [
+      { "label": "Date of Birth", "value": "..." }
+    ]
+  }
+}
+DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
+`;
+
+// 3. Fresher Prompt (0 Years)
+const fresherPrompt = `
+Role: You are an Empathetic Entry-Level Career Strategist at Orbit Careers. 
+Your singular goal is to OPTIMIZE a student or recent graduate's resume for ATS systems to help them secure internships or entry-level roles.
+
+STRICT GUARDRAILS:
+1. Zero Experience is Okay: Do NOT invent work history. Focus heavily on academic projects, relevant coursework, thesis work, and extracurricular leadership. Treat major university projects as "Experience" if work history is missing.
+2. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "Aspiring [Target Job Title] | [Degree] | Strong foundation in [Core Skill 1] & [Core Skill 2]".
+3. Core Skills Format: You MUST output EXACTLY 12 core skills. Focus on academic skills, fast learning, and foundational tools. Output ONLY the raw skill name. 
+   - ABSOLUTELY NO CATEGORIES OR COLONS.
+4. Experience/Projects Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence explaining what they built, researched, or accomplished]". 
    - DO NOT include bullet point characters (like • or ·) in the JSON string itself.
 
 Output Format: You MUST return a JSON object with this exact structure:
@@ -145,7 +227,8 @@ app.post('/api/payment/verify', (req, res) => {
 // ==========================================
 
 // Smart AI Generator with Automatic Retries and Model Fallback
-async function generateAIResponseWithRetry(promptWithJD, filePart) {
+// UPDATED: Now accepts activeSystemPrompt based on user choice
+async function generateAIResponseWithRetry(promptWithJD, filePart, activeSystemPrompt) {
     const maxRetries = 3;
     const baseDelay = 2000; // 2 seconds
 
@@ -153,7 +236,7 @@ async function generateAIResponseWithRetry(promptWithJD, filePart) {
         try {
             const model = genAI.getGenerativeModel({ 
                 model: "gemini-2.5-flash", 
-                systemInstruction: systemPrompt,
+                systemInstruction: activeSystemPrompt,
                 generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
             });
             
@@ -175,7 +258,7 @@ async function generateAIResponseWithRetry(promptWithJD, filePart) {
                 try {
                     const fallbackModel = genAI.getGenerativeModel({ 
                         model: "gemini-1.5-flash", 
-                        systemInstruction: systemPrompt,
+                        systemInstruction: activeSystemPrompt,
                         generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
                     });
                     const fallbackResult = await fallbackModel.generateContent([promptWithJD, filePart]);
@@ -196,13 +279,27 @@ app.post('/api/analyze', uploadLimiter, upload.single('resume'), async (req, res
         const jobDescription = req.body.jobDescription || "Optimize for general industry standards.";
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
+        // Extract the new variables from the frontend
+        const experienceLevel = req.body.experienceLevel || "mid";
+        const targetRole = req.body.targetRole || "";
+        
         // Use req.file.buffer directly from memory storage
         const pdfBase64 = req.file.buffer.toString("base64");
         
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
+        
+        // Determine which AI Brain to use based on the frontend selection
+        let activePrompt = systemPrompt; // Defaults to Mid/Senior level
+        if (experienceLevel === "fresher") {
+            activePrompt = fresherPrompt + `\n\nCRITICAL CONTEXT: The user is a Fresher targeting the exact role of "${targetRole}". You MUST frame their academic projects, certifications, and educational background to prove they are a perfect fit for this specific position. Discard irrelevant hobbies.`;
+        } else if (experienceLevel === "entry") {
+            activePrompt = entryLevelPrompt + `\n\nCRITICAL CONTEXT: The user is an Entry-Level professional targeting the exact role of "${targetRole}". You MUST blend their early-career execution with their education to prove they are a perfect fit for this specific position.`;
+        }
+
         const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume according to the JSON format:`;
         
-        let aiResponse = await generateAIResponseWithRetry(promptWithJD, filePart);
+        // Pass the dynamically selected brain into the AI function
+        let aiResponse = await generateAIResponseWithRetry(promptWithJD, filePart, activePrompt);
         
         const startIndex = aiResponse.indexOf('{');
         const endIndex = aiResponse.lastIndexOf('}');
