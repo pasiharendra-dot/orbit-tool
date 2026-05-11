@@ -177,7 +177,7 @@ app.post('/api/create-order', async (req, res) => {
     try {
         const { hasShared, hasReferral } = req.body; 
         
-        let basePrice = 199; 
+        let basePrice = 1; 
 
         if (hasShared) { basePrice = basePrice * 0.90; }
         if (hasReferral) { basePrice = basePrice * 0.90; }
