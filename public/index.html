@@ -103,25 +103,33 @@
                     <div class="flex flex-col items-center"><span class="text-3xl font-extrabold">100%</span><span class="text-xs uppercase tracking-wider text-blue-200 mt-1">ATS Parsable</span></div>
                 </div>
             </div>
-<div class="mb-4">
-    <label class="block text-sm font-semibold text-gray-700 mb-2">Experience Level</label>
-    <select id="experience-level" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white" onchange="toggleTargetRole()">
-        <option value="mid">Mid-Level Professional (3-8 Years)</option>
-        <option value="senior">Senior-Level Professional (8+ Years)</option>
-        <option value="entry">Entry-Level Professional (1-3 Years)</option>
-        <option value="fresher">Fresher / Student (0 Years)</option>
-    </select>
-</div>
 
-<div id="target-role-container" class="mb-4 hidden">
-    <label class="block text-sm font-semibold text-gray-700 mb-2">Target Job Title <span class="text-red-500">*</span></label>
-    <input type="text" id="target-role-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="e.g., Junior Data Analyst, Marketing Intern">
-    <p class="text-xs text-gray-500 mt-1">Required for freshers and entry-level candidates to focus the resume.</p>
-</div>
-            <div class="glass-panel max-w-3xl w-full rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-10 -mt-20 relative z-20 border border-gray-100 mx-4">
+            <div class="glass-panel max-w-3xl w-full rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-10 -mt-20 relative z-20 border border-gray-100 mx-4 bg-white">
+                
                 <div class="mb-6">
                     <label class="flex items-center text-gray-800 text-sm font-bold mb-2">
                         <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">1</span> 
+                        Experience Level
+                    </label>
+                    <select id="experience-level" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent transition text-sm text-gray-700" onchange="toggleTargetRole()">
+                        <option value="mid">Mid-Level Professional (3-8 Years)</option>
+                        <option value="senior">Senior-Level Professional (8+ Years)</option>
+                        <option value="entry">Entry-Level Professional (1-3 Years)</option>
+                        <option value="fresher">Fresher / Student (0 Years)</option>
+                    </select>
+                </div>
+
+                <div id="target-role-container" class="mb-6 hidden">
+                    <label class="flex items-center text-gray-800 text-sm font-bold mb-2">
+                        <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">*</span> 
+                        Target Job Title <span class="text-red-500 font-normal ml-1">*Required for Freshers</span>
+                    </label>
+                    <input type="text" id="target-role-input" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent transition text-sm" placeholder="e.g., Junior Data Analyst, Marketing Intern">
+                </div>
+
+                <div class="mb-6">
+                    <label class="flex items-center text-gray-800 text-sm font-bold mb-2">
+                        <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">2</span> 
                         Target Job Description <span class="text-gray-400 font-normal ml-1">(Optional)</span>
                     </label>
                     <textarea id="job-description-input" rows="3" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent transition resize-none text-sm" placeholder="Paste the responsibilities and requirements of the job you want here..."></textarea>
@@ -129,7 +137,7 @@
 
                 <div class="mb-6">
                     <label class="flex items-center text-gray-800 text-sm font-bold mb-2">
-                        <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">2</span> 
+                        <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">3</span> 
                         Additional Information <span class="text-gray-400 font-normal ml-1">(Optional)</span>
                     </label>
                     <textarea id="extra-info-input" rows="2" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent transition resize-none text-sm" placeholder="Add missing jobs, new awards, extra dates, or skills to include..."></textarea>
@@ -137,7 +145,7 @@
 
                 <div class="mb-2">
                     <label class="flex items-center text-gray-800 text-sm font-bold">
-                        <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">3</span> 
+                        <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">4</span> 
                         Upload Current Resume
                     </label>
                 </div>
@@ -147,11 +155,11 @@
                     <div class="bg-white p-3 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
                         <svg class="h-8 w-8 text-[#0F3B68]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
                     </div>
-                    <p class="text-lg font-bold text-orbitDark">Click to upload PDF</p>
+                    <p class="text-lg font-bold text-[#0F3B68]">Click to upload PDF</p>
                     <p class="text-sm text-gray-500 mt-1">Bank-Grade Encryption. Data Auto-Deletes.</p>
                 </div>
             </div>
-
+            
             <!-- TRUST SIGNALS: HOME PAGE -->
             <div class="w-full max-w-4xl mt-16 text-center overflow-hidden">
                 <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">Our Users Have Been Hired At</p>
