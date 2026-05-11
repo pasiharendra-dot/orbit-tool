@@ -222,13 +222,13 @@
   }
 
   /* ── STORY SECTION ── */
-  .story-section { background: var(--cream); }
+  .story-section { background: var(--cream); padding: 60px 2rem; }
   .story-grid {
     display: grid;
     grid-template-columns: 260px 1fr;
     gap: 3rem;
     align-items: start;
-    margin-top: 2.5rem;
+    margin-top: 0;
   }
   .story-visual { position: relative; }
   .story-card {
@@ -681,11 +681,6 @@
 <!-- ─── STORY ─── -->
 <section class="story-section">
   <div class="section-inner">
-    <div style="max-width:560px;">
-      <span class="section-label">Our Founder</span>
-      <h2 class="section-title">A Recruiter Who Got <em>Tired</em> of Watching Good Talent Get Filtered Out</h2>
-      <p class="section-body">GetPerfectResume.com was born from a very specific frustration — seeing brilliant candidates rejected not because of their skills, but because their resume couldn't pass an algorithm they didn't even know existed.</p>
-    </div>
     <div class="story-grid">
       <div class="story-visual">
         <div class="story-card">
@@ -731,9 +726,11 @@
         </div>
       </div>
       <div>
-        <p style="font-size:1.05rem; color:var(--text-mid); font-weight:300; margin-bottom:1.5rem; line-height:1.85;">After spending 17 years placing candidates at companies ranging from growing startups to Fortune 500 firms, Harendra Pasi saw the same story play out thousands of times.</p>
-        <p style="font-size:1rem; color:var(--text-mid); font-weight:300; margin-bottom:1.5rem; line-height:1.85;">Talented professionals — engineers, finance experts, senior managers — were being filtered out by ATS software before a single human even looked at their profile. The problem wasn't their skills. It was a resume that wasn't structured for the algorithm.</p>
-        <p style="font-size:1rem; color:var(--text-mid); font-weight:300; margin-bottom:2rem; line-height:1.85;">Rather than just coaching candidates one by one, Harendra decided to encode 17 years of recruiter knowledge directly into an AI — so that every job seeker, regardless of budget, could access the expertise of a top-tier HR consultant.</p>
+        <span class="section-label">Our Founder</span>
+        <h2 class="section-title" style="font-size:clamp(1.5rem,3vw,2.2rem);margin-bottom:0.75rem;">A Recruiter Who Got <em>Tired</em> of Watching Good Talent Get Filtered Out</h2>
+        <p style="font-size:0.95rem; color:var(--text-mid); font-weight:300; margin-bottom:1.25rem; line-height:1.8;">GetPerfectResume.com was born from a very specific frustration — seeing brilliant candidates rejected not because of their skills, but because their resume couldn't pass an algorithm they didn't even know existed.</p>
+        <p style="font-size:0.95rem; color:var(--text-mid); font-weight:300; margin-bottom:1.25rem; line-height:1.8;">After spending 17 years placing candidates at companies ranging from growing startups to Fortune 500 firms, Harendra Pasi saw the same story play out thousands of times. Talented professionals were being filtered out by ATS software before a single human even looked at their profile.</p>
+        <p style="font-size:0.95rem; color:var(--text-mid); font-weight:300; margin-bottom:1.5rem; line-height:1.8;">Rather than coaching candidates one by one, Harendra encoded 17 years of recruiter knowledge into an AI — so every job seeker could access the expertise of a top-tier HR consultant.</p>
         <div class="quote-pull">
           <p>"Every time a good resume fails an ATS scan, a career gets delayed. That is the problem we exist to solve."</p>
           <cite>— Harendra Pasi, Founder, GetPerfectResume.com</cite>
@@ -959,8 +956,9 @@
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="footer-logo">
-          <img src="https://getperfectresume.com/logo.png" alt="GetPerfectResume" style="filter:brightness(0) invert(1);">
+        <div class="footer-logo" style="display:flex;align-items:center;gap:10px;margin-bottom:0.5rem;">
+          <div style="width:30px;height:30px;border-radius:7px;background:#16a34a;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',Georgia,serif;font-size:1rem;font-weight:700;color:#fff;flex-shrink:0;">G</div>
+          <span style="font-family:'DM Serif Display',Georgia,serif;font-size:1rem;color:#ffffff;letter-spacing:-0.01em;">GetPerfectResume<span style="color:#4ade80;">.com</span></span>
         </div>
         <p>Stop getting rejected by ATS bots. Powered by the executive recruiters at Orbit Careers. Built on 17+ years of real recruitment expertise.</p>
         <div style="margin-top:1rem;">
