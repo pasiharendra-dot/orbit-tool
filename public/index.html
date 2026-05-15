@@ -670,7 +670,7 @@
         </footer>
     </main>
 
-    <script>
+<script>
         // ADD YOUR GOOGLE SCRIPT URL HERE!
         const GOOGLE_TRACKER_URL = "https://script.google.com/macros/s/AKfycbxq5u9yJhF1j0Sg_Nws0awK3VrvwQGcoumZphjb752GSYUS_4OWeo23tNyhqLAd2rZO/exec"; 
         
@@ -680,85 +680,76 @@
         window.hasReferral = new URLSearchParams(window.location.search).has('ref');
 
         // Function to show/hide the Target Role box
-function toggleTargetRole() {
-    const level = document.getElementById('experience-level').value;
-    const container = document.getElementById('target-role-container');
-    if (level === 'fresher' || level === 'entry') {
-        container.classList.remove('hidden');
-    } else {
-        container.classList.add('hidden');
-    }
-}
-// Run once on load to ensure correct state
-document.addEventListener('DOMContentLoaded', toggleTargetRole);
+        function toggleTargetRole() {
+            const level = document.getElementById('experience-level').value;
+            const container = document.getElementById('target-role-container');
+            if (level === 'fresher' || level === 'entry') {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', toggleTargetRole);
         
         async function handleFileUpload(event) {
-    try {
-        const file = event.target.files[0];
-        if (!file) return;
+            try {
+                const file = event.target.files[0];
+                if (!file) return;
 
-        if (file.type !== "application/pdf") {
-            alert("Please upload a PDF file.");
-            event.target.value = ''; 
-            return;
-        }
+                if (file.type !== "application/pdf") {
+                    alert("Please upload a PDF file.");
+                    event.target.value = ''; 
+                    return;
+                }
 
-        const jdText = document.getElementById('job-description-input').value.trim();
-        const extraInfoText = document.getElementById('extra-info-input').value.trim();
-        const expLevel = document.getElementById('experience-level').value;
-        const targetRole = document.getElementById('target-role-input').value.trim();
+                const jdText = document.getElementById('job-description-input').value.trim();
+                const extraInfoText = document.getElementById('extra-info-input').value.trim();
+                const expLevel = document.getElementById('experience-level').value;
+                const targetRole = document.getElementById('target-role-input').value.trim();
 
-        // Mandatory Target Role Check for Freshers/Entry Level
-        if ((expLevel === 'fresher' || expLevel === 'entry') && !targetRole) {
-            alert("Please enter your Target Job Title so we can align your resume perfectly.");
-            event.target.value = ''; // Reset the file input
-            return;
-        }
+                if ((expLevel === 'fresher' || expLevel === 'entry') && !targetRole) {
+                    alert("Please enter your Target Job Title so we can align your resume perfectly.");
+                    event.target.value = ''; 
+                    return;
+                }
 
-        document.getElementById('upload-section').style.display = 'none';
-        document.getElementById('loading-section').style.display = 'flex';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+                document.getElementById('upload-section').style.display = 'none';
+                document.getElementById('loading-section').style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        const formData = new FormData();
-        formData.append('resume', file);
-        formData.append('experienceLevel', expLevel);
-        if (jdText) formData.append('jobDescription', jdText);
-        if (extraInfoText) formData.append('extraInfo', extraInfoText);
-        if (targetRole) formData.append('targetRole', targetRole);
-        const response = await fetch('/api/analyze', { method: 'POST', body: formData });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.details || errorData.error || "Unknown Server Crash");
-        }
-        
-        const data = await response.json();
+                const formData = new FormData();
+                formData.append('resume', file);
+                formData.append('experienceLevel', expLevel);
+                if (jdText) formData.append('jobDescription', jdText);
+                if (extraInfoText) formData.append('extraInfo', extraInfoText);
+                if (targetRole) formData.append('targetRole', targetRole);
+                const response = await fetch('/api/analyze', { method: 'POST', body: formData });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.details || errorData.error || "Unknown Server Crash");
+                }
+                
+                const data = await response.json();
 
-        // 1. Generate the dynamic random scores
-        const randomBeforeScore = Math.floor(Math.random() * (62 - 38 + 1)) + 38; 
-        const randomAfterScore = Math.floor(Math.random() * (98 - 89 + 1)) + 89;
+                const randomBeforeScore = Math.floor(Math.random() * (62 - 38 + 1)) + 38; 
+                const randomAfterScore = Math.floor(Math.random() * (98 - 89 + 1)) + 89;
 
-        // 2. Assign the standard data
-        window.resumeData = data.after;
-        
-        // 3. Inject our Random Before Score
-        window.beforeScoreTracker = randomBeforeScore; 
-        document.getElementById('before-score').innerText = `Score: ${randomBeforeScore}/100`;
-        
-        // 4. Handle the fail points list
-        const failPointsList = document.getElementById('fail-points');
-        failPointsList.innerHTML = '';
-        
-        const fails = data.before?.fail_points || ["Critical ATS Formatting Errors Detected."];
-        fails.forEach(point => { 
-            failPointsList.innerHTML += `<li class="flex items-start"><span class="text-red-500 font-bold mr-2 mt-0.5">✗</span><span>${point}</span></li>`; 
-        });
+                window.resumeData = data.after;
+                window.beforeScoreTracker = randomBeforeScore; 
+                document.getElementById('before-score').innerText = `Score: ${randomBeforeScore}/100`;
+                
+                const failPointsList = document.getElementById('fail-points');
+                failPointsList.innerHTML = '';
+                const fails = data.before?.fail_points || ["Critical ATS Formatting Errors Detected."];
+                fails.forEach(point => { 
+                    failPointsList.innerHTML += `<li class="flex items-start"><span class="text-red-500 font-bold mr-2 mt-0.5">✗</span><span>${point}</span></li>`; 
+                });
 
-        // 5. Inject our Random After Score
-        document.getElementById('after-score').innerText = `Score: ${randomAfterScore}/100`;
-        document.getElementById('preview-name').innerText = data.after?.name || "Professional";
-        document.getElementById('preview-title').innerText = data.after?.optimized_title || "Optimized Profile";
-               
+                document.getElementById('after-score').innerText = `Score: ${randomAfterScore}/100`;
+                document.getElementById('preview-name').innerText = data.after?.name || "Professional";
+                document.getElementById('preview-title').innerText = data.after?.optimized_title || "Optimized Profile";
+                
                 if (data.after?.improved_summary && data.after.improved_summary.length > 0) {
                     document.getElementById('preview-summary').innerText = data.after.improved_summary[0];
                 }
@@ -816,59 +807,48 @@ document.addEventListener('DOMContentLoaded', toggleTargetRole);
         window.addEventListener('DOMContentLoaded', () => {
             if (window.hasReferral) updatePriceDisplay();
         });
-        // ==========================================
-        // FOMO SOCIAL PROOF NOTIFICATION SYSTEM
-        // ==========================================
+
+        // FOMO NOTIFICATIONS
         const fomoFirstNames = ["Rahul", "Priya", "Amit", "Sneha", "Vikram", "Neha", "Ramesh", "Karthik", "Siddharth", "Pooja", "Anjali", "Sandeep", "Deepak", "Ayesha", "Manoj", "Divya", "Arjun", "Ravi", "Swati", "Tarun", "Kavya", "Gaurav", "Nisha", "Rohan"];
         const fomoLastInitials = [" S.", " P.", " M.", " K.", " R.", " T.", " V.", " D.", " N.", " L.", " C.", " B.", " A."];
 
         function triggerFomoPopup() {
             const notif = document.getElementById('live-notification');
             const nameEl = document.getElementById('notify-name');
-            
-            // 1. Generate a random name
             const randomFirst = fomoFirstNames[Math.floor(Math.random() * fomoFirstNames.length)];
             const randomLast = fomoLastInitials[Math.floor(Math.random() * fomoLastInitials.length)];
             nameEl.innerText = randomFirst + randomLast;
 
-            // 2. Slide up and fade in
             notif.classList.remove('translate-y-32', 'opacity-0');
             notif.classList.add('translate-y-0', 'opacity-100');
 
-            // 3. Hide after 4 seconds
             setTimeout(() => {
                 notif.classList.remove('translate-y-0', 'opacity-100');
                 notif.classList.add('translate-y-32', 'opacity-0');
-                
-                // 4. Wait 8 to 15 seconds AFTER hiding before showing the next one
                 const timeHidden = Math.floor(Math.random() * (15000 - 8000 + 1)) + 8000;
                 setTimeout(triggerFomoPopup, timeHidden);
-                
             }, 4000); 
         }
 
-        // Start the first popup 4 seconds after the page loads
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(triggerFomoPopup, 4000);
         });
         
         async function initiateCheckout() {
-    try {
-        // 1. Grab the promo code from the input box we added earlier
-        const promoInput = document.getElementById('promo-code-input');
-        const userPromo = promoInput ? promoInput.value : "";
+            try {
+                const promoInput = document.getElementById('promo-code-input');
+                const userPromo = promoInput ? promoInput.value : "";
 
-        // 2. Send it to the server inside the body
-        const response = await fetch('/api/create-order', { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                hasShared: window.hasShared, 
-                hasReferral: window.hasReferral,
-                promoCode: userPromo // <-- THIS IS THE MAGIC ADDITION
-            })
-        });
-        const orderData = await response.json();
+                const response = await fetch('/api/create-order', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        hasShared: window.hasShared, 
+                        hasReferral: window.hasReferral,
+                        promoCode: userPromo 
+                    })
+                });
+                const orderData = await response.json();
                 if (!orderData || !orderData.id) {
                     throw new Error("Failed to create order. Please try again.");
                 }
@@ -884,7 +864,6 @@ document.addEventListener('DOMContentLoaded', toggleTargetRole);
                     "handler": function (response){
                         downloadResume('AI Makeover Paid');
                         
-                        // Switch UI to Success Screen immediately after download
                         document.getElementById('results-section').style.display = 'none';
                         document.getElementById('success-section').style.display = 'block';
                         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -909,21 +888,47 @@ document.addEventListener('DOMContentLoaded', toggleTargetRole);
             }
         }
 
+        // ==========================================
+        // THE TRAFFIC COP (ROUTER)
+        // ==========================================
         async function downloadResume(packageType) {
             try { fetch(GOOGLE_TRACKER_URL, { method: "POST", body: JSON.stringify({ name: window.resumeData.name, email: window.resumeData.email, phone: window.resumeData.phone, beforeScore: window.beforeScoreTracker, afterScore: window.resumeData.score || "N/A", action: `SUCCESS - ${packageType}` }) }); } catch(e) { }
             
-            const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle, TableLayoutType } = docx;
+            const selectedTemplate = document.getElementById('selected-template') ? document.getElementById('selected-template').value : 'sentinel';
+            const data = window.resumeData;
+            
+            let doc;
+
+            // Route to the correct document generator
+            if (selectedTemplate === 'vanguard') {
+                doc = generateVanguard(data);
+            } else if (selectedTemplate === 'creative') {
+                doc = generateCreative(data);
+            } else if (selectedTemplate === 'global') {
+                doc = generateGlobal(data);
+            } else {
+                doc = generateSentinel(data); // Default
+            }
+            
+            // Download the generated file
+            docx.Packer.toBlob(doc).then(blob => { 
+                saveAs(blob, `Orbit_Optimized_${selectedTemplate.toUpperCase()}.docx`); 
+            });
+        }
+
+        // ==========================================
+        // TEMPLATE 1: THE ATS SENTINEL (Original Code)
+        // ==========================================
+        function generateSentinel(data) {
+            const { Document, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle, TableLayoutType } = docx;
             const FONT = "Calibri"; const SIZE_BODY = 19; const SIZE_HEADING = 22;  
             const COLOR_DARK_BLUE = "0F3B68"; const COLOR_LIGHT_BLUE = "5C9CE6"; const COLOR_SUBTEXT = "444444"; 
             
-            const data = window.resumeData;
-
             function createHeader(title) { return new Paragraph({ spacing: { before: 240, after: 120 }, border: { bottom: { color: COLOR_LIGHT_BLUE, space: 1, style: BorderStyle.SINGLE, size: 12 } }, children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: SIZE_HEADING, font: FONT, color: COLOR_DARK_BLUE }) ] }); }
             const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
             
             const skillsTableRows = [];
             if (data.core_skills && data.core_skills.length > 0) {
-                // FORCE MAXIMUM OF 12 SKILLS FOR A PERFECT 3-COLUMN LAYOUT
                 const safeSkills = data.core_skills.slice(0, 12);
                 for (let i = 0; i < safeSkills.length; i += 3) {
                     const chunk = safeSkills.slice(i, i + 3); while (chunk.length < 3) chunk.push(""); 
@@ -932,17 +937,13 @@ document.addEventListener('DOMContentLoaded', toggleTargetRole);
                             width: { size: 33.33, type: WidthType.PERCENTAGE }, 
                             borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } }, 
                             margins: { top: 40, bottom: 40, left: 0, right: 100 },
-                            children: skill ? [ new Paragraph({ 
-                                bullet: { level: 0 }, 
-                                indent: { left: 240, hanging: 240 }, 
-                                children: [ new TextRun({ text: skill, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] 
-                            }) ] : [ new Paragraph({ text: "" }) ] 
+                            children: skill ? [ new Paragraph({ bullet: { level: 0 }, indent: { left: 240, hanging: 240 }, children: [ new TextRun({ text: skill, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] }) ] : [ new Paragraph({ text: "" }) ] 
                         })) 
                     }));
                 }
             }
 
-            const doc = new Document({
+            return new Document({
                 sections: [{
                     properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } },
                     children: [
@@ -959,38 +960,132 @@ document.addEventListener('DOMContentLoaded', toggleTargetRole);
                             new Paragraph({ spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: `${job.title}`, bold: true, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] }), 
                             ...job.bullets.map(bullet => { 
                                 let prefix = ""; let rest = bullet; 
-                                if (bullet.includes(": ")) { 
-                                    const p = bullet.split(": "); 
-                                    prefix = p[0] + ": "; 
-                                    rest = p.slice(1).join(": "); 
-                                } else if (bullet.includes(" – ")) { 
-                                    const p = bullet.split(" – "); 
-                                    prefix = p[0] + " – "; 
-                                    rest = p.slice(1).join(" – "); 
-                                } 
-                                return new Paragraph({ 
-                                    alignment: AlignmentType.JUSTIFIED, 
-                                    bullet: { level: 0 }, 
-                                    spacing: { before: 40, after: 40, line: 240 }, 
-                                    children: [ 
-                                        ...(prefix ? [new TextRun({ text: prefix, bold: true, size: SIZE_BODY, font: FONT })] : []), 
-                                        new TextRun({ text: rest, size: SIZE_BODY, font: FONT }) 
-                                    ] 
-                                }); 
+                                if (bullet.includes(": ")) { const p = bullet.split(": "); prefix = p[0] + ": "; rest = p.slice(1).join(": "); } else if (bullet.includes(" – ")) { const p = bullet.split(" – "); prefix = p[0] + " – "; rest = p.slice(1).join(" – "); } 
+                                return new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40, line: 240 }, children: [ ...(prefix ? [new TextRun({ text: prefix, bold: true, size: SIZE_BODY, font: FONT })] : []), new TextRun({ text: rest, size: SIZE_BODY, font: FONT }) ] }); 
                             }) 
                         ]),
                         createHeader("Education"),
                         ...(data.education || []).map(edu => new Paragraph({ spacing: { before: 100, after: 50 }, children: [ new TextRun({ text: `${edu.institution}`, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] })),
-                        ...(data.personal_details && data.personal_details.length > 0 ? [ createHeader("Personal Details"), ...data.personal_details.map(d => new Paragraph({ spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: `${d.label}: `, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: d.value, size: SIZE_BODY, font: FONT }) ] })) ] : []),
-                        ...(data.certifications && data.certifications.length > 0 ? [ createHeader("Certifications"), ...data.certifications.map(c => new Paragraph({ bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: c, size: SIZE_BODY, font: FONT }) ] })) ] : [])
                     ]
                 }]
             });
+        }
+
+        // ==========================================
+        // TEMPLATE 2: THE EXECUTIVE VANGUARD (Two Column)
+        // ==========================================
+        function generateVanguard(data) {
+            const { Document, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = docx;
+            const FONT = "Calibri"; const SIZE_BODY = 19;
             
-            Packer.toBlob(doc).then(blob => { saveAs(blob, "Orbit_Optimized_Resume.docx"); });
+            // --- LEFT COLUMN ---
+            const leftChildren = [
+                new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200, after: 200 }, children: [ new TextRun({ text: "[INSERT PHOTO HERE]", color: "888888", size: 24 }) ] }),
+                new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "CONTACT", color: "FFFFFF", bold: true, size: 22 }) ] }),
+                new Paragraph({ spacing: { before: 100 }, children: [ new TextRun({ text: data.phone || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
+                new Paragraph({ spacing: { before: 50 }, children: [ new TextRun({ text: data.email || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
+                new Paragraph({ spacing: { before: 50 }, children: [ new TextRun({ text: data.linkedin || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
+                new Paragraph({ spacing: { before: 50 }, children: [ new TextRun({ text: data.location || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
+                
+                new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "SKILLS", color: "FFFFFF", bold: true, size: 22 }) ] }),
+            ];
+
+            if (data.core_skills) {
+                data.core_skills.slice(0,10).forEach(skill => {
+                    leftChildren.push(new Paragraph({ spacing: { before: 80 }, bullet: { level: 0 }, children: [ new TextRun({ text: skill, color: "FFFFFF", size: SIZE_BODY }) ] }));
+                });
+            }
+
+            // --- RIGHT COLUMN ---
+            const rightChildren = [
+                new Paragraph({ spacing: { before: 100 }, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, color: "0F3B68" }) ] }),
+                new Paragraph({ spacing: { after: 200 }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 24, color: "D4AF37" }) ] }),
+                
+                new Paragraph({ spacing: { before: 100, after: 100 }, children: [ new TextRun({ text: "PROFESSIONAL SUMMARY", bold: true, size: 22, color: "0F3B68" }) ] }),
+                ...(data.improved_summary || []).map(p => new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { before: 60, after: 60 }, children: [ new TextRun({ text: p, size: SIZE_BODY, color: "444444" }) ] })),
+                
+                new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: "0F3B68", space: 1, style: BorderStyle.SINGLE, size: 12 } }, children: [ new TextRun({ text: "EXPERIENCE", bold: true, size: 22, color: "0F3B68" }) ] }),
+            ];
+
+            if (data.experience) {
+                data.experience.forEach(job => {
+                    rightChildren.push(new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 7000 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 20 }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, color: "666666" }) ] }));
+                    rightChildren.push(new Paragraph({ spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, color: "D4AF37" }) ] }));
+                    job.bullets.forEach(b => rightChildren.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: b, size: SIZE_BODY, color: "444444" }) ] })));
+                });
+            }
+
+            // --- BUILD THE TABLE ---
+            const layoutTable = new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
+                rows: [ new TableRow({ children: [
+                    new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, shading: { fill: "0F3B68" }, margins: { top: 200, left: 150, right: 150, bottom: 200 }, children: leftChildren }),
+                    new TableCell({ width: { size: 70, type: WidthType.PERCENTAGE }, margins: { left: 300, right: 100, top: 100 }, children: rightChildren })
+                ]})]
+            });
+
+            return new Document({ sections: [{ properties: { page: { margin: { top: 400, right: 400, bottom: 400, left: 400 } } }, children: [layoutTable] }] });
+        }
+
+        // ==========================================
+        // TEMPLATE 3: THE CREATIVE COMPASS
+        // ==========================================
+        function generateCreative(data) {
+            const { Document, Paragraph, TextRun, AlignmentType, BorderStyle } = docx;
+            const FONT = "Arial"; const SIZE_BODY = 19;
+            const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
+
+            const children = [
+                new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 100, after: 50 }, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 50, font: FONT, color: "1877F2" }) ] }),
+                new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), bold: true, size: 24, font: FONT, color: "666666" }) ] }),
+                new Paragraph({ alignment: AlignmentType.CENTER, border: { top: { color: "1877F2", style: BorderStyle.SINGLE, size: 12 }, bottom: { color: "1877F2", style: BorderStyle.SINGLE, size: 12 } }, spacing: { before: 50, after: 200 }, children: [ new TextRun({ text: contactLine, size: SIZE_BODY, font: FONT, color: "444444" }) ] }),
+                
+                new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200, after: 100 }, children: [ new TextRun({ text: "EXECUTIVE SUMMARY", bold: true, size: 20, font: FONT, color: "1877F2" }) ] }),
+                ...(data.improved_summary || []).map(p => new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 60, after: 60 }, children: [ new TextRun({ text: p, size: SIZE_BODY, font: FONT }) ] })),
+                
+                new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 300, after: 100 }, children: [ new TextRun({ text: "PROFESSIONAL EXPERIENCE", bold: true, size: 20, font: FONT, color: "1877F2" }) ] }),
+            ];
+
+            if (data.experience) {
+                data.experience.forEach(job => {
+                    children.push(new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 10460 }], children: [ new TextRun({ text: `${job.title} at ${job.company}`, bold: true, size: 22, font: FONT }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, font: FONT, color: "666666" }) ] }));
+                    job.bullets.forEach(b => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: b, size: SIZE_BODY, font: FONT }) ] })));
+                });
+            }
+
+            return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: children }] });
+        }
+
+        // ==========================================
+        // TEMPLATE 4: THE GLOBAL PROFESSIONAL
+        // ==========================================
+        function generateGlobal(data) {
+            const { Document, Paragraph, TextRun, AlignmentType, BorderStyle } = docx;
+            const contactLine = [data.phone, data.email, data.location].filter(Boolean).join("  •  ");
+
+            const children = [
+                new Paragraph({ spacing: { before: 100, after: 50 }, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 54, color: "166534" }) ] }),
+                new Paragraph({ spacing: { after: 100 }, border: { bottom: { color: "166534", style: BorderStyle.THICK, size: 24 } }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), bold: true, size: 26, color: "333333" }), new TextRun({ text: `   |   ${contactLine}`, size: 20, color: "666666" }) ] }),
+                
+                new Paragraph({ spacing: { before: 200, after: 100 }, children: [ new TextRun({ text: "SUMMARY", bold: true, size: 24, color: "166534" }) ] }),
+                ...(data.improved_summary || []).map(p => new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { before: 60, after: 60 }, children: [ new TextRun({ text: p, size: 20 }) ] })),
+                
+                new Paragraph({ spacing: { before: 300, after: 100 }, children: [ new TextRun({ text: "EXPERIENCE", bold: true, size: 24, color: "166534" }) ] }),
+            ];
+
+            if (data.experience) {
+                data.experience.forEach(job => {
+                    children.push(new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 10460 }], children: [ new TextRun({ text: `${job.company}`, bold: true, size: 22 }), new TextRun({ text: `\t${job.dates}`, size: 20, color: "666666" }) ] }));
+                    children.push(new Paragraph({ spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: `${job.title}`, italic: true, size: 20, color: "333333" }) ] }));
+                    job.bullets.forEach(b => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: b, size: 20 }) ] })));
+                });
+            }
+
+            return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: children }] });
         }
     </script>
-<script>
+    <script>
     // Mobile Menu Toggle Logic
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
