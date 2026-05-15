@@ -136,7 +136,7 @@
                     <input type="text" id="target-role-input" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent transition text-sm" placeholder="e.g., Junior Data Analyst, Marketing Intern">
                 </div>
 
-                <div class="mb-6">
+<div class="mb-6">
                     <label class="flex items-center text-gray-800 text-sm font-bold mb-4">
                         <span class="bg-[#0F3B68] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 text-xs">2</span> 
                         Choose Your Base Template
@@ -144,44 +144,56 @@
                     
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         
-                        <div class="template-card border-2 border-[#0F3B68] rounded-xl p-3 cursor-pointer relative bg-blue-50 transition hover:shadow-lg" onclick="selectTemplate('sentinel', this)">
+                        <div id="card-sentinel" class="template-card border-2 border-[#0F3B68] rounded-xl p-3 cursor-pointer relative bg-blue-50 transition hover:shadow-lg" onclick="selectTemplate('sentinel', this)">
                             <div class="absolute top-2 right-2 bg-[#0F3B68] text-white text-[10px] uppercase px-1.5 py-0.5 rounded font-bold checkmark z-10">Active</div>
                             
-                            <div class="h-48 bg-gray-100 border border-gray-100 rounded mb-2 overflow-hidden shadow-sm">
-                                <img src="/sentinel.jpg" alt="ATS Sentinel Template" class="w-full h-full object-cover object-top">
+                            <div class="h-48 bg-gray-100 border border-gray-100 rounded mb-2 overflow-hidden shadow-sm relative group" onclick="openModal(0, event)">
+                                <img src="/sentinel.jpg" alt="ATS Sentinel Template" class="w-full h-full object-cover object-top transition duration-300 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="bg-white text-gray-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg> Preview</span>
+                                </div>
                             </div>
                             
                             <h3 class="font-bold text-sm text-gray-900 leading-tight">The ATS Sentinel</h3>
                             <p class="text-[10px] text-gray-600 mt-1 leading-tight"><strong class="text-green-700">Best for online portals (Workday, Taleo).</strong> 100% Bot-parsable.</p>
                         </div>
 
-                        <div class="template-card border-2 border-gray-200 rounded-xl p-3 cursor-pointer relative bg-white transition hover:shadow-lg hover:border-gray-300" onclick="selectTemplate('vanguard', this)">
+                        <div id="card-vanguard" class="template-card border-2 border-gray-200 rounded-xl p-3 cursor-pointer relative bg-white transition hover:shadow-lg hover:border-gray-300" onclick="selectTemplate('vanguard', this)">
                             <div class="absolute top-2 right-2 bg-[#0F3B68] text-white text-[10px] uppercase px-1.5 py-0.5 rounded font-bold checkmark hidden z-10">Active</div>
                             
-                            <div class="h-48 bg-gray-100 border border-gray-100 rounded mb-2 overflow-hidden shadow-sm">
-                                <img src="/vanguard.jpg" alt="Executive Vanguard Template" class="w-full h-full object-cover object-top">
+                            <div class="h-48 bg-gray-100 border border-gray-100 rounded mb-2 overflow-hidden shadow-sm relative group" onclick="openModal(1, event)">
+                                <img src="/vanguard.jpg" alt="Executive Vanguard Template" class="w-full h-full object-cover object-top transition duration-300 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="bg-white text-gray-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg> Preview</span>
+                                </div>
                             </div>
                             
                             <h3 class="font-bold text-sm text-gray-900 leading-tight">The Executive Vanguard</h3>
                             <p class="text-[10px] text-gray-600 mt-1 leading-tight"><strong class="text-[#0F3B68]">Best for Emailing HR & LinkedIn.</strong> Visual impact.</p>
                         </div>
 
-                        <div class="template-card border-2 border-gray-200 rounded-xl p-3 cursor-pointer relative bg-white transition hover:shadow-lg hover:border-gray-300" onclick="selectTemplate('creative', this)">
+                        <div id="card-creative" class="template-card border-2 border-gray-200 rounded-xl p-3 cursor-pointer relative bg-white transition hover:shadow-lg hover:border-gray-300" onclick="selectTemplate('creative', this)">
                             <div class="absolute top-2 right-2 bg-[#0F3B68] text-white text-[10px] uppercase px-1.5 py-0.5 rounded font-bold checkmark hidden z-10">Active</div>
                             
-                            <div class="h-48 bg-gray-100 border border-gray-100 rounded mb-2 overflow-hidden shadow-sm">
-                                <img src="/creative.jpg" alt="Creative Compass Template" class="w-full h-full object-cover object-top">
+                            <div class="h-48 bg-gray-100 border border-gray-100 rounded mb-2 overflow-hidden shadow-sm relative group" onclick="openModal(2, event)">
+                                <img src="/creative.jpg" alt="Creative Compass Template" class="w-full h-full object-cover object-top transition duration-300 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="bg-white text-gray-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg> Preview</span>
+                                </div>
                             </div>
                             
                             <h3 class="font-bold text-sm text-gray-900 leading-tight">The Creative Compass</h3>
                             <p class="text-[10px] text-gray-600 mt-1 leading-tight"><strong class="text-[#0F3B68]">Best for Direct Networking.</strong> Modern layout.</p>
                         </div>
 
-                        <div class="template-card border-2 border-gray-200 rounded-xl p-3 cursor-pointer relative bg-white transition hover:shadow-lg hover:border-gray-300" onclick="selectTemplate('global', this)">
+                        <div id="card-global" class="template-card border-2 border-gray-200 rounded-xl p-3 cursor-pointer relative bg-white transition hover:shadow-lg hover:border-gray-300" onclick="selectTemplate('global', this)">
                             <div class="absolute top-2 right-2 bg-[#0F3B68] text-white text-[10px] uppercase px-1.5 py-0.5 rounded font-bold checkmark hidden z-10">Active</div>
                             
-                            <div class="h-48 bg-gray-100 border border-gray-100 rounded mb-2 overflow-hidden shadow-sm">
-                                <img src="/global.jpg" alt="Global Professional Template" class="w-full h-full object-cover object-top">
+                            <div class="h-48 bg-gray-100 border border-gray-100 rounded mb-2 overflow-hidden shadow-sm relative group" onclick="openModal(3, event)">
+                                <img src="/global.jpg" alt="Global Professional Template" class="w-full h-full object-cover object-top transition duration-300 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="bg-white text-gray-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg> Preview</span>
+                                </div>
                             </div>
                             
                             <h3 class="font-bold text-sm text-gray-900 leading-tight">The Global Professional</h3>
@@ -1095,7 +1107,89 @@
             mobileMenu.classList.toggle('hidden');
         });
     }
-</script>
+// ==========================================
+        // FULL SCREEN SLIDER LOGIC
+        // ==========================================
+        const templateGallery = [
+            { id: 'sentinel', title: 'The ATS Sentinel', img: '/sentinel.jpg', desc: 'Best for online portals (Workday, Taleo). 100% Bot-parsable.' },
+            { id: 'vanguard', title: 'The Executive Vanguard', img: '/vanguard.jpg', desc: 'Best for Emailing HR & LinkedIn. Visual impact.' },
+            { id: 'creative', title: 'The Creative Compass', img: '/creative.jpg', desc: 'Best for Direct Networking. Modern layout.' },
+            { id: 'global', title: 'The Global Professional', img: '/global.jpg', desc: 'Hybrid format. Good for both online portals and email.' }
+        ];
+        
+        let currentSlide = 0;
+
+        function openModal(index, event) {
+            // Prevent the click from triggering the "selectTemplate" card click
+            event.stopPropagation(); 
+            currentSlide = index;
+            updateModalUI();
+            
+            const modal = document.getElementById('template-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // Stop background scrolling
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('template-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = ''; // Restore background scrolling
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = templateGallery.length - 1;
+            if (currentSlide >= templateGallery.length) currentSlide = 0;
+            updateModalUI();
+        }
+
+        function updateModalUI() {
+            document.getElementById('modal-image').src = templateGallery[currentSlide].img;
+            document.getElementById('modal-title').innerText = templateGallery[currentSlide].title;
+            document.getElementById('modal-desc').innerText = templateGallery[currentSlide].desc;
+        }
+
+        function selectFromModal() {
+            const selectedId = templateGallery[currentSlide].id;
+            const targetCard = document.getElementById(`card-${selectedId}`);
+            
+            // Programmatically "click" the card to select it
+            if(targetCard) {
+                selectTemplate(selectedId, targetCard);
+            }
+            closeModal();
+        }
+    </script>
+<div id="template-modal" class="fixed inset-0 z-[100] bg-black/90 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity">
+        
+        <button onclick="closeModal()" class="absolute top-6 right-6 text-white hover:text-gray-300 z-50">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <div class="relative flex items-center justify-center w-full max-w-5xl px-4 h-[75vh]">
+            <button onclick="changeSlide(-1)" class="absolute left-2 md:left-10 text-white hover:scale-110 transition bg-black/50 p-3 rounded-full z-50">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+
+            <div class="flex flex-col items-center h-full max-h-full w-full relative">
+                <img id="modal-image" src="" alt="Template Preview" class="max-h-full max-w-full object-contain rounded-lg shadow-2xl border border-gray-700">
+                <div class="text-center mt-6">
+                    <h3 id="modal-title" class="text-2xl font-bold text-white tracking-wide"></h3>
+                    <p id="modal-desc" class="text-gray-400 mt-2 text-sm font-medium"></p>
+                </div>
+            </div>
+
+            <button onclick="changeSlide(1)" class="absolute right-2 md:right-10 text-white hover:scale-110 transition bg-black/50 p-3 rounded-full z-50">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+
+        <button onclick="selectFromModal()" class="mt-8 bg-[#0F3B68] text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-blue-800 transition hover:shadow-lg shadow-blue-900/50 z-50">
+            Select This Template
+        </button>
+    </div>
 </body>
 </html>
 
