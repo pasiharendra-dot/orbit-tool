@@ -1151,36 +1151,41 @@
             document.getElementById('modal-desc').innerText = templateGallery[currentSlide].desc;
         }
 
-function selectFromModal() {
-            const btn = document.getElementById('modal-select-btn');
-            
-            // 1. Visual Success Animation (Turn Green & Change Text)
-            btn.innerText = "✓ Template Selected!";
-            btn.classList.replace('bg-[#0F3B68]', 'bg-green-600');
-            btn.classList.replace('hover:bg-blue-800', 'hover:bg-green-700');
-            
-            // 2. Wait 700ms so the user can read it, then close and select
-            setTimeout(() => {
-                const selectedId = templateGallery[currentSlide].id;
-                const targetCard = document.getElementById(`card-${selectedId}`);
+        function selectFromModal() {
+            try {
+                const btn = document.getElementById('modal-select-btn');
                 
-                // Select the card in the background
-                if(targetCard) {
-                    selectTemplate(selectedId, targetCard);
-                }
+                // 1. Visual Success Animation (Using strict add/remove for Tailwind safety)
+                btn.innerText = "✓ Template Selected!";
+                btn.classList.remove('bg-[#0F3B68]', 'hover:bg-blue-800');
+                btn.classList.add('bg-green-600', 'hover:bg-green-700');
                 
-                // Close the modal
-                closeModal();
-                
-                // 3. Reset the button back to blue instantly while it is invisible
+                // 2. Wait 700ms so the user can read it, then close and select
                 setTimeout(() => {
-                    btn.innerText = "✓ Select This Template";
-                    btn.classList.replace('bg-green-600', 'bg-[#0F3B68]');
-                    btn.classList.replace('hover:bg-green-700', 'hover:bg-blue-800');
-                }, 300);
-                
-            }, 700); // 700 millisecond delay
-        }
+                    const selectedId = templateGallery[currentSlide].id;
+                    const targetCard = document.getElementById("card-" + selectedId);
+                    
+                    // Highlight the card in the background form
+                    if(targetCard) {
+                        selectTemplate(selectedId, targetCard);
+                    }
+                    
+                    // Force close the modal
+                    closeModal();
+                    
+                    // 3. Reset the button back to blue instantly while it is invisible
+                    setTimeout(() => {
+                        btn.innerText = "✓ Select This Template";
+                        btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                        btn.classList.add('bg-[#0F3B68]', 'hover:bg-blue-800');
+                    }, 300);
+                    
+                }, 700);
+            } catch (error) {
+                console.error("Selection Error:", error);
+                closeModal(); // Failsafe: if anything breaks, at least close the window!
+            }
+        }    
     </script>
 <div id="template-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity">
         
