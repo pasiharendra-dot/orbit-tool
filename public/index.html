@@ -1151,15 +1151,35 @@
             document.getElementById('modal-desc').innerText = templateGallery[currentSlide].desc;
         }
 
-        function selectFromModal() {
-            const selectedId = templateGallery[currentSlide].id;
-            const targetCard = document.getElementById(`card-${selectedId}`);
+function selectFromModal() {
+            const btn = document.getElementById('modal-select-btn');
             
-            // Programmatically "click" the card to select it
-            if(targetCard) {
-                selectTemplate(selectedId, targetCard);
-            }
-            closeModal();
+            // 1. Visual Success Animation (Turn Green & Change Text)
+            btn.innerText = "✓ Template Selected!";
+            btn.classList.replace('bg-[#0F3B68]', 'bg-green-600');
+            btn.classList.replace('hover:bg-blue-800', 'hover:bg-green-700');
+            
+            // 2. Wait 700ms so the user can read it, then close and select
+            setTimeout(() => {
+                const selectedId = templateGallery[currentSlide].id;
+                const targetCard = document.getElementById(`card-${selectedId}`);
+                
+                // Select the card in the background
+                if(targetCard) {
+                    selectTemplate(selectedId, targetCard);
+                }
+                
+                // Close the modal
+                closeModal();
+                
+                // 3. Reset the button back to blue instantly while it is invisible
+                setTimeout(() => {
+                    btn.innerText = "✓ Select This Template";
+                    btn.classList.replace('bg-green-600', 'bg-[#0F3B68]');
+                    btn.classList.replace('hover:bg-green-700', 'hover:bg-blue-800');
+                }, 300);
+                
+            }, 700); // 700 millisecond delay
         }
     </script>
 <div id="template-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity">
@@ -1168,10 +1188,10 @@
             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
 
-        <button onclick="selectFromModal()" class="absolute top-6 left-1/2 transform -translate-x-1/2 bg-[#0F3B68] text-white px-8 py-3 rounded-xl font-bold text-lg hover:bg-blue-800 transition hover:shadow-lg shadow-blue-900/50 z-[110]">
+        <button id="modal-select-btn" onclick="selectFromModal()" class="absolute top-6 left-1/2 transform -translate-x-1/2 bg-[#0F3B68] text-white px-8 py-3 rounded-xl font-bold text-lg hover:bg-blue-800 transition hover:shadow-lg shadow-blue-900/50 z-[110]">
             ✓ Select This Template
         </button>
-
+    
         <div class="relative flex items-center justify-center w-full max-w-5xl px-4 h-[80vh] mt-16">
             <button onclick="changeSlide(-1)" class="absolute left-2 md:left-10 text-white hover:scale-110 transition bg-black/50 p-3 rounded-full z-[110]">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
