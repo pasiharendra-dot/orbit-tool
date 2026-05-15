@@ -1162,34 +1162,35 @@
             closeModal();
         }
     </script>
-<div id="template-modal" class="fixed inset-0 z-[100] bg-black/90 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity">
+<div id="template-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity">
         
-        <button onclick="closeModal()" class="absolute top-6 right-6 text-white hover:text-gray-300 z-50">
+        <button onclick="closeModal()" class="absolute top-6 right-6 text-white hover:text-gray-300 z-[110]">
             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
 
-        <div class="relative flex items-center justify-center w-full max-w-5xl px-4 h-[75vh]">
-            <button onclick="changeSlide(-1)" class="absolute left-2 md:left-10 text-white hover:scale-110 transition bg-black/50 p-3 rounded-full z-50">
+        <button onclick="selectFromModal()" class="absolute top-6 left-1/2 transform -translate-x-1/2 bg-[#0F3B68] text-white px-8 py-3 rounded-xl font-bold text-lg hover:bg-blue-800 transition hover:shadow-lg shadow-blue-900/50 z-[110]">
+            ✓ Select This Template
+        </button>
+
+        <div class="relative flex items-center justify-center w-full max-w-5xl px-4 h-[80vh] mt-16">
+            <button onclick="changeSlide(-1)" class="absolute left-2 md:left-10 text-white hover:scale-110 transition bg-black/50 p-3 rounded-full z-[110]">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </button>
 
             <div class="flex flex-col items-center h-full max-h-full w-full relative">
-                <img id="modal-image" src="" alt="Template Preview" class="max-h-full max-w-full object-contain rounded-lg shadow-2xl border border-gray-700">
-                <div class="text-center mt-6">
+                <img id="modal-image" src="" alt="Template Preview" class="max-h-full max-w-full object-contain rounded-lg shadow-2xl border border-gray-700 bg-white">
+                <div class="text-center mt-4">
                     <h3 id="modal-title" class="text-2xl font-bold text-white tracking-wide"></h3>
-                    <p id="modal-desc" class="text-gray-400 mt-2 text-sm font-medium"></p>
+                    <p id="modal-desc" class="text-gray-400 mt-1 text-sm font-medium"></p>
                 </div>
             </div>
 
-            <button onclick="changeSlide(1)" class="absolute right-2 md:right-10 text-white hover:scale-110 transition bg-black/50 p-3 rounded-full z-50">
+            <button onclick="changeSlide(1)" class="absolute right-2 md:right-10 text-white hover:scale-110 transition bg-black/50 p-3 rounded-full z-[110]">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
         </div>
-
-        <button onclick="selectFromModal()" class="mt-8 bg-[#0F3B68] text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-blue-800 transition hover:shadow-lg shadow-blue-900/50 z-50">
-            Select This Template
-        </button>
     </div>
+</div>
 </body>
 </html>
 
