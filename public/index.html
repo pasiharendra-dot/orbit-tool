@@ -879,6 +879,25 @@
         }
 
         // ==========================================
+        // SMART BOLD BULLET PARSER
+        // ==========================================
+        function parseBullet(bulletText) {
+            let prefix = ""; let rest = bulletText;
+            let colonIdx = bulletText.indexOf(": ");
+            let dashIdx = bulletText.indexOf(" – ");
+            
+            // Only bold if the punctuation is in the first 60 chars (to prevent bolding entire sentences)
+            if (colonIdx !== -1 && colonIdx < 60) {
+                prefix = bulletText.substring(0, colonIdx + 2);
+                rest = bulletText.substring(colonIdx + 2);
+            } else if (dashIdx !== -1 && dashIdx < 60) {
+                prefix = bulletText.substring(0, dashIdx + 3);
+                rest = bulletText.substring(dashIdx + 3);
+            }
+            return { prefix, rest };
+        }
+
+        // ==========================================
         // THE TRAFFIC COP (ROUTER)
         // ==========================================
         async function downloadResume(packageType) {
@@ -897,7 +916,7 @@
         }
 
         // ==========================================
-        // TEMPLATE 1: THE ATS SENTINEL
+        // TEMPLATE 1: THE ATS SENTINEL (Original Code)
         // ==========================================
         function generateSentinel(data) {
             const { Document, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle, TableLayoutType } = docx;
@@ -932,6 +951,7 @@
                             new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 10460 }], children: [ new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, font: FONT }) ] }), 
                             new Paragraph({ spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: `${job.title}`, bold: true, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] }), 
                             ...job.bullets.map(bullet => { 
+                                // Sentinel intentionally skips the bolding logic for maximum ATS parsing
                                 return new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40, line: 240 }, children: [ new TextRun({ text: bullet, size: SIZE_BODY, font: FONT }) ] }); 
                             }) 
                         ]),
@@ -945,29 +965,29 @@
         }
 
         // ==========================================
-        // TEMPLATE 2: THE EXECUTIVE VANGUARD (Hybrid Split Header)
+        // TEMPLATE 2: THE EXECUTIVE VANGUARD (Continuous 2-Column Dark)
         // ==========================================
         function generateVanguard(data) {
             const { Document, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = docx;
             const FONT = "Calibri"; const SIZE_BODY = 19;
             
-            // --- TOP LEFT COLUMN (Header Details) ---
+            // --- LEFT COLUMN ---
             const leftChildren = [
                 new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200, after: 200 }, children: [ new TextRun({ text: "[INSERT PHOTO HERE]", color: "888888", size: 24 }) ] }),
-                new Paragraph({ spacing: { before: 50, after: 50 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "CONTACT", color: "FFFFFF", bold: true, size: 22 }) ] }),
-                new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: data.phone || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
-                new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: data.email || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
-                new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: data.location || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
-                new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: data.linkedin || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
+                new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "CONTACT", color: "FFFFFF", bold: true, size: 22 }) ] }),
+                new Paragraph({ spacing: { before: 100 }, children: [ new TextRun({ text: data.phone || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
+                new Paragraph({ spacing: { before: 50 }, children: [ new TextRun({ text: data.email || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
+                new Paragraph({ spacing: { before: 50 }, children: [ new TextRun({ text: data.linkedin || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
+                new Paragraph({ spacing: { before: 50 }, children: [ new TextRun({ text: data.location || "", color: "FFFFFF", size: SIZE_BODY }) ] }),
             ];
 
             if (data.core_skills && data.core_skills.length > 0) {
-                leftChildren.push(new Paragraph({ spacing: { before: 200, after: 50 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "SKILLS", color: "FFFFFF", bold: true, size: 22 }) ] }));
-                data.core_skills.slice(0,10).forEach(skill => leftChildren.push(new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: "• " + skill, color: "FFFFFF", size: SIZE_BODY }) ] })));
+                leftChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "SKILLS", color: "FFFFFF", bold: true, size: 22 }) ] }));
+                data.core_skills.slice(0,10).forEach(skill => leftChildren.push(new Paragraph({ spacing: { before: 80 }, bullet: { level: 0 }, children: [ new TextRun({ text: skill, color: "FFFFFF", size: SIZE_BODY }) ] })));
             }
 
             if (data.education && data.education.length > 0) {
-                leftChildren.push(new Paragraph({ spacing: { before: 200, after: 50 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "EDUCATION", color: "FFFFFF", bold: true, size: 22 }) ] }));
+                leftChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "EDUCATION", color: "FFFFFF", bold: true, size: 22 }) ] }));
                 data.education.forEach(edu => {
                     leftChildren.push(new Paragraph({ spacing: { before: 80 }, children: [ new TextRun({ text: edu.degree, bold: true, color: "FFFFFF", size: SIZE_BODY }) ] }));
                     leftChildren.push(new Paragraph({ children: [ new TextRun({ text: edu.institution, color: "DDDDDD", size: SIZE_BODY }) ] }));
@@ -976,61 +996,57 @@
             }
 
             if (data.certifications && data.certifications.length > 0) {
-                leftChildren.push(new Paragraph({ spacing: { before: 200, after: 50 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "CERTIFICATIONS", color: "FFFFFF", bold: true, size: 22 }) ] }));
-                data.certifications.forEach(cert => leftChildren.push(new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: "• " + cert, color: "FFFFFF", size: SIZE_BODY }) ] })));
+                leftChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "CERTIFICATIONS", color: "FFFFFF", bold: true, size: 22 }) ] }));
+                data.certifications.forEach(cert => leftChildren.push(new Paragraph({ spacing: { before: 40 }, bullet: { level: 0 }, children: [ new TextRun({ text: cert, color: "FFFFFF", size: SIZE_BODY }) ] })));
             }
 
             if (data.personal_details && data.personal_details.length > 0) {
-                leftChildren.push(new Paragraph({ spacing: { before: 200, after: 50 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "DETAILS", color: "FFFFFF", bold: true, size: 22 }) ] }));
+                leftChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: "FFFFFF", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [ new TextRun({ text: "DETAILS", color: "FFFFFF", bold: true, size: 22 }) ] }));
                 data.personal_details.forEach(pd => leftChildren.push(new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: `${pd.label}: `, bold: true, color: "FFFFFF", size: SIZE_BODY }), new TextRun({ text: pd.value, color: "DDDDDD", size: SIZE_BODY }) ] })));
             }
 
-            // --- TOP RIGHT COLUMN (Name & Summary) ---
+            // --- RIGHT COLUMN ---
             const rightChildren = [
-                new Paragraph({ spacing: { before: 50 }, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, color: "0F3B68" }) ] }),
+                new Paragraph({ spacing: { before: 100 }, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, color: "0F3B68" }) ] }),
                 new Paragraph({ spacing: { after: 200 }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 24, color: "D4AF37" }) ] }),
+                
                 new Paragraph({ spacing: { before: 100, after: 100 }, children: [ new TextRun({ text: "PROFESSIONAL SUMMARY", bold: true, size: 22, color: "0F3B68" }) ] }),
                 ...(data.improved_summary || []).map(p => new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { before: 60, after: 60 }, children: [ new TextRun({ text: p, size: SIZE_BODY, color: "444444" }) ] })),
+                
+                new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: "0F3B68", space: 1, style: BorderStyle.SINGLE, size: 12 } }, children: [ new TextRun({ text: "EXPERIENCE", bold: true, size: 22, color: "0F3B68" }) ] }),
             ];
+
+            if (data.experience) {
+                data.experience.forEach(job => {
+                    rightChildren.push(new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 7000 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 20 }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, color: "666666" }) ] }));
+                    rightChildren.push(new Paragraph({ spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, color: "D4AF37" }) ] }));
+                    job.bullets.forEach(b => {
+                        const parsed = parseBullet(b);
+                        rightChildren.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ ...(parsed.prefix ? [new TextRun({ text: parsed.prefix, bold: true, size: SIZE_BODY, color: "000000" })] : []), new TextRun({ text: parsed.rest, size: SIZE_BODY, color: "444444" }) ] }));
+                    });
+                });
+            }
 
             const layoutTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
                 rows: [ new TableRow({ children: [
                     new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, shading: { fill: "0F3B68" }, margins: { top: 200, left: 150, right: 150, bottom: 200 }, children: leftChildren }),
-                    new TableCell({ width: { size: 70, type: WidthType.PERCENTAGE }, margins: { left: 300, right: 100, top: 100, bottom: 200 }, children: rightChildren })
+                    new TableCell({ width: { size: 70, type: WidthType.PERCENTAGE }, margins: { left: 300, right: 100, top: 100 }, children: rightChildren })
                 ]})]
             });
 
-            // --- FULL WIDTH SECTION (Experience) ---
-            const fullWidthChildren = [
-                layoutTable,
-                new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: "0F3B68", space: 1, style: BorderStyle.SINGLE, size: 12 } }, children: [ new TextRun({ text: "PROFESSIONAL EXPERIENCE", bold: true, size: 22, color: "0F3B68" }) ] })
-            ];
-
-            if (data.experience) {
-                data.experience.forEach(job => {
-                    fullWidthChildren.push(new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 10400 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 22 }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, color: "666666" }) ] }));
-                    fullWidthChildren.push(new Paragraph({ spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, color: "D4AF37" }) ] }));
-                    job.bullets.forEach(b => {
-                        let prefix = ""; let rest = b;
-                        if (b.includes(": ")) { const p = b.split(": "); prefix = p[0] + ": "; rest = p.slice(1).join(": "); } 
-                        else if (b.includes(" – ")) { const p = b.split(" – "); prefix = p[0] + " – "; rest = p.slice(1).join(" – "); }
-                        fullWidthChildren.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ ...(prefix ? [new TextRun({ text: prefix, bold: true, size: SIZE_BODY, color: "000000" })] : []), new TextRun({ text: rest, size: SIZE_BODY, color: "444444" }) ] }));
-                    });
-                });
-            }
-            return new Document({ sections: [{ properties: { page: { margin: { top: 400, right: 400, bottom: 400, left: 400 } } }, children: fullWidthChildren }] });
+            return new Document({ sections: [{ properties: { page: { margin: { top: 400, right: 400, bottom: 400, left: 400 } } }, children: [layoutTable] }] });
         }
 
         // ==========================================
-        // TEMPLATE 3: THE CREATIVE COMPASS (Hybrid Split Header)
+        // TEMPLATE 3: THE CREATIVE COMPASS (Continuous 2-Column Light)
         // ==========================================
         function generateCreative(data) {
             const { Document, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = docx;
             const FONT = "Arial"; const SIZE_BODY = 19; const BLUE = "1877F2";
             
-            // --- TOP LEFT COLUMN ---
+            // --- LEFT COLUMN ---
             const leftChildren = [
                 new Paragraph({ spacing: { before: 50 }, children: [ new TextRun({ text: data.phone || "", size: SIZE_BODY, font: FONT }) ] }),
                 new Paragraph({ spacing: { before: 50 }, children: [ new TextRun({ text: data.email || "", size: SIZE_BODY, font: FONT }) ] }),
@@ -1039,12 +1055,12 @@
             ];
 
             if (data.core_skills && data.core_skills.length > 0) {
-                leftChildren.push(new Paragraph({ spacing: { before: 200, after: 50 }, children: [ new TextRun({ text: "SKILLS", color: BLUE, bold: true, size: 22, font: FONT }) ] }));
-                data.core_skills.slice(0,12).forEach(skill => leftChildren.push(new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: "• " + skill, size: SIZE_BODY, font: FONT }) ] })));
+                leftChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, children: [ new TextRun({ text: "SKILLS", color: BLUE, bold: true, size: 22, font: FONT }) ] }));
+                data.core_skills.slice(0,12).forEach(skill => leftChildren.push(new Paragraph({ spacing: { before: 40 }, bullet: { level: 0 }, children: [ new TextRun({ text: skill, size: SIZE_BODY, font: FONT }) ] })));
             }
 
             if (data.education && data.education.length > 0) {
-                leftChildren.push(new Paragraph({ spacing: { before: 200, after: 50 }, children: [ new TextRun({ text: "EDUCATION", color: BLUE, bold: true, size: 22, font: FONT }) ] }));
+                leftChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, children: [ new TextRun({ text: "EDUCATION", color: BLUE, bold: true, size: 22, font: FONT }) ] }));
                 data.education.forEach(edu => {
                     leftChildren.push(new Paragraph({ spacing: { before: 80 }, children: [ new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }) ] }));
                     leftChildren.push(new Paragraph({ children: [ new TextRun({ text: edu.institution, color: "444444", size: SIZE_BODY, font: FONT }) ] }));
@@ -1053,16 +1069,16 @@
             }
 
             if (data.certifications && data.certifications.length > 0) {
-                leftChildren.push(new Paragraph({ spacing: { before: 200, after: 50 }, children: [ new TextRun({ text: "CERTIFICATIONS", color: BLUE, bold: true, size: 22, font: FONT }) ] }));
-                data.certifications.forEach(cert => leftChildren.push(new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: "• " + cert, size: SIZE_BODY, font: FONT }) ] })));
+                leftChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, children: [ new TextRun({ text: "CERTIFICATIONS", color: BLUE, bold: true, size: 22, font: FONT }) ] }));
+                data.certifications.forEach(cert => leftChildren.push(new Paragraph({ spacing: { before: 40 }, bullet: { level: 0 }, children: [ new TextRun({ text: cert, size: SIZE_BODY, font: FONT }) ] })));
             }
 
             if (data.personal_details && data.personal_details.length > 0) {
-                leftChildren.push(new Paragraph({ spacing: { before: 200, after: 50 }, children: [ new TextRun({ text: "PERSONAL DETAILS", color: BLUE, bold: true, size: 22, font: FONT }) ] }));
+                leftChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, children: [ new TextRun({ text: "PERSONAL DETAILS", color: BLUE, bold: true, size: 22, font: FONT }) ] }));
                 data.personal_details.forEach(pd => leftChildren.push(new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: `${pd.label}: `, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: pd.value, size: SIZE_BODY, font: FONT }) ] })));
             }
 
-            // --- TOP RIGHT COLUMN (Aligned Right) ---
+            // --- RIGHT COLUMN ---
             const rightChildren = [
                 new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 0 }, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, font: FONT, color: BLUE }) ] }),
                 new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { after: 200 }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), bold: true, size: 24, font: FONT, color: "666666" }) ] })
@@ -1073,34 +1089,28 @@
                 data.improved_summary.forEach(p => rightChildren.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { before: 60, after: 60 }, children: [ new TextRun({ text: p, size: SIZE_BODY, font: FONT, color: "444444" }) ] })));
             }
 
+            if (data.experience && data.experience.length > 0) {
+                rightChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: BLUE, style: BorderStyle.SINGLE, size: 12 } }, children: [ new TextRun({ text: "PROFESSIONAL EXPERIENCE", bold: true, size: 20, font: FONT, color: BLUE }) ] }));
+                data.experience.forEach(job => {
+                    rightChildren.push(new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 7500 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 22, font: FONT, color: "000000" }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, font: FONT, color: "666666" }) ] }));
+                    rightChildren.push(new Paragraph({ spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, font: FONT, color: BLUE }) ] }));
+                    job.bullets.forEach(b => {
+                        const parsed = parseBullet(b);
+                        rightChildren.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ ...(parsed.prefix ? [new TextRun({ text: parsed.prefix, bold: true, size: SIZE_BODY, font: FONT, color: "000000" })] : []), new TextRun({ text: parsed.rest, size: SIZE_BODY, font: FONT, color: "444444" }) ] }));
+                    });
+                });
+            }
+
             const layoutTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
                 rows: [ new TableRow({ children: [
-                    new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, borders: { right: { color: "DDDDDD", style: BorderStyle.SINGLE, size: 6 } }, margins: { right: 200, bottom: 200 }, children: leftChildren }),
-                    new TableCell({ width: { size: 70, type: WidthType.PERCENTAGE }, margins: { left: 300, bottom: 200 }, children: rightChildren })
+                    new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, borders: { right: { color: "DDDDDD", style: BorderStyle.SINGLE, size: 6 } }, margins: { right: 200 }, children: leftChildren }),
+                    new TableCell({ width: { size: 70, type: WidthType.PERCENTAGE }, margins: { left: 200 }, children: rightChildren })
                 ]})]
             });
 
-            // --- FULL WIDTH SECTION (Experience) ---
-            const fullWidthChildren = [
-                layoutTable,
-                new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: BLUE, style: BorderStyle.SINGLE, size: 12 } }, children: [ new TextRun({ text: "PROFESSIONAL EXPERIENCE", bold: true, size: 20, font: FONT, color: BLUE }) ] })
-            ];
-
-            if (data.experience) {
-                data.experience.forEach(job => {
-                    fullWidthChildren.push(new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 10400 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 22, font: FONT, color: "000000" }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, font: FONT, color: "666666" }) ] }));
-                    fullWidthChildren.push(new Paragraph({ spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: `${job.company}`, bold: true, size: SIZE_BODY, font: FONT, color: BLUE }) ] }));
-                    job.bullets.forEach(b => {
-                        let prefix = ""; let rest = b;
-                        if (b.includes(": ")) { const p = b.split(": "); prefix = p[0] + ": "; rest = p.slice(1).join(": "); } 
-                        else if (b.includes(" – ")) { const p = b.split(" – "); prefix = p[0] + " – "; rest = p.slice(1).join(" – "); }
-                        fullWidthChildren.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ ...(prefix ? [new TextRun({ text: prefix, bold: true, size: SIZE_BODY, font: FONT, color: "000000" })] : []), new TextRun({ text: rest, size: SIZE_BODY, font: FONT, color: "444444" }) ] }));
-                    });
-                });
-            }
-            return new Document({ sections: [{ properties: { page: { margin: { top: 400, right: 400, bottom: 400, left: 400 } } }, children: fullWidthChildren }] });
+            return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: [layoutTable] }] });
         }
 
         // ==========================================
@@ -1120,22 +1130,23 @@
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
                 rows: [ new TableRow({ children: [
-                    new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, children: contactChildren }),
-                    new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, children: [
+                    new TableCell({ width: { size: 40, type: WidthType.PERCENTAGE }, children: contactChildren }),
+                    new TableCell({ width: { size: 60, type: WidthType.PERCENTAGE }, children: [
                         new Paragraph({ alignment: AlignmentType.RIGHT, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 54, color: "166534" }) ] }),
                         new Paragraph({ alignment: AlignmentType.RIGHT, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), bold: true, size: 26, color: "333333" }) ] })
                     ]})
                 ]})]
             });
 
+            // Generates full width dashes ━━━━━━━━━━━━━━━━━━━
             function createCenteredHeader(title) {
                 return new Paragraph({
                     alignment: AlignmentType.CENTER,
                     spacing: { before: 300, after: 150 },
                     children: [
-                        new TextRun({ text: "━━━━━━━  ", color: "166534" }),
+                        new TextRun({ text: "━━━━━━━━━━━━━━━━━━━━━━   ", color: "166534" }),
                         new TextRun({ text: title.toUpperCase(), bold: true, size: 24, color: "166534" }),
-                        new TextRun({ text: "  ━━━━━━━", color: "166534" })
+                        new TextRun({ text: "   ━━━━━━━━━━━━━━━━━━━━━━", color: "166534" })
                     ]
                 });
             }
@@ -1161,10 +1172,8 @@
                     children.push(new Paragraph({ spacing: { before: 150, after: 20 }, tabStops: [{ type: "right", position: 10460 }], children: [ new TextRun({ text: `${job.company}`, bold: true, size: 22 }), new TextRun({ text: `\t${job.dates}`, size: 20, color: "666666" }) ] }));
                     children.push(new Paragraph({ spacing: { before: 0, after: 80 }, children: [ new TextRun({ text: `${job.title}`, italic: true, size: 20, color: "333333" }) ] }));
                     job.bullets.forEach(b => {
-                        let prefix = ""; let rest = b;
-                        if (b.includes(": ")) { const p = b.split(": "); prefix = p[0] + ": "; rest = p.slice(1).join(": "); } 
-                        else if (b.includes(" – ")) { const p = b.split(" – "); prefix = p[0] + " – "; rest = p.slice(1).join(" – "); }
-                        children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ ...(prefix ? [new TextRun({ text: prefix, bold: true, size: 20 })] : []), new TextRun({ text: rest, size: 20 }) ] }));
+                        const parsed = parseBullet(b);
+                        children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ ...(parsed.prefix ? [new TextRun({ text: parsed.prefix, bold: true, size: 20 })] : []), new TextRun({ text: parsed.rest, size: 20 }) ] }));
                     });
                 });
             }
@@ -1177,6 +1186,11 @@
             if (data.personal_details && data.personal_details.length > 0) {
                 children.push(createCenteredHeader("Personal Details"));
                 data.personal_details.forEach(pd => children.push(new Paragraph({ spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: `${pd.label}: `, bold: true, size: 20 }), new TextRun({ text: pd.value, size: 20 }) ] })));
+            }
+
+            if (data.certifications && data.certifications.length > 0) {
+                children.push(createCenteredHeader("Certifications"));
+                data.certifications.forEach(cert => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: cert, size: 20 }) ] })));
             }
 
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: children }] });
@@ -1259,7 +1273,7 @@
                 closeModal(); 
             }
         }
-    </script>
+    </script> 
     <div id="template-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity">
         
         <button onclick="closeModal()" class="absolute top-6 right-6 text-white hover:text-gray-300 z-[110]">
