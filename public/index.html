@@ -1108,8 +1108,27 @@
         });
     }
 // ==========================================
-        // FULL SCREEN SLIDER LOGIC (MASTER BLOCK)
+        // TEMPLATE SELECTION & SLIDER LOGIC
         // ==========================================
+        
+        // 1. Function to handle highlighting the card on the main form
+        function selectTemplate(templateType, element) {
+            document.getElementById('selected-template').value = templateType;
+            
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.classList.remove('border-[#0F3B68]', 'bg-blue-50');
+                card.classList.add('border-gray-200', 'bg-white');
+                card.querySelector('.checkmark').classList.add('hidden');
+                card.querySelector('.checkmark').classList.remove('z-10'); 
+            });
+            
+            element.classList.remove('border-gray-200', 'bg-white');
+            element.classList.add('border-[#0F3B68]', 'bg-blue-50');
+            element.querySelector('.checkmark').classList.remove('hidden');
+            element.querySelector('.checkmark').classList.add('z-10');
+        }
+
+        // 2. Full Screen Slider Logic
         const templateGallery = [
             { id: 'sentinel', title: 'The ATS Sentinel', img: '/sentinel.jpg', desc: 'Best for online portals (Workday, Taleo). 100% Bot-parsable.' },
             { id: 'vanguard', title: 'The Executive Vanguard', img: '/vanguard.jpg', desc: 'Best for Emailing HR & LinkedIn. Visual impact.' },
@@ -1120,7 +1139,6 @@
         let currentSlide = 0;
 
         function openModal(index, event) {
-            // Prevent the click from triggering the "selectTemplate" card click
             event.stopPropagation(); 
             currentSlide = index;
             updateModalUI();
@@ -1155,23 +1173,22 @@
             try {
                 const btn = document.getElementById('modal-select-btn');
                 
-                // 1. Instant Visual Feedback
+                // Visual Success Feedback
                 btn.innerText = "✓ Template Selected!";
                 btn.classList.remove('bg-[#0F3B68]', 'hover:bg-blue-800');
                 btn.classList.add('bg-green-600', 'hover:bg-green-700');
                 
-                // 2. Immediately lock in the selection on the main page
+                // Select the card on the main page
                 const selectedId = templateGallery[currentSlide].id;
                 const targetCard = document.getElementById("card-" + selectedId);
-                
                 if(targetCard) {
                     selectTemplate(selectedId, targetCard);
                 }
                 
-                // 3. INSTANTLY force close the modal (Zero delay)
+                // Instantly close the modal
                 closeModal();
                 
-                // 4. Reset the button quietly while the window is closed
+                // Silently reset the button while the window is closed
                 setTimeout(() => {
                     btn.innerText = "✓ Select This Template";
                     btn.classList.remove('bg-green-600', 'hover:bg-green-700');
@@ -1180,13 +1197,11 @@
                 
             } catch (error) {
                 console.error("Selection Error:", error);
-                closeModal(); // Ultimate failsafe
+                closeModal(); 
             }
         }
-        
-    }    
     </script>
-<div id="template-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity">
+    <div id="template-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity">
         
         <button onclick="closeModal()" class="absolute top-6 right-6 text-white hover:text-gray-300 z-[110]">
             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
