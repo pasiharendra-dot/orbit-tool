@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Workspace | GetPerfectResume</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* DISALLOW HIGHLIGHTING & SELECTION */
+        body, html, .protected-zone {
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        /* DIAGONAL PREVIEW WATERMARK BACKGROUND */
+        .watermark-overlay {
+            position: relative;
+        }
+        .watermark-overlay::before {
+            content: "PREVIEW LOCKED • DO NOT COPY • ";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            font-size: 32px;
+            font-weight: 900;
+            color: rgba(220, 38, 38, 0.04); /* Ultra-faint red text grid */
+            transform: rotate(-25deg);
+            transform-origin: center;
+            pointer-events: none;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans protected-zone">
+
+    <!-- Top Navigation Bar -->
+    <nav class="bg-[#0F3B68] text-white px-6 py-4 flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-2">
+            <span class="font-bold text-xl tracking-wide">GetPerfectResume<span class="text-blue-400">.com</span></span>
+            <span class="bg-blue-900 text-xs px-2 py-0.5 rounded text-blue-300 font-mono">Workspace v1.0</span>
+        </div>
+        <div class="flex items-center space-x-6">
+            <div class="bg-blue-950 px-4 py-1.5 rounded-full text-sm font-semibold flex items-center space-x-2 border border-blue-800">
+                <span class="inline-block w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                <span>Tailor Credits: <span id="credit-count" class="text-yellow-400">2</span></span>
+            </div>
+            <button onclick="logout()" class="text-sm text-gray-300 hover:text-white transition">Sign Out</button>
+        </div>
+    </nav>
+
+    <!-- Main Workspace Layout -->
+    <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- LEFT SIDEBAR: Real-time Editor Form inputs -->
+        <div class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6 max-h-[85vh] overflow-y-auto">
+            <div>
+                <h2 class="text-lg font-bold text-gray-900">Live Optimization Board</h2>
+                <p class="text-xs text-gray-500">Tweak your career data strings here. The generated framework updates in real-time.</p>
+            </div>
+            
+            <hr class="border-gray-100">
+
+            <!-- Tailor Application Module -->
+            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 space-y-3">
+                <label class="block text-xs font-bold text-[#0F3B68] uppercase tracking-wider">Target a New Job Opening</label>
+                <textarea id="new-jd-input" rows="3" class="w-full text-sm p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0F3B68]" placeholder="Paste the target description here to dynamically run key-phrase syncing..."></textarea>
+                <button onclick="spendCreditToTailor()" class="w-full bg-[#0F3B68] text-white font-bold py-2 px-4 rounded text-sm hover:bg-blue-800 transition shadow-sm">
+                    Tailor Layout (-1 Credit)
+                </button>
+            </div>
+
+            <!-- Profile Fields Editor Form -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Full Name</label>
+                    <input type="text" id="edit-name" class="w-full text-sm p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Optimized Profile Title</label>
+                    <input type="text" id="edit-title" class="w-full text-sm p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Executive Summary</label>
+                    <textarea id="edit-summary" rows="4" class="w-full text-sm p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR: Protected Preview Framework Display -->
+        <div class="lg:col-span-7 flex flex-col space-y-4">
+            <div class="flex justify-between items-center bg-white px-6 py-3 rounded-xl shadow-sm border border-gray-200">
+                <span class="text-xs text-red-600 font-semibold flex items-center">
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-600 mr-2"></span>
+                    Contact Data Redacted & Watermarked (Unlock via Download)
+                </span>
+                <button onclick="triggerPurchasePaywall()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-sm px-6 py-2 rounded shadow transition flex items-center space-x-1">
+                    <span>Download Clean Word Copy</span>
+                </button>
+            </div>
+
+            <!-- The Protected Document Preview Container -->
+            <div class="bg-white rounded-xl shadow-md border border-gray-300 p-12 min-h-[75vh] watermark-overlay relative overflow-hidden" id="preview-frame">
+                <!-- Data strings will render inside this wrapper through template selection routing -->
+                <div id="workspace-rendered-content" class="space-y-6 opacity-75">
+                    <div class="border-b-2 border-gray-200 pb-4">
+                        <h1 class="text-3xl font-bold text-gray-400">AMIT SAXENA</h1>
+                        <p class="text-sm text-gray-400 font-semibold uppercase tracking-wider mt-1">DEPUTY GENERAL MANAGER</p>
+                        <p class="text-xs text-red-400 mt-2 font-mono">Contact: +91 ●●●●●-●●●●● | e****01@gmail.com</p>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest">Professional Profile</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Highly accomplished Deputy General Manager with 27+ years of extensive experience leading dynamic market growth operations...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ANTI-COPY EXECUTIONS (Behavioral Locking) -->
+    <script>
+        // Disallow context menu right-clicks
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Disallow copy/cut hotkeys and structural drag commands
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'c' || e.key === 'C' || e.key === 'x' || e.key === 'X' || e.key === 's' || e.key === 'S' || e.key === 'p' || e.key === 'P') {
+                    e.preventDefault();
+                    alert("Framework protected. Document unlocks fully upon standard download verification.");
+                }
+            }
+        });
+
+        document.addEventListener('dragstart', event => event.preventDefault());
+
+        function spendCreditToTailor() {
+            alert("This will hook into the back-end AI router to pass keyword adjustments and deduct 1 user credit row.");
+        }
+
+        function triggerPurchasePaywall() {
+            alert("This instantly pulls up the Razorpay SDK window to run the entry layer payment or verification sequence.");
+        }
+
+        function logout() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
