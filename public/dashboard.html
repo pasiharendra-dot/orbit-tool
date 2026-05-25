@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidate Workspace | GetPerfectResume</title>
+    <title>Resume Studio | GetPerfectResume Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
-        /* DISALLOW HIGHLIGHTING & SELECTION */
+        :root {
+            --primary: #0F3B68;
+            --primary-dark: #082545;
+            --accent: #3B82F6;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        /* PROTECTION */
         body, html, .protected-zone {
             user-select: none !important;
             -webkit-user-select: none !important;
@@ -14,411 +24,1388 @@
             -ms-user-select: none !important;
         }
 
-        /* DIAGONAL PREVIEW WATERMARK BACKGROUND */
+        /* WATERMARK */
         .watermark-overlay {
             position: relative;
         }
         .watermark-overlay::before {
-            content: "PREVIEW LOCKED • UNLOCK VIA DOWNLOAD • PREVIEW LOCKED • UNLOCK VIA DOWNLOAD • ";
+            content: "PREVIEW • UNLOCK VIA DOWNLOAD • ";
             position: absolute;
             top: 0; left: 0; width: 200%; height: 200%;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
-            color: rgba(15, 59, 104, 0.035); /* Elegant ultra-faint brand text grid */
+            color: rgba(15, 59, 104, 0.025);
             transform: rotate(-15deg);
             pointer-events: none;
             z-index: 50;
-            display: block;
-            padding: 40px;
+            white-space: nowrap;
             overflow: hidden;
+            line-height: 3;
         }
+
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* TRANSITIONS */
+        * { transition: all 0.2s ease; }
         
-        /* Layout Tuning for Previews */
-        .preview-font { font-family: 'Calibri', sans-serif; }
+        /* ATS SCORE ANIMATION */
+        @keyframes scoreUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .score-animate { animation: scoreUp 0.4s ease; }
+
+        /* SORTABLE PLACEHOLDER */
+        .sortable-ghost { opacity: 0.4; background: #f1f5f9; }
+        
+        /* TOOLTIP */
+        [data-tooltip] { position: relative; }
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 4px;
+        }
+
+        /* AI SUGGESTION PULSE */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+        }
+        .ai-suggestion { animation: pulse-glow 2s infinite; }
+
+        /* FLOATING TOOLBAR */
+        .floating-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* SECTION DRAG HANDLE */
+        .drag-handle {
+            cursor: grab;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .section-card:hover .drag-handle {
+            opacity: 1;
+        }
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        /* UNDO/REDO BUTTONS */
+        .history-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* PREMIUM BADGE */
+        .premium-badge {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        /* IMPROVEMENT PILL */
+        .improvement-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* SKELETON LOADER */
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        /* STATS CARD */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(249,250,251,0.9));
+            border: 1px solid #e5e7eb;
+            backdrop-filter: blur(10px);
+        }
+
+        /* TEMPLATE SELECTOR */
+        .template-thumb {
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .template-thumb:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .template-thumb.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* CONTEXTUAL MENU */
+        .context-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 4px;
+            min-width: 180px;
+            z-index: 1000;
+        }
+        .context-menu-item {
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+        .context-menu-item:hover {
+            background: #f3f4f6;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .desktop-only { display: none !important; }
+        }
     </style>
 </head>
-<body class="bg-gray-50 font-sans protected-zone flex flex-col min-h-screen">
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 font-sans protected-zone min-h-screen">
 
-    <!-- Top Navigation Bar -->
-    <nav class="bg-[#0F3B68] text-white px-6 py-3 flex justify-between items-center shadow-md shrink-0">
-        <div class="flex items-center space-x-3">
-            <!-- LOGO ADDED HERE -->
-            <img src="/logo.png" alt="Logo" class="h-8 object-contain bg-white rounded p-0.5" onerror="this.style.display='none'">
-            <span class="font-bold text-xl tracking-wide hidden sm:inline-block">GetPerfectResume<span class="text-blue-400">.com</span></span>
-            <span class="bg-blue-900 text-xs px-2 py-0.5 rounded text-blue-300 font-mono ml-2">Workspace v1.3</span>
-        </div>
-        <div class="flex items-center space-x-6">
-            <div class="bg-blue-950 px-4 py-1.5 rounded-full text-sm font-semibold flex items-center space-x-2 border border-blue-800">
-                <span class="inline-block w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                <span>Tailor Credits: <span id="credit-count" class="text-yellow-400">2</span></span>
+    <!-- TOP NAVIGATION -->
+    <nav class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+        <div class="max-w-[1800px] mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-[#0F3B68] rounded-lg flex items-center justify-center">
+                        <i class="ti ti-file-text text-white text-lg"></i>
+                    </div>
+                    <span class="font-bold text-xl text-gray-800">GetPerfectResume</span>
+                    <span class="premium-badge">PRO</span>
+                </div>
+                
+                <!-- AUTO-SAVE INDICATOR -->
+                <div class="flex items-center space-x-2 text-xs text-gray-500 ml-6">
+                    <i class="ti ti-cloud-check text-green-500" id="save-icon"></i>
+                    <span id="save-status">All changes saved</span>
+                </div>
             </div>
-            <button onclick="logout()" class="text-sm text-gray-300 hover:text-white transition">Sign Out</button>
+
+            <div class="flex items-center space-x-4">
+                <!-- KEYBOARD SHORTCUTS -->
+                <button onclick="showKeyboardShortcuts()" class="p-2 hover:bg-gray-100 rounded-lg" data-tooltip="Keyboard shortcuts (?)">
+                    <i class="ti ti-keyboard text-gray-600"></i>
+                </button>
+
+                <!-- CREDITS -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 rounded-full text-sm font-semibold flex items-center space-x-2 border border-blue-200">
+                    <i class="ti ti-sparkles text-blue-600"></i>
+                    <span>AI Credits: <span id="credit-count" class="text-blue-700">12</span></span>
+                </div>
+
+                <!-- EXPORT -->
+                <button onclick="triggerExport()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg shadow-sm flex items-center space-x-2">
+                    <i class="ti ti-download"></i>
+                    <span>Export</span>
+                </button>
+
+                <!-- USER MENU -->
+                <button class="p-2 hover:bg-gray-100 rounded-lg">
+                    <i class="ti ti-user-circle text-gray-600 text-2xl"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
-    <!-- Main Workspace Layout -->
-    <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-grow">
+    <!-- MAIN WORKSPACE -->
+    <div class="max-w-[1800px] mx-auto px-6 py-6 grid grid-cols-1 xl:grid-cols-12 gap-6">
         
-        <!-- LEFT PANEL: Dynamic Control & Optimization Form -->
-        <div class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-gray-200 p-5 space-y-6 max-h-[82vh] overflow-y-auto">
-            <div>
-                <h2 class="text-lg font-bold text-gray-900">Live Editor</h2>
-                <p class="text-xs text-gray-500">Edit your parsed data below. The framework syncs instantly.</p>
-            </div>
+        <!-- LEFT SIDEBAR: TOOLS & CONTROLS -->
+        <div class="xl:col-span-3 space-y-4">
             
-            <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 space-y-2">
-                <label class="block text-[10px] font-bold text-[#0F3B68] uppercase tracking-wider">AI Keyword Sync</label>
-                <textarea id="new-jd-input" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="Paste target job description here..."></textarea>
-                <button onclick="spendCreditToTailor()" class="w-full bg-[#0F3B68] text-white font-bold py-1.5 px-3 rounded text-xs hover:bg-blue-800 transition shadow-sm">
-                    Re-Tailor Resume (-1 Credit)
-                </button>
-            </div>
-
-            <!-- Full Interactive Editing Fields -->
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Full Name</label>
-                    <input type="text" id="edit-name" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+            <!-- ATS SCORE CARD -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-gray-800 flex items-center gap-2">
+                        <i class="ti ti-chart-bar text-blue-600"></i>
+                        ATS Score
+                    </h3>
+                    <button onclick="recalculateATS()" class="p-1 hover:bg-gray-100 rounded" data-tooltip="Recalculate">
+                        <i class="ti ti-refresh text-gray-500 text-sm"></i>
+                    </button>
                 </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Target Profile Title</label>
-                    <input type="text" id="edit-title" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Contact Info (Phone | Email | Location)</label>
-                    <input type="text" id="edit-contact" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Professional Summary</label>
-                    <textarea id="edit-summary" rows="4" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Skills & Competencies (One per line)</label>
-                    <textarea id="edit-skills" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Achievements & Awards (One per line)</label>
-                    <textarea id="edit-achievements" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Employment Details</label>
-                    <textarea id="edit-experience" rows="5" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Education</label>
-                    <textarea id="edit-education" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Certifications (One per line)</label>
-                    <textarea id="edit-certifications" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Personal Details (One per line)</label>
-                    <textarea id="edit-personal" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
-                </div>
-            </div>
-        </div>
-
-        <!-- RIGHT PANEL: Protected Framework Live Viewer -->
-        <div class="lg:col-span-8 flex flex-col space-y-4">
-            
-            <!-- Context Control Bar -->
-            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-3 rounded-xl shadow-sm border border-gray-200 gap-4">
-                <!-- Framework Picker Inside Dashboard -->
-                <div class="flex bg-gray-100 p-1 rounded-lg border border-gray-200 w-full sm:w-auto">
-                    <button id="btn-sentinel" onclick="switchPreviewTemplate('sentinel')" class="px-3 py-1.5 text-xs font-bold rounded-md bg-white text-[#0F3B68] shadow-sm transition">Sentinel (ATS)</button>
-                    <button id="btn-vanguard" onclick="switchPreviewTemplate('vanguard')" class="px-3 py-1.5 text-xs font-bold rounded-md text-gray-600 hover:text-gray-900 transition">Vanguard</button>
-                    <button id="btn-creative" onclick="switchPreviewTemplate('creative')" class="px-3 py-1.5 text-xs font-bold rounded-md text-gray-600 hover:text-gray-900 transition">Creative</button>
-                    <button id="btn-global" onclick="switchPreviewTemplate('global')" class="px-3 py-1.5 text-xs font-bold rounded-md text-gray-600 hover:text-gray-900 transition">Global</button>
-                </div>
-
-                <button onclick="triggerPurchasePaywall()" class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-bold text-sm px-5 py-2 rounded-lg shadow-sm transition flex items-center justify-center">
-                    <span>Download Raw Word Copy (.docx)</span>
-                </button>
-            </div>
-
-            <!-- The Protected Document View Container -->
-            <div class="bg-white rounded-xl shadow-md border border-gray-300 p-10 min-h-[75vh] max-h-[75vh] overflow-y-auto watermark-overlay relative preview-font" id="preview-frame">
                 
-                <!-- DYNAMIC RENDER SLOT -->
-                <div id="workspace-canvas" class="space-y-4 text-xs text-gray-800 relative z-10">
-                    <!-- Framework layers render here automatically via Javascript -->
+                <div class="flex items-center justify-center mb-4">
+                    <div class="relative w-32 h-32">
+                        <svg class="transform -rotate-90" width="128" height="128">
+                            <circle cx="64" cy="64" r="56" stroke="#E5E7EB" stroke-width="8" fill="none"/>
+                            <circle id="ats-progress" cx="64" cy="64" r="56" stroke="#10B981" stroke-width="8" fill="none"
+                                stroke-dasharray="352" stroke-dashoffset="88" stroke-linecap="round"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center flex-col">
+                            <span id="ats-score" class="text-3xl font-bold text-gray-800 score-animate">75</span>
+                            <span class="text-xs text-gray-500">/ 100</span>
+                        </div>
+                    </div>
                 </div>
 
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-gray-600">Keyword Match</span>
+                        <span class="font-semibold text-green-600">82%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div class="bg-green-600 h-1.5 rounded-full" style="width: 82%"></div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-gray-600">Format Quality</span>
+                        <span class="font-semibold text-blue-600">90%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div class="bg-blue-600 h-1.5 rounded-full" style="width: 90%"></div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-gray-600">Impact Score</span>
+                        <span class="font-semibold text-amber-600">68%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div class="bg-amber-600 h-1.5 rounded-full" style="width: 68%"></div>
+                    </div>
+                </div>
+
+                <button onclick="showATSDetails()" class="w-full mt-4 text-sm text-blue-600 hover:text-blue-700 font-semibold flex items-center justify-center gap-1">
+                    <span>View detailed report</span>
+                    <i class="ti ti-arrow-right text-xs"></i>
+                </button>
             </div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="ti ti-bolt text-amber-500"></i>
+                    Quick Actions
+                </h3>
+                
+                <div class="space-y-2">
+                    <button onclick="optimizeWithAI()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-3 rounded-lg font-semibold text-sm flex items-center justify-between hover:from-blue-600 hover:to-indigo-700 shadow-sm">
+                        <span class="flex items-center gap-2">
+                            <i class="ti ti-sparkles"></i>
+                            AI Optimize All
+                        </span>
+                        <span class="text-xs opacity-80">-2 credits</span>
+                    </button>
+
+                    <button onclick="spellCheck()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2">
+                        <i class="ti ti-spell-check"></i>
+                        Spell Check
+                    </button>
+
+                    <button onclick="addSection()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2">
+                        <i class="ti ti-square-plus"></i>
+                        Add Section
+                    </button>
+
+                    <button onclick="showTemplates()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2">
+                        <i class="ti ti-palette"></i>
+                        Change Template
+                    </button>
+
+                    <button onclick="showVersionHistory()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2">
+                        <i class="ti ti-history"></i>
+                        Version History
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI SUGGESTIONS -->
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-5">
+                <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                    <i class="ti ti-bulb text-blue-600"></i>
+                    AI Suggestions
+                </h3>
+                
+                <div class="space-y-3" id="ai-suggestions">
+                    <div class="bg-white rounded-lg p-3 text-sm border border-blue-100">
+                        <div class="flex items-start gap-2">
+                            <i class="ti ti-alert-circle text-amber-500 text-lg"></i>
+                            <div class="flex-1">
+                                <p class="text-gray-700 font-medium mb-1">Add quantifiable achievements</p>
+                                <p class="text-gray-500 text-xs mb-2">Numbers make your impact concrete</p>
+                                <button onclick="applySuggestion('quantify')" class="text-blue-600 text-xs font-semibold hover:text-blue-700">Apply suggestion →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-3 text-sm border border-blue-100">
+                        <div class="flex items-start gap-2">
+                            <i class="ti ti-star text-blue-500 text-lg"></i>
+                            <div class="flex-1">
+                                <p class="text-gray-700 font-medium mb-1">Strengthen action verbs</p>
+                                <p class="text-gray-500 text-xs mb-2">"Led" → "Spearheaded"</p>
+                                <button onclick="applySuggestion('verbs')" class="text-blue-600 text-xs font-semibold hover:text-blue-700">Apply suggestion →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg p-3 text-sm border border-blue-100">
+                        <div class="flex items-start gap-2">
+                            <i class="ti ti-file-text text-green-500 text-lg"></i>
+                            <div class="flex-1">
+                                <p class="text-gray-700 font-medium mb-1">Tailor to job description</p>
+                                <p class="text-gray-500 text-xs mb-2">Match 12 missing keywords</p>
+                                <button onclick="applySuggestion('keywords')" class="text-blue-600 text-xs font-semibold hover:text-blue-700">Apply suggestion →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
+        <!-- MIDDLE: EDITOR -->
+        <div class="xl:col-span-6 space-y-4">
+            
+            <!-- TOOLBAR -->
+            <div class="floating-toolbar bg-white rounded-xl shadow-sm border border-gray-200 p-3 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <!-- UNDO/REDO -->
+                    <button id="undo-btn" onclick="undo()" class="history-btn p-2 hover:bg-gray-100 rounded-lg" data-tooltip="Undo (Ctrl+Z)" disabled>
+                        <i class="ti ti-arrow-back-up text-gray-600"></i>
+                    </button>
+                    <button id="redo-btn" onclick="redo()" class="history-btn p-2 hover:bg-gray-100 rounded-lg" data-tooltip="Redo (Ctrl+Y)" disabled>
+                        <i class="ti ti-arrow-forward-up text-gray-600"></i>
+                    </button>
+                    
+                    <div class="w-px h-6 bg-gray-300 mx-1"></div>
+
+                    <!-- TEXT FORMATTING -->
+                    <button onclick="formatText('bold')" class="p-2 hover:bg-gray-100 rounded-lg" data-tooltip="Bold">
+                        <i class="ti ti-bold text-gray-600"></i>
+                    </button>
+                    <button onclick="formatText('italic')" class="p-2 hover:bg-gray-100 rounded-lg" data-tooltip="Italic">
+                        <i class="ti ti-italic text-gray-600"></i>
+                    </button>
+                    <button onclick="formatText('list')" class="p-2 hover:bg-gray-100 rounded-lg" data-tooltip="Bullet list">
+                        <i class="ti ti-list text-gray-600"></i>
+                    </button>
+                    
+                    <div class="w-px h-6 bg-gray-300 mx-1"></div>
+
+                    <!-- AI TOOLS -->
+                    <button onclick="aiRewrite()" class="p-2 hover:bg-blue-50 rounded-lg" data-tooltip="AI Rewrite">
+                        <i class="ti ti-wand text-blue-600"></i>
+                    </button>
+                    <button onclick="aiExpand()" class="p-2 hover:bg-blue-50 rounded-lg" data-tooltip="Expand with AI">
+                        <i class="ti ti-arrow-autofit-content text-blue-600"></i>
+                    </button>
+                    <button onclick="aiSummarize()" class="p-2 hover:bg-blue-50 rounded-lg" data-tooltip="Summarize">
+                        <i class="ti ti-letters-case text-blue-600"></i>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2 text-xs text-gray-500">
+                    <span>Last edited: <span id="last-edit-time">Just now</span></span>
+                </div>
+            </div>
+
+            <!-- JOB DESCRIPTION ANALYZER -->
+            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border border-purple-200 p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-gray-800 flex items-center gap-2">
+                        <i class="ti ti-target text-purple-600"></i>
+                        Job Description Analyzer
+                    </h3>
+                    <span class="text-xs text-purple-600 font-semibold">Premium Feature</span>
+                </div>
+                <textarea id="jd-input" rows="3" 
+                    class="w-full text-sm p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                    placeholder="Paste the job description here to get AI-powered keyword matching and tailoring suggestions..."></textarea>
+                <div class="flex items-center justify-between mt-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-600">Keyword match:</span>
+                        <span id="keyword-match" class="text-xs font-bold text-purple-600">0/0</span>
+                    </div>
+                    <button onclick="analyzeJobDescription()" class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold px-4 py-2 rounded-lg flex items-center gap-2">
+                        <i class="ti ti-wand"></i>
+                        <span>Analyze & Tailor</span>
+                        <span class="text-xs opacity-75">(-1 credit)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- EDITABLE SECTIONS -->
+            <div id="sections-container" class="space-y-4">
+                <!-- Sections will be dynamically rendered here -->
+            </div>
+
+            <!-- ADD SECTION BUTTON -->
+            <button onclick="addSection()" class="w-full border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-xl py-4 text-gray-500 hover:text-blue-600 font-semibold flex items-center justify-center gap-2 transition-all">
+                <i class="ti ti-plus"></i>
+                <span>Add New Section</span>
+            </button>
+
+        </div>
+
+        <!-- RIGHT: LIVE PREVIEW -->
+        <div class="xl:col-span-3 space-y-4">
+            
+            <!-- PREVIEW CONTROLS -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-gray-800">Live Preview</h3>
+                    <div class="flex items-center gap-2">
+                        <button onclick="togglePreviewMode('desktop')" id="preview-desktop" class="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                            <i class="ti ti-device-laptop"></i>
+                        </button>
+                        <button onclick="togglePreviewMode('mobile')" id="preview-mobile" class="p-2 hover:bg-gray-100 rounded-lg">
+                            <i class="ti ti-device-mobile"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TEMPLATE SELECTOR -->
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Template</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="switchTemplate('sentinel')" data-template="sentinel" 
+                            class="template-thumb active bg-white border-2 rounded-lg p-2 text-left hover:shadow-md">
+                            <div class="text-xs font-bold text-gray-800 mb-1">Sentinel</div>
+                            <div class="text-[10px] text-gray-500">ATS-Optimized</div>
+                        </button>
+                        <button onclick="switchTemplate('vanguard')" data-template="vanguard"
+                            class="template-thumb bg-white border-2 rounded-lg p-2 text-left hover:shadow-md">
+                            <div class="text-xs font-bold text-gray-800 mb-1">Vanguard</div>
+                            <div class="text-[10px] text-gray-500">Executive</div>
+                        </button>
+                        <button onclick="switchTemplate('creative')" data-template="creative"
+                            class="template-thumb bg-white border-2 rounded-lg p-2 text-left hover:shadow-md">
+                            <div class="text-xs font-bold text-gray-800 mb-1">Creative</div>
+                            <div class="text-[10px] text-gray-500">Modern</div>
+                        </button>
+                        <button onclick="switchTemplate('global')" data-template="global"
+                            class="template-thumb bg-white border-2 rounded-lg p-2 text-left hover:shadow-md">
+                            <div class="text-xs font-bold text-gray-800 mb-1">Global</div>
+                            <div class="text-[10px] text-gray-500">International</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CUSTOMIZATION -->
+                <div class="mt-4 space-y-3">
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide block mb-2">Primary Color</label>
+                        <div class="flex gap-2">
+                            <button onclick="changeColor('#0F3B68')" class="w-8 h-8 rounded-full border-2 border-gray-300" style="background: #0F3B68"></button>
+                            <button onclick="changeColor('#1F4E79')" class="w-8 h-8 rounded-full border-2 border-gray-300" style="background: #1F4E79"></button>
+                            <button onclick="changeColor('#2D5F7F')" class="w-8 h-8 rounded-full border-2 border-gray-300" style="background: #2D5F7F"></button>
+                            <button onclick="changeColor('#059669')" class="w-8 h-8 rounded-full border-2 border-gray-300" style="background: #059669"></button>
+                            <button onclick="changeColor('#7C3AED')" class="w-8 h-8 rounded-full border-2 border-gray-300" style="background: #7C3AED"></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide block mb-2">Font Size</label>
+                        <input type="range" min="10" max="14" value="12" step="0.5" 
+                            onchange="changeFontSize(this.value)" 
+                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-[10px] text-gray-500 mt-1">
+                            <span>Smaller</span>
+                            <span>Larger</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide block mb-2">Line Spacing</label>
+                        <select onchange="changeLineSpacing(this.value)" class="w-full text-sm p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="1.2">Compact</option>
+                            <option value="1.5" selected>Normal</option>
+                            <option value="1.8">Relaxed</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PREVIEW DOCUMENT -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-24">
+                <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+                    <span class="text-sm font-semibold text-gray-700">Preview</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="downloadPDF()" class="p-1.5 hover:bg-gray-100 rounded" data-tooltip="Download PDF">
+                            <i class="ti ti-file-type-pdf text-red-600"></i>
+                        </button>
+                        <button onclick="printPreview()" class="p-1.5 hover:bg-gray-100 rounded" data-tooltip="Print">
+                            <i class="ti ti-printer text-gray-600"></i>
+                        </button>
+                        <button onclick="sharePreview()" class="p-1.5 hover:bg-gray-100 rounded" data-tooltip="Share">
+                            <i class="ti ti-share text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="preview-container" class="watermark-overlay overflow-y-auto" style="height: 800px; background: #f9fafb;">
+                    <div id="preview-canvas" class="bg-white mx-auto p-10 shadow-sm" style="width: 8.5in; min-height: 11in; font-size: 12px;">
+                        <!-- Resume preview renders here -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <!-- Minimalist SaaS Footer -->
-    <footer class="bg-gray-100 text-center py-4 text-[10px] text-gray-400 font-semibold tracking-wider shrink-0 border-t border-gray-200 mt-auto">
-        &copy; 2026 ORBIT CAREERS | SECURE CANDIDATE WORKSPACE
-    </footer>
+    <!-- MODALS -->
+    <!-- Keyboard Shortcuts Modal -->
+    <div id="shortcuts-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800">Keyboard Shortcuts</h3>
+                <button onclick="document.getElementById('shortcuts-modal').classList.add('hidden')" class="p-1 hover:bg-gray-100 rounded">
+                    <i class="ti ti-x text-gray-600"></i>
+                </button>
+            </div>
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Undo</span>
+                    <kbd class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">Ctrl + Z</kbd>
+                </div>
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Redo</span>
+                    <kbd class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">Ctrl + Y</kbd>
+                </div>
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Save</span>
+                    <kbd class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">Ctrl + S</kbd>
+                </div>
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">AI Optimize</span>
+                    <kbd class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">Ctrl + Shift + O</kbd>
+                </div>
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Add Section</span>
+                    <kbd class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">Ctrl + Shift + A</kbd>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-gray-600">Show Shortcuts</span>
+                    <kbd class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">?</kbd>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- WORKSPACE FRAMEWORK CORE LOGIC -->
+    <!-- CORE JAVASCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script>
-        // Mock static profile data matrix
-        let activeProfile = {
-            name: "AMIT SAXENA",
-            title: "DEPUTY GENERAL MANAGER | CHANNEL MANAGEMENT & P&L OVERSIGHT",
-            summary: "Highly accomplished Executive with 27+ years of extensive experience driving strategic business development, market expansion, and channel management across diverse fast-paced consumer industries.",
-            contact: "+91 ●●●●●-●●●●●  |  a****a0601@gmail.com  |  New Delhi, India",
-            skills: ["Strategic Business Development", "Channel Management", "Key Account Management", "P&L Management", "Market Expansion", "Team Leadership"],
-            achievements: [
-                "Achieved highest growth award in compressor segment scaling regional sales margins by 34%.",
-                "Appointed 8 new strategic channel distribution partners within 2 years, securing emerging dealers recognition."
-            ],
-            experience: "Deputy General Manager - Samvardhana Motherson\nMay 2025 – Present\n• Led complete sales operations for India market segments.\n• Managed 9 high-performing team members to achieve annual operating targets.\n\nRegional Sales Leader - Ingersoll Rand\nJun 2010 – Jan 2019\n• Handled the complete channel network appointment process.\n• Led entire sales of Air Compressor Division in East Region.",
-            education: "Master of Business Administration (MBA) | University of Delhi (1998)",
-            certifications: ["Advance Certification Program in Leadership | IIM Lucknow (2019)"],
-            personal: ["Date of Birth: 6th January 1976", "Languages: English, Hindi"]
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        const STATE = {
+            currentTemplate: 'sentinel',
+            credits: 12,
+            atsScore: 75,
+            history: [],
+            historyIndex: -1,
+            previewMode: 'desktop',
+            customization: {
+                primaryColor: '#0F3B68',
+                fontSize: 12,
+                lineSpacing: 1.5
+            },
+            profile: {
+                name: "AMIT SAXENA",
+                title: "DEPUTY GENERAL MANAGER | CHANNEL MANAGEMENT & P&L OVERSIGHT",
+                contact: "+91 ●●●●●-●●●●●  |  a****a0601@gmail.com  |  New Delhi, India",
+                sections: [
+                    {
+                        id: 'summary',
+                        type: 'summary',
+                        title: 'Professional Summary',
+                        icon: 'ti-file-text',
+                        content: "Highly accomplished Executive with 27+ years of extensive experience driving strategic business development, market expansion, and channel management across diverse fast-paced consumer industries.",
+                        visible: true
+                    },
+                    {
+                        id: 'achievements',
+                        type: 'list',
+                        title: 'Achievements & Awards',
+                        icon: 'ti-trophy',
+                        items: [
+                            "Achieved highest growth award in compressor segment scaling regional sales margins by 34%.",
+                            "Appointed 8 new strategic channel distribution partners within 2 years, securing emerging dealers recognition."
+                        ],
+                        visible: true
+                    },
+                    {
+                        id: 'skills',
+                        type: 'tags',
+                        title: 'Professional Skills',
+                        icon: 'ti-puzzle',
+                        items: ["Strategic Business Development", "Channel Management", "Key Account Management", "P&L Management", "Market Expansion", "Team Leadership"],
+                        visible: true
+                    },
+                    {
+                        id: 'experience',
+                        type: 'experience',
+                        title: 'Work Experience',
+                        icon: 'ti-briefcase',
+                        entries: [
+                            {
+                                company: "Samvardhana Motherson",
+                                position: "Deputy General Manager",
+                                period: "May 2025 – Present",
+                                achievements: [
+                                    "Led complete sales operations for India market segments.",
+                                    "Managed 9 high-performing team members to achieve annual operating targets."
+                                ]
+                            },
+                            {
+                                company: "Ingersoll Rand",
+                                position: "Regional Sales Leader",
+                                period: "Jun 2010 – Jan 2019",
+                                achievements: [
+                                    "Handled the complete channel network appointment process.",
+                                    "Led entire sales of Air Compressor Division in East Region."
+                                ]
+                            }
+                        ],
+                        visible: true
+                    },
+                    {
+                        id: 'education',
+                        type: 'simple',
+                        title: 'Education',
+                        icon: 'ti-school',
+                        content: "Master of Business Administration (MBA) | University of Delhi (1998)",
+                        visible: true
+                    },
+                    {
+                        id: 'certifications',
+                        type: 'list',
+                        title: 'Certifications',
+                        icon: 'ti-certificate',
+                        items: ["Advance Certification Program in Leadership | IIM Lucknow (2019)"],
+                        visible: true
+                    },
+                    {
+                        id: 'personal',
+                        type: 'list',
+                        title: 'Personal Details',
+                        icon: 'ti-user',
+                        items: ["Date of Birth: 6th January 1976", "Languages: English, Hindi"],
+                        visible: true
+                    }
+                ]
+            }
         };
 
-        let currentActiveTemplate = 'sentinel';
-
-        // Initialize dashboard inputs and canvas loop
+        // ============================================
+        // INITIALIZATION
+        // ============================================
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('edit-name').value = activeProfile.name;
-            document.getElementById('edit-title').value = activeProfile.title;
-            document.getElementById('edit-contact').value = activeProfile.contact;
-            document.getElementById('edit-summary').value = activeProfile.summary;
-            document.getElementById('edit-skills').value = activeProfile.skills.join('\n');
-            document.getElementById('edit-achievements').value = activeProfile.achievements.join('\n');
-            document.getElementById('edit-experience').value = activeProfile.experience;
-            document.getElementById('edit-education').value = activeProfile.education;
-            document.getElementById('edit-certifications').value = activeProfile.certifications.join('\n');
-            document.getElementById('edit-personal').value = activeProfile.personal.join('\n');
-
-            // Wire up instant keystroke rendering tracking
-            const fields = ['name', 'title', 'contact', 'summary', 'experience', 'education'];
-            const arrayFields = ['skills', 'achievements', 'certifications', 'personal'];
-
-            fields.forEach(f => {
-                document.getElementById(`edit-${f}`).addEventListener('input', (e) => { 
-                    activeProfile[f] = f === 'name' || f === 'title' ? e.target.value.toUpperCase() : e.target.value; 
-                    renderCurrentCanvas(); 
-                });
-            });
-
-            arrayFields.forEach(f => {
-                document.getElementById(`edit-${f}`).addEventListener('input', (e) => { 
-                    activeProfile[f] = e.target.value.split('\n').filter(val => val.trim() !== ''); 
-                    renderCurrentCanvas(); 
-                });
-            });
-
-            renderCurrentCanvas();
+            renderSections();
+            renderPreview();
+            initializeSortable();
+            setupKeyboardShortcuts();
+            startAutoSave();
+            saveToHistory();
         });
 
-        // Template Switcher UI Handler
-        function switchPreviewTemplate(templateId) {
-            currentActiveTemplate = templateId;
-            ['sentinel', 'vanguard', 'creative', 'global'].forEach(id => {
-                const btn = document.getElementById(`btn-${id}`);
-                if (id === templateId) {
-                    btn.className = "px-3 py-1.5 text-xs font-bold rounded-md bg-white text-[#0F3B68] shadow-sm transition";
-                } else {
-                    btn.className = "px-3 py-1.5 text-xs font-bold rounded-md text-gray-600 hover:text-gray-900 transition";
-                }
-            });
-            renderCurrentCanvas();
-        }
-
-        // Master Layout Render Router
-        function renderCurrentCanvas() {
-            const canvas = document.getElementById('workspace-canvas');
-            
-            // Format experience text block for HTML preview
-            const expFormatted = activeProfile.experience.split('\n').map(line => {
-                if(line.startsWith('•') || line.startsWith('-')) return `<li class="ml-4 list-disc">${line.substring(1).trim()}</li>`;
-                if(line.trim() === '') return `<br>`;
-                return `<p class="font-bold text-gray-800 mt-2">${line}</p>`;
+        // ============================================
+        // SECTION RENDERING
+        // ============================================
+        function renderSections() {
+            const container = document.getElementById('sections-container');
+            container.innerHTML = STATE.profile.sections.map((section, index) => {
+                if (!section.visible) return '';
+                
+                return `
+                    <div class="section-card bg-white rounded-xl shadow-sm border border-gray-200 p-5" data-section-id="${section.id}">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <button class="drag-handle p-1 hover:bg-gray-100 rounded cursor-grab">
+                                    <i class="ti ti-grip-vertical text-gray-400"></i>
+                                </button>
+                                <i class="ti ${section.icon} text-blue-600 text-lg"></i>
+                                <h3 class="font-bold text-gray-800">${section.title}</h3>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="aiOptimizeSection('${section.id}')" class="p-2 hover:bg-blue-50 rounded-lg" data-tooltip="AI Optimize">
+                                    <i class="ti ti-wand text-blue-600"></i>
+                                </button>
+                                <button onclick="toggleSection('${section.id}')" class="p-2 hover:bg-gray-100 rounded-lg" data-tooltip="Hide section">
+                                    <i class="ti ti-eye-off text-gray-600"></i>
+                                </button>
+                                <button onclick="deleteSection('${section.id}')" class="p-2 hover:bg-red-50 rounded-lg" data-tooltip="Delete">
+                                    <i class="ti ti-trash text-red-600"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        ${renderSectionContent(section)}
+                    </div>
+                `;
             }).join('');
+        }
 
-            if (currentActiveTemplate === 'sentinel') {
-                canvas.innerHTML = `
-                    <div class="text-center border-b pb-3 border-blue-200">
-                        <h1 class="text-2xl font-bold text-[#0F3B68] tracking-tight">${activeProfile.name}</h1>
-                        <p class="text-xs font-bold text-gray-600 uppercase mt-1 tracking-wide">${activeProfile.title}</p>
-                        <p class="text-[10px] text-gray-500 mt-1">${activeProfile.contact}</p>
-                    </div>
-                    <div>
-                        <h2 class="text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-2">Professional Summary</h2>
-                        <p class="text-gray-600 mt-1.5 leading-relaxed text-justify">${activeProfile.summary}</p>
-                    </div>
-                    ${activeProfile.achievements.length ? `<div>
-                        <h2 class="text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Achievements & Awards</h2>
-                        <ul class="list-disc pl-4 mt-1.5 space-y-1 text-gray-600">${activeProfile.achievements.map(ach => `<li>${ach}</li>`).join('')}</ul>
-                    </div>` : ''}
-                    ${activeProfile.skills.length ? `<div>
-                        <h2 class="text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Professional Skills</h2>
-                        <p class="text-gray-600 mt-1.5">${activeProfile.skills.join('  |  ')}</p>
-                    </div>` : ''}
-                    <div>
-                        <h2 class="text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Work Experience</h2>
-                        <div class="text-gray-600">${expFormatted}</div>
-                    </div>
-                    ${activeProfile.education ? `<div>
-                        <h2 class="text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Education</h2>
-                        <p class="text-gray-600 mt-1.5">${activeProfile.education}</p>
-                    </div>` : ''}
-                    ${activeProfile.certifications.length ? `<div>
-                        <h2 class="text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Certifications</h2>
-                        <ul class="list-disc pl-4 mt-1.5 space-y-1 text-gray-600">${activeProfile.certifications.map(c => `<li>${c}</li>`).join('')}</ul>
-                    </div>` : ''}
-                    ${activeProfile.personal.length ? `<div>
-                        <h2 class="text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Personal Details</h2>
-                        <ul class="mt-1.5 space-y-1 text-gray-600">${activeProfile.personal.map(p => `<li>${p}</li>`).join('')}</ul>
-                    </div>` : ''}
-                `;
-            } 
-            else if (currentActiveTemplate === 'vanguard') {
-                canvas.innerHTML = `
-                    <div class="grid grid-cols-12 gap-4">
-                        <div class="col-span-4 bg-[#0F3B68] text-white p-4 rounded-lg space-y-4 min-h-[60vh]">
-                            <div class="text-center text-[10px] text-blue-300 border border-blue-800 py-4 rounded">Placeholder Photo Area</div>
-                            <div>
-                                <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">CONTACT</h3>
-                                <p class="text-[10px] space-y-1 opacity-90">${activeProfile.contact.replace(/ \| /g, '<br>')}</p>
-                            </div>
-                            ${activeProfile.skills.length ? `<div>
-                                <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">SKILLS</h3>
-                                <ul class="text-[10px] space-y-1 opacity-90">${activeProfile.skills.map(s => `<li>• ${s}</li>`).join('')}</ul>
-                            </div>` : ''}
-                            ${activeProfile.education ? `<div>
-                                <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">EDUCATION</h3>
-                                <p class="text-[10px] opacity-90">${activeProfile.education}</p>
-                            </div>` : ''}
-                            ${activeProfile.certifications.length ? `<div>
-                                <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">CERTIFICATIONS</h3>
-                                <ul class="text-[10px] space-y-1 opacity-90">${activeProfile.certifications.map(c => `<li>• ${c}</li>`).join('')}</ul>
-                            </div>` : ''}
-                            ${activeProfile.personal.length ? `<div>
-                                <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">DETAILS</h3>
-                                <ul class="text-[10px] space-y-1 opacity-90">${activeProfile.personal.map(p => `<li>${p}</li>`).join('')}</ul>
-                            </div>` : ''}
+        function renderSectionContent(section) {
+            switch(section.type) {
+                case 'summary':
+                case 'simple':
+                    return `
+                        <textarea oninput="updateSection('${section.id}', 'content', this.value)" 
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm"
+                            rows="4">${section.content || ''}</textarea>
+                    `;
+                
+                case 'list':
+                    return `
+                        <div class="space-y-2">
+                            ${section.items.map((item, i) => `
+                                <div class="flex items-start gap-2">
+                                    <input type="text" value="${item}" 
+                                        oninput="updateSectionItem('${section.id}', ${i}, this.value)"
+                                        class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                    <button onclick="removeSectionItem('${section.id}', ${i})" class="p-2 hover:bg-red-50 rounded-lg">
+                                        <i class="ti ti-x text-red-600"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                            <button onclick="addSectionItem('${section.id}')" class="text-blue-600 hover:text-blue-700 text-sm font-semibold flex items-center gap-1">
+                                <i class="ti ti-plus text-xs"></i>
+                                Add item
+                            </button>
                         </div>
-                        <div class="col-span-8 p-2 space-y-3">
-                            <div>
-                                <h1 class="text-2xl font-bold text-[#0F3B68]">${activeProfile.name}</h1>
-                                <p class="text-xs font-bold text-amber-600 mt-0.5 uppercase">${activeProfile.title}</p>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px]">Professional Summary</h3>
-                                <p class="text-gray-600 mt-1 leading-relaxed text-justify">${activeProfile.summary}</p>
-                            </div>
-                            ${activeProfile.achievements.length ? `<div>
-                                <h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Achievements</h3>
-                                <ul class="list-disc pl-4 mt-1 text-gray-600 space-y-0.5">${activeProfile.achievements.map(ach => `<li>${ach}</li>`).join('')}</ul>
-                            </div>` : ''}
-                            <div>
-                                <h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Experience</h3>
-                                <div class="text-gray-600">${expFormatted}</div>
-                            </div>
+                    `;
+                
+                case 'tags':
+                    return `
+                        <div class="flex flex-wrap gap-2">
+                            ${section.items.map((item, i) => `
+                                <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm flex items-center gap-2">
+                                    ${item}
+                                    <button onclick="removeSectionItem('${section.id}', ${i})" class="hover:bg-blue-100 rounded-full p-0.5">
+                                        <i class="ti ti-x text-xs"></i>
+                                    </button>
+                                </span>
+                            `).join('')}
+                            <button onclick="addSkillTag('${section.id}')" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-full text-sm">
+                                <i class="ti ti-plus text-xs"></i> Add skill
+                            </button>
                         </div>
-                    </div>
-                `;
-            }
-            else if (currentActiveTemplate === 'creative') {
-                canvas.innerHTML = `
-                    <div class="grid grid-cols-12 gap-6 border-b-2 border-[#1F4E79] pb-3 mb-3">
-                        <div class="col-span-7">
-                            <h1 class="text-2xl font-bold text-[#1F4E79]">${activeProfile.name}</h1>
-                            <p class="text-xs font-bold text-gray-700 mt-0.5 uppercase">${activeProfile.title}</p>
+                    `;
+                
+                case 'experience':
+                    return `
+                        <div class="space-y-4">
+                            ${section.entries.map((entry, i) => `
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="grid grid-cols-2 gap-3 mb-3">
+                                        <input type="text" value="${entry.company}" 
+                                            oninput="updateExperience('${section.id}', ${i}, 'company', this.value)"
+                                            placeholder="Company"
+                                            class="p-2 border border-gray-300 rounded-lg text-sm font-semibold">
+                                        <input type="text" value="${entry.period}" 
+                                            oninput="updateExperience('${section.id}', ${i}, 'period', this.value)"
+                                            placeholder="Period"
+                                            class="p-2 border border-gray-300 rounded-lg text-sm">
+                                    </div>
+                                    <input type="text" value="${entry.position}" 
+                                        oninput="updateExperience('${section.id}', ${i}, 'position', this.value)"
+                                        placeholder="Position"
+                                        class="w-full p-2 border border-gray-300 rounded-lg text-sm mb-3 font-semibold">
+                                    <div class="space-y-2">
+                                        ${entry.achievements.map((ach, j) => `
+                                            <div class="flex items-start gap-2">
+                                                <span class="text-gray-400 text-sm mt-2">•</span>
+                                                <input type="text" value="${ach}" 
+                                                    oninput="updateExperienceAchievement('${section.id}', ${i}, ${j}, this.value)"
+                                                    class="flex-1 p-2 border border-gray-300 rounded-lg text-sm">
+                                                <button onclick="removeExperienceAchievement('${section.id}', ${i}, ${j})" class="p-2 hover:bg-red-50 rounded-lg">
+                                                    <i class="ti ti-x text-red-600 text-sm"></i>
+                                                </button>
+                                            </div>
+                                        `).join('')}
+                                        <button onclick="addExperienceAchievement('${section.id}', ${i})" class="text-blue-600 hover:text-blue-700 text-xs font-semibold flex items-center gap-1 ml-5">
+                                            <i class="ti ti-plus text-xs"></i>
+                                            Add achievement
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                            <button onclick="addExperienceEntry('${section.id}')" class="text-blue-600 hover:text-blue-700 text-sm font-semibold flex items-center gap-1">
+                                <i class="ti ti-plus text-xs"></i>
+                                Add position
+                            </button>
                         </div>
-                        <div class="col-span-5 border-l border-[#1F4E79] pl-3 text-[10px] text-gray-600 space-y-0.5">
-                            <p>${activeProfile.contact.replace(/ \| /g, '<br>')}</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h2 class="text-xs font-bold text-[#1F4E79] tracking-wide uppercase">Professional Summary</h2>
-                        <p class="text-gray-600 mt-1 leading-relaxed text-justify">${activeProfile.summary}</p>
-                    </div>
-                    <div class="grid grid-cols-12 gap-6 mt-4 border-t border-gray-200 pt-3">
-                        <div class="col-span-4 space-y-3">
-                            ${activeProfile.skills.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[11px]">SKILLS</h3>
-                            <ul class="space-y-1 text-gray-600 text-[11px]">${activeProfile.skills.map(s => `<li>• ${s}</li>`).join('')}</ul></div>` : ''}
-                            ${activeProfile.education ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[11px]">EDUCATION</h3>
-                            <p class="text-[10px] text-gray-600">${activeProfile.education}</p></div>` : ''}
-                            ${activeProfile.certifications.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[11px]">CERTIFICATIONS</h3>
-                            <ul class="space-y-1 text-gray-600 text-[10px]">${activeProfile.certifications.map(c => `<li>• ${c}</li>`).join('')}</ul></div>` : ''}
-                            ${activeProfile.personal.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[11px]">PERSONAL DETAILS</h3>
-                            <ul class="space-y-1 text-gray-600 text-[10px]">${activeProfile.personal.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
-                        </div>
-                        <div class="col-span-8 space-y-3">
-                            ${activeProfile.achievements.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[11px]">ACHIEVEMENTS</h3>
-                            <ul class="list-disc pl-4 text-gray-600 space-y-0.5">${activeProfile.achievements.map(ach => `<li>${ach}</li>`).join('')}</ul></div>` : ''}
-                            <div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[11px]">EXPERIENCE</h3>
-                            <div class="text-gray-600">${expFormatted}</div>
-                        </div>
-                    </div>
-                `;
-            }
-            else if (currentActiveTemplate === 'global') {
-                canvas.innerHTML = `
-                    <div class="grid grid-cols-12 gap-4 border-b-2 border-green-800 pb-3 mb-2">
-                        <div class="col-span-7">
-                            <h1 class="text-2xl font-bold text-green-800">${activeProfile.name}</h1>
-                            <p class="text-xs font-semibold text-gray-700 uppercase mt-0.5">${activeProfile.title}</p>
-                        </div>
-                        <div class="col-span-5 text-right text-[10px] text-gray-500 space-y-0.5">
-                            <p>${activeProfile.contact.replace(/ \| /g, '<br>')}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[11px] font-bold text-green-800 uppercase tracking-wider">Professional Profile</span><div class="flex-grow border-b border-green-700"></div></div>
-                        <p class="text-gray-600 leading-relaxed text-justify">${activeProfile.summary}</p>
-                        
-                        ${activeProfile.skills.length ? `<div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[11px] font-bold text-green-800 uppercase tracking-wider">Competencies</span><div class="flex-grow border-b border-green-700"></div></div>
-                        <p class="text-center text-gray-600 font-medium text-[11px]">${activeProfile.skills.join('   •   ')}</p>` : ''}
-
-                        ${activeProfile.achievements.length ? `<div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[11px] font-bold text-green-800 uppercase tracking-wider">Achievements</span><div class="flex-grow border-b border-green-700"></div></div>
-                        <ul class="list-disc pl-4 text-gray-600 space-y-0.5">${activeProfile.achievements.map(ach => `<li>${ach}</li>`).join('')}</ul>` : ''}
-
-                        <div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[11px] font-bold text-green-800 uppercase tracking-wider">Career Summary</span><div class="flex-grow border-b border-green-700"></div></div>
-                        <div class="text-gray-600">${expFormatted}</div>
-
-                        ${activeProfile.education ? `<div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[11px] font-bold text-green-800 uppercase tracking-wider">Education</span><div class="flex-grow border-b border-green-700"></div></div>
-                        <p class="text-gray-600 text-center">${activeProfile.education}</p>` : ''}
-                        
-                        ${activeProfile.certifications.length ? `<div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[11px] font-bold text-green-800 uppercase tracking-wider">Certifications</span><div class="flex-grow border-b border-green-700"></div></div>
-                        <ul class="list-disc pl-4 text-gray-600 space-y-0.5">${activeProfile.certifications.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
-
-                        ${activeProfile.personal.length ? `<div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[11px] font-bold text-green-800 uppercase tracking-wider">Personal Details</span><div class="flex-grow border-b border-green-700"></div></div>
-                        <ul class="text-gray-600 space-y-0.5 text-center">${activeProfile.personal.map(p => `<li>${p}</li>`).join('')}</ul>` : ''}
-                    </div>
-                `;
+                    `;
+                
+                default:
+                    return '';
             }
         }
 
-        // ==========================================
-        // BEHAVIORAL PROTECTION CONTROLS (Anti-Theft)
-        // ==========================================
-        document.addEventListener('contextmenu', event => event.preventDefault());
+        // ============================================
+        // PREVIEW RENDERING
+        // ============================================
+        function renderPreview() {
+            const canvas = document.getElementById('preview-canvas');
+            const template = STATE.currentTemplate;
+            const profile = STATE.profile;
+            const sections = profile.sections.filter(s => s.visible);
+            
+            // Apply customization
+            canvas.style.fontSize = STATE.customization.fontSize + 'px';
+            canvas.style.lineHeight = STATE.customization.lineSpacing;
+            
+            let html = '';
+            
+            // Header
+            html += `
+                <div class="text-center border-b pb-4 mb-4" style="border-color: ${STATE.customization.primaryColor}30">
+                    <h1 class="text-3xl font-bold mb-2" style="color: ${STATE.customization.primaryColor}">${profile.name}</h1>
+                    <p class="text-sm font-semibold text-gray-700 uppercase mb-2">${profile.title}</p>
+                    <p class="text-xs text-gray-600">${profile.contact}</p>
+                </div>
+            `;
+            
+            // Sections
+            sections.forEach(section => {
+                html += `
+                    <div class="mb-4">
+                        <h2 class="text-sm font-bold uppercase mb-2 pb-1 border-b" style="color: ${STATE.customization.primaryColor}; border-color: ${STATE.customization.primaryColor}30">
+                            ${section.title}
+                        </h2>
+                `;
+                
+                switch(section.type) {
+                    case 'summary':
+                    case 'simple':
+                        html += `<p class="text-gray-700 text-justify leading-relaxed">${section.content || ''}</p>`;
+                        break;
+                    
+                    case 'list':
+                        html += `<ul class="list-disc pl-5 space-y-1">`;
+                        section.items.forEach(item => {
+                            html += `<li class="text-gray-700">${item}</li>`;
+                        });
+                        html += `</ul>`;
+                        break;
+                    
+                    case 'tags':
+                        html += `<p class="text-gray-700">${section.items.join(' • ')}</p>`;
+                        break;
+                    
+                    case 'experience':
+                        section.entries.forEach(entry => {
+                            html += `
+                                <div class="mb-3">
+                                    <div class="flex justify-between items-baseline mb-1">
+                                        <p class="font-bold text-gray-800">${entry.company}</p>
+                                        <p class="text-xs text-gray-600">${entry.period}</p>
+                                    </div>
+                                    <p class="text-sm font-semibold text-gray-700 mb-1">${entry.position}</p>
+                                    <ul class="list-disc pl-5 space-y-0.5">
+                            `;
+                            entry.achievements.forEach(ach => {
+                                html += `<li class="text-gray-700 text-sm">${ach}</li>`;
+                            });
+                            html += `</ul></div>`;
+                        });
+                        break;
+                }
+                
+                html += `</div>`;
+            });
+            
+            canvas.innerHTML = html;
+        }
 
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                if (['c', 'C', 'x', 'X', 's', 'S', 'p', 'P'].includes(e.key)) {
+        // ============================================
+        // SECTION MANAGEMENT
+        // ============================================
+        function updateSection(id, field, value) {
+            const section = STATE.profile.sections.find(s => s.id === id);
+            if (section) {
+                section[field] = value;
+                saveToHistory();
+                renderPreview();
+                triggerAutoSave();
+            }
+        }
+
+        function updateSectionItem(id, index, value) {
+            const section = STATE.profile.sections.find(s => s.id === id);
+            if (section && section.items) {
+                section.items[index] = value;
+                saveToHistory();
+                renderPreview();
+                triggerAutoSave();
+            }
+        }
+
+        function addSectionItem(id) {
+            const section = STATE.profile.sections.find(s => s.id === id);
+            if (section && section.items) {
+                section.items.push('');
+                saveToHistory();
+                renderSections();
+                renderPreview();
+            }
+        }
+
+        function removeSectionItem(id, index) {
+            const section = STATE.profile.sections.find(s => s.id === id);
+            if (section && section.items) {
+                section.items.splice(index, 1);
+                saveToHistory();
+                renderSections();
+                renderPreview();
+            }
+        }
+
+        function addSkillTag(id) {
+            const skill = prompt('Enter skill name:');
+            if (skill && skill.trim()) {
+                addSectionItem(id);
+                const section = STATE.profile.sections.find(s => s.id === id);
+                section.items[section.items.length - 1] = skill.trim();
+                renderSections();
+                renderPreview();
+            }
+        }
+
+        function updateExperience(sectionId, entryIndex, field, value) {
+            const section = STATE.profile.sections.find(s => s.id === sectionId);
+            if (section && section.entries) {
+                section.entries[entryIndex][field] = value;
+                saveToHistory();
+                renderPreview();
+                triggerAutoSave();
+            }
+        }
+
+        function updateExperienceAchievement(sectionId, entryIndex, achIndex, value) {
+            const section = STATE.profile.sections.find(s => s.id === sectionId);
+            if (section && section.entries) {
+                section.entries[entryIndex].achievements[achIndex] = value;
+                saveToHistory();
+                renderPreview();
+                triggerAutoSave();
+            }
+        }
+
+        function addExperienceAchievement(sectionId, entryIndex) {
+            const section = STATE.profile.sections.find(s => s.id === sectionId);
+            if (section && section.entries) {
+                section.entries[entryIndex].achievements.push('');
+                saveToHistory();
+                renderSections();
+            }
+        }
+
+        function removeExperienceAchievement(sectionId, entryIndex, achIndex) {
+            const section = STATE.profile.sections.find(s => s.id === sectionId);
+            if (section && section.entries) {
+                section.entries[entryIndex].achievements.splice(achIndex, 1);
+                saveToHistory();
+                renderSections();
+                renderPreview();
+            }
+        }
+
+        function addExperienceEntry(sectionId) {
+            const section = STATE.profile.sections.find(s => s.id === sectionId);
+            if (section && section.entries) {
+                section.entries.push({
+                    company: '',
+                    position: '',
+                    period: '',
+                    achievements: ['']
+                });
+                saveToHistory();
+                renderSections();
+            }
+        }
+
+        function toggleSection(id) {
+            const section = STATE.profile.sections.find(s => s.id === id);
+            if (section) {
+                section.visible = !section.visible;
+                saveToHistory();
+                renderSections();
+                renderPreview();
+            }
+        }
+
+        function deleteSection(id) {
+            if (confirm('Are you sure you want to delete this section?')) {
+                const index = STATE.profile.sections.findIndex(s => s.id === id);
+                if (index !== -1) {
+                    STATE.profile.sections.splice(index, 1);
+                    saveToHistory();
+                    renderSections();
+                    renderPreview();
+                }
+            }
+        }
+
+        function addSection() {
+            const types = [
+                { value: 'summary', label: 'Summary/Paragraph' },
+                { value: 'list', label: 'Bullet List' },
+                { value: 'tags', label: 'Skills/Tags' },
+                { value: 'experience', label: 'Work Experience' },
+                { value: 'simple', label: 'Simple Text' }
+            ];
+            
+            // This would open a modal in production
+            alert('Add Section feature - would open a modal to select section type');
+        }
+
+        // ============================================
+        // SORTABLE (DRAG & DROP)
+        // ============================================
+        function initializeSortable() {
+            const container = document.getElementById('sections-container');
+            new Sortable(container, {
+                handle: '.drag-handle',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: function(evt) {
+                    const oldIndex = evt.oldIndex;
+                    const newIndex = evt.newIndex;
+                    
+                    const item = STATE.profile.sections.splice(oldIndex, 1)[0];
+                    STATE.profile.sections.splice(newIndex, 0, item);
+                    
+                    saveToHistory();
+                    renderPreview();
+                }
+            });
+        }
+
+        // ============================================
+        // HISTORY (UNDO/REDO)
+        // ============================================
+        function saveToHistory() {
+            // Remove any future history if we're not at the end
+            STATE.history = STATE.history.slice(0, STATE.historyIndex + 1);
+            
+            // Add current state
+            STATE.history.push(JSON.stringify(STATE.profile));
+            STATE.historyIndex++;
+            
+            // Limit history to 50 states
+            if (STATE.history.length > 50) {
+                STATE.history.shift();
+                STATE.historyIndex--;
+            }
+            
+            updateHistoryButtons();
+        }
+
+        function undo() {
+            if (STATE.historyIndex > 0) {
+                STATE.historyIndex--;
+                STATE.profile = JSON.parse(STATE.history[STATE.historyIndex]);
+                renderSections();
+                renderPreview();
+                updateHistoryButtons();
+            }
+        }
+
+        function redo() {
+            if (STATE.historyIndex < STATE.history.length - 1) {
+                STATE.historyIndex++;
+                STATE.profile = JSON.parse(STATE.history[STATE.historyIndex]);
+                renderSections();
+                renderPreview();
+                updateHistoryButtons();
+            }
+        }
+
+        function updateHistoryButtons() {
+            document.getElementById('undo-btn').disabled = STATE.historyIndex <= 0;
+            document.getElementById('redo-btn').disabled = STATE.historyIndex >= STATE.history.length - 1;
+        }
+
+        // ============================================
+        // AUTO-SAVE
+        // ============================================
+        let autoSaveTimeout;
+        function triggerAutoSave() {
+            clearTimeout(autoSaveTimeout);
+            document.getElementById('save-status').textContent = 'Saving...';
+            document.getElementById('save-icon').className = 'ti ti-cloud-upload text-blue-500';
+            
+            autoSaveTimeout = setTimeout(() => {
+                // Simulate save
+                localStorage.setItem('resume-draft', JSON.stringify(STATE));
+                document.getElementById('save-status').textContent = 'All changes saved';
+                document.getElementById('save-icon').className = 'ti ti-cloud-check text-green-500';
+            }, 1000);
+        }
+
+        function startAutoSave() {
+            setInterval(() => {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                document.getElementById('last-edit-time').textContent = timeString;
+            }, 60000);
+        }
+
+        // ============================================
+        // TEMPLATE SWITCHING
+        // ============================================
+        function switchTemplate(templateName) {
+            STATE.currentTemplate = templateName;
+            document.querySelectorAll('.template-thumb').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-template="${templateName}"]`).classList.add('active');
+            renderPreview();
+        }
+
+        // ============================================
+        // CUSTOMIZATION
+        // ============================================
+        function changeColor(color) {
+            STATE.customization.primaryColor = color;
+            renderPreview();
+        }
+
+        function changeFontSize(size) {
+            STATE.customization.fontSize = parseFloat(size);
+            renderPreview();
+        }
+
+        function changeLineSpacing(spacing) {
+            STATE.customization.lineSpacing = parseFloat(spacing);
+            renderPreview();
+        }
+
+        // ============================================
+        // AI FEATURES (MOCK)
+        // ============================================
+        function optimizeWithAI() {
+            if (STATE.credits < 2) {
+                alert('Insufficient credits. Please purchase more credits.');
+                return;
+            }
+            
+            // Show loading
+            alert('AI is optimizing your resume...\n\n• Strengthening action verbs\n• Adding quantifiable metrics\n• Improving keyword density\n• Enhancing impact statements');
+            
+            STATE.credits -= 2;
+            document.getElementById('credit-count').textContent = STATE.credits;
+            recalculateATS();
+        }
+
+        function aiOptimizeSection(id) {
+            alert(`AI optimization for section: ${id}\n\nThis would:\n• Rewrite for impact\n• Add power verbs\n• Suggest metrics\n• Match job keywords`);
+        }
+
+        function aiRewrite() {
+            alert('AI Rewrite: Select text to rewrite with AI');
+        }
+
+        function aiExpand() {
+            alert('AI Expand: Select text to expand with additional details');
+        }
+
+        function aiSummarize() {
+            alert('AI Summarize: Select text to make more concise');
+        }
+
+        function analyzeJobDescription() {
+            const jd = document.getElementById('jd-input').value;
+            if (!jd.trim()) {
+                alert('Please paste a job description first');
+                return;
+            }
+            
+            if (STATE.credits < 1) {
+                alert('Insufficient credits');
+                return;
+            }
+            
+            alert('Analyzing job description...\n\nFound:\n• 23 key requirements\n• 18 matching keywords in your resume\n• 5 missing keywords to add\n• 3 sections to emphasize');
+            
+            STATE.credits -= 1;
+            document.getElementById('credit-count').textContent = STATE.credits;
+            document.getElementById('keyword-match').textContent = '18/23';
+        }
+
+        function applySuggestion(type) {
+            alert(`Applying ${type} suggestion...`);
+            recalculateATS();
+        }
+
+        function spellCheck() {
+            alert('Spell check complete!\n\nNo errors found ✓');
+        }
+
+        // ============================================
+        // ATS SCORING
+        // ============================================
+        function recalculateATS() {
+            const newScore = Math.min(100, STATE.atsScore + Math.floor(Math.random() * 10));
+            STATE.atsScore = newScore;
+            
+            const circle = document.getElementById('ats-progress');
+            const scoreEl = document.getElementById('ats-score');
+            const circumference = 2 * Math.PI * 56;
+            const offset = circumference - (newScore / 100) * circumference;
+            
+            circle.style.strokeDashoffset = offset;
+            scoreEl.textContent = newScore;
+            scoreEl.classList.add('score-animate');
+            setTimeout(() => scoreEl.classList.remove('score-animate'), 400);
+        }
+
+        function showATSDetails() {
+            alert('ATS Detailed Report\n\n✓ Keyword Optimization: 82%\n✓ Format Compatibility: 90%\n✓ Section Structure: 95%\n⚠ Quantifiable Results: 68%\n⚠ Action Verbs: 75%\n\nRecommendations:\n1. Add more metrics and numbers\n2. Use stronger action verbs\n3. Include industry keywords');
+        }
+
+        // ============================================
+        // PREVIEW CONTROLS
+        // ============================================
+        function togglePreviewMode(mode) {
+            STATE.previewMode = mode;
+            document.getElementById('preview-desktop').className = mode === 'desktop' ? 'p-2 bg-blue-100 text-blue-600 rounded-lg' : 'p-2 hover:bg-gray-100 rounded-lg';
+            document.getElementById('preview-mobile').className = mode === 'mobile' ? 'p-2 bg-blue-100 text-blue-600 rounded-lg' : 'p-2 hover:bg-gray-100 rounded-lg';
+            
+            const canvas = document.getElementById('preview-canvas');
+            if (mode === 'mobile') {
+                canvas.style.width = '375px';
+                canvas.style.fontSize = '10px';
+            } else {
+                canvas.style.width = '8.5in';
+                canvas.style.fontSize = STATE.customization.fontSize + 'px';
+            }
+        }
+
+        function downloadPDF() {
+            alert('PDF download would be triggered here');
+        }
+
+        function printPreview() {
+            window.print();
+        }
+
+        function sharePreview() {
+            alert('Share options:\n• Copy link\n• Email\n• Download as PDF\n• Export to Google Drive');
+        }
+
+        // ============================================
+        // EXPORT
+        // ============================================
+        function triggerExport() {
+            alert('Export Options:\n\n1. Word Document (.docx) - $4.99\n2. PDF Premium - $3.99\n3. Both formats - $6.99\n\nIncludes:\n✓ Watermark removal\n✓ Full editing rights\n✓ Lifetime access\n✓ All templates');
+        }
+
+        // ============================================
+        // MODALS & UTILITIES
+        // ============================================
+        function showKeyboardShortcuts() {
+            document.getElementById('shortcuts-modal').classList.remove('hidden');
+            document.getElementById('shortcuts-modal').classList.add('flex');
+        }
+
+        function showTemplates() {
+            alert('Template gallery with 20+ professional templates');
+        }
+
+        function showVersionHistory() {
+            alert('Version History:\n\nToday, 2:45 PM - Current\nToday, 1:30 PM - Auto-saved\nYesterday, 4:20 PM - Manual save\n\nClick any version to restore');
+        }
+
+        // ============================================
+        // KEYBOARD SHORTCUTS
+        // ============================================
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Ctrl+Z: Undo
+                if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
                     e.preventDefault();
-                    alert("Security Shield Active: Watermarked preview locked. Complete standard verification to release the editable Word Document framework.");
+                    undo();
+                }
+                
+                // Ctrl+Y or Ctrl+Shift+Z: Redo
+                if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'z')) {
+                    e.preventDefault();
+                    redo();
+                }
+                
+                // Ctrl+S: Save
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    triggerAutoSave();
+                }
+                
+                // Ctrl+Shift+O: AI Optimize
+                if (e.ctrlKey && e.shiftKey && e.key === 'O') {
+                    e.preventDefault();
+                    optimizeWithAI();
+                }
+                
+                // Ctrl+Shift+A: Add Section
+                if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                    e.preventDefault();
+                    addSection();
+                }
+                
+                // ?: Show shortcuts
+                if (e.key === '?' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                    showKeyboardShortcuts();
+                }
+            });
+        }
+
+        // ============================================
+        // PROTECTION
+        // ============================================
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && ['c', 'C', 'x', 'X', 'p', 'P'].includes(e.key)) {
+                const selection = window.getSelection().toString();
+                if (selection && document.getElementById('preview-canvas').contains(window.getSelection().anchorNode)) {
+                    e.preventDefault();
+                    alert("Preview is protected. Export to unlock full document.");
                 }
             }
         });
-
-        document.addEventListener('dragstart', event => event.preventDefault());
-
-        function spendCreditToTailor() {
-            alert("Contacting parser... Keyword matrix injected. Deducting 1 application credit framework.");
-        }
-
-        function triggerPurchasePaywall() {
-            alert("Launching Razorpay security handler verification layer (₹199 entry sequence)...");
-        }
-
-        function logout() {
-            window.location.href = 'index.html';
-        }
     </script>
 </body>
 </html>
