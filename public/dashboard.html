@@ -42,9 +42,9 @@
     <!-- Top Navigation Bar -->
     <nav class="bg-[#0F3B68] text-white px-4 md:px-6 py-3 flex flex-wrap justify-between items-center shadow-md shrink-0 gap-3">
         <div class="flex items-center space-x-3">
-            <img src="/logo.png" alt="Logo" class="h-8 object-contain bg-white rounded p-0.5" onerror="this.style.display='none'">
-            <span class="font-bold text-lg md:text-xl tracking-wide hidden sm:inline-block">GetPerfectResume<span class="text-blue-400">.com</span></span>
-            <span class="bg-blue-900 text-[10px] px-2 py-0.5 rounded text-blue-300 font-mono hidden md:inline-block">Workspace v1.4</span>
+            <!-- Text Logo Removed, Only Image Logo Remains -->
+            <img src="/logo.png" alt="GetPerfectResume Logo" class="h-8 md:h-10 object-contain bg-white rounded p-0.5" onerror="this.style.display='none'">
+            <span class="bg-blue-900 text-[10px] px-2 py-0.5 rounded text-blue-300 font-mono hidden md:inline-block">Workspace v1.5</span>
         </div>
         
         <!-- Auto-Save Indicator -->
@@ -195,20 +195,22 @@
 
     <!-- WORKSPACE FRAMEWORK CORE LOGIC -->
     <script>
-        // Mock static profile data matrix
+        // EXPANDED DUMMY DATA FOR FULL 2-PAGE RESUME PREVIEW
         let activeProfile = {
             name: "AMIT SAXENA",
             title: "DEPUTY GENERAL MANAGER | CHANNEL MANAGEMENT & P&L OVERSIGHT",
-            summary: "Highly accomplished Executive with 27+ years of extensive experience driving strategic business development, market expansion, and channel management across diverse fast-paced consumer industries.",
+            summary: "Highly accomplished Executive with 27+ years of extensive experience driving strategic business development, market expansion, and channel management across diverse fast-paced consumer industries. Proven expertise in formulating and executing tactical initiatives, leading cross-functional teams, and building sophisticated sales models to consistently deliver exceptional results in revenue growth, operational performance, and profitability. Adept at navigating dynamic market environments, fostering strategic partnerships, and enhancing organizational profitability through effective leadership and analytical problem-solving.",
             contact: "+91 ●●●●●-●●●●●  |  a****a0601@gmail.com  |  New Delhi, India",
-            skills: ["Strategic Business Development", "Channel Management", "Key Account Management", "P&L Management", "Market Expansion", "Team Leadership"],
+            skills: ["Strategic Business Development", "Channel Management", "Key Account Management", "P&L Management", "Market Expansion", "Team Leadership", "Revenue Generation", "Market Analysis", "Cross-functional Collaboration", "Analytical Skills"],
             achievements: [
                 "Achieved highest growth award in compressor segment scaling regional sales margins by 34%.",
-                "Appointed 8 new strategic channel distribution partners within 2 years, securing emerging dealers recognition."
+                "Appointed 8 new strategic channel distribution partners within 2 years, securing emerging dealers recognition.",
+                "Consistently achieved the lowest MTTR (Mean Time To Repair) in services/maintenance monthly.",
+                "Received appreciation for outstanding performance in creating strategies that acquired more business deals."
             ],
-            experience: "Deputy General Manager - Samvardhana Motherson\nMay 2025 – Present\n• Led complete sales operations for India market segments.\n• Managed 9 high-performing team members to achieve annual operating targets.\n\nRegional Sales Leader - Ingersoll Rand\nJun 2010 – Jan 2019\n• Handled the complete channel network appointment process.\n• Led entire sales of Air Compressor Division in East Region.",
-            education: "Master of Business Administration (MBA) | University of Delhi (1998)",
-            certifications: ["Advance Certification Program in Leadership | IIM Lucknow (2019)"],
+            experience: "Deputy General Manager - Samvardhana Motherson\nMay 2025 – Present\n• Led complete sales and business development for Nirvana business (Commercial refrigeration) across the India market.\n• Directed 9 team members to achieve Annual Operating Plan (AOP) for equipment and after-sales services.\n• Appointed new dealers and managed channel network in potential territories across India.\n• Collaborated with major OEMs for tender participation and semi-government cooperative institutions.\n• Reviewed channel partner performance and appointed effective new channels to maximize reach.\n\nBusiness Line Manager - Gardner Denver Engineered Products\nFeb 2019 – Jan 2022\n• Ensured successful channel network for preset business targets amidst growing competition.\n• Identified prospective clients, generated new account business, and developed them for profitability.\n• Executed plans to reach unexplored market segments and customer groups using segmentation and penetration strategies.\n• Managed business operations through Distribution Team, achieving 22% growth in 2020.",
+            education: "Master of Business Administration (MBA) in Marketing | MJP Rohilkhand University (1998)\nBachelor of Science (B.Sc.) | MJP Rohilkhand University (1995)",
+            certifications: ["Advance Certification Program in Leadership for Business Excellence | IIM Lucknow (2019)"],
             personal: ["Date of Birth: 6th January 1976", "Languages: English, Hindi"]
         };
 
@@ -314,7 +316,7 @@
                     </div>` : ''}
                     ${activeProfile.skills.length ? `<div>
                         <h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Professional Skills</h2>
-                        <p class="text-gray-600 mt-1.5">${activeProfile.skills.join('  |  ')}</p>
+                        <p class="text-gray-600 mt-1.5 leading-relaxed">${activeProfile.skills.join('  |  ')}</p>
                     </div>` : ''}
                     <div>
                         <h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Work Experience</h2>
@@ -322,7 +324,7 @@
                     </div>
                     ${activeProfile.education ? `<div>
                         <h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Education</h2>
-                        <p class="text-gray-600 mt-1.5">${activeProfile.education}</p>
+                        <p class="text-gray-600 mt-1.5 whitespace-pre-line">${activeProfile.education}</p>
                     </div>` : ''}
                     ${activeProfile.certifications.length ? `<div>
                         <h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Certifications</h2>
@@ -341,7 +343,7 @@
                             <div class="text-center text-[10px] text-blue-300 border border-blue-800 py-4 rounded">Placeholder Photo</div>
                             <div>
                                 <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">CONTACT</h3>
-                                <p class="text-[10px] space-y-1 opacity-90">${activeProfile.contact.replace(/ \| /g, '<br>')}</p>
+                                <p class="text-[10px] space-y-1 opacity-90 leading-relaxed">${activeProfile.contact.replace(/ \| /g, '<br>')}</p>
                             </div>
                             ${activeProfile.skills.length ? `<div>
                                 <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">SKILLS</h3>
@@ -349,7 +351,7 @@
                             </div>` : ''}
                             ${activeProfile.education ? `<div>
                                 <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">EDUCATION</h3>
-                                <p class="text-[10px] opacity-90">${activeProfile.education}</p>
+                                <p class="text-[10px] opacity-90 whitespace-pre-line">${activeProfile.education}</p>
                             </div>` : ''}
                             ${activeProfile.certifications.length ? `<div>
                                 <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">CERTIFICATIONS</h3>
@@ -388,7 +390,7 @@
                             <h1 class="text-xl md:text-2xl font-bold text-[#1F4E79]">${activeProfile.name}</h1>
                             <p class="text-[11px] md:text-xs font-bold text-gray-700 mt-0.5 uppercase">${activeProfile.title}</p>
                         </div>
-                        <div class="md:col-span-5 md:border-l md:border-[#1F4E79] md:pl-3 text-[10px] text-gray-600 space-y-0.5">
+                        <div class="md:col-span-5 md:border-l md:border-[#1F4E79] md:pl-3 text-[10px] text-gray-600 space-y-0.5 leading-relaxed">
                             <p>${activeProfile.contact.replace(/ \| /g, '<br>')}</p>
                         </div>
                     </div>
@@ -401,7 +403,7 @@
                             ${activeProfile.skills.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">SKILLS</h3>
                             <ul class="space-y-1 text-gray-600 text-[10px] md:text-[11px]">${activeProfile.skills.map(s => `<li>• ${s}</li>`).join('')}</ul></div>` : ''}
                             ${activeProfile.education ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">EDUCATION</h3>
-                            <p class="text-[10px] text-gray-600">${activeProfile.education}</p></div>` : ''}
+                            <p class="text-[10px] text-gray-600 whitespace-pre-line">${activeProfile.education}</p></div>` : ''}
                             ${activeProfile.certifications.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">CERTIFICATIONS</h3>
                             <ul class="space-y-1 text-gray-600 text-[9px] md:text-[10px]">${activeProfile.certifications.map(c => `<li>• ${c}</li>`).join('')}</ul></div>` : ''}
                             ${activeProfile.personal.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">PERSONAL DETAILS</h3>
@@ -423,7 +425,7 @@
                             <h1 class="text-xl md:text-2xl font-bold text-green-800">${activeProfile.name}</h1>
                             <p class="text-[11px] md:text-xs font-semibold text-gray-700 uppercase mt-0.5">${activeProfile.title}</p>
                         </div>
-                        <div class="md:col-span-5 md:text-right text-[10px] text-gray-500 space-y-0.5">
+                        <div class="md:col-span-5 md:text-right text-[10px] text-gray-500 space-y-0.5 leading-relaxed">
                             <p>${activeProfile.contact.replace(/ \| /g, '<br>')}</p>
                         </div>
                     </div>
@@ -433,7 +435,7 @@
                         <p class="text-gray-600 leading-relaxed text-justify">${activeProfile.summary}</p>
                         
                         ${activeProfile.skills.length ? `<div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] md:text-[11px] font-bold text-green-800 uppercase tracking-wider whitespace-nowrap">Competencies</span><div class="flex-grow border-b border-green-700"></div></div>
-                        <p class="text-center text-gray-600 font-medium text-[10px] md:text-[11px]">${activeProfile.skills.join('   •   ')}</p>` : ''}
+                        <p class="text-center text-gray-600 font-medium text-[10px] md:text-[11px] leading-relaxed">${activeProfile.skills.join('   •   ')}</p>` : ''}
 
                         ${activeProfile.achievements.length ? `<div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] md:text-[11px] font-bold text-green-800 uppercase tracking-wider whitespace-nowrap">Achievements</span><div class="flex-grow border-b border-green-700"></div></div>
                         <ul class="list-disc pl-4 text-gray-600 space-y-0.5">${activeProfile.achievements.map(ach => `<li>${ach}</li>`).join('')}</ul>` : ''}
@@ -442,7 +444,7 @@
                         <div class="text-gray-600">${expFormatted}</div>
 
                         ${activeProfile.education ? `<div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] md:text-[11px] font-bold text-green-800 uppercase tracking-wider whitespace-nowrap">Education</span><div class="flex-grow border-b border-green-700"></div></div>
-                        <p class="text-gray-600 text-center">${activeProfile.education}</p>` : ''}
+                        <p class="text-gray-600 text-center whitespace-pre-line">${activeProfile.education}</p>` : ''}
                         
                         ${activeProfile.certifications.length ? `<div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] md:text-[11px] font-bold text-green-800 uppercase tracking-wider whitespace-nowrap">Certifications</span><div class="flex-grow border-b border-green-700"></div></div>
                         <ul class="list-disc pl-4 text-gray-600 space-y-0.5">${activeProfile.certifications.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
