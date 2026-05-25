@@ -361,4 +361,85 @@ app.get('/blog/:postName', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'blog', `${postName}.html`));
 });
 
+// A. Login / Fetch Profile Endpoint
+app.post('/api/auth', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ error: "Email is required" });
+
+        // Check if user already exists
+        let { data: user, error: fetchError } = await supabase
+            .from('candidate_profiles')
+            .select('*')
+            .eq('email', email)
+            .single();
+
+        // If user doesn't exist, create a new row with 2 free credits
+        if (!user || fetchError) {
+            const { data: newUser, error: insertError } = await supabase
+                .from('candidate_profiles')
+                .insert([{ email: email, credits: 2, master_resume: {} }])
+                .select()
+                .single();
+                
+            if (insertError) throw new Error("Failed to create user profile");
+            user = newUser;
+        }
+
+        res.json({ success: true, profile: user });
+    } catch (error) {
+        console.error("Auth Error:", error);
+        res.status(500).json({ error: "Authentication failed" });
+    }
+});
+
+// B. Save / Update Master Profile
+app.post('/api/save-profile', async (req, res) => {
+    try {
+        const { email, resumeData } = req.body;
+        if (!email || !resumeData) return res.status(400).json({ error: "Missing data" });
+
+        const { error } = await supabase
+            .from('candidate_profiles')
+            .update({ master_resume: resumeData })
+            .eq('email', email);
+
+        if (error) throw error;
+        res.json({ success: true, message: "Profile saved to cloud" });
+    } catch (error) {
+        console.error("Save Error:", error);
+        res.status(500).json({ error: "Failed to save profile" });
+    }
+});
+
+// C. Spend a Tailor Credit
+app.post('/api/use-credit', async (req, res) => {
+    try {
+        const { email } = req.body;
+        
+        // 1. Fetch current credits
+        const { data: user } = await supabase
+            .from('candidate_profiles')
+            .select('credits')
+            .eq('email', email)
+            .single();
+
+        if (!user) return res.status(404).json({ error: "User not found" });
+        if (user.credits <= 0) return res.status(403).json({ error: "Out of credits", redirect: "paywall" });
+
+        // 2. Deduct 1 credit
+        const newBalance = user.credits - 1;
+        const { error: updateError } = await supabase
+            .from('candidate_profiles')
+            .update({ credits: newBalance })
+            .eq('email', email);
+
+        if (updateError) throw updateError;
+        res.json({ success: true, remainingCredits: newBalance });
+    } catch (error) {
+        console.error("Credit Error:", error);
+        res.status(500).json({ error: "Failed to process credit" });
+    }
+});
+
 app.listen(port, () => { console.log(`Engine running at port ${port}`); });
