@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    // On page load, verify user session and pull data
+document.addEventListener('DOMContentLoaded', async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+        window.location.href = 'index.html'; // Kick them back if they try to bypass login
+        return;
+    }
+    
+    // Now that they are logged in, send their email to your new /api/auth route
+    // This creates their account/credits in your database
+    fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: session.user.email })
+    });
+});
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Candidate Workspace | GetPerfectResume</title>
@@ -476,9 +492,77 @@
             alert("This connects to the backend inference module. It will tailor the resume against the target JD and deduct 1 credit.");
         }
 
-        function triggerPurchasePaywall() {
-            alert("Launching Razorpay security handler verification layer (₹199 entry sequence)...");
-        }
+// REPLACE your existing triggerPurchasePaywall with this:
+
+async function triggerPurchasePaywall() {
+    // 1. Create the modal UI dynamically
+    const modalHTML = `
+        <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[100] p-4">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-sm space-y-5">
+                <h3 class="text-xl font-bold text-gray-800">Finalize Download</h3>
+                <p class="text-sm text-gray-600">Unlock your ATS-optimized Word document and 2 additional tailor credits.</p>
+                
+                <input type="text" id="promo-code-input" class="w-full p-3 border border-gray-300 rounded-lg uppercase text-sm font-semibold tracking-wide" placeholder="HAVE A PROMO CODE?">
+                
+                <button id="pay-btn" onclick="processPayment()" class="w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition text-sm">
+                    Pay ₹199 & Download
+                </button>
+                <button onclick="closeModal()" class="w-full text-xs text-gray-400 font-medium hover:underline">Cancel</button>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function closeModal() {
+    const modal = document.getElementById('payment-modal');
+    if (modal) modal.remove();
+}
+
+// 2. This is the logic that actually talks to your server
+async function processPayment() {
+    const btn = document.getElementById('pay-btn');
+    const promoCode = document.getElementById('promo-code-input').value;
+    
+    btn.innerText = "Processing...";
+    btn.disabled = true;
+
+    try {
+        // Fetch the order from your server
+        const response = await fetch('/api/create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                promoCode: promoCode,
+                email: "user-email-placeholder" // We will bind this to your Supabase session in the next step
+            })
+        });
+        
+        const orderData = await response.json();
+        
+        // Open Razorpay (Existing logic you already have in your index.html)
+        const options = {
+            "key": "YOUR_RAZORPAY_KEY", // Make sure this is defined
+            "amount": orderData.amount,
+            "currency": "INR",
+            "name": "GetPerfectResume.com",
+            "order_id": orderData.id,
+            "handler": function (response){
+                // After success, trigger download
+                downloadResume('Paid Download');
+                closeModal();
+            },
+            "theme": { "color": "#0F3B68" }
+        };
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+
+    } catch (error) {
+        alert("Payment initialization failed. Please try again.");
+        btn.innerText = "Pay ₹199 & Download";
+        btn.disabled = false;
+    }
+}        
 
         function logout() {
             window.location.href = 'index.html';
