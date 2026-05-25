@@ -7,7 +7,12 @@ const Razorpay = require('razorpay');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto'); // <-- SECURITY ADDITION: Required for verifying Razorpay signatures
+const { createClient } = require('@supabase/supabase-js');
 
+// Initialize Supabase using Environment Variables for Security
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 const app = express();
 const port = process.env.PORT || 3000;
 
