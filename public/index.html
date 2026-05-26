@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // Initialize the same way as your server
+    const supabase = supabase.createClient('https://vkiitostqcjkiyflcjhu.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraWl0b3N0cWNqa2l5Zmxjamh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MTgyNDEsImV4cCI6MjA5NTI5NDI0MX0.a1vvLGJPEJ9l7v3HgHQQ4dIRs8HLN8IEPuGqnm-lHC4'); 
+</script>
     <link rel="icon" type="image/png" href="/favicon.png">
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3F3M7P5F41"></script>
@@ -278,6 +283,8 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
         <div id="loading-section" class="hidden flex flex-col items-center mt-32 w-full px-4 mb-32">
             <div class="relative w-20 h-20 mb-6">
@@ -305,7 +312,7 @@
                     </div>
                 </div>
 
-<div class="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-200 overflow-hidden relative">
+                <div class="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-200 overflow-hidden relative">
     <div class="absolute top-0 left-0 w-full h-1 bg-green-500"></div>
     
     <!-- Top Bar -->
@@ -327,8 +334,7 @@
         
         <!-- Blurred Section with Embedded Login Card -->
         <div class="relative">
-            
-            <!-- Blurred Dummy Content (Extended height to prevent clipping) -->
+            <!-- Blurred Dummy Content (Extended slightly to ensure the card fits) -->
             <div class="blur-md select-none opacity-40">
                 <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Achievements & Awards</h3>
                 <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
@@ -339,13 +345,7 @@
                 <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
                 <div class="h-2 w-11/12 bg-gray-300 rounded mb-2"></div>
                 <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
-                
-                <!-- Added Education block to stretch container naturally -->
-                <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Education</h3>
-                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
-                
-                <!-- The Spacer Guarantee -->
-                <div class="h-40 w-full"></div> 
+                <div class="h-24"></div> <!-- Spacer to ensure container is tall enough for the card -->
             </div>
             
             <!-- NEW OVERLAY: Candidate Workspace Card -->
@@ -363,7 +363,7 @@
                         <li class="flex items-center"><span class="text-green-500 mr-2">✅</span> Re-Tailor against Target Jobs (JD)</li>
                     </ul>
 
-                    <!-- The Google Login Button (Now safely visible) -->
+                    <!-- The Google Login Button -->
                     <button id="google-login-btn" class="w-full py-3.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold rounded-xl shadow-sm transition flex justify-center items-center gap-3 text-sm md:text-base">
                         <!-- Google G Logo SVG -->
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -376,7 +376,6 @@
                     </button>
                 </div>
             </div>
-            
         </div>
     </div>
 </div>
@@ -1320,28 +1319,25 @@
 </div>
 <script>
     // 1. Initialize Supabase Connection
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    // 1. Declare variables FIRST before using them
     const supabaseUrl = 'https://vkiitostqcjkiyflcjhu.supabase.co';
     const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraWl0b3N0cWNqa2l5Zmxjamh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MTgyNDEsImV4cCI6MjA5NTI5NDI0MX0.a1vvLGJPEJ9l7v3HgHQQ4dIRs8HLN8IEPuGqnm-lHC4';
+    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-    // 2. Create client using a safe variable name (NOT "supabase")
-    const { createClient } = supabase;
-    const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
-
-    // 3. Attach Google Login to the button
+    // 2. Attach Google Login to the button
     const googleBtn = document.getElementById('google-login-btn');
-
+    
     if (googleBtn) {
         googleBtn.addEventListener('click', async () => {
+            // Give user visual feedback that a process has started
             const originalHTML = googleBtn.innerHTML;
             googleBtn.innerHTML = "Connecting to Google...";
             googleBtn.disabled = true;
 
-            const { data, error } = await supabaseClient.auth.signInWithOAuth({
+            // Trigger Supabase Google OAuth
+            const { data, error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
+                    // Redirect directly to the dashboard upon successful login
                     redirectTo: window.location.origin + '/dashboard.html'
                 }
             });
@@ -1357,4 +1353,3 @@
 </script>
 </body>
 </html>
-
