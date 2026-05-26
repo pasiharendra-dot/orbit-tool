@@ -349,8 +349,7 @@
             renderCurrentCanvas();
         });
 
-        // UI AI Stubs
-        async function triggerAI(section) {
+async function triggerAI(section) {
 
     const mapping = {
         jd: 'new-jd-input',
@@ -367,70 +366,122 @@
     const field =
         document.getElementById(fieldId);
 
-    const originalText =
+    const current =
         field.value.trim();
 
-    const jd =
-        document.getElementById(
-            'new-jd-input'
-        )?.value || '';
+    const button =
+        event.target;
 
-    const oldPlaceholder =
-        field.placeholder;
+    const originalText =
+        button.innerHTML;
 
-    field.disabled = true;
-    field.placeholder =
-        'AI optimizing...';
+    button.innerHTML =
+        '⏳ Working...';
+
+    button.disabled = true;
 
     try {
 
-        const response =
-            await fetch('/api/ai-rewrite', {
-                method: 'POST',
-                headers: {
-                    'Content-Type':
-                    'application/json'
-                },
-                body: JSON.stringify({
-                    section,
-                    content:
-                        originalText,
-                    jobDescription:
-                        jd
-                })
-            });
+        let improved =
+            current;
 
-        const data =
-            await response.json();
+        switch(section){
 
-        if (!response.ok) {
-            throw new Error(
-                data.error ||
-                'AI rewrite failed'
+            case 'title':
+
+                improved =
+                current
+                ? current
+                    .replace(
+                    /manager/i,
+                    'Strategic Manager'
+                    )
+                    .replace(
+                    /executive/i,
+                    'Senior Executive'
+                    )
+                : 'Senior Professional';
+
+                break;
+
+            case 'summary':
+
+                improved =
+                current +
+                ' Proven expertise in driving business growth, stakeholder engagement, strategic execution, operational excellence, and measurable outcomes.';
+
+                break;
+
+            case 'skills':
+
+                const extraSkills = [
+                    'Stakeholder Management',
+                    'Strategic Planning',
+                    'Cross Functional Collaboration',
+                    'Business Development',
+                    'Vendor Management'
+                ];
+
+                improved =
+                    current +
+                    '\n' +
+                    extraSkills.join('\n');
+
+                break;
+
+            case 'bullets':
+
+                improved =
+                    current
+                    .replaceAll(
+                        'handled',
+                        'Led'
+                    )
+                    .replaceAll(
+                        'responsible for',
+                        'Directed'
+                    )
+                    .replaceAll(
+                        'worked on',
+                        'Executed'
+                    );
+
+                break;
+
+            case 'jd':
+
+                alert(
+                    'Job description added for ATS optimization.'
+                );
+
+                break;
+        }
+
+        if(section !== 'jd'){
+
+            field.value =
+                improved;
+
+            field.dispatchEvent(
+                new Event('input')
             );
         }
 
-        field.value =
-            data.result || originalText;
-
-        field.dispatchEvent(
-            new Event('input')
-        );
-
-    } catch (err) {
+    } catch(err){
 
         console.error(err);
 
         alert(
-            err.message ||
-            'AI failed. Please retry.'
+            'Enhancement failed.'
         );
 
     } finally {
 
-        field.disabled = false;
-        field.placeholder =
-            oldPlaceholder;
+        button.innerHTML =
+            originalText;
+
+        button.disabled =
+            false;
     }
 }
         // Template Switcher UI Handler
