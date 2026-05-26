@@ -972,7 +972,7 @@ function openPrintPreview() {
 
     generateA4Pages(previewContent);
 }
-        function generateA4Pages(contentHTML) {
+ function generateA4Pages(contentHTML) {
 
     const wrapper =
         document.getElementById(
@@ -981,33 +981,38 @@ function openPrintPreview() {
 
     wrapper.innerHTML = '';
 
-    // Hidden render area
+    // Create hidden A4 render area
     const temp =
         document.createElement('div');
 
-    temp.style.position = 'absolute';
-    temp.style.left = '-99999px';
-    temp.style.top = '0';
-    temp.style.width = '182mm';
-    temp.style.padding = '14mm';
-    temp.style.background = '#fff';
-    temp.style.fontSize = '11pt';
-    temp.style.lineHeight = '1.45';
+    temp.style.position =
+        'absolute';
 
-    temp.innerHTML = contentHTML;
+    temp.style.left =
+        '-99999px';
 
-    document.body.appendChild(temp);
+    temp.style.top =
+        '0';
+
+    temp.style.width =
+        '182mm';
+
+    temp.style.padding =
+        '14mm';
+
+    temp.style.background =
+        '#fff';
+
+    temp.innerHTML =
+        contentHTML;
+
+    document.body.appendChild(
+        temp
+    );
 
     const PAGE_HEIGHT = 980;
 
-    // Grab ALL meaningful blocks
-    const contentBlocks =
-        temp.querySelectorAll(
-            'h1, h2, h3, p, li, ul, div'
-        );
-
-    let currentPageHTML = '';
-
+    // Create test container
     const testPage =
         document.createElement('div');
 
@@ -1027,46 +1032,57 @@ function openPrintPreview() {
         testPage
     );
 
-    contentBlocks.forEach(block => {
+    // Get ONLY top content blocks
+    const blocks =
+        Array.from(
+            temp.children
+        );
+
+    let currentHTML = '';
+
+    blocks.forEach(block => {
 
         const clone =
             block.cloneNode(true);
 
-        const trialHTML =
-            currentPageHTML +
+        testPage.innerHTML =
+            currentHTML +
             clone.outerHTML;
 
-        testPage.innerHTML =
-            trialHTML;
-
+        // If page overflows
         if (
             testPage.scrollHeight >
             PAGE_HEIGHT
         ) {
 
-            createPreviewPage(
-                wrapper,
-                currentPageHTML
-            );
+            if (
+                currentHTML.trim()
+            ) {
 
-            currentPageHTML =
+                createPreviewPage(
+                    wrapper,
+                    currentHTML
+                );
+            }
+
+            currentHTML =
                 clone.outerHTML;
 
         } else {
 
-            currentPageHTML =
-                trialHTML;
+            currentHTML +=
+                clone.outerHTML;
         }
     });
 
-    // Last page
+    // Final page
     if (
-        currentPageHTML.trim()
+        currentHTML.trim()
     ) {
 
         createPreviewPage(
             wrapper,
-            currentPageHTML
+            currentHTML
         );
     }
 
