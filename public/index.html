@@ -1335,6 +1335,9 @@
 
     if (googleBtn) {
         googleBtn.addEventListener('click', async () => {
+                if (window.resumeData) {
+        localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
+    }
             const originalHTML = googleBtn.innerHTML;
             googleBtn.innerHTML = "Connecting to Google...";
             googleBtn.disabled = true;
