@@ -350,10 +350,89 @@
         });
 
         // UI AI Stubs
-        function triggerAI(section) {
-            alert(`AI Module locked in preview mode. Connecting to backend inference for [${section}] requires an active API connection.`);
+        async function triggerAI(section) {
+
+    const mapping = {
+        jd: 'new-jd-input',
+        title: 'edit-title',
+        summary: 'edit-summary',
+        skills: 'edit-skills',
+        bullets: 'edit-experience'
+    };
+
+    const fieldId = mapping[section];
+
+    if (!fieldId) return;
+
+    const field =
+        document.getElementById(fieldId);
+
+    const originalText =
+        field.value.trim();
+
+    const jd =
+        document.getElementById(
+            'new-jd-input'
+        )?.value || '';
+
+    const oldPlaceholder =
+        field.placeholder;
+
+    field.disabled = true;
+    field.placeholder =
+        'AI optimizing...';
+
+    try {
+
+        const response =
+            await fetch('/api/ai-rewrite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':
+                    'application/json'
+                },
+                body: JSON.stringify({
+                    section,
+                    content:
+                        originalText,
+                    jobDescription:
+                        jd
+                })
+            });
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error ||
+                'AI rewrite failed'
+            );
         }
 
+        field.value =
+            data.result || originalText;
+
+        field.dispatchEvent(
+            new Event('input')
+        );
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert(
+            err.message ||
+            'AI failed. Please retry.'
+        );
+
+    } finally {
+
+        field.disabled = false;
+        field.placeholder =
+            oldPlaceholder;
+    }
+}
         // Template Switcher UI Handler
         function switchPreviewTemplate(templateId) {
             currentActiveTemplate = templateId;
