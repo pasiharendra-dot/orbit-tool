@@ -251,7 +251,17 @@
                             </div>
                     </div>
                 </div>
+<button onclick="openPrintPreview()" 
+class="w-full xl:w-auto bg-[#0F3B68] hover:bg-[#0b2d50] text-white font-bold text-xs md:text-sm px-4 md:px-5 py-2 md:py-2.5 rounded-lg shadow-sm transition flex items-center justify-center whitespace-nowrap shrink-0">
 
+    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+        </path>
+    </svg>
+
+    Print Preview
+</button>
                 <button onclick="triggerPurchasePaywall()" class="w-full xl:w-auto bg-green-600 hover:bg-green-700 text-white font-bold text-xs md:text-sm px-4 md:px-5 py-2 md:py-2.5 rounded-lg shadow-sm transition flex items-center justify-center whitespace-nowrap shrink-0">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     Download .docx
@@ -837,7 +847,7 @@ canvas.innerHTML = `
             if (e.ctrlKey || e.metaKey) {
                 if (['c', 'C', 'x', 'X', 's', 'S', 'p', 'P'].includes(e.key)) {
                     e.preventDefault();
-                    alert("Security Shield Active: Watermarked preview locked. Complete standard verification to release the editable Word Document framework.");
+                    alert("Preview locked. Downloadable Word document unlocks after payment.");
                 }
             }
         });
@@ -870,7 +880,80 @@ canvas.innerHTML = `
             const modal = document.getElementById('payment-modal');
             if (modal) modal.remove();
         }
+function openPrintPreview() {
 
+    const previewContent =
+        document.getElementById(
+            'workspace-canvas'
+        ).innerHTML;
+
+    const modalHTML = `
+    <div id="preview-modal"
+         class="fixed inset-0 bg-black/70 z-[9999] flex items-center justify-center p-4">
+
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] overflow-hidden flex flex-col">
+
+            <div class="bg-[#0F3B68] text-white px-6 py-4 flex justify-between items-center">
+
+                <div>
+                    <h2 class="font-bold text-lg">
+                        Resume Preview
+                    </h2>
+
+                    <p class="text-blue-200 text-xs">
+                        Preview only — download available after unlock
+                    </p>
+                </div>
+
+                <button onclick="closePreviewModal()"
+                        class="text-white hover:text-gray-300 text-xl font-bold">
+                    ✕
+                </button>
+            </div>
+
+            <div class="bg-gray-100 px-6 py-2 border-b text-center">
+
+                <span class="text-[11px] font-semibold text-red-500">
+                    Preview Mode Active — Printing & Download Disabled
+                </span>
+
+            </div>
+
+            <div id="preview-body"
+                 class="flex-1 overflow-y-auto bg-gray-200 p-8">
+
+                <div class="bg-white max-w-[850px] mx-auto shadow-xl min-h-[1100px] p-10 preview-font">
+
+                    ${previewContent}
+
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+
+    document.body.insertAdjacentHTML(
+        'beforeend',
+        modalHTML
+    );
+
+    document.body.style.overflow =
+        'hidden';
+}
+
+function closePreviewModal() {
+
+    const modal =
+        document.getElementById(
+            'preview-modal'
+        );
+
+    if(modal)
+        modal.remove();
+
+    document.body.style.overflow =
+        'auto';
+}
         async function processPayment() {
             const btn = document.getElementById('pay-btn');
             const promoCode = document.getElementById('promo-code-input').value;
