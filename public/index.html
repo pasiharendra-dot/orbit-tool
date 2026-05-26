@@ -334,7 +334,8 @@
         
         <!-- Blurred Section with Embedded Login Card -->
         <div class="relative">
-            <!-- Blurred Dummy Content (Extended slightly to ensure the card fits) -->
+            
+            <!-- Blurred Dummy Content (Extended height to prevent clipping) -->
             <div class="blur-md select-none opacity-40">
                 <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Achievements & Awards</h3>
                 <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
@@ -345,7 +346,13 @@
                 <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
                 <div class="h-2 w-11/12 bg-gray-300 rounded mb-2"></div>
                 <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
-                <div class="h-24"></div> <!-- Spacer to ensure container is tall enough for the card -->
+                
+                <!-- Added Education block to stretch container naturally -->
+                <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Education</h3>
+                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
+                
+                <!-- The Spacer Guarantee -->
+                <div class="h-40 w-full"></div> 
             </div>
             
             <!-- NEW OVERLAY: Candidate Workspace Card -->
@@ -363,7 +370,7 @@
                         <li class="flex items-center"><span class="text-green-500 mr-2">✅</span> Re-Tailor against Target Jobs (JD)</li>
                     </ul>
 
-                    <!-- The Google Login Button -->
+                    <!-- The Google Login Button (Now safely visible) -->
                     <button id="google-login-btn" class="w-full py-3.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold rounded-xl shadow-sm transition flex justify-center items-center gap-3 text-sm md:text-base">
                         <!-- Google G Logo SVG -->
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -376,6 +383,7 @@
                     </button>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
