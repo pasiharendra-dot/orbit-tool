@@ -212,7 +212,7 @@
         // Supabase Initialization
         const supabaseUrl = 'https://vkiitostqcjkiyflcjhu.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraWl0b3N0cWNqa2l5Zmxjamh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MTgyNDEsImV4cCI6MjA5NTI5NDI0MX0.a1vvLGJPEJ9l7v3HgHQQ4dIRs8HLN8IEPuGqnm-lHC4'; 
-        const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
         let currentUserEmail = "";
         let currentActiveTemplate = 'sentinel';
@@ -237,7 +237,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             
             // 1. Session Auth Check
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) {
                 window.location.href = 'index.html'; 
                 return;
@@ -699,7 +699,7 @@ canvas.innerHTML = `
         }        
 
         async function logout() {
-            await supabase.auth.signOut();
+            await supabaseClient.auth.signOut();
             window.location.href = 'index.html';
         }
     </script>
