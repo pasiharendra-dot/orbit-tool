@@ -37,6 +37,40 @@
         
         /* Layout Tuning for Previews */
         .preview-font { font-family: 'Calibri', sans-serif; }
+        /* =========================
+   A4 PRINT PREVIEW
+========================= */
+
+.a4-page {
+    width: 210mm;
+    height: 297mm;
+    background: white;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #d1d5db;
+}
+
+.resume-page-content {
+    padding: 14mm;
+    height: 100%;
+    overflow: hidden;
+    font-size: 11pt;
+    line-height: 1.45;
+}
+
+/* LOCKED WATERMARK */
+.a4-page::after {
+    content: "PREVIEW LOCKED";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: 68px;
+    font-weight: 900;
+    color: rgba(15,59,104,0.04);
+    pointer-events: none;
+    white-space: nowrap;
+}
     </style>
 </head>
 <body class="bg-gray-50 font-sans protected-zone flex flex-col min-h-screen">
@@ -922,32 +956,17 @@ function openPrintPreview() {
             <div id="preview-body"
                  class="flex-1 overflow-y-auto bg-[#d9d9d9] p-10">
 
-                <div class="flex justify-center py-8">
+                <div class="flex justify-center py-10">
 
-    <div
-        class="bg-white shadow-2xl preview-font relative overflow-hidden"
-        style="
-            width: 210mm;
-            min-height: 297mm;
-            padding: 14mm;
-            transform: scale(0.9);
-            transform-origin: top center;
-        "
-    >
+    <div id="a4-preview-wrapper"
+         class="flex flex-col gap-8 items-center">
 
-        <!-- PAPER BORDER -->
-        <div class="absolute inset-0 border border-gray-200 pointer-events-none"></div>
+        <div class="a4-page bg-white shadow-2xl preview-font relative">
 
-        <!-- WATERMARK -->
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] overflow-hidden">
-            <div class="rotate-[-35deg] text-[70px] font-black text-[#0F3B68] whitespace-nowrap">
-                PREVIEW LOCKED • PREVIEW LOCKED • PREVIEW LOCKED
+            <div class="resume-page-content">
+                ${previewContent}
             </div>
-        </div>
 
-        <!-- RESUME CONTENT -->
-        <div class="relative z-10 text-[11pt] leading-[1.45] text-black">
-            ${previewContent}
         </div>
 
     </div>
