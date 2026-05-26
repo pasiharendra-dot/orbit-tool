@@ -12,6 +12,7 @@ const { createClient } = require('@supabase/supabase-js');
 // Initialize Supabase using Environment Variables for Security
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+console.log("Checking Render Env:", process.env.SUPABASE_URL ? "URL EXISTS" : "URL IS MISSING");
 const supabase = createClient(supabaseUrl, supabaseKey);
 const app = express();
 const port = process.env.PORT || 3000;
