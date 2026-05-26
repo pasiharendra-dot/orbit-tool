@@ -920,13 +920,39 @@ function openPrintPreview() {
             </div>
 
             <div id="preview-body"
-                 class="flex-1 overflow-y-auto bg-gray-200 p-8">
+                 class="flex-1 overflow-y-auto bg-[#d9d9d9] p-10">
 
-                <div class="bg-white max-w-[850px] mx-auto shadow-xl min-h-[1100px] p-10 preview-font">
+                <div class="flex justify-center py-8">
 
-                    ${previewContent}
+    <div
+        class="bg-white shadow-2xl preview-font relative overflow-hidden"
+        style="
+            width: 210mm;
+            min-height: 297mm;
+            padding: 14mm;
+            transform: scale(0.9);
+            transform-origin: top center;
+        "
+    >
 
-                </div>
+        <!-- PAPER BORDER -->
+        <div class="absolute inset-0 border border-gray-200 pointer-events-none"></div>
+
+        <!-- WATERMARK -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] overflow-hidden">
+            <div class="rotate-[-35deg] text-[70px] font-black text-[#0F3B68] whitespace-nowrap">
+                PREVIEW LOCKED • PREVIEW LOCKED • PREVIEW LOCKED
+            </div>
+        </div>
+
+        <!-- RESUME CONTENT -->
+        <div class="relative z-10 text-[11pt] leading-[1.45] text-black">
+            ${previewContent}
+        </div>
+
+    </div>
+
+</div>
             </div>
         </div>
     </div>
