@@ -228,12 +228,12 @@
         document.addEventListener('DOMContentLoaded', async () => {
             
             // 1. Session Auth Check
-// const { data: { session } } = await supabase.auth.getSession();
-// if (!session) {
-//     window.location.href = 'index.html'; 
-//     return;
-// }
-// currentUserEmail = session.user.email;
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+    window.location.href = 'index.html'; 
+    return;
+ }
+ currentUserEmail = session.user.email;
 
             // 2. Register user on backend
             fetch('/api/auth', {
