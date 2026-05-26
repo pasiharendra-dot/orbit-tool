@@ -372,7 +372,7 @@
         function renderCurrentCanvas() {
             const canvas = document.getElementById('workspace-canvas');
             
-            const expFormatted = activeProfile.experience.split('\n').map(line => {
+            const expFormatted = (activeProfile.experience || '').split('\n').map(line => {
                 if(line.startsWith('•') || line.startsWith('-')) return `<li class="ml-4 list-disc">${line.substring(1).trim()}</li>`;
                 if(line.trim() === '') return `<br>`;
                 return `<p class="font-bold text-gray-800 mt-2">${line}</p>`;
@@ -462,41 +462,120 @@
                     </div>
                 `;
             }
-            else if (currentActiveTemplate === 'creative') {
-                canvas.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 border-b-2 border-[#1F4E79] pb-3 mb-3">
-                        <div class="md:col-span-7">
-                            <h1 class="text-xl md:text-2xl font-bold text-[#1F4E79]">${activeProfile.name}</h1>
-                            <p class="text-[11px] md:text-xs font-bold text-gray-700 mt-0.5 uppercase">${activeProfile.title}</p>
-                        </div>
-                        <div class="md:col-span-5 md:border-l md:border-[#1F4E79] md:pl-3 text-[10px] text-gray-600 space-y-0.5 leading-relaxed">
-                            <p>${activeProfile.contact.replace(/ \| /g, '<br>')}</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h2 class="text-[11px] md:text-xs font-bold text-[#1F4E79] tracking-wide uppercase">Professional Summary</h2>
-                        <p class="text-gray-600 mt-1 leading-relaxed text-justify">${activeProfile.summary}</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 mt-4 border-t border-gray-200 pt-3">
-                        <div class="md:col-span-4 space-y-3">
-                            ${activeProfile.skills.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">SKILLS</h3>
-                            <ul class="space-y-1 text-gray-600 text-[10px] md:text-[11px]">${activeProfile.skills.map(s => `<li>• ${s}</li>`).join('')}</ul></div>` : ''}
-                            ${activeProfile.education ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">EDUCATION</h3>
-                            <p class="text-[10px] text-gray-600 whitespace-pre-line">${activeProfile.education}</p></div>` : ''}
-                            ${activeProfile.certifications.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">CERTIFICATIONS</h3>
-                            <ul class="space-y-1 text-gray-600 text-[9px] md:text-[10px]">${activeProfile.certifications.map(c => `<li>• ${c}</li>`).join('')}</ul></div>` : ''}
-                            ${activeProfile.personal.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">PERSONAL DETAILS</h3>
-                            <ul class="space-y-1 text-gray-600 text-[9px] md:text-[10px]">${activeProfile.personal.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
-                        </div>
-                        <div class="md:col-span-8 space-y-3">
-                            ${activeProfile.achievements.length ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">ACHIEVEMENTS</h3>
-                            <ul class="list-disc pl-4 text-gray-600 space-y-0.5">${activeProfile.achievements.map(ach => `<li>${ach}</li>`).join('')}</ul></div>` : ''}
-                            <div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">EXPERIENCE</h3>
-                            <div class="text-gray-600">${expFormatted}</div>
-                        </div>
-                    </div>
-                `;
+            else if (
+currentActiveTemplate === 'creative'
+) {
+
+canvas.innerHTML = `
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 border-b-2 border-[#1F4E79] pb-3 mb-3">
+
+    <div class="md:col-span-7">
+        <h1 class="text-xl md:text-2xl font-bold text-[#1F4E79]">
+            ${activeProfile.name}
+        </h1>
+
+        <p class="text-[11px] md:text-xs font-bold text-gray-700 mt-0.5 uppercase">
+            ${activeProfile.title}
+        </p>
+    </div>
+
+    <div class="md:col-span-5 md:border-l md:border-[#1F4E79] md:pl-3 text-[10px] text-gray-600 space-y-0.5 leading-relaxed">
+        <p>
+            ${activeProfile.contact.replace(/ \| /g, '<br>')}
+        </p>
+    </div>
+
+</div>
+
+<div class="space-y-4">
+
+    <div>
+        <h2 class="text-[11px] md:text-xs font-bold text-[#1F4E79] tracking-wide uppercase">
+            Professional Summary
+        </h2>
+
+        <p class="text-gray-600 mt-1 leading-relaxed text-justify">
+            ${activeProfile.summary}
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 mt-4 border-t border-gray-200 pt-3">
+
+        <div class="md:col-span-4 space-y-3">
+
+            ${
+                activeProfile.skills.length
+                ? `
+                <div>
+                    <h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">
+                        SKILLS
+                    </h3>
+
+                    <ul class="space-y-1 text-gray-600 text-[10px] md:text-[11px]">
+                        ${activeProfile.skills.map(
+                            s => `<li>• ${s}</li>`
+                        ).join('')}
+                    </ul>
+                </div>
+                `
+                : ''
             }
+
+            ${
+                activeProfile.education
+                ? `
+                <div>
+                    <h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">
+                        EDUCATION
+                    </h3>
+
+                    <p class="text-[10px] text-gray-600 whitespace-pre-line">
+                        ${activeProfile.education}
+                    </p>
+                </div>
+                `
+                : ''
+            }
+
+        </div>
+
+        <div class="md:col-span-8 space-y-3">
+
+            ${
+                activeProfile.achievements.length
+                ? `
+                <div>
+                    <h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">
+                        ACHIEVEMENTS
+                    </h3>
+
+                    <ul class="list-disc pl-4 text-gray-600 space-y-0.5">
+                        ${activeProfile.achievements.map(
+                            ach => `<li>${ach}</li>`
+                        ).join('')}
+                    </ul>
+                </div>
+                `
+                : ''
+            }
+
+            <div>
+                <h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] md:text-[11px]">
+                    EXPERIENCE
+                </h3>
+
+                <div class="text-gray-600">
+                    ${expFormatted}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+`;
+}
             else if (currentActiveTemplate === 'global') {
                 canvas.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 border-b-2 border-green-800 pb-3 mb-2">
