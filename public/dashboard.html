@@ -1008,14 +1008,13 @@ function openPrintPreview() {
                                     Unlock all pages instantly.
                                 </p>
 
-                                <button
-                                    onclick="triggerPurchasePaywall()"
-                                    class="mt-6 bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-4 rounded-2xl text-sm transition shadow-lg">
+<button
+    onclick="processPaymentDirect()"
+    class="mt-6 bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-4 rounded-2xl text-sm transition shadow-lg">
 
-                                    Unlock Full Resume ₹199
+    Unlock Full Resume ₹199
 
-                                </button>
-
+</button>
                             </div>
 
                         </div>
@@ -1058,6 +1057,75 @@ function openPrintPreview() {
 
     document.body.style.overflow =
         'auto';
+}
+        async function processPaymentDirect() {
+
+    try {
+
+        const response =
+            await fetch('/api/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':
+                    'application/json'
+                },
+                body: JSON.stringify({
+                    promoCode: '',
+                    email:
+                    currentUserEmail
+                })
+            });
+
+        const orderData =
+            await response.json();
+
+        const options = {
+            key:
+            "rzp_live_SgcC4zdgmzFA5L",
+
+            amount:
+            orderData.amount,
+
+            currency:
+            "INR",
+
+            name:
+            "GetPerfectResume.com",
+
+            order_id:
+            orderData.id,
+
+            handler:
+            function(response){
+
+                alert(
+                    "Payment successful! Document download initiated."
+                );
+
+                closePreviewModal();
+            },
+
+            theme: {
+                color:
+                "#0F3B68"
+            }
+        };
+
+        const rzp =
+            new Razorpay(
+                options
+            );
+
+        rzp.open();
+
+    } catch(err){
+
+        console.error(err);
+
+        alert(
+            'Payment initialization failed. Please try again.'
+        );
+    }
 }
         async function processPayment() {
             const btn = document.getElementById('pay-btn');
