@@ -506,9 +506,17 @@ async function triggerAI(section, buttonElement) {
             })
         });
 
-        if (!response.ok) {
-            const errData = await response.json();
-            throw new Error(errData.message || 'AI generation failed');
+if (!response.ok) {
+            let errMessage = `Server Error: ${response.status} ${response.statusText}`;
+            try {
+                // Try to read the error as JSON
+                const errData = await response.json();
+                errMessage = errData.message || errMessage;
+            } catch (e) {
+                // If it fails (because it's an HTML 404 page), fallback gracefully
+                console.warn("Server did not return JSON error.");
+            }
+            throw new Error(errMessage);
         }
 
         const result = await response.json();
