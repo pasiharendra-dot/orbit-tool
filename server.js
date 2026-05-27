@@ -233,14 +233,19 @@ app.post('/api/create-order', async (req, res) => {
 // ==========================================
 // SECURITY ADDITION: Razorpay Payment Verification
 // ==========================================
-app.post('/api/payment/verify', (req, res) => {
+app.post('/api/payment/verify', async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+        // ADDED: Destructured 'plan' and 'email' from the request body
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, plan, email } = req.body;
         
+        if (!email) {
+            return res.status(400).json({ error: "Missing candidate email context." });
+        }
+
         // Use the exact Razorpay secret from your environment variables
         const secret = process.env.RAZORPAY_KEY_SECRET; 
 
-        // Generate the expected cryptographic signature
+        // Generate the expected cryptographic signature (Your existing security check)
         const generated_signature = crypto
             .createHmac('sha256', secret)
             .update(razorpay_order_id + "|" + razorpay_payment_id)
@@ -248,13 +253,40 @@ app.post('/api/payment/verify', (req, res) => {
 
         // Compare what we generated with what Razorpay sent us
         if (generated_signature === razorpay_signature) {
-            res.status(200).json({ status: "success", message: "Payment is authentic." });
+            
+            // ==========================================
+            // DATABASE PROVISIONING FOR PLANS
+            // ==========================================
+            let updateData = { plan_type: plan || 'single' };
+
+            if (plan === 'annual') {
+                // Set expiry date exactly 1 year (365 days) from right now
+                const expiryDate = new Date();
+                expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+                updateData.plan_expiry = expiryDate.toISOString();
+            } else {
+                // For single download, clear the 'used' flag so they have 1 fresh slot open
+                updateData.download_used = false;
+            }
+
+            // Sync structural parameters directly into Supabase
+            const { error: dbError } = await supabase
+                .from('candidate_profiles')
+                .update(updateData)
+                .eq('email', email);
+
+            if (dbError) {
+                console.error("Supabase Plan Provisioning Error:", dbError);
+                throw new Error("Payment verified but failed to provision your plan features.");
+            }
+
+            res.status(200).json({ status: "success", message: "Payment verified and plan activated." });
         } else {
             res.status(400).json({ error: "Invalid payment signature. Potential fraud attempt." });
         }
     } catch (error) {
         console.error("Payment Verification Error:", error);
-        res.status(500).json({ error: "Server error during payment verification" });
+        res.status(500).json({ error: error.message || "Server error during payment verification" });
     }
 });
 // ==========================================
