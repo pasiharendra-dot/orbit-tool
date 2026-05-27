@@ -442,5 +442,52 @@ app.post('/api/use-credit', async (req, res) => {
         res.status(500).json({ error: "Failed to process credit" });
     }
 });
+// ==========================================
+// NEW: AI OPTIMIZATION ENDPOINT
+// ==========================================
+app.post('/api/optimize-resume', async (req, res) => {
+    const { email, section, currentContent, jobDescription } = req.body;
 
+    try {
+        // 1. Verify User & Credits
+        const { data: user, error: userError } = await supabase
+            .from('candidate_profiles')
+            .select('credits')
+            .eq('email', email)
+            .single();
+
+        if (userError || !user) throw new Error("User not found");
+        if (user.credits <= 0) return res.status(403).json({ message: "Out of credits. Please purchase more." });
+
+        // 2. Select AI Prompt based on section
+        let promptInstruction = `You are a resume expert. Rewrite the following resume section: ${section}.`;
+        if (section === 'title') promptInstruction = "Act as a professional resume writer. Rewrite this resume title to be more impactful and ATS-friendly, focusing on leadership and results.";
+        if (section === 'summary') promptInstruction = "Act as a professional resume writer. Rewrite this professional summary to be concise, results-oriented, and impactful, keeping it under 3 sentences.";
+        if (section === 'bullets') promptInstruction = "Act as a professional resume writer. Rewrite these bullet points to be action-oriented, quantifiable, and use high-impact power verbs. Focus on results achieved.";
+
+        const fullPrompt = `${promptInstruction}\n\nContext:\nTarget Job Description: ${jobDescription}\n\nCurrent Content: ${currentContent}\n\nReturn ONLY the optimized text.`;
+
+        // 3. Generate AI Response
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const result = await model.generateContent(fullPrompt);
+        const optimizedText = result.response.text().trim();
+
+        // 4. Deduct Credit
+        await supabase
+            .from('candidate_profiles')
+            .update({ credits: user.credits - 1 })
+            .eq('email', email);
+
+        // 5. Send back to Dashboard
+        res.status(200).json({
+            success: true,
+            optimizedText: optimizedText,
+            remainingCredits: user.credits - 1
+        });
+
+    } catch (error) {
+        console.error("AI Route Error:", error);
+        res.status(500).json({ message: "AI processing failed. Please try again." });
+    }
+});
 app.listen(port, () => { console.log(`Engine running at port ${port}`); });
