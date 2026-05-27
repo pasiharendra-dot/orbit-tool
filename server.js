@@ -280,10 +280,10 @@ async function generateAIResponseWithRetry(promptWithJD, filePart, activeSystemP
             }
             
             if (attempt === maxRetries) {
-                console.log("Triggering Emergency Fallback to 1.5-flash model...");
+                console.log("Triggering Emergency Fallback to 2.5-flash model...");
                 try {
                     const fallbackModel = genAI.getGenerativeModel({ 
-                        model: "gemini-1.5-flash", 
+                        model: "gemini-2.5-flash", 
                         systemInstruction: activeSystemPrompt,
                         generationConfig: { responseMimeType: "application/json", temperature: 0.0 } 
                     });
@@ -468,7 +468,7 @@ app.post('/api/optimize-resume', async (req, res) => {
         const fullPrompt = `${promptInstruction}\n\nContext:\nTarget Job Description: ${jobDescription}\n\nCurrent Content: ${currentContent}\n\nReturn ONLY the optimized text.`;
 
         // 3. Generate AI Response
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const result = await model.generateContent(fullPrompt);
         const optimizedText = result.response.text().trim();
 
