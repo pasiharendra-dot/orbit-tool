@@ -1115,13 +1115,17 @@ function openPrintPreview() {
             orderData.id,
 
             handler:
-            function(response){
+            async function(response){
     // Unlock paid access
-    isPaidUser = true;
+    paidDownloadToken =
+        'unlock_' +
+        Date.now() +
+        '_' +
+        Math.random();
                 alert(
                     "Payment successful! Document download initiated."
                 );
-                downloadResume();
+               await downloadResume();
                 closePreviewModal();
             },
 
