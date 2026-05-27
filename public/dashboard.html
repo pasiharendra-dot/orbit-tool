@@ -303,7 +303,18 @@ class="w-full xl:w-auto bg-[#0F3B68] hover:bg-[#0b2d50] text-white font-bold tex
     <footer class="bg-gray-100 text-center py-4 text-[10px] text-gray-400 font-semibold tracking-wider shrink-0 border-t border-gray-200 mt-auto">
         &copy; 2026 ORBIT CAREERS | SECURE CANDIDATE WORKSPACE
     </footer>
-
+<div id="success-modal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md text-center transform transition-all scale-100 border border-gray-100">
+            <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-green-100">
+                <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-3xl font-extrabold text-[#0F3B68] mb-3">Payment Successful!</h3>
+            <p class="text-gray-600 mb-8 leading-relaxed text-sm">Your ATS-optimized Word document is downloading now. You now have full access to the live editor.</p>
+            <button onclick="closeSuccessModal()" class="w-full py-4 bg-[#0F3B68] hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg transition">
+                Return to Dashboard
+            </button>
+        </div>
+    </div>
     <script>
         // Supabase Initialization
         const supabaseUrl = 'https://vkiitostqcjkiyflcjhu.supabase.co';
@@ -1158,6 +1169,7 @@ function openPrintPreview() {
                         alert("Payment successful! Document download initiated.");
                         downloadResume();
                         closeModal();
+                        document.getElementById('success-modal').classList.remove('hidden');
                     },
                     "theme": { "color": "#0F3B68" }
                 };
@@ -1175,7 +1187,9 @@ function openPrintPreview() {
             await supabaseClient.auth.signOut();
             window.location.href = 'index.html';
         }
-
+function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
         // ==========================================
         // DOCUMENT GENERATION ENGINE
         // ==========================================
