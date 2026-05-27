@@ -310,6 +310,10 @@ class="w-full xl:w-auto bg-[#0F3B68] hover:bg-[#0b2d50] text-white font-bold tex
             </div>
             <h3 class="text-3xl font-extrabold text-[#0F3B68] mb-3">Payment Successful!</h3>
             <p class="text-gray-600 mb-8 leading-relaxed text-sm">Your ATS-optimized Word document is downloading now. You now have full access to the live editor.</p>
+            <button onclick="downloadResume()" 
+class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition">
+    Download Again
+</button>
             <button onclick="closeSuccessModal()" class="w-full py-4 bg-[#0F3B68] hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg transition">
                 Return to Dashboard
             </button>
@@ -324,7 +328,9 @@ class="w-full xl:w-auto bg-[#0F3B68] hover:bg-[#0b2d50] text-white font-bold tex
         let currentUserEmail = "";
         let currentActiveTemplate = 'sentinel';
         let saveTimeout;
-
+        // PAYMENT ACCESS LOCK
+        let paidDownloadToken = null;
+        
         // Fallback dummy data just in case localStorage is empty
         let activeProfile = {
             name: "JOHN DOE",
@@ -1110,7 +1116,8 @@ function openPrintPreview() {
 
             handler:
             function(response){
-
+    // Unlock paid access
+    isPaidUser = true;
                 alert(
                     "Payment successful! Document download initiated."
                 );
@@ -1166,6 +1173,12 @@ function openPrintPreview() {
                     "name": "GetPerfectResume.com",
                     "order_id": orderData.id,
                     "handler": function (response){
+                    // Unlock paid access
+                        paidDownloadToken =
+    'unlock_' +
+    Date.now() +
+    '_' +
+    Math.random();
                         alert("Payment successful! Document download initiated.");
                         downloadResume();
                         closeModal();
@@ -1203,6 +1216,16 @@ function closeSuccessModal() {
         }
 
         async function downloadResume() {
+            // Block unpaid users
+if (!paidDownloadToken) {
+
+    alert(
+        "Please complete payment to unlock download."
+    );
+
+    triggerPurchasePaywall();
+    return;
+}
             try {
                 const savedData = localStorage.getItem('orbit_resume_data');
                 if (!savedData) { alert("Error: Resume data not found."); return; }
@@ -1231,6 +1254,7 @@ function closeSuccessModal() {
                 docx.Packer.toBlob(doc).then(blob => { 
                     saveAs(blob, `Orbit_Optimized_${currentActiveTemplate.toUpperCase()}.docx`); 
                 });
+
             } catch (err) {
                 console.error(err);
                 alert("An error occurred while generating the document.");
