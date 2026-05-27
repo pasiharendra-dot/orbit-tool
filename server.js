@@ -184,19 +184,24 @@ DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 
 app.post('/api/create-order', async (req, res) => {
     try {
-        const { hasShared, hasReferral, promoCode } = req.body; 
+        // ADDED 'plan' to destructuring
+        const { hasShared, hasReferral, promoCode, plan } = req.body; 
         
-        let basePrice = 199; 
-
+        // DYNAMIC BASE PRICE
+        let basePrice = (plan === 'annual') ? 499 : 199; 
+        
         // ==========================================
         // THE PROMO CODE ENGINE
         // ==========================================
         if (promoCode) {
             const cleanCode = promoCode.toUpperCase().trim();
             
-            // University / Affiliate Tier (Drops price to ₹99)
+            // University / Affiliate Tier (Drops single price to ₹99)
             if (cleanCode === "SYMBIOSIS99" || cleanCode === "NMIMS99" || cleanCode === "LAUNCH99") {
-                basePrice = 99;
+                // We only apply this discount to the single download plan for logic safety
+                if (plan !== 'annual') {
+                    basePrice = 99;
+                }
             } 
             // Founder / Testing Tier (Drops price to ₹1)
             else if (cleanCode === "FOUNDER") {
@@ -204,7 +209,7 @@ app.post('/api/create-order', async (req, res) => {
             }
         }
 
-        // Apply social sharing discounts (if you are still using them)
+        // Apply social sharing discounts
         if (hasShared) { basePrice = basePrice * 0.90; }
         if (hasReferral) { basePrice = basePrice * 0.90; }
 
@@ -216,7 +221,9 @@ app.post('/api/create-order', async (req, res) => {
             receipt: "receipt_" + Math.random().toString(36).substring(7)
         };
         const order = await razorpay.orders.create(options);
-        res.json({ id: order.id, amount: order.amount, calculatedPrice: Math.round(basePrice) });
+        
+        // RETURN 'plan' so the frontend knows what was just ordered
+        res.json({ id: order.id, amount: order.amount, calculatedPrice: Math.round(basePrice), plan: plan });
     } catch (error) {
         console.error("Razorpay Order Error:", error);
         res.status(500).json({ error: "Could not create Razorpay order" });
