@@ -329,7 +329,10 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
         let currentActiveTemplate = 'sentinel';
         let saveTimeout;
         // PAYMENT ACCESS LOCK
-        let paidDownloadToken = null;
+        let paidDownloadToken =
+    localStorage.getItem(
+        'paidDownloadToken'
+    ) || null;
         
         // Fallback dummy data just in case localStorage is empty
         let activeProfile = {
@@ -1122,6 +1125,11 @@ function openPrintPreview() {
         Date.now() +
         '_' +
         Math.random();
+                    // Save payment state
+    localStorage.setItem(
+        'paidDownloadToken',
+        paidDownloadToken
+    );
                 alert(
                     "Payment successful! Document download initiated."
                 );
@@ -1176,15 +1184,20 @@ function openPrintPreview() {
                     "currency": "INR",
                     "name": "GetPerfectResume.com",
                     "order_id": orderData.id,
-                    "handler": function (response){
+                    "handler": async function (response){
                     // Unlock paid access
                         paidDownloadToken =
     'unlock_' +
     Date.now() +
     '_' +
     Math.random();
+                            // Save payment state
+    localStorage.setItem(
+        'paidDownloadToken',
+        paidDownloadToken
+    );
                         alert("Payment successful! Document download initiated.");
-                        downloadResume();
+                       await downloadResume();
                         closeModal();
                         document.getElementById('success-modal').classList.remove('hidden');
                     },
@@ -1201,6 +1214,12 @@ function openPrintPreview() {
         }        
 
         async function logout() {
+                // Remove paid access
+    localStorage.removeItem(
+        'paidDownloadToken'
+    );
+
+    paidDownloadToken = null;
             await supabaseClient.auth.signOut();
             window.location.href = 'index.html';
         }
