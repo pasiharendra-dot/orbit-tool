@@ -1414,5 +1414,77 @@
         });
     }
 </script>
+        // Modal Controls
+function openLoginModal() {
+    document.getElementById('login-modal').classList.remove('hidden');
+}
+
+function closeLoginModal() {
+    document.getElementById('login-modal').classList.add('hidden');
+    document.getElementById('login-msg').classList.add('hidden');
+}
+
+// 1. Google 1-Click Login
+async function loginWithGoogle() {
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            redirectTo: window.location.origin + '/dashboard.html'
+        }
+    });
+    if (error) showMsg(error.message, false);
+}
+
+// 2. Standard Email/Password Login
+async function loginWithEmail() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const btn = document.getElementById('auth-btn');
+
+    if (!email || !password) return showMsg("Please enter both email and password.", false);
+
+    btn.innerText = "Authenticating...";
+    btn.disabled = true;
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+        showMsg(error.message, false);
+        btn.innerText = "Sign In";
+        btn.disabled = false;
+    } else {
+        window.location.href = 'dashboard.html';
+    }
+}
+
+// 3. Set up a password for the first time
+async function signUpWithEmail() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    
+    if (!email || !password) return showMsg("Please enter an email and create a password above.", false);
+
+    const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+        showMsg(error.message, false);
+    } else {
+        showMsg("Account created! You can now log in.", true);
+    }
+}
+
+// Helper to show messages
+function showMsg(text, isSuccess) {
+    const msg = document.getElementById('login-msg');
+    msg.innerText = text;
+    msg.className = `text-xs font-bold mt-4 block ${isSuccess ? 'text-green-600' : 'text-red-500'}`;
+}
+
 </body>
 </html>
