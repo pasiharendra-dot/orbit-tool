@@ -705,7 +705,21 @@
     </div>
 </div>
 <script>
-// Modal Controls
+// Check if user is already logged in on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            // Look for the action parameter in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const action = urlParams.get('action');
+
+            // Only redirect if they are logged in AND they didn't explicitly request the upload page
+            if (session && action !== 'upload') {
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        // Modal Controls
 function openLoginModal() {
     document.getElementById('login-modal').classList.remove('hidden');
 }
