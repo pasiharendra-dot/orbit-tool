@@ -705,20 +705,33 @@
     </div>
 </div>
 <script>
-// Check if user is already logged in on page load
+// Global tracker for upload flow
+        window.isUserLoggedIn = false; 
+
+        // Check if user is already logged in on page load
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await supabaseClient.auth.getSession();
             
-            // Look for the action parameter in the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const action = urlParams.get('action');
+            if (session) {
+                window.isUserLoggedIn = true;
 
-            // Only redirect if they are logged in AND they didn't explicitly request the upload page
-            if (session && action !== 'upload') {
-                window.location.href = 'dashboard.html';
+                // 1. Instantly change any "Login" buttons into "Dashboard" portals
+                const loginButtons = document.querySelectorAll('button[onclick="openLoginModal()"]');
+                loginButtons.forEach(btn => {
+                    btn.innerText = "Dashboard";
+                    btn.onclick = () => window.location.href = 'dashboard.html';
+                });
+
+                // 2. Look for the action parameter in the URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const action = urlParams.get('action');
+
+                // 3. Only redirect if they didn't explicitly request the upload page
+                if (action !== 'upload') {
+                    window.location.href = 'dashboard.html';
+                }
             }
         });
-
         // Modal Controls
 function openLoginModal() {
     document.getElementById('login-modal').classList.remove('hidden');
@@ -887,13 +900,25 @@ function showMsg(text, isSuccess) {
                     document.getElementById('preview-summary').innerText = data.after.improved_summary[0];
                 }
 
+                // ==========================================
+                // NEW: BYPASS LOGIN WALL IF ALREADY LOGGED IN
+                // ==========================================
+                if (window.isUserLoggedIn) {
+                    // 1. Save the parsed data to browser memory
+                    if (window.resumeData) {
+                        localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
+                    }
+                    // 2. Redirect straight to dashboard
+                    window.location.href = 'dashboard.html';
+                    return; // Stop the rest of the script
+                }
+
                 document.getElementById('loading-section').style.display = 'none';
                 document.getElementById('results-section').style.display = 'block';
 
                 try { fetch(GOOGLE_TRACKER_URL, { method: "POST", body: JSON.stringify({ name: data.after?.name || "Unknown", email: data.after?.email || "Unknown", phone: data.after?.phone || "Unknown", beforeScore: window.beforeScoreTracker, afterScore: data.after?.score || "N/A", action: "Lead Captured" }) }); } catch(e) { }
 
-                event.target.value = ''; 
-
+                event.target.value = '';
             } catch (error) {
                 console.error("UPLOAD ERROR:", error);
                 alert("CRITICAL ERROR: " + error.message);
