@@ -369,12 +369,22 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
                 document.getElementById('account-avatar').innerHTML = `<span class="text-sm font-bold">${currentUserEmail.charAt(0).toUpperCase()}</span>`;
             }
 
-            // 2. Register user on backend
+// 2. Register user on backend & Sync Credits Visually
+            window.currentCredits = 0; // Global tracker
             fetch('/api/auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: currentUserEmail })
-            });
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.profile) {
+                    window.currentCredits = data.profile.credits;
+                    const creditSpan = document.getElementById('credit-count');
+                    if (creditSpan) creditSpan.innerText = window.currentCredits;
+                }
+            })
+            .catch(err => console.error("Credit sync failed", err));
 
             // 3. UNPACK THE RESUME FROM LOCALSTORAGE
             const savedData = localStorage.getItem('orbit_resume_data');
@@ -515,6 +525,11 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
         });
 
 async function triggerAI(section, buttonElement) {
+    // NEW: Check credits before doing anything
+    if (window.currentCredits !== undefined && window.currentCredits <= 0) {
+        triggerPurchasePaywall();
+        return;
+    }
     const mapping = {
         jd: 'new-jd-input',
         title: 'edit-title',
@@ -578,9 +593,16 @@ if (!response.ok) {
             field.dispatchEvent(new Event('input'));
         }
 
-        if (result.remainingCredits !== undefined) {
+            if (result.remainingCredits !== undefined) {
+            window.currentCredits = result.remainingCredits; // Update global state
             const creditSpan = document.getElementById('credit-count');
             if (creditSpan) creditSpan.innerText = result.remainingCredits;
+        }
+
+        // NEW: Catch 403 Out Of Credits from backend specifically
+        if (!response.ok && response.status === 403) {
+            triggerPurchasePaywall();
+            throw new Error("Out of credits. Please choose a plan.");
         }
 
         if (section === 'jd') {
@@ -994,59 +1016,75 @@ async function handleDownloadClick(event) {
 // ==========================================
 
 function triggerPurchasePaywall() {
-
-    // Prevent duplicate modals
     if (document.getElementById('payment-modal')) return;
 
     const modalHTML = `
-        <div id="payment-modal"
-             class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[100] p-4">
-
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-sm space-y-5 text-center">
-
-                <h3 class="text-xl font-bold text-[#0F3B68]">
-                    Unlock Your Resume
-                </h3>
-
-                <p class="text-sm text-gray-600 pb-2 border-b border-gray-100">
-                    Choose a plan to download your ATS-optimized Word document.
-                </p>
-
-                <div class="space-y-3">
-
-                    <button
-                        onclick="processPayment('single')"
-                        id="btn-single"
-                        class="w-full py-3.5 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-bold rounded-xl transition text-sm">
-
-                        ₹199 - One Time Download
-                    </button>
-
-                    <button
-                        onclick="processPayment('annual')"
-                        id="btn-annual"
-                        class="w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition text-sm relative overflow-hidden">
-
-                        <span class="absolute top-0 right-0 bg-yellow-400 text-[9px] text-black px-2 py-0.5 font-bold rounded-bl-lg">
-                            BEST VALUE
-                        </span>
-
-                        ₹499 - 1 Year Unlimited Access
-                    </button>
+        <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[100] p-4 backdrop-blur-sm overflow-y-auto">
+            <div class="bg-white p-5 md:p-8 rounded-2xl shadow-2xl w-full max-w-5xl my-8 relative">
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 font-bold text-xl">✕</button>
+                
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl md:text-3xl font-extrabold text-[#0F3B68]">Unlock Your Full Potential</h3>
+                    <p class="text-sm text-gray-600 mt-2">Select a plan to download your ATS-optimized resume and get more AI credits.</p>
                 </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    
+                    <!-- 1. Starter Tier -->
+                    <div class="border border-gray-200 rounded-xl p-5 flex flex-col hover:border-blue-500 transition shadow-sm bg-gray-50">
+                        <h4 class="font-bold text-gray-800 text-lg">Starter</h4>
+                        <div class="text-3xl font-extrabold text-[#0F3B68] my-2">₹199</div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Single Use</p>
+                        <ul class="text-xs text-gray-600 space-y-3 mb-6 flex-grow">
+                            <li class="flex gap-2"><span>✅</span> 1 Word Doc Download</li>
+                            <li class="flex gap-2"><span>✅</span> 50 AI Rewrite Credits</li>
+                            <li class="flex gap-2"><span>✅</span> Standard ATS Check</li>
+                            <li class="flex gap-2 opacity-50"><span>❌</span> No Future Edits</li>
+                        </ul>
+                        <button onclick="processPayment('single')" id="btn-single" class="w-full py-3 border-2 border-[#0F3B68] text-[#0F3B68] hover:bg-blue-50 font-bold rounded-xl transition text-sm">Select Starter</button>
+                    </div>
+                    
+                    <!-- 2. Annual Tier -->
+                    <div class="border-2 border-green-500 rounded-xl p-5 flex flex-col relative shadow-xl transform md:-translate-y-4 bg-white">
+                        <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Most Popular</span>
+                        <h4 class="font-bold text-gray-800 text-lg">Annual Pass</h4>
+                        <div class="flex items-end gap-1 my-2">
+                            <div class="text-3xl font-extrabold text-green-700">₹499</div>
+                            <div class="text-sm text-gray-500 font-normal mb-1">/yr</div>
+                        </div>
+                        <p class="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-4 border-b pb-2">Full Platform Access</p>
+                        <ul class="text-xs text-gray-700 space-y-3 mb-6 flex-grow font-medium">
+                            <li class="flex gap-2"><span>✨</span> Unlimited Word Downloads</li>
+                            <li class="flex gap-2"><span>✨</span> 300 AI Rewrite Credits</li>
+                            <li class="flex gap-2"><span>✨</span> Advanced ATS Analytics</li>
+                            <li class="flex gap-2"><span>✨</span> 1 Year Live Editor Access</li>
+                        </ul>
+                        <button onclick="processPayment('annual')" id="btn-annual" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition text-sm">Select Annual</button>
+                    </div>
 
-                <input
-                    type="text"
-                    id="promo-code-input"
-                    class="w-full mt-2 p-3 border border-gray-300 rounded-lg uppercase text-xs font-semibold tracking-wide text-center"
-                    placeholder="HAVE A PROMO CODE?">
+                    <!-- 3. Expert Tier -->
+                    <div class="border border-amber-300 rounded-xl p-5 flex flex-col bg-gradient-to-b from-amber-50 to-white hover:border-amber-500 transition relative shadow-sm">
+                        <span class="absolute top-3 right-3 bg-amber-200 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded uppercase">Human Led</span>
+                        <h4 class="font-bold text-gray-800 text-lg">Expert Review</h4>
+                        <div class="flex items-end gap-2 my-2">
+                            <div class="text-3xl font-extrabold text-amber-700">₹2499</div>
+                            <div class="text-sm text-gray-400 line-through mb-1">₹4999</div>
+                        </div>
+                        <p class="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-4 border-b pb-2">Done-For-You Strategy</p>
+                        <ul class="text-xs text-gray-700 space-y-3 mb-6 flex-grow font-medium">
+                            <li class="flex gap-2"><span>🔥</span> 1-on-1 Expert Resume Writer</li>
+                            <li class="flex gap-2"><span>🔥</span> Guaranteed Shortlist Format</li>
+                            <li class="flex gap-2"><span>🔥</span> Priority WhatsApp Support</li>
+                            <li class="flex gap-2"><span>🔥</span> Includes Annual Pass (300 Cr)</li>
+                        </ul>
+                        <button onclick="processPayment('expert')" id="btn-expert" class="w-full py-3 bg-[#0F3B68] hover:bg-blue-900 text-white font-bold rounded-xl shadow transition text-sm">Book Expert</button>
+                    </div>
 
-                <button
-                    onclick="closeModal()"
-                    class="w-full text-xs text-gray-400 font-medium hover:underline mt-2">
-
-                    Cancel
-                </button>
+                </div>
+                
+                <div class="max-w-xs mx-auto">
+                    <input type="text" id="promo-code-input" class="w-full p-2 border border-gray-300 rounded text-xs font-semibold tracking-wide text-center uppercase" placeholder="HAVE A PROMO CODE?">
+                </div>
             </div>
         </div>
     `;
