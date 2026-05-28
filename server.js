@@ -184,11 +184,12 @@ DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
 
 app.post('/api/create-order', async (req, res) => {
     try {
-        // ADDED 'plan' to destructuring
         const { hasShared, hasReferral, promoCode, plan } = req.body; 
         
-        // DYNAMIC BASE PRICE
-        let basePrice = (plan === 'annual') ? 499 : 199; 
+        // DYNAMIC BASE PRICE FOR 3 TIERS
+        let basePrice = 199; // Default 'single'
+        if (plan === 'annual') basePrice = 499;
+        if (plan === 'expert') basePrice = 2499; 
         
         // ==========================================
         // THE PROMO CODE ENGINE
@@ -196,22 +197,15 @@ app.post('/api/create-order', async (req, res) => {
         if (promoCode) {
             const cleanCode = promoCode.toUpperCase().trim();
             
-            // University / Affiliate Tier (Drops single price to ₹99)
+            // Affiliate Tier (Only applies to 'single' plan for safety)
             if (cleanCode === "SYMBIOSIS99" || cleanCode === "NMIMS99" || cleanCode === "LAUNCH99") {
-                // We only apply this discount to the single download plan for logic safety
-                if (plan !== 'annual') {
-                    basePrice = 99;
-                }
+                if (plan === 'single') basePrice = 99;
             } 
-            // Founder / Testing Tier (Drops price to ₹1)
+            // Founder Tier
             else if (cleanCode === "FOUNDER") {
                 basePrice = 1;
             }
         }
-
-        // Apply social sharing discounts
-        if (hasShared) { basePrice = basePrice * 0.90; }
-        if (hasReferral) { basePrice = basePrice * 0.90; }
 
         const finalPricePaise = Math.round(basePrice) * 100; 
 
@@ -222,7 +216,6 @@ app.post('/api/create-order', async (req, res) => {
         };
         const order = await razorpay.orders.create(options);
         
-        // RETURN 'plan' so the frontend knows what was just ordered
         res.json({ id: order.id, amount: order.amount, calculatedPrice: Math.round(basePrice), plan: plan });
     } catch (error) {
         console.error("Razorpay Order Error:", error);
@@ -235,60 +228,58 @@ app.post('/api/create-order', async (req, res) => {
 // ==========================================
 app.post('/api/payment/verify', async (req, res) => {
     try {
-        // ADDED: Destructured 'plan' and 'email' from the request body
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, plan, email } = req.body;
         
-        if (!email) {
-            return res.status(400).json({ error: "Missing candidate email context." });
-        }
+        if (!email) return res.status(400).json({ error: "Missing candidate email context." });
 
-        // Use the exact Razorpay secret from your environment variables
         const secret = process.env.RAZORPAY_KEY_SECRET; 
+        const generated_signature = crypto.createHmac('sha256', secret).update(razorpay_order_id + "|" + razorpay_payment_id).digest('hex');
 
-        // Generate the expected cryptographic signature (Your existing security check)
-        const generated_signature = crypto
-            .createHmac('sha256', secret)
-            .update(razorpay_order_id + "|" + razorpay_payment_id)
-            .digest('hex');
-
-        // Compare what we generated with what Razorpay sent us
         if (generated_signature === razorpay_signature) {
             
-            // ==========================================
-            // DATABASE PROVISIONING FOR PLANS
-            // ==========================================
-            let updateData = { plan_type: plan || 'single' };
+            // 1. Fetch user's current credits so we don't overwrite them
+            const { data: userRecord } = await supabase
+                .from('candidate_profiles')
+                .select('credits')
+                .eq('email', email)
+                .single();
+                
+            const currentCredits = userRecord ? (userRecord.credits || 0) : 0;
 
-            if (plan === 'annual') {
-                // Set expiry date exactly 1 year (365 days) from right now
+            // 2. Provision Plan & Credits
+            let updateData = { plan_type: plan || 'single' };
+            let creditsToAdd = 50; // Default for Single
+
+            if (plan === 'annual' || plan === 'expert') {
                 const expiryDate = new Date();
                 expiryDate.setFullYear(expiryDate.getFullYear() + 1);
                 updateData.plan_expiry = expiryDate.toISOString();
+                creditsToAdd = 300; 
+                
+                // If expert, clear the download_used flag just in case
+                updateData.download_used = false; 
             } else {
-                // For single download, clear the 'used' flag so they have 1 fresh slot open
-                updateData.download_used = false;
+                updateData.download_used = false; // Unlock their single download
+                creditsToAdd = 50;
             }
 
-            // Sync structural parameters directly into Supabase
-            const { error: dbError } = await supabase
-                .from('candidate_profiles')
-                .update(updateData)
-                .eq('email', email);
+            // Add the new credits to their existing balance
+            updateData.credits = currentCredits + creditsToAdd;
 
-            if (dbError) {
-                console.error("Supabase Plan Provisioning Error:", dbError);
-                throw new Error("Payment verified but failed to provision your plan features.");
-            }
+            const { error: dbError } = await supabase.from('candidate_profiles').update(updateData).eq('email', email);
+
+            if (dbError) throw new Error("Payment verified but failed to provision your plan features.");
 
             res.status(200).json({ status: "success", message: "Payment verified and plan activated." });
         } else {
-            res.status(400).json({ error: "Invalid payment signature. Potential fraud attempt." });
+            res.status(400).json({ error: "Invalid payment signature." });
         }
     } catch (error) {
         console.error("Payment Verification Error:", error);
         res.status(500).json({ error: error.message || "Server error during payment verification" });
     }
 });
+
 // ==========================================
 
 // Smart AI Generator with Automatic Retries and Model Fallback
