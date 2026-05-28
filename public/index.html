@@ -78,6 +78,13 @@
             <li><a href="/#pricing" class="text-gray-800 hover:text-green-600 font-medium transition-colors">Pricing</a></li>
             <li><a href="/blog" class="text-gray-800 hover:text-green-600 font-medium transition-colors">Blog</a></li>
             <li><a href="/#faq" class="text-gray-800 hover:text-green-600 font-medium transition-colors">FAQ</a></li>
+            
+            <!-- LOGIN BUTTON (DESKTOP) -->
+            <li>
+                <button onclick="openLoginModal()" class="bg-[#0F3B68] hover:bg-blue-900 text-white font-bold px-6 py-2.5 rounded-lg shadow-sm transition-colors tracking-wide">
+                    Login
+                </button>
+            </li>
         </ul>
 
         <!-- Mobile Hamburger Button -->
@@ -95,13 +102,16 @@
             <li><a href="/#pricing" class="block text-gray-800 hover:text-green-600 font-medium text-lg">Pricing</a></li>
             <li><a href="/blog" class="block text-gray-800 hover:text-green-600 font-medium text-lg">Blog</a></li>
             <li><a href="/#faq" class="block text-gray-800 hover:text-green-600 font-medium text-lg">FAQ</a></li>
+            
+            <!-- LOGIN BUTTON (MOBILE) -->
+            <li class="pt-3 mt-2 border-t border-gray-100">
+                <button onclick="openLoginModal()" class="w-full bg-[#0F3B68] hover:bg-blue-900 text-white font-bold py-3.5 rounded-xl shadow-md transition-colors text-lg tracking-wide">
+                    Login to Workspace
+                </button>
+            </li>
         </ul>
     </div>
-</nav>
-        <button onclick="openLoginModal()" class="text-[#0F3B68] font-bold hover:text-blue-700 px-4 py-2 transition">
-    Login
-</button>
-
+</nav>        
     <main class="flex-grow flex flex-col items-center">
         
         <div id="upload-section" class="w-full flex flex-col items-center fade-in">
