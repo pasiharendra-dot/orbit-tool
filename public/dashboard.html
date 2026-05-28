@@ -1098,286 +1098,143 @@ function closeModal() {
 }
 
 // ==========================================
-// PAYMENT PROCESSOR
+// PAYMENT PROCESSOR (3-TIER UPGRADE)
 // ==========================================
 
 async function processPayment(selectedPlan) {
 
-    const singleBtn =
-        document.getElementById('btn-single');
+    const singleBtn = document.getElementById('btn-single');
+    const annualBtn = document.getElementById('btn-annual');
+    const expertBtn = document.getElementById('btn-expert'); // Added Expert Button
+    const promoCode = document.getElementById('promo-code-input')?.value?.trim() || "";
 
-    const annualBtn =
-        document.getElementById('btn-annual');
+    // Determine which button was clicked
+    let activeBtn;
+    if (selectedPlan === 'single') activeBtn = singleBtn;
+    else if (selectedPlan === 'annual') activeBtn = annualBtn;
+    else if (selectedPlan === 'expert') activeBtn = expertBtn;
 
-    const promoCode =
-        document.getElementById(
-            'promo-code-input'
-        )?.value?.trim() || "";
-
-    const activeBtn =
-        selectedPlan === 'single'
-            ? singleBtn
-            : annualBtn;
-
-    const originalSingleText =
-        singleBtn.innerHTML;
-
-    const originalAnnualText =
-        annualBtn.innerHTML;
+    const originalText = activeBtn ? activeBtn.innerHTML : "Processing...";
 
     try {
-
-        // Disable buttons
-        activeBtn.innerHTML = "Processing...";
-        singleBtn.disabled = true;
-        annualBtn.disabled = true;
+        // Disable all buttons to prevent double-clicks
+        if (activeBtn) activeBtn.innerHTML = "Processing...";
+        if (singleBtn) singleBtn.disabled = true;
+        if (annualBtn) annualBtn.disabled = true;
+        if (expertBtn) expertBtn.disabled = true;
 
         // Create order
-        const response = await fetch(
-            '/api/create-order',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type':
-                        'application/json'
-                },
-                body: JSON.stringify({
-                    promoCode,
-                    email: currentUserEmail,
-                    plan: selectedPlan
-                })
-            }
-        );
+        const response = await fetch('/api/create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                promoCode,
+                email: currentUserEmail,
+                plan: selectedPlan
+            })
+        });
 
-        const orderData =
-            await response.json();
+        const orderData = await response.json();
 
         if (!response.ok) {
-            throw new Error(
-                orderData.error ||
-                'Failed to create order'
-            );
+            throw new Error(orderData.error || 'Failed to create order');
         }
 
         // Prefill user details
-        const currentName =
-            document.getElementById(
-                'edit-name'
-            )?.value || "Candidate";
-
-        const contactStr =
-            document.getElementById(
-                'edit-contact'
-            )?.value || "";
-
-        const currentPhone =
-            contactStr
-                .split('|')[0]
-                ?.trim() || "";
+        const currentName = document.getElementById('edit-name')?.value || "Candidate";
+        const contactStr = document.getElementById('edit-contact')?.value || "";
+        const currentPhone = contactStr.split('|')[0]?.trim() || "";
+        
+        let planDescription = 'Single Resume Download';
+        if (selectedPlan === 'annual') planDescription = '1-Year Unlimited Access';
+        if (selectedPlan === 'expert') planDescription = 'Expert Review & Strategy';
 
         // Razorpay config
         const options = {
-
-            key:
-                "rzp_live_SgcC4zdgmzFA5L",
-
-            amount:
-                orderData.amount,
-
-            currency:
-                "INR",
-
-            name:
-                "GetPerfectResume.com",
-
-            description:
-                selectedPlan === 'annual'
-                    ? '1-Year Unlimited Access'
-                    : 'Single Resume Download',
-
-            order_id:
-                orderData.id,
-
+            key: "rzp_live_SgcC4zdgmzFA5L",
+            amount: orderData.amount,
+            currency: "INR",
+            name: "GetPerfectResume.com",
+            description: planDescription,
+            order_id: orderData.id,
             prefill: {
-                name:
-                    currentName,
-
-                email:
-                    currentUserEmail,
-
-                contact:
-                    currentPhone
+                name: currentName,
+                email: currentUserEmail,
+                contact: currentPhone
             },
-
-            handler:
-                async function (
-                    response
-                ) {
-
+            handler: async function (response) {
                 try {
-
-                    // ==================================
                     // VERIFY PAYMENT
-                    // ==================================
+                    const verifyResponse = await fetch('/api/payment/verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            email: currentUserEmail,
+                            plan: selectedPlan
+                        })
+                    });
 
-                    const verifyResponse =
-                        await fetch(
-                            '/api/payment/verify',
-                            {
-                                method:
-                                    'POST',
+                    const verifyData = await verifyResponse.json();
 
-                                headers: {
-                                    'Content-Type':
-                                        'application/json'
-                                },
-
-                                body:
-                                    JSON.stringify({
-                                        razorpay_order_id:
-                                            response.razorpay_order_id,
-
-                                        razorpay_payment_id:
-                                            response.razorpay_payment_id,
-
-                                        razorpay_signature:
-                                            response.razorpay_signature,
-
-                                        email:
-                                            currentUserEmail,
-
-                                        plan:
-                                            selectedPlan
-                                    })
-                            }
-                        );
-
-                    const verifyData =
-                        await verifyResponse.json();
-
-                    if (
-                        !verifyResponse.ok
-                    ) {
-                        throw new Error(
-                            verifyData.error ||
-                            'Payment verification failed'
-                        );
+                    if (!verifyResponse.ok) {
+                        throw new Error(verifyData.error || 'Payment verification failed');
                     }
 
                     // SUCCESS
-                    alert(
-                        "Payment successful! Document download initiated."
-                    );
+                    alert("Payment successful! Plan activated.");
+                    
+                    // Refresh the visual credits automatically
+                    const creditSpan = document.getElementById('credit-count');
+                    if (creditSpan && selectedPlan === 'single') creditSpan.innerText = parseInt(creditSpan.innerText) + 50;
+                    if (creditSpan && (selectedPlan === 'annual' || selectedPlan === 'expert')) creditSpan.innerText = parseInt(creditSpan.innerText) + 300;
+                    window.currentCredits = parseInt(creditSpan.innerText);
 
+                    // Proceed to download
                     await downloadResume();
-
                     closeModal();
+                    document.getElementById('success-modal')?.classList.remove('hidden');
 
-                    document
-                        .getElementById(
-                            'success-modal'
-                        )
-                        ?.classList.remove(
-                            'hidden'
-                        );
-
-                } catch (
-                    verificationError
-                ) {
-
-                    console.error(
-                        "Verification Error:",
-                        verificationError
-                    );
-
-                    alert(
-                        "Payment received but verification failed. Please contact support."
-                    );
+                } catch (verificationError) {
+                    console.error("Verification Error:", verificationError);
+                    alert("Payment received but verification failed. Please contact support.");
                 }
             },
-
             modal: {
                 ondismiss: function () {
-
-                    // Reset buttons if closed
-                    singleBtn.innerHTML =
-                        originalSingleText;
-
-                    annualBtn.innerHTML =
-                        originalAnnualText;
-
-                    singleBtn.disabled =
-                        false;
-
-                    annualBtn.disabled =
-                        false;
+                    // Reset buttons if user closes Razorpay without paying
+                    if (activeBtn) activeBtn.innerHTML = originalText;
+                    if (singleBtn) singleBtn.disabled = false;
+                    if (annualBtn) annualBtn.disabled = false;
+                    if (expertBtn) expertBtn.disabled = false;
                 }
             },
-
-            theme: {
-                color:
-                    "#0F3B68"
-            }
+            theme: { color: "#0F3B68" }
         };
 
-        const rzp =
-            new Razorpay(options);
-
+        const rzp = new Razorpay(options);
         rzp.open();
 
-        rzp.on(
-            'payment.failed',
-            function (response) {
-
-                console.error(
-                    'Payment Failed:',
-                    response
-                );
-
-                alert(
-                    "Payment failed. Please try again."
-                );
-
-                singleBtn.innerHTML =
-                    originalSingleText;
-
-                annualBtn.innerHTML =
-                    originalAnnualText;
-
-                singleBtn.disabled =
-                    false;
-
-                annualBtn.disabled =
-                    false;
-            }
-        );
+        rzp.on('payment.failed', function (response) {
+            console.error('Payment Failed:', response);
+            alert("Payment failed. Please try again.");
+            if (activeBtn) activeBtn.innerHTML = originalText;
+            if (singleBtn) singleBtn.disabled = false;
+            if (annualBtn) annualBtn.disabled = false;
+            if (expertBtn) expertBtn.disabled = false;
+        });
 
     } catch (error) {
-
-        console.error(
-            "Payment Error:",
-            error
-        );
-
-        alert(
-            error.message ||
-            "Payment initialization failed. Please try again."
-        );
-
-        singleBtn.innerHTML =
-            originalSingleText;
-
-        annualBtn.innerHTML =
-            originalAnnualText;
-
-        singleBtn.disabled =
-            false;
-
-        annualBtn.disabled =
-            false;
+        console.error("Payment Error:", error);
+        alert(error.message || "Payment initialization failed. Please try again.");
+        if (activeBtn) activeBtn.innerHTML = originalText;
+        if (singleBtn) singleBtn.disabled = false;
+        if (annualBtn) annualBtn.disabled = false;
+        if (expertBtn) expertBtn.disabled = false;
     }
 }
-
   // ==========================================
         // PRINT PREVIEW LOGIC
         // ==========================================
