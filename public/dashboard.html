@@ -268,9 +268,8 @@
                     </div>
                     <div>
                         <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">ATS Score</p>
-                        <p class="text-xs font-semibold text-gray-800 mt-0.5"><span class="text-green-600 font-bold">Optimized</span> Framework</p>
+                        <p id="ats-status-text" class="text-xs font-semibold text-gray-800 mt-0.5"><span class="text-green-600 font-bold">Optimized</span> Framework</p>
                     </div>
-
                     <div class="hidden md:block ml-4 border-l border-gray-200 pl-4 max-w-[200px]">
                         <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1">Keywords Injected</p>
                         <div id="keyword-tags" class="flex flex-wrap gap-1">
@@ -418,8 +417,7 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
 
             // 5. Update Dynamic Analytics (Score & Keywords)
             setTimeout(() => {
-                document.getElementById('ats-score-text').innerText = `${activeScore}%`;
-                document.getElementById('score-ring').setAttribute('stroke-dasharray', `${activeScore}, 100`);
+                updateATSScoreUI();
             }, 300); // small delay for animation effect
 
             const keywordContainer = document.getElementById('keyword-tags');
@@ -564,8 +562,40 @@ if (!response.ok) {
             button.disabled = false;
         }
     }
-}
-// Template Switcher UI Handler
+}// Dynamic ATS Score Engine
+        function updateATSScoreUI() {
+            let displayedScore = activeScore;
+            let statusHTML = '<span class="text-green-600 font-bold">Optimized</span> Framework';
+            let ringColor = 'text-green-500';
+
+            // Apply ATS parsing penalties based on layout complexity
+            if (currentActiveTemplate === 'vanguard') {
+                displayedScore = Math.max(0, activeScore - 18); // Heavy penalty for Columns + Photo
+                statusHTML = '<span class="text-red-500 font-bold">Low ATS Fit</span> (2-Col + Photo)';
+                ringColor = 'text-red-500';
+            } else if (currentActiveTemplate === 'creative') {
+                displayedScore = Math.max(0, activeScore - 12); // Moderate penalty for Columns
+                statusHTML = '<span class="text-orange-500 font-bold">Medium Fit</span> (2-Col Layout)';
+                ringColor = 'text-orange-500';
+            } else if (currentActiveTemplate === 'global') {
+                statusHTML = '<span class="text-green-600 font-bold">Optimized</span> (Global Std)';
+            }
+
+            // Update the Dial UI
+            document.getElementById('ats-score-text').innerText = `${displayedScore}%`;
+            
+            const ring = document.getElementById('score-ring');
+            if (ring) {
+                ring.setAttribute('stroke-dasharray', `${displayedScore}, 100`);
+                ring.classList.remove('text-green-500', 'text-red-500', 'text-orange-500');
+                ring.classList.add(ringColor);
+            }
+
+            const statusText = document.getElementById('ats-status-text');
+            if (statusText) statusText.innerHTML = statusHTML;
+        }
+
+        // Template Switcher UI Handler
         function switchPreviewTemplate(templateId) {
 
             currentActiveTemplate = templateId;
@@ -580,34 +610,22 @@ if (!response.ok) {
                 }
             }
 
-            const allTemplates = [
-                'sentinel',
-                'vanguard',
-                'creative',
-                'global'
-            ];
-            
-    allTemplates.forEach(id => {
+            const allTemplates = ['sentinel', 'vanguard', 'creative', 'global'];
 
-        const btn =
-            document.getElementById(`btn-${id}`);
+            allTemplates.forEach(id => {
+                const btn = document.getElementById(`btn-${id}`);
+                if (!btn) return;
 
-        if (!btn) return;
+                if (id === templateId) {
+                    btn.className = "template-card bg-white text-[#0F3B68] rounded-lg p-3 border-2 border-white shadow-md transition scale-[1.02]";
+                } else {
+                    btn.className = "template-card bg-blue-50 text-gray-700 rounded-lg p-3 border border-blue-200 transition hover:scale-[1.02]";
+                }
+            });
 
-        if (id === templateId) {
-
-            btn.className =
-                "template-card bg-white text-[#0F3B68] rounded-lg p-3 border-2 border-white shadow-md transition scale-[1.02]";
-
-        } else {
-
-            btn.className =
-                "template-card bg-blue-50 text-gray-700 rounded-lg p-3 border border-blue-200 transition hover:scale-[1.02]";
+            renderCurrentCanvas();
+            updateATSScoreUI(); // Trigger score recalculation on template switch
         }
-    });
-
-    renderCurrentCanvas();
-}
 
         // Master Layout Render Router
         function renderCurrentCanvas() {
