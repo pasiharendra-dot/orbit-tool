@@ -391,6 +391,17 @@
                         </svg>
                         Unlock My ATS Resume
                     </button>
+                        <!-- NEW EMAIL LOGIN TRIGGER -->
+                    <div class="flex items-center my-4">
+                        <div class="flex-grow border-t border-gray-200"></div>
+                        <span class="px-3 text-xs text-gray-400 font-semibold uppercase">Or</span>
+                        <div class="flex-grow border-t border-gray-200"></div>
+                    </div>
+                    
+                    <button onclick="openLoginModal()" class="w-full py-3.5 bg-[#0F3B68] hover:bg-blue-900 text-white font-bold rounded-xl shadow-sm transition flex justify-center items-center gap-2 text-sm md:text-base">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        Continue with Email
+                    </button>
                 </div>
             </div>
             
@@ -744,6 +755,9 @@ function closeLoginModal() {
 
 // 1. Google 1-Click Login
 async function loginWithGoogle() {
+    // 🚨 SAVE DATA BEFORE REDIRECTING 🚨
+    if (window.resumeData) localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
+    
     const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -755,6 +769,9 @@ async function loginWithGoogle() {
 
 // 2. Standard Email/Password Login
 async function loginWithEmail() {
+    // 🚨 SAVE DATA BEFORE REDIRECTING 🚨
+    if (window.resumeData) localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
+
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
     const btn = document.getElementById('auth-btn');
@@ -780,6 +797,9 @@ async function loginWithEmail() {
 
 // 3. Set up a password for the first time
 async function signUpWithEmail() {
+    // 🚨 SAVE DATA SO IT SURVIVES THE EMAIL CONFIRMATION CLICK 🚨
+    if (window.resumeData) localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
+
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
     
@@ -793,10 +813,9 @@ async function signUpWithEmail() {
     if (error) {
         showMsg(error.message, false);
     } else {
-        showMsg("Account created! You can now log in.", true);
+        showMsg("Account created! Check your email to confirm, then log in.", true);
     }
 }
-
 // Helper to show messages
 function showMsg(text, isSuccess) {
     const msg = document.getElementById('login-msg');
