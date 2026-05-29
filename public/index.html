@@ -1108,17 +1108,8 @@ document.getElementById('loading-section').style.display = 'none';
                 if(document.getElementById('how-it-works')) document.getElementById('how-it-works').style.display = 'none';
                 if(document.getElementById('faq')) document.getElementById('faq').style.display = 'none';
                 
-// 2. Show Loader
-            document.getElementById('loading-section').style.display = 'flex';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // ... (keep your existing fetch logic) ...
-
-            // 3. On success, hide loader and show ONLY results
-            document.getElementById('loading-section').style.display = 'none';
-            document.getElementById('results-section').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+                document.getElementById('results-section').style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll back up to the top of the clean preview
                 
                 
                 const formData = new FormData();
