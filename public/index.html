@@ -1103,6 +1103,7 @@ document.getElementById('loading-section').style.display = 'none';
                 
                 // Hide home page elements to create a clean preview page
                 if(document.getElementById('hero-section')) document.getElementById('hero-section').style.display = 'none';
+                if(document.getElementById('upload-section')) document.getElementById('upload-section').style.display = 'none';
                 if(document.getElementById('testimonials-section')) document.getElementById('testimonials-section').style.display = 'none';
                 if(document.getElementById('how-it-works')) document.getElementById('how-it-works').style.display = 'none';
                 if(document.getElementById('faq')) document.getElementById('faq').style.display = 'none';
@@ -1633,24 +1634,31 @@ document.getElementById('loading-section').style.display = 'none';
         // TEMPLATE SELECTION & SLIDER LOGIC
         // ==========================================
         function selectTemplate(templateType, element) {
-            document.getElementById('selected-template').value = templateType;
-            document.querySelectorAll('.template-card').forEach(card => {
-                card.classList.remove('border-[#0F3B68]', 'bg-blue-50');
-                card.classList.add('border-gray-100', 'bg-white');
-                const badge = card.querySelector('.checkmark');
-                if(badge) {
-                    badge.classList.add('hidden');
-                    badge.classList.remove('flex', 'z-10'); 
-                }
-            });
-            element.classList.remove('border-gray-100', 'bg-white');
-            element.classList.add('border-[#0F3B68]', 'bg-blue-50');
-            const activeBadge = element.querySelector('.checkmark');
-            if(activeBadge) {
-                activeBadge.classList.remove('hidden');
-                activeBadge.classList.add('flex', 'z-10'); 
-            }
+    // 1. Force update the hidden input so the download function knows which template to use
+    document.getElementById('selected-template').value = templateType;
+    
+    // 2. Reset all cards
+    document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('border-[#0F3B68]', 'bg-blue-50');
+        card.classList.add('border-gray-100', 'bg-white');
+        const badge = card.querySelector('.checkmark');
+        if (badge) {
+            badge.classList.add('hidden');
+            badge.classList.remove('flex', 'z-10');
         }
+    });
+    
+    // 3. Set the clicked card as active
+    element.classList.remove('border-gray-100', 'bg-white');
+    element.classList.add('border-[#0F3B68]', 'bg-blue-50');
+    
+    // 4. Force show the active badge
+    const activeBadge = element.querySelector('.checkmark');
+    if (activeBadge) {
+        activeBadge.classList.remove('hidden');
+        activeBadge.classList.add('flex', 'z-10');
+    }
+}
         const templateGallery = [
             { id: 'sentinel', title: 'The ATS Sentinel', img: '/sentinel.jpg', desc: 'Best for online portals (Workday, Taleo). 100% Bot-parsable.' },
             { id: 'vanguard', title: 'The Executive Vanguard', img: '/vanguard.jpg', desc: 'Best for Emailing HR & LinkedIn. Visual impact.' },
