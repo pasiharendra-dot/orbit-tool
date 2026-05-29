@@ -111,7 +111,7 @@
         </ul>
     </div>
 </nav>        
-    <!-- NEW MODERN HERO SECTION (WITH IMAGE) -->
+    <!-- NEW MODERN HERO SECTION -->
         <style>
             @keyframes smoothFloat {
                 0% { transform: translateY(0px); }
@@ -122,7 +122,7 @@
             .animate-float-delayed { animation: smoothFloat 6s ease-in-out infinite; animation-delay: 3s; }
         </style>
 
-        <section class="w-full bg-slate-50 relative overflow-hidden pt-12 md:pt-20 pb-12 border-b border-gray-200">
+        <section id="hero-section" class="w-full bg-slate-50 relative overflow-hidden pt-12 md:pt-20 pb-12 border-b border-gray-200">
             <!-- Subtle Background Gradients -->
             <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-blue-100 blur-3xl opacity-50 pointer-events-none"></div>
             <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-green-50 blur-3xl opacity-60 pointer-events-none"></div>
@@ -387,7 +387,7 @@
         </div>
           
                    
-            <div class="w-full bg-slate-50 py-16 relative overflow-hidden border-t border-gray-200">
+            <div id="testimonials-section" class="w-full bg-slate-50 py-16 relative overflow-hidden border-t border-gray-200">
                 <div class="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-blue-100 blur-3xl opacity-50 pointer-events-none"></div>
                 <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-green-50 blur-3xl opacity-50 pointer-events-none"></div>
 
@@ -588,48 +588,8 @@
         </div>
     </div>
 </div>
-                </div>
-                <!-- TRUST SIGNALS: SPLIT VIEW PAGE -->
-            <div class="w-full max-w-4xl mx-auto mt-20 border-t border-gray-200 pt-16 text-center overflow-hidden">
-                <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">Our Users Have Been Hired At</p>
-                <div class="flex justify-center gap-8 md:gap-16 items-center opacity-60 grayscale">
-                    <span class="text-xl font-extrabold tracking-tighter">amazon</span>
-                    <span class="text-2xl font-bold tracking-tight text-blue-800">Deloitte.</span>
-                    <span class="text-2xl font-extrabold">TCS</span>
-                    <span class="text-xl font-bold">Infosys</span>
-                    <span class="text-xl font-bold tracking-tight">Capgemini</span>
-                </div>
-            </div>
-            
-            <div class="w-full max-w-5xl mx-auto mt-24 mb-10 px-4">
-                <h3 class="text-2xl font-bold text-center text-orbitDark mb-10">Don't just take our word for it.</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div class="flex items-center mb-4 text-yellow-400">★★★★★</div>
-                        <p class="text-sm text-gray-600 mb-6 italic">"I was getting instantly rejected for months. Orbit rewrote my bullet points completely. Got 3 interviews in the first week of using the new Word doc."</p>
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-[#0F3B68] font-bold text-sm mr-3">SK</div>
-                            <div><p class="text-sm font-bold text-gray-900">Sandeep K.</p><p class="text-xs text-gray-500">Sales Director</p></div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div class="flex items-center mb-4 text-yellow-400">★★★★★</div>
-                        <p class="text-sm text-gray-600 mb-6 italic">"The format is incredibly clean. I didn't have to fiddle with margins or spacing at all. The AI perfectly captured my actual work experience without making things up."</p>
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-sm mr-3">PR</div>
-                            <div><p class="text-sm font-bold text-gray-900">Priya R.</p><p class="text-xs text-gray-500">Project Manager</p></div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <div class="flex items-center mb-4 text-yellow-400">★★★★★</div>
-                        <p class="text-sm text-gray-600 mb-6 italic">"Best investment I've made in my career. It passed the Taleo ATS scanner at my dream company with a 92% match. Highly recommend for senior professionals."</p>
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-700 font-bold text-sm mr-3">VM</div>
-                            <div><p class="text-sm font-bold text-gray-900">Vishnu M.</p><p class="text-xs text-gray-500">Procurement Head</p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </div>
+        
         </div>
 
         <div id="success-section" class="hidden w-full max-w-3xl mt-20 mb-32 px-4 mx-auto text-center fade-in">
@@ -1139,10 +1099,18 @@ function showMsg(text, isSuccess) {
                     return;
                 }
 
-                document.getElementById('upload-section').style.display = 'none';
-                document.getElementById('loading-section').style.display = 'flex';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-
+document.getElementById('loading-section').style.display = 'none';
+                
+                // Hide home page elements to create a clean preview page
+                if(document.getElementById('hero-section')) document.getElementById('hero-section').style.display = 'none';
+                if(document.getElementById('testimonials-section')) document.getElementById('testimonials-section').style.display = 'none';
+                if(document.getElementById('how-it-works')) document.getElementById('how-it-works').style.display = 'none';
+                if(document.getElementById('faq')) document.getElementById('faq').style.display = 'none';
+                
+                document.getElementById('results-section').style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll back up to the top of the clean preview
+                
+                
                 const formData = new FormData();
                 formData.append('resume', file);
                 formData.append('experienceLevel', expLevel);
@@ -1668,16 +1636,21 @@ function showMsg(text, isSuccess) {
             document.getElementById('selected-template').value = templateType;
             document.querySelectorAll('.template-card').forEach(card => {
                 card.classList.remove('border-[#0F3B68]', 'bg-blue-50');
-                card.classList.add('border-gray-200', 'bg-white');
-                card.querySelector('.checkmark').classList.add('hidden');
-                card.querySelector('.checkmark').classList.remove('z-10'); 
+                card.classList.add('border-gray-100', 'bg-white');
+                const badge = card.querySelector('.checkmark');
+                if(badge) {
+                    badge.classList.add('hidden');
+                    badge.classList.remove('flex', 'z-10'); 
+                }
             });
-            element.classList.remove('border-gray-200', 'bg-white');
+            element.classList.remove('border-gray-100', 'bg-white');
             element.classList.add('border-[#0F3B68]', 'bg-blue-50');
-            element.querySelector('.checkmark').classList.remove('hidden');
-            element.querySelector('.checkmark').classList.add('z-10');
+            const activeBadge = element.querySelector('.checkmark');
+            if(activeBadge) {
+                activeBadge.classList.remove('hidden');
+                activeBadge.classList.add('flex', 'z-10'); 
+            }
         }
-
         const templateGallery = [
             { id: 'sentinel', title: 'The ATS Sentinel', img: '/sentinel.jpg', desc: 'Best for online portals (Workday, Taleo). 100% Bot-parsable.' },
             { id: 'vanguard', title: 'The Executive Vanguard', img: '/vanguard.jpg', desc: 'Best for Emailing HR & LinkedIn. Visual impact.' },
