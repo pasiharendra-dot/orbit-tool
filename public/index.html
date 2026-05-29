@@ -530,57 +530,118 @@
         </div>
 </section>
 
-<!-- FAQ Section -->
-<section id="faq" class="py-20 bg-gray-50 border-t border-gray-200">
-    <div class="max-w-5xl mx-auto px-6">
+<!-- Interactive FAQ Section -->
+<section id="faq" class="py-24 bg-gray-50 border-t border-gray-200">
+    <div class="max-w-4xl mx-auto px-6">
+        
         <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Frequently Asked Questions</h2>
-            <p class="text-lg text-gray-600">Everything you need to know about our ATS optimization engine.</p>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">Frequently Asked Questions</h2>
+            <p class="text-xl text-gray-600">Everything you need to know about our ATS optimization engine.</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-10">
+        <div class="space-y-4">
+            
             <!-- FAQ Item 1 -->
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">What exactly does GetPerfectResume.com do?</h3>
-                <p class="text-gray-600 leading-relaxed">We take your existing resume and instantly restructure it to bypass Applicant Tracking Systems (ATS). Our recruiter-trained AI rewrites your bullet points for maximum impact and outputs a perfectly structured Microsoft Word document in under 60 seconds.</p>
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md hover:border-blue-200">
+                <button onclick="toggleFaq(this)" class="w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none group">
+                    <span class="text-lg font-bold text-gray-900 group-hover:text-[#0F3B68] transition-colors">What exactly does GetPerfectResume.com do?</span>
+                    <svg class="w-6 h-6 text-[#0F3B68] transform transition-transform duration-300 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="faq-answer hidden px-8 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                    We take your existing resume and instantly restructure it to bypass Applicant Tracking Systems (ATS). Our recruiter-trained AI rewrites your bullet points for maximum impact and outputs a perfectly structured Microsoft Word document in under 60 seconds.
+                </div>
             </div>
+
             <!-- FAQ Item 2 -->
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">How is this different from ChatGPT?</h3>
-                <p class="text-gray-600 leading-relaxed">ChatGPT gives you raw text that you still have to format, and it frequently invents fake experiences. Our AI resume builder is hardcoded with strict recruiter guardrails: zero hallucination, exact ATS keyword structuring, and it instantly generates a fully formatted .docx file ready to submit.</p>
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md hover:border-blue-200">
+                <button onclick="toggleFaq(this)" class="w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none group">
+                    <span class="text-lg font-bold text-gray-900 group-hover:text-[#0F3B68] transition-colors">How is this different from ChatGPT?</span>
+                    <svg class="w-6 h-6 text-[#0F3B68] transform transition-transform duration-300 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="faq-answer hidden px-8 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                    ChatGPT gives you raw text that you still have to format, and it frequently invents fake experiences. Our AI resume builder is hardcoded with strict recruiter guardrails: zero hallucination, exact ATS keyword structuring, and it instantly generates a fully formatted .docx file ready to submit.
+                </div>
             </div>
+
             <!-- FAQ Item 3 -->
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Will the AI make up fake experience?</h3>
-                <p class="text-gray-600 leading-relaxed">Absolutely not. We have a strict "Zero Seniority Hallucination" protocol. We will never elevate your job level or invent achievements. We simply translate your raw career data into the high-impact language that recruiters look for.</p>
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md hover:border-blue-200">
+                <button onclick="toggleFaq(this)" class="w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none group">
+                    <span class="text-lg font-bold text-gray-900 group-hover:text-[#0F3B68] transition-colors">Will the AI make up fake experience?</span>
+                    <svg class="w-6 h-6 text-[#0F3B68] transform transition-transform duration-300 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="faq-answer hidden px-8 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                    Absolutely not. We have a strict "Zero Seniority Hallucination" protocol. We will never elevate your job level or invent achievements. We simply translate your raw career data into the high-impact language that recruiters look for.
+                </div>
             </div>
+
             <!-- FAQ Item 4 -->
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">What file format will I receive?</h3>
-                <p class="text-gray-600 leading-relaxed">You will instantly download a perfectly formatted Microsoft Word document (.docx). We provide Word files rather than PDFs so that you retain full control to make minor edits or update your contact info in the future.</p>
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md hover:border-blue-200">
+                <button onclick="toggleFaq(this)" class="w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none group">
+                    <span class="text-lg font-bold text-gray-900 group-hover:text-[#0F3B68] transition-colors">What file format will I receive?</span>
+                    <svg class="w-6 h-6 text-[#0F3B68] transform transition-transform duration-300 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="faq-answer hidden px-8 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                    You will instantly download a perfectly formatted Microsoft Word document (.docx). We provide Word files rather than PDFs so that you retain full control to make minor edits or update your contact info in the future.
+                </div>
             </div>
+
             <!-- FAQ Item 5 -->
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Do I need a specific Job Description (JD)?</h3>
-                <p class="text-gray-600 leading-relaxed">You can optimize for general industry standards, but pasting a target JD is highly recommended. It allows our AI resume maker to customize your 12 core skills and summary to match the exact keywords the employer is scanning for.</p>
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md hover:border-blue-200">
+                <button onclick="toggleFaq(this)" class="w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none group">
+                    <span class="text-lg font-bold text-gray-900 group-hover:text-[#0F3B68] transition-colors">Do I need a specific Job Description (JD)?</span>
+                    <svg class="w-6 h-6 text-[#0F3B68] transform transition-transform duration-300 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="faq-answer hidden px-8 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                    You can optimize for general industry standards, but pasting a target JD is highly recommended. It allows our AI resume maker to customize your 12 core skills and summary to match the exact keywords the employer is scanning for.
+                </div>
             </div>
+
             <!-- FAQ Item 6 -->
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Is my data secure and private?</h3>
-                <p class="text-gray-600 leading-relaxed">100% yes. Your uploaded resume is used strictly for the 60-second generation process. The original file is instantly and permanently deleted from our servers the moment your new resume is generated.</p>
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md hover:border-blue-200">
+                <button onclick="toggleFaq(this)" class="w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none group">
+                    <span class="text-lg font-bold text-gray-900 group-hover:text-[#0F3B68] transition-colors">Is my data secure and private?</span>
+                    <svg class="w-6 h-6 text-[#0F3B68] transform transition-transform duration-300 flex-shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="faq-answer hidden px-8 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                    100% yes. Your uploaded resume is used strictly for the 60-second generation process. The original file is instantly and permanently deleted from our servers the moment your new resume is generated.
+                </div>
             </div>
+
         </div>
 
-        <!-- Call to Action Button (Now safely inside the FAQ container) -->
+        <!-- Call to Action Button -->
         <div class="text-center mt-20">
-            <button onclick="document.getElementById('upload-section').scrollIntoView({behavior: 'smooth'})" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-[#0F3B68] border border-transparent rounded-full shadow-lg hover:bg-blue-800 transition-colors duration-300">
+            <button onclick="document.getElementById('upload-section').scrollIntoView({behavior: 'smooth'})" class="inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-white bg-[#0F3B68] border border-transparent rounded-full shadow-[0_10px_20px_rgba(15,59,104,0.3)] hover:bg-blue-800 hover:-translate-y-1 transition-all duration-300">
                 Optimize Your Resume Now
-                <svg class="w-5 h-5 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <svg class="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
         </div>
         
     </div>
 </section>
+
+<!-- Add this script right below the section to handle the animations -->
+<script>
+    function toggleFaq(button) {
+        const answer = button.nextElementSibling;
+        const icon = button.querySelector('svg');
+        const isHidden = answer.classList.contains('hidden');
+
+        // Optional: Close all other FAQs first (Accordion style)
+        document.querySelectorAll('.faq-answer').forEach(el => {
+            el.classList.add('hidden');
+        });
+        document.querySelectorAll('#faq button svg').forEach(el => {
+            el.classList.remove('rotate-180');
+        });
+
+        // Toggle the clicked one
+        if (isHidden) {
+            answer.classList.remove('hidden');
+            icon.classList.add('rotate-180');
+        }
+    }
+</script>            
             <footer class="w-full bg-white border-t border-gray-200 pt-12 pb-8 mt-auto">
             <div class="max-w-7xl mx-auto px-4 md:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
