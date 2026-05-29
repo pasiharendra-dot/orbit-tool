@@ -76,7 +76,6 @@
         <!-- Desktop Menu (Hidden on mobile) -->
         <ul class="hidden md:flex space-x-8 items-center">
             <li><a href="/" class="text-gray-800 hover:text-green-600 font-medium transition-colors">Home</a></li>
-            <li><a href="/#pricing" class="text-gray-800 hover:text-green-600 font-medium transition-colors">Pricing</a></li>
             <li><a href="/blog" class="text-gray-800 hover:text-green-600 font-medium transition-colors">Blog</a></li>
             <li><a href="/#faq" class="text-gray-800 hover:text-green-600 font-medium transition-colors">FAQ</a></li>
             
@@ -100,14 +99,13 @@
     <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white border-t border-b shadow-lg pb-4 pt-2 px-6 z-50">
         <ul class="flex flex-col space-y-4">
             <li><a href="/" class="block text-gray-800 hover:text-green-600 font-medium text-lg">Home</a></li>
-            <li><a href="/#pricing" class="block text-gray-800 hover:text-green-600 font-medium text-lg">Pricing</a></li>
             <li><a href="/blog" class="block text-gray-800 hover:text-green-600 font-medium text-lg">Blog</a></li>
             <li><a href="/#faq" class="block text-gray-800 hover:text-green-600 font-medium text-lg">FAQ</a></li>
             
             <!-- LOGIN BUTTON (MOBILE) -->
             <li class="pt-3 mt-2 border-t border-gray-100">
                 <button onclick="openLoginModal()" class="w-full bg-[#0F3B68] hover:bg-blue-900 text-white font-bold py-3.5 rounded-xl shadow-md transition-colors text-lg tracking-wide">
-                    Login to Workspace
+                    Login to Resume Builder Dashboard
                 </button>
             </li>
         </ul>
@@ -365,13 +363,13 @@
                 <div class="h-64 md:h-72 w-full"></div> 
             </div>
             
-            <!-- NEW OVERLAY: Candidate Workspace Card -->
+            <!-- NEW OVERLAY: Resume Builder Dashboard Card -->
             <div class="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-sm p-4 z-10 rounded-lg">
                 
                 <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 md:p-8 flex flex-col relative overflow-hidden max-w-md w-full transform transition-all hover:scale-[1.02]">
                     <div class="absolute top-0 right-0 bg-blue-100 text-[#0F3B68] text-[10px] md:text-xs font-bold px-3 py-1.5 rounded-bl-lg">FREE ACCESS</div>
                     
-                    <h4 class="text-xl md:text-2xl font-bold text-gray-900 mb-2 mt-2">Candidate Workspace</h4>
+                    <h4 class="text-xl md:text-2xl font-bold text-gray-900 mb-2 mt-2">Resume Builder Dashboard</h4>
                     <p class="text-gray-600 mb-5 text-xs md:text-sm">Create your free account to unlock your parsed data, switch resume templates, and access the live editor.</p>
 
                     <ul class="text-sm text-gray-600 text-left space-y-3 mb-6 flex-grow">
@@ -540,63 +538,6 @@
         </div>
     </div>
 </section>
-        <!-- Pricing Section -->
-<section id="pricing" class="py-24 bg-gray-50 relative">
-    <div class="max-w-4xl mx-auto px-6 relative z-10">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-            <p class="text-xl text-gray-600">No subscriptions. No hidden fees. Just one affordable price to unlock your career potential.</p>
-        </div>
-
-        <!-- Single Pricing Card -->
-        <div class="max-w-md mx-auto bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
-            <!-- Badge -->
-            <div class="bg-gradient-to-r from-green-600 to-emerald-400 text-center py-2">
-                <span class="text-white font-bold text-sm uppercase tracking-widest">Limited Time Launch Special</span>
-            </div>
-            
-            <div class="p-8 sm:p-10 text-center">
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Instant ATS Optimization</h3>
-                
-                <!-- Pricing Anchor -->
-                <div class="mt-6 flex justify-center items-baseline text-gray-900 mb-8">
-                    <span class="text-3xl font-semibold text-gray-400 line-through mr-3">₹999</span>
-                    <span class="text-6xl font-extrabold tracking-tight">₹199</span>
-                    <span class="text-xl font-medium text-gray-500 ml-1">/resume</span>
-                </div>
-
-                <!-- Feature Checklist -->
-                <ul class="text-left space-y-4 mb-10">
-                    <li class="flex items-start">
-                        <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        <span class="text-gray-700 font-medium">Recruiter-Trained AI Rewrites</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        <span class="text-gray-700 font-medium">100% ATS-Compliant Formatting</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        <span class="text-gray-700 font-medium">Instant 60-Second Delivery</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        <span class="text-gray-700 font-medium">Fully Editable Word Doc (.docx)</span>
-                    </li>
-                </ul>
-
-                <!-- CTA Button -->
-                <button onclick="document.getElementById('upload-section').scrollIntoView({behavior: 'smooth'})" class="w-full block bg-gray-900 hover:bg-green-600 text-white font-bold text-lg py-4 rounded-xl shadow-md transition-colors duration-300">
-                    Optimize My Resume
-                </button>
-                <p class="text-xs text-gray-400 mt-4 font-medium flex items-center justify-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    Secure payment via Razorpay
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
         <!-- FAQ Section -->
 <section id="faq" class="py-20 bg-gray-50 border-t border-gray-200">
     <div class="max-w-5xl mx-auto px-6">
@@ -679,7 +620,7 @@
         <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 font-bold text-xl">✕</button>
         
         <h3 class="text-2xl font-extrabold text-[#0F3B68] mb-1">Welcome Back</h3>
-        <p class="text-sm text-gray-600 mb-6">Log in to access your workspace.</p>
+        <p class="text-sm text-gray-600 mb-6">Log in to access your Resume Builder Dashboard.</p>
         
         <!-- Google Login Button -->
         <button onclick="loginWithGoogle()" class="w-full py-3 mb-4 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold rounded-xl shadow-sm transition flex items-center justify-center gap-3 text-sm">
