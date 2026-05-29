@@ -306,47 +306,38 @@
                             <label class="block text-gray-800 text-xs font-bold mb-4 uppercase tracking-wider">Select ATS Architecture</label>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 
-                                <!-- Sentinel -->
-                                <div id="card-sentinel" class="template-card border-2 border-[#0F3B68] rounded-xl p-2 cursor-pointer relative bg-blue-50 transition-all duration-300 hover:-translate-y-1 group" onclick="selectTemplate('sentinel', this)">
-                                    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
-                                    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative" onclick="openModal(0, event)">
-                                        <img src="/sentinel.jpg" alt="Sentinel" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
-                                    </div>
-                                    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Sentinel</h3>
-                                </div>
+                                <div id="card-sentinel" class="template-card border-2 border-[#0F3B68] rounded-xl p-2 cursor-pointer relative bg-blue-50 transition-all duration-300 hover:-translate-y-1 group" onclick="selectTemplate('sentinel', this); openModal(0, event)">
+    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
+    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative">
+        <img src="/sentinel.jpg" alt="Sentinel" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
+    </div>
+    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Sentinel</h3>
+</div>
 
-                                <!-- Vanguard -->
-                                <div id="card-vanguard" class="template-card border-2 border-gray-100 rounded-xl p-2 cursor-pointer relative bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#0F3B68]/30 group" onclick="selectTemplate('vanguard', this)">
-                                    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark hidden z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
-                                    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative" onclick="openModal(1, event)">
-                                        <img src="/vanguard.jpg" alt="Vanguard" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
-                                    </div>
-                                    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Vanguard</h3>
-                                </div>
+<div id="card-vanguard" class="template-card border-2 border-gray-100 rounded-xl p-2 cursor-pointer relative bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#0F3B68]/30 group" onclick="selectTemplate('vanguard', this); openModal(1, event)">
+    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark hidden z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
+    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative">
+        <img src="/vanguard.jpg" alt="Vanguard" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
+    </div>
+    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Vanguard</h3>
+</div>
 
-                                <!-- Creative -->
-                                <div id="card-creative" class="template-card border-2 border-gray-100 rounded-xl p-2 cursor-pointer relative bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#0F3B68]/30 group" onclick="selectTemplate('creative', this)">
-                                    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark hidden z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
-                                    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative" onclick="openModal(2, event)">
-                                        <img src="/creative.jpg" alt="Creative" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
-                                    </div>
-                                    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Creative</h3>
-                                </div>
+<div id="card-creative" class="template-card border-2 border-gray-100 rounded-xl p-2 cursor-pointer relative bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#0F3B68]/30 group" onclick="selectTemplate('creative', this); openModal(2, event)">
+    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark hidden z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
+    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative">
+        <img src="/creative.jpg" alt="Creative" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
+    </div>
+    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Creative</h3>
+</div>
 
-                                <!-- Global -->
-                                <div id="card-global" class="template-card border-2 border-gray-100 rounded-xl p-2 cursor-pointer relative bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#0F3B68]/30 group" onclick="selectTemplate('global', this)">
-                                    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark hidden z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
-                                    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative" onclick="openModal(3, event)">
-                                        <img src="/global.jpg" alt="Global" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
-                                    </div>
-                                    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Global</h3>
-                                </div>
-
-                            </div>
-                            <input type="hidden" id="selected-template" value="sentinel">
-                        </div>
-                    </div>
-
+<div id="card-global" class="template-card border-2 border-gray-100 rounded-xl p-2 cursor-pointer relative bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#0F3B68]/30 group" onclick="selectTemplate('global', this); openModal(3, event)">
+    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark hidden z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
+    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative">
+        <img src="/global.jpg" alt="Global" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
+    </div>
+    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Global</h3>
+</div>
+                                    
                     <!-- RIGHT COLUMN: The Dark Mode AI Core (40%) -->
                     <div class="w-full lg:w-[40%] bg-[#0A192F] relative p-12 flex flex-col justify-center items-center text-center overflow-hidden cursor-pointer group" onclick="document.getElementById('fileInput').click()">
                         
@@ -1108,8 +1099,16 @@ document.getElementById('loading-section').style.display = 'none';
                 if(document.getElementById('how-it-works')) document.getElementById('how-it-works').style.display = 'none';
                 if(document.getElementById('faq')) document.getElementById('faq').style.display = 'none';
                 
-                document.getElementById('results-section').style.display = 'block';
-                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll back up to the top of the clean preview
+// 2. Show Loader
+            document.getElementById('loading-section').style.display = 'flex';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // ... (keep your existing fetch logic) ...
+
+            // 3. On success, hide loader and show ONLY results
+            document.getElementById('loading-section').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
                 
                 
                 const formData = new FormData();
