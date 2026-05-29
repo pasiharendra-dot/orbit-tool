@@ -477,14 +477,29 @@
             </div>
         </div>
 
-        <div id="loading-section" class="hidden flex flex-col items-center mt-32 w-full px-4 mb-32">
-            <div class="relative w-20 h-20 mb-6">
-                <div class="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-orbitLightBlue rounded-full border-t-transparent animate-spin"></div>
-            </div>
-            <h3 class="text-2xl font-bold text-orbitDark mb-2">Analyzing against ATS Algorithms...</h3>
-            <p class="text-gray-500 font-medium text-center">Applying recruiter-certified frameworks and structuring the document.</p>
-        </div>
+<div id="loading-section" class="hidden flex flex-col items-center mt-32 w-full px-4 mb-32">
+
+    <div class="relative w-20 h-20 mb-6">
+        <div class="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
+        <div class="absolute inset-0 border-4 border-orbitLightBlue rounded-full border-t-transparent animate-spin"></div>
+    </div>
+
+    <h3 class="text-3xl font-extrabold text-orbitDark mb-3 text-center">
+        Building Your ATS Resume...
+    </h3>
+
+    <!-- Dynamic message -->
+    <p id="loading-text"
+       class="text-gray-500 font-medium text-center text-lg transition-all duration-500">
+        Scanning resume structure...
+    </p>
+
+    <!-- Small trust line -->
+    <p class="text-sm text-gray-400 mt-4 text-center max-w-md">
+        This usually takes 30–40 seconds depending on resume complexity.
+    </p>
+
+</div>
 
         <div id="results-section" class="hidden max-w-[1200px] w-full mt-10 mb-20 px-4 fade-in">
             <h3 class="text-3xl font-extrabold text-center text-orbitDark mb-2">Your ATS Makeover is Ready</h3>
@@ -1119,7 +1134,118 @@ if(document.getElementById('faq'))
 const loadingSection = document.getElementById('loading-section');
 loadingSection.classList.remove('hidden');
 loadingSection.style.display = 'flex';
+// Dynamic loading messages
+const loadingMessages = [
+    "Scanning resume structure...",
+    "Identifying ATS blockers...",
+    "Extracting recruiter keywords...",
+    "Optimizing formatting...",
+    "Rewriting weak bullet points...",
+    "Improving ATS compatibility...",
+    "Building recruiter-approved resume...",
+    "Final quality check..."
+];
 
+const loadingText =
+document.getElementById(
+'loading-text'
+);
+
+let messageIndex = 0;
+
+const loadingInterval =
+setInterval(() => {
+
+    messageIndex++;
+
+    if (
+        messageIndex <
+        loadingMessages.length
+    ) {
+        loadingText.innerText =
+            loadingMessages[
+                messageIndex
+            ];
+    }
+
+}, 5000);
+// API CALL
+        const response =
+        await fetch(
+            '/api/analyze',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                'Analysis failed'
+            );
+        }
+
+        const data =
+        await response.json();
+
+        clearInterval(
+            loadingInterval
+        );
+
+        // HIDE LOADER
+        document
+        .getElementById(
+            'loading-section'
+        )
+        .style.display =
+        'none';
+
+        // SHOW RESULTS
+        document
+        .getElementById(
+            'results-section'
+        )
+        .style.display =
+        'block';
+
+        // existing preview code here...
+
+    } catch(error) {
+
+        clearInterval(
+            loadingInterval
+        );
+
+        document
+        .getElementById(
+            'loading-section'
+        )
+        .style.display =
+        'none';
+
+        alert(
+            error.message ||
+            'Something went wrong. Please try again.'
+        );
+
+        // bring back upload screen
+        document
+        .getElementById(
+            'hero-section'
+        )
+        .style.display =
+        'block';
+
+        document
+        .getElementById(
+            'upload-section'
+        )
+        .style.display =
+        'flex';
+
+        console.error(error);
+    }
+}
 // STEP 3: Hide results until API finishes
 document.getElementById('results-section').style.display = 'none';
 
@@ -1142,6 +1268,9 @@ window.scrollTo({
                 }
                 
                 const data = await response.json();
+                    clearInterval(
+    loadingInterval
+);
 // Hide loading animation
 document.getElementById('loading-section').style.display = 'none';
 
