@@ -379,8 +379,8 @@
                     </ul>
 
                     <!-- The Google Login Button (Now safely visible) -->
-                    <button id="google-login-btn" class="w-full py-3.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold rounded-xl shadow-sm transition flex justify-center items-center gap-3 text-sm md:text-base">
-                        <!-- Google G Logo SVG -->
+                    <!-- The Google Login Button (Now safely visible) -->
+                    <button id="google-login-btn" onclick="loginWithGoogle()" class="w-full py-3.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold rounded-xl shadow-sm transition flex justify-center items-center gap-3 text-sm md:text-base">                        <!-- Google G Logo SVG -->
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.66 15.63 16.88 16.79 15.71 17.57V20.34H19.28C21.36 18.42 22.56 15.6 22.56 12.25Z" fill="#4285F4"/>
                             <path d="M12 23C14.97 23 17.46 22.02 19.28 20.34L15.71 17.57C14.73 18.23 13.48 18.64 12 18.64C9.14 18.64 6.71 16.71 5.84 14.11H2.18V16.95C3.99 20.53 7.7 23 12 23Z" fill="#34A853"/>
@@ -712,7 +712,13 @@
     </div>
 </div>
 <script>
-// Global tracker for upload flow
+<script>
+        // 1. INITIALIZE SUPABASE FIRST
+        const supabaseUrl = 'https://vkiitostqcjkiyflcjhu.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraWl0b3N0cWNqa2l5Zmxjamh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MTgyNDEsImV4cCI6MjA5NTI5NDI0MX0.a1vvLGJPEJ9l7v3HgHQQ4dIRs8HLN8IEPuGqnm-lHC4'; 
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        // 2. Global tracker for upload flow
         window.isUserLoggedIn = false; 
 
         // Check if user is already logged in on page load
@@ -1501,44 +1507,5 @@ function showMsg(text, isSuccess) {
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
         </div>
-    </div>
-</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    // 1. Declare variables FIRST before using them
-    const supabaseUrl = 'https://vkiitostqcjkiyflcjhu.supabase.co';
-    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraWl0b3N0cWNqa2l5Zmxjamh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MTgyNDEsImV4cCI6MjA5NTI5NDI0MX0.a1vvLGJPEJ9l7v3HgHQQ4dIRs8HLN8IEPuGqnm-lHC4';
-
-    // 2. Create client using a safe variable name (NOT "supabase")
-    const { createClient } = supabase;
-    const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
-
-    // 3. Attach Google Login to the button
-    const googleBtn = document.getElementById('google-login-btn');
-
-    if (googleBtn) {
-        googleBtn.addEventListener('click', async () => {
-                if (window.resumeData) {
-        localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
-    }
-            const originalHTML = googleBtn.innerHTML;
-            googleBtn.innerHTML = "Connecting to Google...";
-            googleBtn.disabled = true;
-
-            const { data, error } = await supabaseClient.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: window.location.origin + '/dashboard.html'
-                }
-            });
-
-            if (error) {
-                console.error("Login Error:", error.message);
-                alert("Authentication failed. Please try again.");
-                googleBtn.innerHTML = originalHTML;
-                googleBtn.disabled = false;
-            }
-        });
-    }
-</script>
-</body>
+    </body>
 </html>
