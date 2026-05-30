@@ -76,7 +76,22 @@
         <!-- Desktop Menu (Hidden on mobile) -->
         <ul class="hidden md:flex space-x-8 items-center">
             <li><a href="/" class="text-gray-800 hover:text-green-600 font-medium transition-colors">Home</a></li>
-            <li><a href="/blog" class="text-gray-800 hover:text-green-600 font-medium transition-colors">Blog</a></li>
+            <!-- Blog Dropdown (Desktop) -->
+            <li class="relative group py-2">
+                <a href="/blog" class="text-gray-800 hover:text-green-600 font-medium transition-colors flex items-center gap-1">
+                    Blog
+                    <svg class="w-4 h-4 text-gray-400 group-hover:text-green-600 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </a>
+                
+                <!-- Dropdown Card -->
+                <div class="absolute left-0 top-full pt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
+                    <div class="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden flex flex-col p-2">
+                        <a href="/blog.html?category=job-interview" class="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#0F3B68] rounded-lg transition-colors">Job Interview</a>
+<a href="/blog.html?category=career" class="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#0F3B68] rounded-lg transition-colors">Career</a>
+<a href="/blog.html?category=cover-letter" class="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#0F3B68] rounded-lg transition-colors">Cover Letter</a>
+<a href="/blog.html?category=resume-help" class="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#0F3B68] rounded-lg transition-colors">Resume Help</a>                    </div>
+                </div>
+            </li>
             <li><a href="/#faq" class="text-gray-800 hover:text-green-600 font-medium transition-colors">FAQ</a></li>
             
             <!-- LOGIN BUTTON (DESKTOP) -->
@@ -99,7 +114,20 @@
     <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white border-t border-b shadow-lg pb-4 pt-2 px-6 z-50">
         <ul class="flex flex-col space-y-4">
             <li><a href="/" class="block text-gray-800 hover:text-green-600 font-medium text-lg">Home</a></li>
-            <li><a href="/blog" class="block text-gray-800 hover:text-green-600 font-medium text-lg">Blog</a></li>
+            <!-- Blog Dropdown (Mobile) -->
+            <li class="flex flex-col">
+                <div class="flex items-center justify-between">
+                    <a href="/blog" class="block text-gray-800 hover:text-green-600 font-medium text-lg">Blog</a>
+                    <button onclick="document.getElementById('mobile-blog-dropdown').classList.toggle('hidden')" class="p-2 text-gray-500 focus:outline-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                </div>
+                <ul id="mobile-blog-dropdown" class="hidden flex flex-col space-y-3 pl-4 border-l-2 border-gray-100 mt-3 mb-2">
+                    <a href="/blog.html?category=job-interview" class="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#0F3B68] rounded-lg transition-colors">Job Interview</a>
+<a href="/blog.html?category=career" class="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#0F3B68] rounded-lg transition-colors">Career</a>
+<a href="/blog.html?category=cover-letter" class="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#0F3B68] rounded-lg transition-colors">Cover Letter</a>
+<a href="/blog.html?category=resume-help" class="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#0F3B68] rounded-lg transition-colors">Resume Help</a>                </ul>
+            </li>
             <li><a href="/#faq" class="block text-gray-800 hover:text-green-600 font-medium text-lg">FAQ</a></li>
             
             <!-- LOGIN BUTTON (MOBILE) -->
