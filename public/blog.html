@@ -2,324 +2,495 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-3F3M7P5F41"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-3F3M7P5F41');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3F3M7P5F41"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-3F3M7P5F41');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Career Insights & ATS Secrets | GetPerfectResume Blog</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Responsive Blog Navigation -->
-<nav class="bg-white border-b py-4 sticky top-0 z-50 shadow-sm relative">
-    <div class="max-w-5xl mx-auto px-6 flex justify-between items-center">
-        
-        <!-- The Logo (Image instead of text) -->
-        <a href="/" class="flex-shrink-0">
-            <img src="/logo.png" alt="GetPerfectResume" class="h-10 w-auto object-contain">
-        </a>
+<body class="bg-white">
+    
+    <nav class="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 flex flex-col">
+        <div class="max-w-[1400px] w-full mx-auto px-6 py-3 flex justify-between items-center">
+            
+            <a href="/" class="flex-shrink-0 flex items-center gap-2 transition hover:opacity-80">
+                <img src="/logo.png" alt="GetPerfectResume" class="h-9 w-auto object-contain">
+            </a>
 
-        <!-- Desktop Links -->
-        <div class="hidden md:flex space-x-6 items-center">
-            <a href="/#pricing" class="text-sm font-semibold text-gray-600 hover:text-green-600 transition-colors">Pricing</a>
-            <a href="/blog" class="text-sm font-semibold text-green-600 transition-colors">All Articles</a>
-            <a href="/#faq" class="text-sm font-semibold text-gray-600 hover:text-green-600 transition-colors">FAQ</a>
+            <div class="hidden lg:flex space-x-6 items-center">
+                <a href="/blog.html" id="nav-desktop-all" class="nav-category text-sm font-bold text-[#0F3B68] border-b-2 border-[#0F3B68] pb-1" data-cat="all">All Articles</a>
+                <a href="/blog.html?category=resume-help" id="nav-desktop-resume-help" class="nav-category text-sm font-semibold text-gray-500 hover:text-[#0F3B68] transition-colors pb-1" data-cat="resume-help">Resume Help</a>
+                <a href="/blog.html?category=career" id="nav-desktop-career" class="nav-category text-sm font-semibold text-gray-500 hover:text-[#0F3B68] transition-colors pb-1" data-cat="career">Career</a>
+                <a href="/blog.html?category=linkedin" id="nav-desktop-linkedin" class="nav-category text-sm font-semibold text-gray-500 hover:text-[#0F3B68] transition-colors pb-1" data-cat="linkedin">LinkedIn</a>
+                <a href="/blog.html?category=job-interview" id="nav-desktop-job-interview" class="nav-category text-sm font-semibold text-gray-500 hover:text-[#0F3B68] transition-colors pb-1" data-cat="job-interview">Interviews</a>
+                
+                <div class="h-5 w-px bg-gray-200 ml-2"></div>
+                <a href="/" class="text-sm font-bold text-white bg-[#0F3B68] hover:bg-blue-900 px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Build My Resume
+                </a>
+            </div>
+
+            <div class="lg:hidden flex items-center gap-4">
+                <a href="/" class="text-[11px] font-bold text-white bg-[#0F3B68] px-4 py-2 rounded-full shadow-sm">Build Resume</a>
+            </div>
         </div>
 
-        <!-- Mobile Back Link -->
-        <a href="/" class="md:hidden text-sm font-semibold text-gray-600 hover:text-green-600 flex-shrink-0">← Back</a>
-    </div>
-</nav>
+        <div class="lg:hidden w-full overflow-x-auto custom-scrollbar px-6 py-2 border-t border-gray-50 bg-white">
+            <div class="flex space-x-5 w-max">
+                <a href="/blog.html" id="nav-mobile-all" class="nav-category text-xs font-bold text-[#0F3B68] border-b-2 border-[#0F3B68] pb-1" data-cat="all">All Articles</a>
+                <a href="/blog.html?category=resume-help" id="nav-mobile-resume-help" class="nav-category text-xs font-semibold text-gray-500 hover:text-[#0F3B68] pb-1 transition-colors" data-cat="resume-help">Resume Help</a>
+                <a href="/blog.html?category=career" id="nav-mobile-career" class="nav-category text-xs font-semibold text-gray-500 hover:text-[#0F3B68] pb-1 transition-colors" data-cat="career">Career</a>
+                <a href="/blog.html?category=linkedin" id="nav-mobile-linkedin" class="nav-category text-xs font-semibold text-gray-500 hover:text-[#0F3B68] pb-1 transition-colors" data-cat="linkedin">LinkedIn</a>
+                <a href="/blog.html?category=job-interview" id="nav-mobile-job-interview" class="nav-category text-xs font-semibold text-gray-500 hover:text-[#0F3B68] pb-1 transition-colors" data-cat="job-interview">Interviews</a>
+            </div>
+        </div>
+    </nav>
 
-    <main class="max-w-6xl mx-auto px-6 py-12">
-        <header class="mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Latest Career Insights</h1>
-            <p class="text-lg text-gray-600">Expert advice on bypassing ATS, landing executive roles, and mastering your job search.</p>
+    <main class="max-w-[1400px] mx-auto px-6 py-12">
+        
+        <header class="mb-10 flex items-center justify-between border-b border-gray-100 pb-6">
+            <h1 id="blog-page-title" class="text-3xl md:text-4xl font-extrabold text-[#0F3B68] tracking-tight">Articles</h1>
         </header>
 
-        <!-- Blog Grid -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- DYNAMIC HERO SECTION (Hides when filtering) -->
+        <div id="hero-blog-section" class="mb-16">
+            
+            <!-- Magazine Split Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-16">
+                
+                <!-- FEATURED ARTICLE (Col 1-6) -->
+                <a href="/blog/ats-friendly-resume-format.html" class="lg:col-span-6 bg-[#F8F7F4] rounded-3xl p-8 md:p-10 flex flex-col justify-between group hover:shadow-xl transition-all duration-300 relative overflow-hidden border border-gray-100">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-xs font-bold text-gray-500">Written by</span>
+                            <div class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-full shadow-sm border border-gray-100">
+                                <div class="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center text-[10px] font-bold text-blue-800">OC</div>
+                                <span class="text-xs font-bold text-gray-800">Orbit Careers</span>
+                            </div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-4 group-hover:text-[#0F3B68] transition-colors">The Ultimate ATS-Friendly Resume Format for 2026 With Free Examples</h2>
+                        <div class="flex items-center gap-2 text-sm text-gray-500 font-medium">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            8 min read
+                        </div>
+                    </div>
+                    <!-- Abstract Decorative Shape -->
+                    <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-gradient-to-br from-blue-200 to-green-200 rounded-full blur-3xl opacity-60 group-hover:scale-110 transition-transform duration-700"></div>
+                </a>
+
+                <!-- POPULAR ARTICLES (Col 7-9) -->
+                <div class="lg:col-span-3 flex flex-col">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-2">Popular</h3>
+                    <div class="space-y-8">
+                        <a href="/blog/resume-keywords.html" class="group block">
+                            <div class="w-full h-36 bg-blue-50 rounded-2xl mb-4 overflow-hidden border border-blue-100 flex items-center justify-center group-hover:border-blue-300 transition">
+                                <svg class="w-12 h-12 text-blue-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            <span class="text-[10px] font-bold text-green-600 uppercase tracking-widest block mb-1.5">Resume Help</span>
+                            <h4 class="font-bold text-gray-900 leading-snug group-hover:text-[#0F3B68] transition">How to Find and Inject the Right Resume Keywords from a Job Description</h4>
+                        </a>
+                        
+                        <a href="/blog/why-your-resume-gets-rejected-by-ats.html" class="group block">
+                            <div class="w-full h-36 bg-[#0F3B68] rounded-2xl mb-4 overflow-hidden border border-gray-900 flex items-center justify-center group-hover:opacity-90 transition">
+                                <svg class="w-12 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <span class="text-[10px] font-bold text-green-600 uppercase tracking-widest block mb-1.5">Resume Help</span>
+                            <h4 class="font-bold text-gray-900 leading-snug group-hover:text-[#0F3B68] transition">Why Your Resume Gets Rejected by ATS (And How to Fix It in 2026)</h4>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- LATEST ARTICLES (Col 10-12) -->
+                <div class="lg:col-span-3 flex flex-col">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-2">Latest</h3>
+                    <div class="flex flex-col">
+                        <a href="/blog/action-verbs-for-resume.html" class="py-4 border-b border-gray-100 group">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1">29 May 2026</span>
+                            <h4 class="font-bold text-sm text-gray-800 leading-snug group-hover:text-[#0F3B68] transition">50 Powerful Action Verbs to Replace "Responsible For" on Your Resume</h4>
+                        </a>
+                        <a href="/blog/linkedin-about-section.html" class="py-4 border-b border-gray-100 group">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1">26 May 2026</span>
+                            <h4 class="font-bold text-sm text-gray-800 leading-snug group-hover:text-[#0F3B68] transition">How to Write a LinkedIn "About" Section That Tells Your Career Story</h4>
+                        </a>
+                        <a href="/blog/one-page-vs-two-page-resume.html" class="py-4 border-b border-gray-100 group">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1">18 May 2026</span>
+                            <h4 class="font-bold text-sm text-gray-800 leading-snug group-hover:text-[#0F3B68] transition">One Page vs. Two Page Resume: Which Do Recruiters Actually Want?</h4>
+                        </a>
+                        <a href="/blog/optimize-linkedin-profile.html" class="py-4 border-b border-gray-100 group">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1">10 May 2026</span>
+                            <h4 class="font-bold text-sm text-gray-800 leading-snug group-hover:text-[#0F3B68] transition">How to Optimize Your LinkedIn Profile to Appear in Recruiter Searches</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INLINE CTA BANNER -->
+            <div class="bg-[#FCECDD] rounded-[2rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between relative overflow-hidden shadow-sm border border-orange-100 mb-16">
+                <div class="relative z-10 max-w-xl mb-6 md:mb-0">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-4">ATS-Friendly resume builder: compliant formatting & examples (2026)</h2>
+                    <div class="flex items-center gap-2 text-sm text-orange-800 font-medium mb-8">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Instant Analysis
+                    </div>
+                    <a href="/" class="inline-flex items-center gap-2 bg-transparent border-2 border-gray-900 text-gray-900 font-bold px-6 py-2.5 rounded-full hover:bg-gray-900 hover:text-white transition-all">
+                        Build Resume
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+                <!-- Abstract Graphic Representation -->
+                <div class="relative z-10 w-full md:w-1/3 flex justify-end">
+                    <div class="w-48 h-40 bg-white/60 backdrop-blur rounded-xl shadow-lg border border-white p-4 transform rotate-3">
+                        <div class="w-full h-3 bg-gray-200 rounded-full mb-3"></div>
+                        <div class="w-3/4 h-3 bg-gray-200 rounded-full mb-6"></div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="h-16 bg-orange-200 rounded-lg"></div>
+                            <div class="h-16 bg-blue-100 rounded-lg"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-gray-900 mb-8 border-b border-gray-100 pb-4">All Library Articles</h2>
+        </div>
+
+        <!-- MAIN ARTICLE GRID (Contains all 27 articles) -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="main-article-grid">
+            
             <!-- Article Card 1 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="career">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Career</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">I Applied to 100 Jobs and Got 0 Offers—Here’s What I Did Differently</h2>
-                    <p class="text-gray-600 text-sm mb-4">The invisible barrier between you and your dream job is likely an ATS bot. Here is how to beat it...</p>
-                    <a href="/blog/why-resume-rejected.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="career">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-green-600 uppercase tracking-widest bg-green-50 self-start px-2.5 py-1 rounded-md mb-4">Career</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">I Applied to 100 Jobs and Got 0 Offers—Here’s What I Did Differently</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">The invisible barrier between you and your dream job is likely an ATS bot. Here is how to beat it...</p>
+                    <a href="/blog/why-resume-rejected.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 2 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How to Check if Your Resume is Actually ATS-Compatible</h2>
-                    <p class="text-gray-600 text-sm mb-4">Are you being auto-rejected by hiring software? Learn how to perform the manual ATS plain-text test...</p>
-                    <a href="/blog/how-to-check-ats-compatibility.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How to Check if Your Resume is Actually ATS-Compatible</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Are you being auto-rejected by hiring software? Learn how to perform the manual ATS plain-text test...</p>
+                    <a href="/blog/how-to-check-ats-compatibility.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 3 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">The Ultimate ATS-Friendly Resume Format for 2026 (Free Template)</h2>
-                    <p class="text-gray-600 text-sm mb-4">Are you being auto-rejected by hiring software? Learn how to write an ATS Resume</p>
-                    <a href="/blog/ats-friendly-resume-format.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">The Ultimate ATS-Friendly Resume Format for 2026 (Free Template)</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Are you being auto-rejected by hiring software? Learn how to write an ATS Resume</p>
+                    <a href="/blog/ats-friendly-resume-format.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 4 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">PDF vs. Word Resume: Which Format Do ATS Parsers Prefer?</h2>
-                    <p class="text-gray-600 text-sm mb-4">Wondering What Formats ATS Systems Prefer? Here is A Detailed Guide.</p>
-                    <a href="/blog/pdf-vs-word-resume.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">PDF vs. Word Resume: Which Format Do ATS Parsers Prefer?</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Wondering What Formats ATS Systems Prefer? Here is A Detailed Guide.</p>
+                    <a href="/blog/pdf-vs-word-resume.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 5 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">Why Using ChatGPT to Write Your Resume is Getting You Rejected</h2>
-                    <p class="text-gray-600 text-sm mb-4">Wondering Why Your Chatgpt Generated CV is Getting Rejected? Here is The Answer</p>
-                    <a href="/blog/chatgpt-rejected-ai-optimizer.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">Why Using ChatGPT to Write Your Resume is Getting You Rejected</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Wondering Why Your Chatgpt Generated CV is Getting Rejected? Here is The Answer</p>
+                    <a href="/blog/chatgpt-rejected-ai-optimizer.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 6 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">Stop failing ATS scans due to bad typography. Discover the 5 best fonts</h2>
-                    <p class="text-gray-600 text-sm mb-4">The ATS Systems Reject the Custom Fonts, Wondering if Your Resume is Getting Rejected Because of The Fonts? Here is The Answer</p>
-                    <a href="/blog/best-fonts-for-ats.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">Stop failing ATS scans due to bad typography. Discover the 5 best fonts</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">The ATS Systems Reject the Custom Fonts, Wondering if Your Resume is Getting Rejected Because of The Fonts? Here is The Answer</p>
+                    <a href="/blog/best-fonts-for-ats.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 7 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How to Find and Inject the Right Resume Keywords from a Job Description</h2>
-                    <p class="text-gray-600 text-sm mb-4">Stop guessing what recruiters want. Learn how to decode job descriptions, find the exact resume keywords ATS parsers are looking for, and inject them naturally.</p>
-                    <a href="/blog/resume-keywords.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How to Find and Inject the Right Resume Keywords from a Job Description</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Stop guessing what recruiters want. Learn how to decode job descriptions, find the exact resume keywords ATS parsers are looking for, and inject them naturally.</p>
+                    <a href="/blog/resume-keywords.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 8 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">The Truth About Two-Column Resumes: Why Bots Hate Modern Designs</h2>
-                    <p class="text-gray-600 text-sm mb-4">Find out why your beautiful multi column resume is getting you rejected. Learn the technical truth about how ATS parsers scramble two-column designs and how to fix it.</p>
-                    <a href="/blog/multi-column-resume-truth.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">The Truth About Two-Column Resumes: Why Bots Hate Modern Designs</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Find out why your beautiful multi column resume is getting you rejected. Learn the technical truth about how ATS parsers scramble two-column designs and how to fix it.</p>
+                    <a href="/blog/multi-column-resume-truth.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 9 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">Stop Paying for ATS Resume Checkers—Do This Instead</h2>
-                    <p class="text-gray-600 text-sm mb-4">Most online ATS resume checkers are outdated scams that rely on simple keyword counting. Learn why they fail and how to use true AI resume optimization instead.</p>
-                    <a href="/blog/ats-resume-checker.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">Stop Paying for ATS Resume Checkers—Do This Instead</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Most online ATS resume checkers are outdated scams that rely on simple keyword counting. Learn why they fail and how to use true AI resume optimization instead.</p>
+                    <a href="/blog/ats-resume-checker.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 10 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">7 Insider Secrets to Beat the ATS and Reach a Human Recruiter</h2>
-                    <p class="text-gray-600 text-sm mb-4">Stop falling into the resume black hole. Discover the highly technical, executive strategies you need to beat the ATS and get your resume in front of a human.</p>
-                    <a href="/blog/beat-the-ats.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">7 Insider Secrets to Beat the ATS and Reach a Human Recruiter</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Stop falling into the resume black hole. Discover the highly technical, executive strategies you need to beat the ATS and get your resume in front of a human.</p>
+                    <a href="/blog/beat-the-ats.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 11 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">Why Charts and Graphics on Your Resume Are Destroying Your Chances</h2>
-                    <p class="text-gray-600 text-sm mb-4">Find out why putting graphics on your resume is getting you rejected. Learn the technical truth about ATS parsers, OCR failures, and why visual resumes fail.</p>
-                    <a href="/blog/graphics-on-resume.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">Why Charts and Graphics on Your Resume Are Destroying Your Chances</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Find out why putting graphics on your resume is getting you rejected. Learn the technical truth about ATS parsers, OCR failures, and why visual resumes fail.</p>
+                    <a href="/blog/graphics-on-resume.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 12 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How Far Back Should a Resume Go? (The 10-15 Year Rule Explained)</h2>
-                    <p class="text-gray-600 text-sm mb-4">Wondering how far back should a resume go? Learn the technical reasons behind the 10-15 year rule, how ATS date parsing works, and how to avoid ageism in your job search.</p>
-                    <a href="/blog/how-far-back-should-a-resume-go.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How Far Back Should a Resume Go? (The 10-15 Year Rule Explained)</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Wondering how far back should a resume go? Learn the technical reasons behind the 10-15 year rule, how ATS date parsing works, and how to avoid ageism in your job search.</p>
+                    <a href="/blog/how-far-back-should-a-resume-go.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 13 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">50 Powerful Action Verbs to Replace "Responsible For" on Your Resume</h2>
-                    <p class="text-gray-600 text-sm mb-4">Stop using passive language that gets you rejected. Discover 50 powerful action verbs for your resume, learn how ATS parsers score semantic verbs, and transform your bullet points.</p>
-                    <a href="/blog/action-verbs-for-resume.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">50 Powerful Action Verbs to Replace "Responsible For" on Your Resume</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Stop using passive language that gets you rejected. Discover 50 powerful action verbs for your resume, learn how ATS parsers score semantic verbs, and transform your bullet points.</p>
+                    <a href="/blog/action-verbs-for-resume.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 14 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">One Page vs. Two Page Resume: Which Do Recruiters Actually Want?</h2>
-                    <p class="text-gray-600 text-sm mb-4">Settle the debate on one page vs two page resumes. Learn how ATS parsers evaluate resume length, the dangers of shrinking fonts, and what executives actually want to read.</p>
-                    <a href="/blog/one-page-vs-two-page-resume.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">One Page vs. Two Page Resume: Which Do Recruiters Actually Want?</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Settle the debate on one page vs two page resumes. Learn how ATS parsers evaluate resume length, the dangers of shrinking fonts, and what executives actually want to read.</p>
+                    <a href="/blog/one-page-vs-two-page-resume.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 15 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How to Write a Professional Summary That Hooks Recruiters in 6 Seconds</h2>
-                    <p class="text-gray-600 text-sm mb-4">Stop using outdated objective statements. Discover the exact 3-sentence formula and professional summary examples that hook executive recruiters and pass ATS parsers.</p>
-                    <a href="/blog/professional-summary-examples.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How to Write a Professional Summary That Hooks Recruiters in 6 Seconds</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Stop using outdated objective statements. Discover the exact 3-sentence formula and professional summary examples that hook executive recruiters and pass ATS parsers.</p>
+                    <a href="/blog/professional-summary-examples.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 16 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How to Explain an Employment Gap on Your Resume Without Apologizing</h2>
-                    <p class="text-gray-600 text-sm mb-4">Stop hiding from your career history. Learn how to explain an employment gap on your resume, beat the ATS date parsers, and command respect from executive recruiters.</p>
-                    <a href="/blog/employment-gap-on-resume.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How to Explain an Employment Gap on Your Resume Without Apologizing</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Stop hiding from your career history. Learn how to explain an employment gap on your resume, beat the ATS date parsers, and command respect from executive recruiters.</p>
+                    <a href="/blog/employment-gap-on-resume.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 17 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">The Perfect Resume Strategy for a Complete Career Pivot</h2>
-                    <p class="text-gray-600 text-sm mb-4">Discover the elite resume strategy for a complete career pivot. Learn how to beat ATS parsers, avoid the functional resume trap, and translate your transferable skills.</p>
-                    <a href="/blog/resume-for-career-change.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">The Perfect Resume Strategy for a Complete Career Pivot</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Discover the elite resume strategy for a complete career pivot. Learn how to beat ATS parsers, avoid the functional resume trap, and translate your transferable skills.</p>
+                    <a href="/blog/resume-for-career-change.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 18 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How to Correctly List Freelance and Consulting Work on a Resume</h2>
-                    <p class="text-gray-600 text-sm mb-4">Wondering how to put freelance work on a resume? Learn the executive strategy to list contract work, consulting, and gig experience without failing ATS parsers.</p>
-                    <a href="/blog/freelance-work-on-resume.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How to Correctly List Freelance and Consulting Work on a Resume</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Wondering how to put freelance work on a resume? Learn the executive strategy to list contract work, consulting, and gig experience without failing ATS parsers.</p>
+                    <a href="/blog/freelance-work-on-resume.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 19 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">Where and How to List Certifications to Maximize Resume Impact</h2>
-                    <p class="text-gray-600 text-sm mb-4">Earning the certification was only half the battle. Discover the executive strategy on how to list certifications on a resume to beat ATS parsers and win interviews.</p>
-                    <a href="/blog/list-certifications-on-resume.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">Where and How to List Certifications to Maximize Resume Impact</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Earning the certification was only half the battle. Discover the executive strategy on how to list certifications on a resume to beat ATS parsers and win interviews.</p>
+                    <a href="/blog/list-certifications-on-resume.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 20 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How to Add Numbers to Your Resume (Even if You Aren't in Sales)</h2>
-                    <p class="text-gray-600 text-sm mb-4">Struggling to build a quantifiable achievements resume? Learn the executive strategies to add hard numbers, metrics, and scale to your resume, regardless of your industry.</p>
-                    <a href="/blog/quantifiable-achievements-resume.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How to Add Numbers to Your Resume (Even if You Aren't in Sales)</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Struggling to build a quantifiable achievements resume? Learn the executive strategies to add hard numbers, metrics, and scale to your resume, regardless of your industry.</p>
+                    <a href="/blog/quantifiable-achievements-resume.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 21 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">Why the Resume "Objective Statement" is Dead (And What to Use Instead)</h2>
-                    <p class="text-gray-600 text-sm mb-4">Stop killing your job search with an outdated resume objective statement. Learn why executive recruiters hate them and how to write an ATS-friendly professional summary instead.</p>
-                    <a href="/blog/resume-objective-statement.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">Why the Resume "Objective Statement" is Dead (And What to Use Instead)</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Stop killing your job search with an outdated resume objective statement. Learn why executive recruiters hate them and how to write an ATS-friendly professional summary instead.</p>
+                    <a href="/blog/resume-objective-statement.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 22 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="linkedin">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">LinkedIn</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How to Optimize Your LinkedIn Profile to Appear in Recruiter Searches</h2>
-                    <p class="text-gray-600 text-sm mb-4">Stop waiting for recruiters to find you. Learn the exact algorithm secrets to optimize your LinkedIn profile, rank in recruiter searches, and humanize your professional brand.</p>
-                    <a href="/blog/optimize-linkedin-profile.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="linkedin">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 self-start px-2.5 py-1 rounded-md mb-4">LinkedIn</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How to Optimize Your LinkedIn Profile to Appear in Recruiter Searches</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Stop waiting for recruiters to find you. Learn the exact algorithm secrets to optimize your LinkedIn profile, rank in recruiter searches, and humanize your professional brand.</p>
+                    <a href="/blog/optimize-linkedin-profile.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 23 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="linkedin">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">LinkedIn</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">10 LinkedIn Headline Formulas That Drive Inbound Recruiter Messages</h2>
-                    <p class="text-gray-600 text-sm mb-4">Stop using the default LinkedIn headline. Discover the technical algorithm secrets and 10 executive LinkedIn headline examples that drive inbound recruiter messages.</p>
-                    <a href="/blog/linkedin-headline-examples.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="linkedin">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 self-start px-2.5 py-1 rounded-md mb-4">LinkedIn</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">10 LinkedIn Headline Formulas That Drive Inbound Recruiter Messages</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Stop using the default LinkedIn headline. Discover the technical algorithm secrets and 10 executive LinkedIn headline examples that drive inbound recruiter messages.</p>
+                    <a href="/blog/linkedin-headline-examples.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 24 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="linkedin">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">LinkedIn</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How to Write a LinkedIn "About" Section That Tells Your Career Story</h2>
-                    <p class="text-gray-600 text-sm mb-4">Stop leaving your LinkedIn About section blank. Learn the 4-part executive storytelling framework to write a LinkedIn summary that hooks recruiters and humanizes your brand.</p>
-                    <a href="/blog/linkedin-about-section.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="linkedin">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 self-start px-2.5 py-1 rounded-md mb-4">LinkedIn</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How to Write a LinkedIn "About" Section That Tells Your Career Story</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Stop leaving your LinkedIn About section blank. Learn the 4-part executive storytelling framework to write a LinkedIn summary that hooks recruiters and humanizes your brand.</p>
+                    <a href="/blog/linkedin-about-section.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 25 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="linkedin">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">LinkedIn</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">Does the Green "Open to Work" Banner Actually Hurt Your Job Search?</h2>
-                    <p class="text-gray-600 text-sm mb-4">Settle the debate on the LinkedIn Open to Work banner. Learn the technical truth about how recruiters use the open to work feature on LinkedIn and whether it hurts your brand.</p>
-                    <a href="/blog/open-to-work-linkedin-banner.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="linkedin">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 self-start px-2.5 py-1 rounded-md mb-4">LinkedIn</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">Does the Green "Open to Work" Banner Actually Hurt Your Job Search?</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Settle the debate on the LinkedIn Open to Work banner. Learn the technical truth about how recruiters use the open to work feature on LinkedIn and whether it hurts your brand.</p>
+                    <a href="/blog/open-to-work-linkedin-banner.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 26 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="linkedin">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">LinkedIn</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">How the LinkedIn Skills Section Actually Dictates Your Search Ranking</h2>
-                    <p class="text-gray-600 text-sm mb-4">Discover the technical algorithmic secrets of the LinkedIn skills section. Learn how recruiters search for talent and how to optimize your skills to rank on page one.</p>
-                    <a href="/blog/linkedin-skills-section-ranking.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="linkedin">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 self-start px-2.5 py-1 rounded-md mb-4">LinkedIn</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">How the LinkedIn Skills Section Actually Dictates Your Search Ranking</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">Discover the technical algorithmic secrets of the LinkedIn skills section. Learn how recruiters search for talent and how to optimize your skills to rank on page one.</p>
+                    <a href="/blog/linkedin-skills-section-ranking.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
             <!-- Article Card 27 -->
-            <article class="blog-post bg-white rounded-xl shadow-sm border overflow-hidden hover:shadow-md transition" data-category="resume-help">
-                <div class="p-6">
-                    <span class="text-xs font-bold text-green-600 uppercase tracking-widest">Resume Help</span>
-                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900">Why Your Resume Gets Rejected by ATS (And How to Fix It in 2026)</h2>
-                    <p class="text-gray-600 text-sm mb-4">83% of resumes never reach human eyes. Learn why ATS systems reject resumes and the exact steps to make yours ATS-compliant in under 60 seconds.</p>
-                    <a href="/blog/why-your-resume-gets-rejected-by-ats.html" class="text-green-600 font-semibold hover:underline text-sm">Read Full Story →</a>
+            <article class="blog-post bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col" data-category="resume-help">
+                <div class="p-8 flex flex-col h-full">
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 self-start px-2.5 py-1 rounded-md mb-4">Resume Help</span>
+                    <h2 class="text-xl font-bold mt-2 mb-3 text-gray-900 leading-snug">Why Your Resume Gets Rejected by ATS (And How to Fix It in 2026)</h2>
+                    <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">83% of resumes never reach human eyes. Learn why ATS systems reject resumes and the exact steps to make yours ATS-compliant in under 60 seconds.</p>
+                    <a href="/blog/why-your-resume-gets-rejected-by-ats.html" class="text-[#0F3B68] font-bold hover:underline text-sm flex items-center gap-1">Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
                 </div>
             </article>
 
-            <!-- More cards will go here as you write them! -->
         </div>
     </main>
+<!-- PREMIUM FOOTER -->
+    <footer class="bg-gray-50 border-t border-gray-100 pt-16 pb-8 mt-20">
+        <div class="max-w-[1400px] mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                
+                <!-- Brand Column -->
+                <div class="col-span-1 md:col-span-2">
+                    <img src="/logo.png" alt="GetPerfectResume" class="h-8 w-auto object-contain mb-4 filter grayscale hover:grayscale-0 transition-all duration-300">
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-sm">
+                        Empowering professionals to bypass ATS algorithms and land executive roles with AI-driven, recruiter-certified resume frameworks.
+                    </p>
+                </div>
+                
+                <!-- Product Links -->
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4 tracking-wide">Product</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/" class="text-sm text-gray-500 hover:text-[#0F3B68] font-medium transition-colors">Build My Resume</a></li>
+                        <li><a href="/#how-it-works" class="text-sm text-gray-500 hover:text-[#0F3B68] font-medium transition-colors">How it Works</a></li>
+                        <li><a href="/blog.html" class="text-sm text-gray-500 hover:text-[#0F3B68] font-medium transition-colors">Career Insights Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support Links -->
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4 tracking-wide">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/#faq" class="text-sm text-gray-500 hover:text-[#0F3B68] font-medium transition-colors">FAQ</a></li>
+                        <li><a href="https://wa.me/918208407384?text=I%20am%20coming%20from%20the%20blog%20and%20would%20like%20to%20book%20an%20Expert%20Review." target="_blank" class="text-sm text-gray-500 hover:text-green-600 font-medium transition-colors flex items-center gap-1.5">Chat with an Expert <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a></li>
+                        <li><a href="#" class="text-sm text-gray-500 hover:text-[#0F3B68] font-medium transition-colors">Terms & Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bottom Copyright -->
+            <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-gray-400 font-semibold tracking-widest uppercase">
+                    &copy; 2026 Orbit Careers. All rights reserved.
+                </p>
+                
+                <!-- Social Icon (LinkedIn) -->
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-[#0F3B68] transition-colors">
+                        <span class="sr-only">LinkedIn</span>
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // 1. Read the URL to see if a category was clicked
@@ -327,28 +498,43 @@
         const activeCategory = urlParams.get('category');
 
         if (activeCategory) {
-            // 2. Find all blog posts on the page
-            const allPosts = document.querySelectorAll('.blog-post');
-            let postsFound = 0;
+            
+            // HIDE the hero and CTA sections so the user only sees the filtered grid
+            const heroSection = document.getElementById('hero-blog-section');
+            if (heroSection) heroSection.style.display = 'none';
 
-            // 3. Loop through them and hide/show based on the tag
+            // 2. Filter the articles
+            const allPosts = document.querySelectorAll('.blog-post');
             allPosts.forEach(post => {
                 if (post.getAttribute('data-category') === activeCategory) {
-                    post.style.display = 'block'; // Show it
-                    postsFound++;
+                    post.style.display = 'flex'; // Use flex to maintain the card structure
                 } else {
                     post.style.display = 'none'; // Hide it
                 }
             });
 
-            // Optional: Update the page title to show they are filtering
+            // 3. Update the page title
             const pageTitle = document.getElementById('blog-page-title');
             if (pageTitle) {
-                // Capitalize the category nicely (e.g. "job-interview" -> "Job Interview")
                 const formattedTitle = activeCategory.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                 pageTitle.innerText = formattedTitle + " Articles";
             }
         }
+
+        // 4. Highlight the active category in BOTH mobile and desktop navs
+        // Determine what category we are actively viewing (defaults to 'all')
+        const currentCat = activeCategory || 'all';
+
+        // Reset all links to gray, then highlight the ones matching the current category
+        document.querySelectorAll('.nav-category').forEach(link => {
+            if (link.getAttribute('data-cat') === currentCat) {
+                link.classList.remove('text-gray-500', 'font-semibold');
+                link.classList.add('text-[#0F3B68]', 'border-b-2', 'border-[#0F3B68]', 'font-bold');
+            } else {
+                link.classList.remove('text-[#0F3B68]', 'border-b-2', 'border-[#0F3B68]', 'font-bold');
+                link.classList.add('text-gray-500', 'font-semibold');
+            }
+        });
     });
 </script>
 </body>
