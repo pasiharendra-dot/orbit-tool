@@ -482,7 +482,8 @@
                 <div class="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
                 <div class="absolute inset-0 border-4 border-orbitLightBlue rounded-full border-t-transparent animate-spin"></div>
             </div>
-            <h3 class="text-2xl font-bold text-orbitDark mb-2">Analyzing against ATS Algorithms...</h3>
+            <!-- Added id="loading-title" and transition classes -->
+            <h3 id="loading-title" class="text-2xl font-bold text-orbitDark mb-2 transition-opacity duration-500">Building your ATS optimized Resume...</h3>
             <p class="text-gray-500 font-medium text-center">Applying recruiter-certified frameworks and structuring the document.</p>
         </div>
 
@@ -1099,34 +1100,57 @@ function showMsg(text, isSuccess) {
                     return;
                 }
 
-// STEP 1: Hide homepage sections
-if(document.getElementById('hero-section'))
-    document.getElementById('hero-section').style.display = 'none';
+                // STEP 1: Hide homepage sections
+                if(document.getElementById('hero-section')) document.getElementById('hero-section').style.display = 'none';
+                if(document.getElementById('upload-section')) document.getElementById('upload-section').style.display = 'none';
+                if(document.getElementById('testimonials-section')) document.getElementById('testimonials-section').style.display = 'none';
+                if(document.getElementById('how-it-works')) document.getElementById('how-it-works').style.display = 'none';
+                if(document.getElementById('faq')) document.getElementById('faq').style.display = 'none';
 
-if(document.getElementById('upload-section'))
-    document.getElementById('upload-section').style.display = 'none';
+                // STEP 2: SHOW loading animation & Start Text Cycle
+                const loadingSection = document.getElementById('loading-section');
+                loadingSection.classList.remove('hidden');
+                loadingSection.style.display = 'flex';
 
-if(document.getElementById('testimonials-section'))
-    document.getElementById('testimonials-section').style.display = 'none';
+                // --- DYNAMIC LOADING TEXT LOGIC ---
+                const loadingPhrases = [
+                    "Scanning resume structure...",
+                    "Identifying ATS blockers...",
+                    "Extracting recruiter keywords...",
+                    "Optimizing formatting...",
+                    "Rewriting bullet points...",
+                    "Improving ATS compatibility...",
+                    "Building recruiter-approved resume...",
+                    "Final quality check..."
+                ];
+                const loadingTitle = document.getElementById('loading-title');
+                let phraseIndex = 0;
+                
+                if (loadingTitle) {
+                    loadingTitle.innerText = loadingPhrases[0];
+                    loadingTitle.style.opacity = 1;
+                }
+                
+                if (window.loadingInterval) clearInterval(window.loadingInterval);
+                
+                window.loadingInterval = setInterval(() => {
+                    phraseIndex++;
+                    if (phraseIndex < loadingPhrases.length && loadingTitle) {
+                        loadingTitle.style.opacity = 0; // Fade out
+                        setTimeout(() => {
+                            loadingTitle.innerText = loadingPhrases[phraseIndex];
+                            loadingTitle.style.opacity = 1; // Fade in
+                        }, 500); 
+                    } else {
+                        clearInterval(window.loadingInterval);
+                    }
+                }, 5000);
+                // ----------------------------------
 
-if(document.getElementById('how-it-works'))
-    document.getElementById('how-it-works').style.display = 'none';
+                // STEP 3: Hide results until API finishes
+                document.getElementById('results-section').style.display = 'none';
 
-if(document.getElementById('faq'))
-    document.getElementById('faq').style.display = 'none';
-
-// STEP 2: SHOW loading animation
-const loadingSection = document.getElementById('loading-section');
-loadingSection.classList.remove('hidden');
-loadingSection.style.display = 'flex';
-
-// STEP 3: Hide results until API finishes
-document.getElementById('results-section').style.display = 'none';
-
-window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-});                
+                window.scrollTo({ top: 0, behavior: 'smooth' });                
                 
                 const formData = new FormData();
                 formData.append('resume', file);
@@ -1142,11 +1166,15 @@ window.scrollTo({
                 }
                 
                 const data = await response.json();
-// Hide loading animation
-document.getElementById('loading-section').style.display = 'none';
 
-// Show final preview page
-document.getElementById('results-section').style.display = 'block';
+                // Clear interval when API returns
+                if (window.loadingInterval) clearInterval(window.loadingInterval);
+
+                // Hide loading animation
+                document.getElementById('loading-section').style.display = 'none';
+
+                // Show final preview page
+                document.getElementById('results-section').style.display = 'block';
 
                 const randomBeforeScore = Math.floor(Math.random() * (62 - 38 + 1)) + 38; 
                 const randomAfterScore = Math.floor(Math.random() * (98 - 89 + 1)) + 89;
@@ -1183,21 +1211,23 @@ document.getElementById('results-section').style.display = 'block';
                     return; // Stop the rest of the script
                 }
 
-                document.getElementById('loading-section').style.display = 'none';
-                document.getElementById('results-section').style.display = 'block';
-
                 try { fetch(GOOGLE_TRACKER_URL, { method: "POST", body: JSON.stringify({ name: data.after?.name || "Unknown", email: data.after?.email || "Unknown", phone: data.after?.phone || "Unknown", beforeScore: window.beforeScoreTracker, afterScore: data.after?.score || "N/A", action: "Lead Captured" }) }); } catch(e) { }
 
                 event.target.value = '';
             } catch (error) {
                 console.error("UPLOAD ERROR:", error);
                 alert("CRITICAL ERROR: " + error.message);
+                
+                if (window.loadingInterval) clearInterval(window.loadingInterval); // Stop timer on error
+                
                 document.getElementById('loading-section').style.display = 'none';
-                document.getElementById('upload-section').style.display = 'flex';
+                if(document.getElementById('upload-section')) {
+                    document.getElementById('upload-section').style.display = 'flex';
+                }
                 event.target.value = '';
             }
         }
-
+        
         // ==========================================
         // PRICING & FOMO LOGIC
         // ==========================================
