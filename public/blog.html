@@ -295,5 +295,36 @@
             <!-- More cards will go here as you write them! -->
         </div>
     </main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Read the URL to see if a category was clicked
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeCategory = urlParams.get('category');
+
+        if (activeCategory) {
+            // 2. Find all blog posts on the page
+            const allPosts = document.querySelectorAll('.blog-post');
+            let postsFound = 0;
+
+            // 3. Loop through them and hide/show based on the tag
+            allPosts.forEach(post => {
+                if (post.getAttribute('data-category') === activeCategory) {
+                    post.style.display = 'block'; // Show it
+                    postsFound++;
+                } else {
+                    post.style.display = 'none'; // Hide it
+                }
+            });
+
+            // Optional: Update the page title to show they are filtering
+            const pageTitle = document.getElementById('blog-page-title');
+            if (pageTitle) {
+                // Capitalize the category nicely (e.g. "job-interview" -> "Job Interview")
+                const formattedTitle = activeCategory.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                pageTitle.innerText = formattedTitle + " Articles";
+            }
+        }
+    });
+</script>
 </body>
 </html>
