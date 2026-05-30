@@ -1119,6 +1119,14 @@ function showMsg(text, isSuccess) {
                     return;
                 }
 
+                    const maxSize = 10 * 1024 * 1024; // 10MB
+
+if (file.size > maxSize) {
+    alert(
+        'Resume file too large. Max 10MB.'
+    );
+    return;
+}
                 const jdText = document.getElementById('job-description-input').value.trim();
                 const extraInfoText = document.getElementById('extra-info-input').value.trim();
                 const expLevel = document.getElementById('experience-level').value;
