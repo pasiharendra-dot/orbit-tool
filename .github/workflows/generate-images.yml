@@ -1,0 +1,37 @@
+name: Generate Template Thumbnails
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-thumbnails:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write 
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Browser Dependencies
+        run: npx puppeteer browsers install chrome
+
+      - name: Run Thumbnail Generator
+        run: node generate-thumbnails.js
+
+      - name: Commit and Push Images
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add images/
+          git commit -m "Auto-generated 50 template thumbnails" || echo "No changes to commit"
+          git push
