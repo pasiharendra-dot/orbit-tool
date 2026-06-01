@@ -116,7 +116,7 @@
             </div>
 
             <div class="mb-4">
-                <h2 class="text-base md:text-lg font-bold text-gray-900">Edit Your Resume</h2>
+                <h2 id="sidebar-title" class="text-base md:text-lg font-bold text-gray-900">Edit Your Resume</h2>
                 
                 <!-- WORKSPACE TOGGLE -->
                 <div class="bg-gray-100 p-1 rounded-lg flex relative mt-2">
@@ -307,7 +307,7 @@
         <div class="lg:col-span-8 flex flex-col space-y-4">            
             <div class="flex flex-col xl:flex-row justify-between items-center bg-white p-3 md:p-4 rounded-xl shadow-sm border border-gray-200 gap-4">
                 
-                <div class="flex items-center gap-4 w-full xl:w-auto">
+                <div id="ats-score-container" class="flex items-center gap-4 w-full xl:w-auto transition-opacity duration-300">
                     <div class="relative w-12 h-12 flex-shrink-0">
                         <svg class="w-full h-full" viewBox="0 0 36 36">
                             <path class="text-gray-200" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" />
@@ -338,7 +338,7 @@ class="w-full xl:w-auto bg-[#0F3B68] hover:bg-[#0b2d50] text-white font-bold tex
 </button>
                 <button onclick="handleDownloadClick()" class="w-full xl:w-auto bg-green-600 hover:bg-green-700 text-white font-bold text-xs md:text-sm px-4 md:px-5 py-2 md:py-2.5 rounded-lg shadow-sm transition flex items-center justify-center whitespace-nowrap shrink-0">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Download .docx
+                    <span id="download-btn-text">Download .docx</span>
                 </button>
             </div>
 
@@ -1029,9 +1029,13 @@ async function handleDownloadClick(event) {
             user.plan_type === 'single' &&
             !user.download_used;
 
-        // Already paid → allow download
+// Already paid → allow download
         if (isAnnualActive || isSingleDownloadValid) {
-            await downloadResume();
+            if (currentWorkspace === 'cover-letter') {
+                await downloadCoverLetter();
+            } else {
+                await downloadResume();
+            }
 
             // Mark single plan as used
             if (user.plan_type === 'single') {
@@ -1241,8 +1245,12 @@ async function processPayment(selectedPlan) {
                     if (creditSpan && (selectedPlan === 'annual' || selectedPlan === 'expert')) creditSpan.innerText = parseInt(creditSpan.innerText) + 300;
                     window.currentCredits = parseInt(creditSpan.innerText);
 
-                    // Proceed to download
-                    await downloadResume();
+// Proceed to download
+                    if (currentWorkspace === 'cover-letter') {
+                        await downloadCoverLetter();
+                    } else {
+                        await downloadResume();
+                    }
                     closeModal();
                     document.getElementById('success-modal')?.classList.remove('hidden');
 
@@ -1724,22 +1732,42 @@ function closeSuccessModal() {
             const tabCL = document.getElementById('tab-cover-letter');
             const panelResume = document.getElementById('resume-editor-panel');
             const panelCL = document.getElementById('cover-letter-panel');
+            
+            // Dynamic UI Elements
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const atsScoreBar = document.getElementById('ats-score-container');
+            const downloadBtnText = document.getElementById('download-btn-text');
 
             if (workspace === 'resume') {
                 tabResume.className = "flex-1 py-1.5 text-[11px] font-bold rounded-md bg-white text-[#0F3B68] shadow-sm transition-all duration-300";
                 tabCL.className = "flex-1 py-1.5 text-[11px] font-bold rounded-md text-gray-500 hover:text-gray-700 transition-all duration-300";
                 panelResume.classList.remove('hidden');
                 panelCL.classList.add('hidden');
+                
+                if (sidebarTitle) sidebarTitle.innerText = "Edit Your Resume";
+                if (atsScoreBar) {
+                    atsScoreBar.style.opacity = '1';
+                    atsScoreBar.style.pointerEvents = 'auto';
+                }
+                if (downloadBtnText) downloadBtnText.innerText = "Download .docx";
+                
                 renderCurrentCanvas();
             } else {
                 tabCL.className = "flex-1 py-1.5 text-[11px] font-bold rounded-md bg-white text-[#0F3B68] shadow-sm transition-all duration-300";
                 tabResume.className = "flex-1 py-1.5 text-[11px] font-bold rounded-md text-gray-500 hover:text-gray-700 transition-all duration-300";
                 panelCL.classList.remove('hidden');
                 panelResume.classList.add('hidden');
+                
+                if (sidebarTitle) sidebarTitle.innerText = "Cover Letter AI";
+                if (atsScoreBar) {
+                    atsScoreBar.style.opacity = '0'; // Hides it smoothly without breaking flexbox alignment
+                    atsScoreBar.style.pointerEvents = 'none';
+                }
+                if (downloadBtnText) downloadBtnText.innerText = "Export Letter";
+                
                 renderCoverLetterCanvas();
             }
         }
-
         function renderCoverLetterCanvas() {
             const canvas = document.getElementById('workspace-canvas');
             canvas.innerHTML = `
@@ -1765,14 +1793,17 @@ function closeSuccessModal() {
                 const name = document.getElementById('edit-name').value || "Candidate";
                 const role = document.getElementById('cl-target-role').value || "the open role";
                 const company = document.getElementById('cl-target-company').value || "your organization";
-                const contactStr = document.getElementById('edit-contact').value.replace(/ \| /g, '<br>') || "Contact Information";
+                const contactStr = document.getElementById('edit-contact').value || "Contact Information";
                 
                 const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+                // Save data globally so the DOCX builder can grab it
+                window.generatedCoverLetterData = { name, role, company, contactStr, today };
 
                 canvas.innerHTML = `
                     <div class="text-left font-serif text-gray-800 p-2 leading-relaxed text-[11px] md:text-xs">
                         <p class="mb-6 font-extrabold text-[#0F3B68] text-base md:text-lg">${name.toUpperCase()}</p>
-                        <p class="mb-6 text-gray-500 leading-snug">${contactStr}</p>
+                        <p class="mb-6 text-gray-500 leading-snug">${contactStr.replace(/ \| /g, '<br>')}</p>
                         <p class="mb-8 text-gray-800">${today}</p>
                         <p class="mb-6 font-bold text-gray-800">To the Hiring Team at ${company},</p>
                         
@@ -1791,6 +1822,42 @@ function closeSuccessModal() {
                 btn.disabled = false;
             }, 2500);
         }
+
+        async function downloadCoverLetter() {
+            if (!window.generatedCoverLetterData) {
+                alert("Please click '✨ Auto-Write Cover Letter' first!");
+                return;
+            }
+            try {
+                const { Document, Paragraph, TextRun } = docx;
+                const data = window.generatedCoverLetterData;
+                
+                const doc = new Document({
+                    sections: [{
+                        properties: { page: { margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 } } },
+                        children: [
+                            new Paragraph({ children: [new TextRun({ text: data.name.toUpperCase(), bold: true, size: 32, color: "0F3B68" })] }),
+                            new Paragraph({ spacing: { after: 400 }, children: [new TextRun({ text: data.contactStr.replace(/ \| /g, ' | '), size: 20, color: "666666" })] }),
+                            new Paragraph({ spacing: { after: 200 }, children: [new TextRun({ text: data.today, size: 24 })] }),
+                            new Paragraph({ spacing: { after: 400 }, children: [new TextRun({ text: `To the Hiring Team at ${data.company},`, bold: true, size: 24 })] }),
+                            new Paragraph({ spacing: { after: 200 }, children: [new TextRun({ text: `I am writing to express my strong interest in the ${data.role} position. With a proven track record of driving measurable outcomes and aligning cross-functional teams to exceed core business objectives, I am confident in my ability to deliver immediate, strategic value to your organization.`, size: 24 })] }),
+                            new Paragraph({ spacing: { after: 200 }, children: [new TextRun({ text: `Throughout my career, I have consistently focused on operational excellence and scalable growth. While my attached resume outlines my professional milestones and technical competencies, what it cannot fully capture is my relentless drive for innovation and my commitment to fostering collaborative, high-performing environments.`, size: 24 })] }),
+                            new Paragraph({ spacing: { after: 400 }, children: [new TextRun({ text: `I welcome the opportunity to discuss how my unique blend of skills, coupled with my deep industry expertise, aligns perfectly with the strategic direction of ${data.company}. I am excited about the possibility of contributing to your team's ongoing success.`, size: 24 })] }),
+                            new Paragraph({ spacing: { after: 400 }, children: [new TextRun({ text: `Thank you for your time and consideration.`, size: 24 })] }),
+                            new Paragraph({ children: [new TextRun({ text: `Sincerely,`, size: 24 })] }),
+                            new Paragraph({ spacing: { before: 400 }, children: [new TextRun({ text: data.name, bold: true, size: 24 })] }),
+                        ]
+                    }]
+                });
+
+                docx.Packer.toBlob(doc).then(blob => { 
+                    saveAs(blob, `Cover_Letter_${data.company.replace(/\s+/g, '_')}.docx`); 
+                });
+            } catch (err) {
+                console.error(err);
+                alert("Error generating cover letter document.");
+            }
+        }    
     </script>
 </body>
 </html>
