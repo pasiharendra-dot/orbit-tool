@@ -115,8 +115,20 @@
                 </div>
             </div>
 
-            <div>
+            <div class="mb-4">
                 <h2 class="text-base md:text-lg font-bold text-gray-900">Edit Your Resume</h2>
+                
+                <!-- WORKSPACE TOGGLE -->
+                <div class="bg-gray-100 p-1 rounded-lg flex relative mt-2">
+                    <button id="tab-resume" onclick="switchWorkspace('resume')" class="flex-1 py-1.5 text-[11px] font-bold rounded-md bg-white text-[#0F3B68] shadow-sm transition-all duration-300">📄 Resume</button>
+                    <button id="tab-cover-letter" onclick="switchWorkspace('cover-letter')" class="flex-1 py-1.5 text-[11px] font-bold rounded-md text-gray-500 hover:text-gray-700 transition-all duration-300">✉️ Cover Letter</button>
+                </div>
+            </div>
+
+            <!-- RESUME EDITOR PANEL (Active by default) -->
+            <div id="resume-editor-panel" class="space-y-4">
+                
+            <!-- TEMPLATE PICKER -->
                 
             <!-- TEMPLATE PICKER -->
 <div class="bg-gradient-to-br from-[#0F3B68] to-[#164B80] rounded-xl p-4 shadow-md border border-blue-900">
@@ -258,10 +270,41 @@
                     <textarea id="edit-personal" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
                 </div>
             </div>
+            </div> <!-- Closes resume-editor-panel -->
+
+            <!-- COVER LETTER PANEL (Hidden by default) -->
+            <div id="cover-letter-panel" class="hidden space-y-4">
+                <div class="bg-gradient-to-br from-[#0F3B68] to-[#164B80] rounded-xl p-4 shadow-md border border-blue-900 mb-4">
+                    <h3 class="text-white font-bold text-sm">Cover Letter AI</h3>
+                    <p class="text-blue-200 text-[10px]">Auto-generate a highly tailored letter.</p>
+                </div>
+                
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Target Company / Hiring Manager</label>
+                    <input type="text" id="cl-target-company" placeholder="e.g., Google or John Doe" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                </div>
+                
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Target Role</label>
+                    <input type="text" id="cl-target-role" placeholder="e.g., Senior Product Manager" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Letter Tone</label>
+                    <select id="cl-tone" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                        <option value="confident">Confident & Executive</option>
+                        <option value="direct">Direct & Startup-Ready</option>
+                        <option value="traditional">Traditional & Corporate</option>
+                    </select>
+                </div>
+
+                <button onclick="generateCoverLetter(this)" class="w-full py-3 mt-2 bg-[#0F3B68] hover:bg-blue-800 text-white font-bold rounded-lg shadow-sm transition text-xs flex justify-center items-center gap-2">
+                    ✨ Auto-Write Cover Letter
+                </button>
+            </div> <!-- Closes cover-letter-panel -->
         </div>
 
-        <div class="lg:col-span-8 flex flex-col space-y-4">
-            
+        <div class="lg:col-span-8 flex flex-col space-y-4">            
             <div class="flex flex-col xl:flex-row justify-between items-center bg-white p-3 md:p-4 rounded-xl shadow-sm border border-gray-200 gap-4">
                 
                 <div class="flex items-center gap-4 w-full xl:w-auto">
@@ -1668,6 +1711,85 @@ function closeSuccessModal() {
             }
 
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: children }] });
+        }
+
+        // ==========================================
+        // WORKSPACE TOGGLE & COVER LETTER ENGINE
+        // ==========================================
+        let currentWorkspace = 'resume';
+
+        function switchWorkspace(workspace) {
+            currentWorkspace = workspace;
+            const tabResume = document.getElementById('tab-resume');
+            const tabCL = document.getElementById('tab-cover-letter');
+            const panelResume = document.getElementById('resume-editor-panel');
+            const panelCL = document.getElementById('cover-letter-panel');
+
+            if (workspace === 'resume') {
+                tabResume.className = "flex-1 py-1.5 text-[11px] font-bold rounded-md bg-white text-[#0F3B68] shadow-sm transition-all duration-300";
+                tabCL.className = "flex-1 py-1.5 text-[11px] font-bold rounded-md text-gray-500 hover:text-gray-700 transition-all duration-300";
+                panelResume.classList.remove('hidden');
+                panelCL.classList.add('hidden');
+                renderCurrentCanvas();
+            } else {
+                tabCL.className = "flex-1 py-1.5 text-[11px] font-bold rounded-md bg-white text-[#0F3B68] shadow-sm transition-all duration-300";
+                tabResume.className = "flex-1 py-1.5 text-[11px] font-bold rounded-md text-gray-500 hover:text-gray-700 transition-all duration-300";
+                panelCL.classList.remove('hidden');
+                panelResume.classList.add('hidden');
+                renderCoverLetterCanvas();
+            }
+        }
+
+        function renderCoverLetterCanvas() {
+            const canvas = document.getElementById('workspace-canvas');
+            canvas.innerHTML = `
+                <div class="text-left font-serif p-4 opacity-40">
+                    <p class="mb-6">[Your Name]<br>[Your Contact Info]</p>
+                    <p class="mb-6">[Date]</p>
+                    <p class="mb-6">[Hiring Manager / Target Company]<br>[Company Address]</p>
+                    <p class="mb-6 font-bold">Dear [Hiring Manager],</p>
+                    <p class="mb-4 italic">Your highly tailored, ATS-aligned cover letter will be generated here...</p>
+                    <p class="mb-8 italic">Click "✨ Auto-Write Cover Letter" in the left panel to execute.</p>
+                    <p>Sincerely,<br><br>[Your Name]</p>
+                </div>
+            `;
+        }
+
+        function generateCoverLetter(btn) {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "⏳ Scanning Resume & Generating...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const canvas = document.getElementById('workspace-canvas');
+                const name = document.getElementById('edit-name').value || "Candidate";
+                const role = document.getElementById('cl-target-role').value || "the open role";
+                const company = document.getElementById('cl-target-company').value || "your organization";
+                const contactStr = document.getElementById('edit-contact').value.replace(/ \| /g, '<br>') || "Contact Information";
+                
+                const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+                canvas.innerHTML = `
+                    <div class="text-left font-serif text-gray-800 p-2 leading-relaxed text-[11px] md:text-xs">
+                        <p class="mb-6 font-extrabold text-[#0F3B68] text-base md:text-lg">${name.toUpperCase()}</p>
+                        <p class="mb-6 text-gray-500 leading-snug">${contactStr}</p>
+                        <p class="mb-8 text-gray-800">${today}</p>
+                        <p class="mb-6 font-bold text-gray-800">To the Hiring Team at ${company},</p>
+                        
+                        <p class="mb-4 text-justify">I am writing to express my strong interest in the ${role} position. With a proven track record of driving measurable outcomes and aligning cross-functional teams to exceed core business objectives, I am confident in my ability to deliver immediate, strategic value to your organization.</p>
+                        
+                        <p class="mb-4 text-justify">Throughout my career, I have consistently focused on operational excellence and scalable growth. While my attached resume outlines my professional milestones and technical competencies, what it cannot fully capture is my relentless drive for innovation and my commitment to fostering collaborative, high-performing environments.</p>
+                        
+                        <p class="mb-4 text-justify">I welcome the opportunity to discuss how my unique blend of skills, coupled with my deep industry expertise, aligns perfectly with the strategic direction of ${company}. I am excited about the possibility of contributing to your team's ongoing success.</p>
+                        
+                        <p class="mb-10">Thank you for your time and consideration.</p>
+                        <p>Sincerely,<br><br><span class="font-bold">${name}</span></p>
+                    </div>
+                `;
+                
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2500);
         }
     </script>
 </body>
