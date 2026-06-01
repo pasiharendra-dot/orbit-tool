@@ -7,6 +7,10 @@ jobs:
   build-thumbnails:
     runs-on: ubuntu-latest
     
+    # This line fixes the Node 20 deprecation warning
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    
     permissions:
       contents: write 
 
@@ -17,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install Dependencies
         run: npm install
