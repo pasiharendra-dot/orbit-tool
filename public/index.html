@@ -331,53 +331,7 @@
                                 <textarea id="extra-info-input" rows="1" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent transition-all resize-none text-sm text-gray-700" placeholder="Any missing promotions, metrics, or certs? Type them here..."></textarea>
                             </div>
                         </div>
-
-                        <!-- Template Selection -->
-                        <div class="mb-4">
-                            <label class="block text-gray-800 text-xs font-bold mb-4 uppercase tracking-wider">Select ATS Architecture</label>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                
-                                <!-- Sentinel -->
-                                <div id="card-sentinel" class="template-card border-2 border-[#0F3B68] rounded-xl p-2 cursor-pointer relative bg-blue-50 transition-all duration-300 hover:-translate-y-1 group" onclick="selectTemplate('sentinel', this)">
-                                    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
-                                    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative" onclick="openModal(0, event)">
-                                        <img src="/sentinel.jpg" alt="Sentinel" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
-                                    </div>
-                                    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Sentinel</h3>
-                                </div>
-
-                                <!-- Vanguard -->
-                                <div id="card-vanguard" class="template-card border-2 border-gray-100 rounded-xl p-2 cursor-pointer relative bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#0F3B68]/30 group" onclick="selectTemplate('vanguard', this)">
-                                    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark hidden z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
-                                    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative" onclick="openModal(1, event)">
-                                        <img src="/vanguard.jpg" alt="Vanguard" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
-                                    </div>
-                                    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Vanguard</h3>
-                                </div>
-
-                                <!-- Creative -->
-                                <div id="card-creative" class="template-card border-2 border-gray-100 rounded-xl p-2 cursor-pointer relative bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#0F3B68]/30 group" onclick="selectTemplate('creative', this)">
-                                    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark hidden z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
-                                    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative" onclick="openModal(2, event)">
-                                        <img src="/creative.jpg" alt="Creative" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
-                                    </div>
-                                    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Creative</h3>
-                                </div>
-
-                                <!-- Global -->
-                                <div id="card-global" class="template-card border-2 border-gray-100 rounded-xl p-2 cursor-pointer relative bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#0F3B68]/30 group" onclick="selectTemplate('global', this)">
-                                    <div class="absolute -top-2 -right-2 bg-[#0F3B68] text-white text-[9px] uppercase px-1.5 py-0.5 rounded shadow-sm font-bold checkmark hidden z-10 flex items-center gap-0.5"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ON</div>
-                                    <div class="h-28 bg-gray-100 rounded-lg mb-2 overflow-hidden relative" onclick="openModal(3, event)">
-                                        <img src="/global.jpg" alt="Global" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
-                                    </div>
-                                    <h3 class="font-extrabold text-[11px] text-gray-900 leading-tight text-center">Global</h3>
-                                </div>
-
-                            </div>
-                            <input type="hidden" id="selected-template" value="sentinel">
-                        </div>
-                    </div>
-
+                        
                     <!-- RIGHT COLUMN: The Dark Mode AI Core (40%) -->
                     <div class="w-full lg:w-[40%] bg-[#0A192F] relative p-12 flex flex-col justify-center items-center text-center overflow-hidden cursor-pointer group" onclick="document.getElementById('fileInput').click()">
                         
@@ -1839,7 +1793,52 @@ if (file.size > maxSize) {
                 closeModal(); 
             }
         }
-    </script>
+// Populate the Homepage Slider
+const featuredTemplates = [
+    { id: 'vanguard', name: 'Vanguard', category: 'Executive' },
+    { id: 'axiom', name: 'Axiom', category: 'Professional' },
+    { id: 'navy_executive', name: 'Navy Exec', category: 'C-Suite' },
+    { id: 'classic_blue', name: 'Classic Blue', category: 'Corporate' },
+    { id: 'pinnacle', name: 'Pinnacle', category: 'Consulting' },
+    { id: 'meridian', name: 'Meridian', category: 'Engineering' }
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sliderContainer = document.getElementById('homepage-template-slider');
+    if (sliderContainer) {
+        sliderContainer.innerHTML = featuredTemplates.map(t => `
+            <div class="snap-start shrink-0 w-64 md:w-72 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden group hover:shadow-xl transition-all duration-300">
+                <div class="relative aspect-[1/1.4] bg-gray-100">
+                    <img src="thumbnails/${t.id}.jpg" alt="${t.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-[#0F3B68]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
+                        <button onclick="selectTemplateAndUpload('${t.id}')" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2.5 px-6 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            Use Template
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-gray-900 text-lg">${t.name}</h3>
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-0.5">${t.category}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+});
+
+// The magical function that remembers their choice and opens the upload box
+function selectTemplateAndUpload(templateId) {
+    // 1. Save their choice
+    localStorage.setItem('orbit_selected_template', templateId);
+    
+    // 2. Open your existing Upload Modal
+    // (Replace 'openUploadModal()' with whatever function actually opens your upload popup)
+    if (typeof openUploadModal === 'function') {
+        openUploadModal();
+    } else {
+        window.location.href = '/?action=upload';
+    }
+}    
+</script>
     <div id="template-modal" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity">
         
         <button onclick="closeModal()" class="absolute top-6 right-6 text-white hover:text-gray-300 z-[110]">
