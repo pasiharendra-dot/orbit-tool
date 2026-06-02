@@ -657,7 +657,7 @@ if (!response.ok) {
             grid.innerHTML = templates.map(t => `
                 <button onclick="applyTemplate('${t.id}')" class="group relative bg-white p-2 rounded-xl shadow-sm border ${currentActiveTemplate === t.id ? 'border-[#0F3B68] ring-2 ring-blue-100' : 'border-gray-200 hover:border-blue-300'} transition-all duration-200 text-left w-full">
                     <div class="aspect-[1/1.4] bg-gray-100 rounded-lg mb-2 overflow-hidden flex items-center justify-center border border-gray-100">
-                        <span class="text-[10px] font-bold text-gray-400 group-hover:text-blue-500 transition">${t.id.toUpperCase()}</span>
+                        <img src="thumbnails/${t.id}.jpg" alt="${t.name} Template" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTBweCIgZmlsbD0iIzkY2EzeSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPlBST1ZJREUgSU1BR0U8L3RleHQ+PC9zdmc+'">
                     </div>
                     <h4 class="font-bold text-xs text-gray-900 truncate">${t.name}</h4>
                     <p class="text-[9px] text-gray-500 uppercase tracking-wide">${t.category}</p>
@@ -665,7 +665,7 @@ if (!response.ok) {
             `).join('');
             document.getElementById('template-library-modal').classList.remove('hidden');
         }
-
+        
         function closeTemplateModal() {
             document.getElementById('template-library-modal').classList.add('hidden');
         }
