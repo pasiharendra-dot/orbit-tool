@@ -40,3 +40,9 @@ jobs:
           git commit -m "Auto-generated 50 template thumbnails" || echo "No changes to commit"
           git pull --rebase origin main
           git push
+# 👇 ADD THIS NEW STEP RIGHT AFTER YOUR SCRIPT RUNS
+      - name: Rescue Generated Images
+        uses: actions/upload-artifact@v4
+        with:
+          name: template-thumbnails
+          path: images/
