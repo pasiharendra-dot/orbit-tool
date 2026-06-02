@@ -188,7 +188,191 @@ const TemplateEngine = {
             </div>
         `;
     },
+// 11. NEW: MERIDIAN (Technical, clean structural borders)
+    meridian: function(profile, expFormatted) {
+        return `
+            <div class="mb-4">
+                <h1 class="text-3xl md:text-4xl font-black text-gray-900 tracking-tight uppercase">${profile.name}</h1>
+                <p class="text-sm text-gray-600 font-bold mt-1">${profile.title} | ${profile.contact.replace(/ \| /g, ' | ')}</p>
+            </div>
+            <div class="space-y-4">
+                <div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1">About</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                <div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
+                <div class="grid grid-cols-2 gap-4 mt-3">
+                    ${profile.education ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1">Education</h2><p class="text-xs text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                    ${profile.skills.length ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1">Technical Skills</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.skills.join(', ')}</p></div>` : ''}
+                </div>
+            </div>
+        `;
+    },
 
+    // 12. NEW: MINIMAL GREY (Soft greys, thin elegant lines)
+    minimal_grey: function(profile, expFormatted) {
+        return `
+            <div class="border-b border-gray-300 pb-4 mb-4">
+                <h1 class="text-3xl font-bold text-gray-800 tracking-tight">${profile.name}</h1>
+                <p class="text-xs text-gray-500 mt-1">${profile.title} • ${profile.contact.replace(/ \| /g, ' • ')}</p>
+            </div>
+            <div class="space-y-3">
+                <div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 rounded-sm">Summary</h2><p class="text-xs text-gray-600 leading-relaxed">${profile.summary}</p></div>
+                <div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 mt-3 rounded-sm">Experience</h2><div class="text-xs text-gray-600">${expFormatted}</div></div>
+                ${profile.education ? `<div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 mt-3 rounded-sm">Education</h2><p class="text-xs text-gray-600 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                ${profile.skills.length ? `<div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 mt-3 rounded-sm">Skills</h2><p class="text-xs text-gray-600 leading-relaxed">${profile.skills.join(' | ')}</p></div>` : ''}
+            </div>
+        `;
+    },
+
+    // 13. NEW: NAVY EXECUTIVE (Thick navy banner, authoritative)
+    navy_executive: function(profile, expFormatted) {
+        return `
+            <div class="bg-[#1A365D] text-white p-6 mb-5">
+                <h1 class="text-3xl font-bold uppercase tracking-wider">${profile.name}</h1>
+                <p class="text-xs text-blue-200 mt-2 font-medium tracking-wide border-t border-blue-400 pt-2">${profile.title} | ${profile.contact.replace(/ \| /g, ' | ')}</p>
+            </div>
+            <div class="space-y-4 px-2">
+                <div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2">Executive Profile</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                <div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Professional Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
+                ${profile.education ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Education</h2><p class="text-xs text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                ${profile.certifications.length ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Board Roles & Certifications</h2><ul class="text-xs text-gray-800 list-disc pl-4 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
+            </div>
+        `;
+    },
+
+    // 14. NEW: OLIVE TECH (Earthy tones, data/tech focus)
+    olive_tech: function(profile, expFormatted) {
+        return `
+            <div class="bg-[#4B5320] text-white p-5 mb-4 rounded-sm">
+                <h1 class="text-3xl font-extrabold uppercase tracking-widest">${profile.name}</h1>
+                <p class="text-[11px] text-[#C5E1A5] mt-1">${profile.title}</p>
+                <p class="text-[9px] text-gray-200 mt-1">${profile.contact.replace(/ \| /g, ' • ')}</p>
+            </div>
+            <div class="space-y-3 px-1">
+                <div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5">Summary</h2><p class="text-xs text-gray-700 leading-relaxed">${profile.summary}</p></div>
+                <div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Work Experience</h2><div class="text-xs text-gray-700">${expFormatted}</div></div>
+                ${profile.education ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Education</h2><p class="text-xs text-gray-700 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                ${profile.skills.length ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Technical Skills</h2><p class="text-xs text-gray-700 leading-relaxed">${profile.skills.join(', ')}</p></div>` : ''}
+            </div>
+        `;
+    },
+
+    // 15. NEW: PINNACLE (McKinsey/Bain style, serif, centered)
+    pinnacle: function(profile, expFormatted) {
+        return `
+            <div class="text-center border-b-[2px] border-black pb-3 mb-4 font-serif">
+                <h1 class="text-4xl font-bold uppercase tracking-widest mb-2">${profile.name}</h1>
+                <p class="text-[11px] text-gray-800">${profile.title}</p>
+                <p class="text-[9px] text-gray-600 mt-1">${profile.contact}</p>
+            </div>
+            <div class="space-y-4 font-serif px-4">
+                <div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2">Professional Summary</h2><p class="text-xs text-gray-900 leading-relaxed text-justify">${profile.summary}</p></div>
+                <div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Professional Experience</h2><div class="text-xs text-gray-900">${expFormatted}</div></div>
+                ${profile.education ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Education</h2><p class="text-xs text-gray-900 whitespace-pre-line">${profile.education}</p></div>` : ''}
+            </div>
+        `;
+    },
+
+    // 16. NEW: PURPLE PRO (SaaS/Product manager style)
+    purple_pro: function(profile, expFormatted) {
+        return `
+            <div class="bg-[#5E35B1] text-white p-5 mb-4 shadow-sm">
+                <h1 class="text-3xl font-bold tracking-tight">${profile.name}</h1>
+                <p class="text-[10px] text-purple-200 mt-1.5 opacity-90">${profile.title} | ${profile.contact.replace(/ \| /g, ' | ')}</p>
+            </div>
+            <div class="space-y-3 px-2">
+                <div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5">Professional Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                <div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Work Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
+                ${profile.education ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Education</h2><p class="text-xs text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                ${profile.skills.length ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Skills</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.skills.join(' • ')}</p></div>` : ''}
+            </div>
+        `;
+    },
+
+    // 17. NEW: RECTOR (Classic C-Suite, strong typography)
+    rector: function(profile, expFormatted) {
+        return `
+            <div class="mb-5 font-serif">
+                <h1 class="text-4xl font-black text-black tracking-tighter uppercase leading-none">${profile.name.split(' ')[0]}</h1>
+                <h1 class="text-4xl font-black text-black tracking-tighter uppercase leading-none">${profile.name.split(' ').slice(1).join(' ')}</h1>
+                <p class="text-[10px] text-gray-600 mt-3 border-t border-gray-300 pt-1">${profile.title} • ${profile.contact.replace(/ \| /g, ' • ')}</p>
+            </div>
+            <div class="space-y-4 font-serif">
+                <div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2">Executive Profile</h2><p class="text-xs text-gray-900 leading-relaxed text-justify">${profile.summary}</p></div>
+                <div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Career History</h2><div class="text-xs text-gray-900">${expFormatted}</div></div>
+                ${profile.education ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Education</h2><p class="text-xs text-gray-900 whitespace-pre-line">${profile.education}</p></div>` : ''}
+            </div>
+        `;
+    },
+
+    // 18. NEW: ROSE MODERN (Soft burgundy header, left column)
+    rose_modern: function(profile, expFormatted) {
+        return `
+            <div class="bg-[#90323D] text-white p-5 mb-4">
+                <h1 class="text-3xl font-bold tracking-wide">${profile.name}</h1>
+                <p class="text-[10px] text-pink-100 mt-1">${profile.title} | ${profile.contact.replace(/ \| /g, ' | ')}</p>
+            </div>
+            <div class="grid grid-cols-12 gap-6 px-2">
+                <div class="col-span-4 space-y-4 bg-pink-50/50 p-3 rounded">
+                    ${profile.education ? `<div><h3 class="text-[10px] font-bold text-[#90323D] uppercase tracking-wider border-b border-pink-200 pb-1 mb-1.5">Education</h3><p class="text-[10px] text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                    ${profile.skills.length ? `<div><h3 class="text-[10px] font-bold text-[#90323D] uppercase tracking-wider border-b border-pink-200 pb-1 mb-1.5 mt-3">Core Skills</h3><ul class="text-[10px] text-gray-800 space-y-1">${profile.skills.slice(0,10).map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
+                </div>
+                <div class="col-span-8 space-y-4">
+                    <div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2">Professional Summary</h3><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                    <div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Work Experience</h3><div class="text-xs text-gray-800">${expFormatted}</div></div>
+                </div>
+            </div>
+        `;
+    },
+
+    // 19. NEW: SIGNAL (Tech, terminal-esque, thick left borders)
+    signal: function(profile, expFormatted) {
+        return `
+            <div class="mb-5">
+                <h1 class="text-3xl font-black text-black uppercase tracking-tight">${profile.name}</h1>
+                <p class="text-xs text-gray-600 font-medium mt-1">${profile.title}</p>
+                <p class="text-[10px] text-gray-500 mt-0.5">${profile.contact.replace(/ \| /g, ' · ')}</p>
+            </div>
+            <div class="space-y-4">
+                <div class="border-l-4 border-black pl-3"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Profile</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                <div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
+                ${profile.education ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Education</h2><p class="text-xs text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                ${profile.skills.length ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Technical Stack</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.skills.join(' · ')}</p></div>` : ''}
+            </div>
+        `;
+    },
+
+    // 20. NEW: SLATE PROFESSIONAL (Grey/Blue block, ultra clean)
+    slate_professional: function(profile, expFormatted) {
+        return `
+            <div class="bg-[#334155] text-white p-5 mb-4">
+                <h1 class="text-3xl font-bold tracking-wide">${profile.name}</h1>
+                <p class="text-[11px] text-slate-300 mt-1 uppercase tracking-wider">${profile.title}</p>
+                <p class="text-[9px] text-slate-400 mt-1">${profile.contact.replace(/ \| /g, ' | ')}</p>
+            </div>
+            <div class="space-y-3 px-2">
+                <div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase">Executive Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                <div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase mt-3">Professional Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
+                ${profile.education ? `<div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase mt-3">Education</h2><p class="text-xs text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                ${profile.skills.length ? `<div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase mt-3">Skills & Expertise</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.skills.join(', ')}</p></div>` : ''}
+            </div>
+        `;
+    },
+
+    // 21. NEW: ZENITH (Black header, stark contrast)
+    zenith: function(profile, expFormatted) {
+        return `
+            <div class="bg-[#111111] text-white p-6 mb-4 font-serif">
+                <h1 class="text-4xl font-bold tracking-widest uppercase">${profile.name}</h1>
+                <p class="text-xs text-gray-300 mt-1 border-t border-gray-600 pt-2">${profile.title}</p>
+            </div>
+            <div class="text-right text-[9px] text-gray-500 mb-4 px-2">${profile.contact.replace(/ \| /g, '  |  ')}</div>
+            <div class="space-y-4 px-2 font-serif">
+                <div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5">· Profile</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                <div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Career History</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
+                ${profile.education ? `<div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Education</h2><p class="text-xs text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                ${profile.certifications.length ? `<div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Credentials</h2><ul class="text-xs text-gray-800 list-disc pl-5 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
+            </div>
+        `;
+    }
     // --- The Render Router ---
     renderLayout: function(layoutName, profile, expFormatted) {
         if (this[layoutName]) {
