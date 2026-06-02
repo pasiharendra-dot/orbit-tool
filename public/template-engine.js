@@ -373,7 +373,7 @@ const TemplateEngine = {
                 ${profile.certifications.length ? `<div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Credentials</h2><ul class="text-xs text-gray-800 list-disc pl-5 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
             </div>
         `;
-    }
+    },
     
         // --- The Render Router ---
     renderLayout: function(layoutName, profile, expFormatted) {
