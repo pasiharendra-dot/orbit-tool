@@ -1,56 +1,53 @@
 const puppeteer = require('puppeteer');
-const sharp = require('sharp');
-const express = require('express');
 const path = require('path');
-const fs = require('fs');
 
-const app = express();
-app.use(express.static(path.join(__dirname, '/'))); 
-const PORT = 3000;
+// Array of templates to capture (Replace with your actual URLs/paths)
+const templates = [
+  { name: 'executive-layout', url: 'http://localhost:3000/preview/executive' },
+  // Add your other template URLs here
+];
 
-const layouts = ['sentinel', 'vanguard', 'creative', 'global'];
-const themes = ['orbit', 'emerald', 'charcoal', 'ruby', 'slate'];
-const fonts = ['modern', 'classic', 'tech', 'elegant'];
+(async () => {
+  console.log('🚀 Booting up thumbnail generator...');
+  const browser = await puppeteer.launch({ headless: 'new' });
+  const page = await browser.newPage();
 
-app.listen(PORT, async () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-    
-    const imgDir = path.join(__dirname, 'images');
-    if (!fs.existsSync(imgDir)) fs.mkdirSync(imgDir);
+  // Set the viewport to ensure the resume renders at a good resolution
+  await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 2 });
 
-    console.log('Launching headless browser...');
-    const browser = await puppeteer.launch({ 
-        headless: "new",
-        args: ['--no-sandbox', '--disable-setuid-sandbox'] 
-    });
-    const page = await browser.newPage();
-    await page.setViewport({ width: 800, height: 1131, deviceScaleFactor: 2 });
+  for (const template of templates) {
+    console.log(`\n⏳ Generating Template: ${template.name}...`);
 
-    for (let i = 0; i < 50; i++) {
-        const layout = layouts[i % layouts.length];
-        const theme = themes[i % themes.length];
-        const font = fonts[i % fonts.length];
+    try {
+      // 1. Go to the page and wait for network activity to quiet down
+      await page.goto(template.url, { waitUntil: 'networkidle0', timeout: 30000 });
 
-        const url = `http://localhost:${PORT}/dashboard.html?screenshot_mode=true&layout=${layout}&theme=${theme}&font=${font}`;
-        console.log(`Generating Template ${i + 1}/50...`);
-        
-        await page.goto(url, { waitUntil: 'networkidle0' }); 
+      // 2. The 1-Second Buffer: Give web fonts and builder scripts time to fully paint
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-        const canvasElement = await page.$('#preview-frame');
-        
-        if (canvasElement) {
-            const screenshotBuffer = await canvasElement.screenshot();
-            const outputPath = path.join(imgDir, `template-${i + 1}.webp`);
-            
-            await sharp(screenshotBuffer)
-                .resize({ width: 600 }) 
-                .webp({ quality: 80 })  
-                .toFile(outputPath);
-                
-            console.log(`Saved template-${i + 1}.webp`);
-        }
+      // 3. Look for your exact resume container
+      const targetElement = '#workspace-canvas';
+      const resumeBox = await page.$(targetElement);
+
+      // 4. The Bulletproof Check: If it's missing, tell us exactly why!
+      if (!resumeBox) {
+        console.error(`❌ ERROR: Could not find '${targetElement}' for ${template.name}.`);
+        console.error(`   👉 Fix: Check if the ID changed, or if the page failed to render the resume.`);
+        continue; // Move on to the next template instead of crashing completely
+      }
+
+      // 5. Take a screenshot of ONLY the resume canvas
+      const outputPath = path.join(__dirname, `${template.name}-thumb.png`);
+      await resumeBox.screenshot({ path: outputPath });
+
+      console.log(`✅ Saved! Thumbnail generated at: ${outputPath}`);
+
+    } catch (err) {
+      // Catch page timeouts or navigation errors
+      console.error(`❌ CRITICAL FAILURE on ${template.name}:`, err.message);
     }
+  }
 
-    await browser.close();
-    process.exit(0);
-});
+  await browser.close();
+  console.log('\n🎉 Finished processing all templates!');
+})();
