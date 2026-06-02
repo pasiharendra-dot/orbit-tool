@@ -334,20 +334,7 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
 
         // Initialize dashboard inputs and canvas loop
         document.addEventListener('DOMContentLoaded', async () => {
-            // --- BOT BYPASS FOR SCREENSHOT AUTOMATION ---
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('screenshot_mode') === 'true') {
-                currentDesignTokens.layout = urlParams.get('layout') || 'sentinel';
-                currentDesignTokens.themeColor = urlParams.get('theme') || 'orbit';
-                currentDesignTokens.fontPairing = urlParams.get('font') || 'modern';
-                
-                switchPreviewTemplate(currentDesignTokens.layout);
-                updateToken('themeColor', currentDesignTokens.themeColor);
-                
-                document.getElementById('preview-frame').style.overflow = 'hidden';
-                return; 
-            }
-            
+                        
             // --------------------------------------------
             // 1. Session Auth Check
             const { data: { session } } = await supabaseClient.auth.getSession();
