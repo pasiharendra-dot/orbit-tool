@@ -17,7 +17,10 @@ const templates = [
     console.log('📁 Created new "images" folder!');
   }
 
-  const browser = await puppeteer.launch({ headless: 'new' });
+  const browser = await puppeteer.launch({ 
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox'] // 👈 Tells cloud servers not to panic
+  });
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 2 });
 
