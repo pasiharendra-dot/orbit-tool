@@ -188,7 +188,8 @@ const TemplateEngine = {
             </div>
         `;
     },
-// 11. NEW: MERIDIAN (Technical, clean structural borders)
+
+    // 11. NEW: MERIDIAN (Technical, clean structural borders)
     meridian: function(profile, expFormatted) {
         return `
             <div class="mb-4">
@@ -373,7 +374,8 @@ const TemplateEngine = {
             </div>
         `;
     }
-    // --- The Render Router ---
+    
+        // --- The Render Router ---
     renderLayout: function(layoutName, profile, expFormatted) {
         if (this[layoutName]) {
             return this[layoutName](profile, expFormatted);
