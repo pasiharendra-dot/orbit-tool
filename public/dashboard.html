@@ -490,6 +490,16 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
                 });
             });
 
+            // READ THE SAVED TEMPLATE CHOICE FROM HOMEPAGE
+            const preSelectedTemplate = localStorage.getItem('orbit_selected_template');
+            if (preSelectedTemplate) {
+                currentActiveTemplate = preSelectedTemplate;
+                const activeLabel = document.getElementById('active-template-label');
+                if (activeLabel) {
+                    activeLabel.innerText = preSelectedTemplate.replace('_', ' ');
+                }
+            }
+
             renderCurrentCanvas();
         });
 
