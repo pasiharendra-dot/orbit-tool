@@ -1,11 +1,11 @@
 const TemplateEngine = {
     
- // 1. ORIGINAL: SENTINEL
+    // 1. ORIGINAL: SENTINEL
     sentinel: function(profile, expFormatted) {
         return `
             <div class="text-center border-b pb-3 border-blue-200">
                 <h1 class="text-xl md:text-2xl font-bold text-[#0F3B68] tracking-tight">${profile.name}</h1>
-                <p class="text-[11px] md:text-xs font-bold text-gray-600 uppercase mt-1 tracking-wide">${profile.title}</p>
+                <p class="text-[11px] md:text-xs font-bold text-gray-600 uppercase mt-1 tracking-wide leading-relaxed">${profile.title}</p>
                 <p class="text-[9px] md:text-[10px] text-gray-500 mt-1">${profile.contact}</p>
             </div>
             <div>
@@ -37,7 +37,7 @@ const TemplateEngine = {
                     ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">PERSONAL DETAILS</h3><ul class="text-[10px] space-y-1 opacity-90">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
                 </div>
                 <div class="md:col-span-8 p-2 space-y-3">
-                    <div><h1 class="text-xl md:text-2xl font-bold text-[#0F3B68]">${profile.name}</h1><p class="text-[11px] md:text-xs font-bold text-amber-600 mt-0.5 uppercase">${profile.title}</p></div>
+                    <div><h1 class="text-xl md:text-2xl font-bold text-[#0F3B68]">${profile.name}</h1><p class="text-[11px] md:text-xs font-bold text-amber-600 mt-1 uppercase leading-relaxed">${profile.title}</p></div>
                     <div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px]">Professional Summary</h3><p class="text-gray-600 mt-1 leading-relaxed text-justify">${profile.summary}</p></div>
                     <div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Experience</h3><div class="text-gray-600">${expFormatted}</div></div>
                 </div>
@@ -49,7 +49,7 @@ const TemplateEngine = {
     creative: function(profile, expFormatted) {
         return `
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 border-b-2 border-[#1F4E79] pb-3 mb-3">
-                <div class="md:col-span-7"><h1 class="text-xl md:text-2xl font-bold text-[#1F4E79]">${profile.name}</h1><p class="text-[11px] md:text-xs font-bold text-gray-700 mt-0.5 uppercase">${profile.title}</p></div>
+                <div class="md:col-span-7"><h1 class="text-xl md:text-2xl font-bold text-[#1F4E79]">${profile.name}</h1><p class="text-[11px] md:text-xs font-bold text-gray-700 mt-1 uppercase leading-relaxed">${profile.title}</p></div>
                 <div class="md:col-span-5 md:border-l md:border-[#1F4E79] md:pl-3 text-[10px] text-gray-600 leading-relaxed"><p>${profile.contact.replace(/ \| /g, '<br>')}</p></div>
             </div>
             <div class="space-y-4">
@@ -73,7 +73,7 @@ const TemplateEngine = {
     global: function(profile, expFormatted) {
         return `
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 border-b-2 border-green-800 pb-3 mb-2">
-                <div class="md:col-span-7"><h1 class="text-xl md:text-2xl font-bold text-green-800">${profile.name}</h1><p class="text-[11px] font-semibold text-gray-700 uppercase mt-0.5">${profile.title}</p></div>
+                <div class="md:col-span-7"><h1 class="text-xl md:text-2xl font-bold text-green-800">${profile.name}</h1><p class="text-[11px] font-semibold text-gray-700 uppercase mt-1 leading-relaxed">${profile.title}</p></div>
                 <div class="md:col-span-5 md:text-right text-[10px] text-gray-500 leading-relaxed"><p>${profile.contact.replace(/ \| /g, '<br>')}</p></div>
             </div>
             <div class="space-y-4">
@@ -93,12 +93,13 @@ const TemplateEngine = {
         `;
     },
 
-    // 5. NEW: APEX (Clean, minimalist, sans-serif)
+    // 5. NEW: APEX
     apex: function(profile, expFormatted) {
         return `
             <div class="mb-4">
                 <h1 class="text-2xl md:text-3xl font-extrabold text-black tracking-tight mb-1" style="font-family: 'Inter', sans-serif;">${profile.name}</h1>
-                <p class="text-xs text-gray-700">${profile.title} • ${profile.contact.replace(/ \| /g, ' • ')}</p>
+                <p class="text-xs font-semibold text-gray-800 leading-relaxed">${profile.title}</p>
+                <p class="text-[10px] text-gray-600 mt-0.5">${profile.contact.replace(/ \| /g, ' • ')}</p>
             </div>
             <div class="space-y-3" style="font-family: 'Inter', sans-serif;">
                 <div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
@@ -111,12 +112,12 @@ const TemplateEngine = {
         `;
     },
 
-    // 6. NEW: AXIOM (Left column text split, black bold top)
+    // 6. NEW: AXIOM
     axiom: function(profile, expFormatted) {
         return `
             <div class="border-b-2 border-black pb-2 mb-3">
                 <h1 class="text-2xl md:text-3xl font-black text-black tracking-tighter">${profile.name}</h1>
-                <p class="text-xs text-gray-600 font-medium">${profile.title}</p>
+                <p class="text-xs font-semibold text-gray-800 mt-1 leading-relaxed">${profile.title}</p>
             </div>
             <div class="grid grid-cols-12 gap-6">
                 <div class="col-span-4 space-y-4">
@@ -134,11 +135,13 @@ const TemplateEngine = {
         `;
     },
 
-    // 7. NEW: CHRONICLE (Traditional serif, thick top border)
+    // 7. NEW: CHRONICLE
     chronicle: function(profile, expFormatted) {
         return `
-            <div class="border-b-[3px] border-black pb-2 mb-3 flex justify-between items-end font-serif">
-                <div><h1 class="text-2xl md:text-3xl font-bold text-black uppercase tracking-wide">${profile.name}</h1><p class="text-[10px] text-gray-600 mt-1">${profile.contact}</p></div>
+            <div class="border-b-[3px] border-black pb-2 mb-3 font-serif">
+                <h1 class="text-2xl md:text-3xl font-bold text-black uppercase tracking-wide">${profile.name}</h1>
+                <p class="text-xs font-bold text-gray-800 mt-1.5 leading-relaxed">${profile.title}</p>
+                <p class="text-[10px] text-gray-600 mt-0.5">${profile.contact.replace(/ \| /g, ' • ')}</p>
             </div>
             <div class="space-y-3 font-serif">
                 <div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest">Professional Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
@@ -151,12 +154,13 @@ const TemplateEngine = {
         `;
     },
     
-    // 8. NEW: CLASSIC BLUE (Blue centered headers, light blue lines)
+    // 8. NEW: CLASSIC BLUE
     classic_blue: function(profile, expFormatted) {
         return `
             <div class="text-center mb-3">
                 <h1 class="text-2xl md:text-3xl font-bold text-[#235789] uppercase tracking-wide mb-1">${profile.name}</h1>
-                <p class="text-xs text-gray-600">${profile.title}  |  ${profile.contact.replace(/ \| /g, ' | ')}</p>
+                <p class="text-xs font-bold text-gray-800 mt-1 leading-relaxed">${profile.title}</p>
+                <p class="text-[10px] text-gray-600 mt-0.5">${profile.contact.replace(/ \| /g, ' | ')}</p>
             </div>
             <div class="space-y-3">
                 <div><h2 class="text-[11px] font-bold text-[#235789] border-b-2 border-[#87A8D0] pb-0.5 mb-1.5 uppercase">Professional Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
@@ -169,12 +173,12 @@ const TemplateEngine = {
         `;
     },
 
-    // 9. NEW: CREATIVE CORAL (Large Coral header block)
+    // 9. NEW: CREATIVE CORAL
     creative_coral: function(profile, expFormatted) {
         return `
             <div class="bg-[#C84B31] text-center text-white py-5 px-4 mb-4">
                 <h1 class="text-2xl md:text-3xl font-bold uppercase tracking-widest mb-1">${profile.name}</h1>
-                <p class="text-[11px] font-medium tracking-wider mb-2">${profile.title}</p>
+                <p class="text-[11px] font-semibold text-orange-50 tracking-wider mb-2 leading-relaxed">${profile.title}</p>
                 <p class="text-[9px] opacity-90">${profile.contact.replace(/ \| /g, '  |  ')}</p>
             </div>
             <div class="space-y-3 px-2">
@@ -188,14 +192,14 @@ const TemplateEngine = {
         `;
     },
 
-    // 10. NEW: EXECUTIVE TEAL (Top Teal box right, left sidebar)
+    // 10. NEW: EXECUTIVE TEAL
     executive_teal: function(profile, expFormatted) {
         return `
             <div class="grid grid-cols-12 gap-0 mb-4">
                 <div class="col-span-4"></div>
                 <div class="col-span-8 bg-[#1A6359] text-white p-5 rounded-tl-lg rounded-bl-lg">
                     <h1 class="text-2xl md:text-3xl font-bold uppercase tracking-wider">${profile.name}</h1>
-                    <p class="text-xs text-teal-100 mt-1">${profile.title}</p>
+                    <p class="text-xs font-medium text-teal-50 mt-1.5 leading-relaxed">${profile.title}</p>
                 </div>
             </div>
             <div class="grid grid-cols-12 gap-6">
@@ -214,12 +218,13 @@ const TemplateEngine = {
         `;
     },
 
-    // 11. NEW: MERIDIAN (Technical, clean structural borders)
+    // 11. NEW: MERIDIAN
     meridian: function(profile, expFormatted) {
         return `
             <div class="mb-4">
                 <h1 class="text-3xl md:text-4xl font-black text-gray-900 tracking-tight uppercase">${profile.name}</h1>
-                <p class="text-sm text-gray-600 font-bold mt-1">${profile.title} | ${profile.contact.replace(/ \| /g, ' | ')}</p>
+                <p class="text-sm font-bold text-gray-800 mt-1.5 leading-relaxed">${profile.title}</p>
+                <p class="text-[10px] text-gray-500 mt-0.5 font-medium">${profile.contact.replace(/ \| /g, ' | ')}</p>
             </div>
             <div class="space-y-4">
                 <div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1">About</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
@@ -234,12 +239,13 @@ const TemplateEngine = {
         `;
     },
 
-    // 12. NEW: MINIMAL GREY (Soft greys, thin elegant lines)
+    // 12. NEW: MINIMAL GREY
     minimal_grey: function(profile, expFormatted) {
         return `
             <div class="border-b border-gray-300 pb-4 mb-4">
                 <h1 class="text-3xl font-bold text-gray-800 tracking-tight">${profile.name}</h1>
-                <p class="text-xs text-gray-500 mt-1">${profile.title} • ${profile.contact.replace(/ \| /g, ' • ')}</p>
+                <p class="text-xs font-bold text-gray-600 mt-1.5 leading-relaxed">${profile.title}</p>
+                <p class="text-[10px] text-gray-500 mt-0.5">${profile.contact.replace(/ \| /g, ' • ')}</p>
             </div>
             <div class="space-y-3">
                 <div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 rounded-sm">Summary</h2><p class="text-xs text-gray-600 leading-relaxed">${profile.summary}</p></div>
@@ -252,12 +258,15 @@ const TemplateEngine = {
         `;
     },
     
-    // 13. NEW: NAVY EXECUTIVE (Thick navy banner, authoritative)
+    // 13. NEW: NAVY EXECUTIVE
     navy_executive: function(profile, expFormatted) {
         return `
             <div class="bg-[#1A365D] text-white p-6 mb-5">
                 <h1 class="text-3xl font-bold uppercase tracking-wider">${profile.name}</h1>
-                <p class="text-xs text-blue-200 mt-2 font-medium tracking-wide border-t border-blue-400 pt-2">${profile.title} | ${profile.contact.replace(/ \| /g, ' | ')}</p>
+                <div class="border-t border-blue-400 mt-2 pt-2">
+                    <p class="text-xs text-white font-semibold tracking-wide leading-relaxed">${profile.title}</p>
+                    <p class="text-[10px] text-blue-200 mt-1">${profile.contact.replace(/ \| /g, ' | ')}</p>
+                </div>
             </div>
             <div class="space-y-4 px-2">
                 <div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2">Executive Profile</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
@@ -269,12 +278,12 @@ const TemplateEngine = {
         `;
     },
 
-    // 14. NEW: OLIVE TECH (Earthy tones, data/tech focus)
+    // 14. NEW: OLIVE TECH
     olive_tech: function(profile, expFormatted) {
         return `
             <div class="bg-[#4B5320] text-white p-5 mb-4 rounded-sm">
                 <h1 class="text-3xl font-extrabold uppercase tracking-widest">${profile.name}</h1>
-                <p class="text-[11px] text-[#C5E1A5] mt-1">${profile.title}</p>
+                <p class="text-[11px] font-semibold text-[#C5E1A5] mt-1.5 leading-relaxed">${profile.title}</p>
                 <p class="text-[9px] text-gray-200 mt-1">${profile.contact.replace(/ \| /g, ' • ')}</p>
             </div>
             <div class="space-y-3 px-1">
@@ -288,12 +297,12 @@ const TemplateEngine = {
         `;
     },
 
-    // 15. NEW: PINNACLE (McKinsey/Bain style, serif, centered)
+    // 15. NEW: PINNACLE
     pinnacle: function(profile, expFormatted) {
         return `
             <div class="text-center border-b-[2px] border-black pb-3 mb-4 font-serif">
                 <h1 class="text-4xl font-bold uppercase tracking-widest mb-2">${profile.name}</h1>
-                <p class="text-[11px] text-gray-800">${profile.title}</p>
+                <p class="text-[11px] font-bold text-gray-800 leading-relaxed">${profile.title}</p>
                 <p class="text-[9px] text-gray-600 mt-1">${profile.contact}</p>
             </div>
             <div class="space-y-4 font-serif px-4">
@@ -306,12 +315,13 @@ const TemplateEngine = {
         `;
     },
 
-    // 16. NEW: PURPLE PRO (SaaS/Product manager style)
+    // 16. NEW: PURPLE PRO
     purple_pro: function(profile, expFormatted) {
         return `
             <div class="bg-[#5E35B1] text-white p-5 mb-4 shadow-sm">
                 <h1 class="text-3xl font-bold tracking-tight">${profile.name}</h1>
-                <p class="text-[10px] text-purple-200 mt-1.5 opacity-90">${profile.title} | ${profile.contact.replace(/ \| /g, ' | ')}</p>
+                <p class="text-[11px] text-white font-semibold mt-1.5 leading-relaxed">${profile.title}</p>
+                <p class="text-[10px] text-purple-200 mt-1 opacity-90">${profile.contact.replace(/ \| /g, ' | ')}</p>
             </div>
             <div class="space-y-3 px-2">
                 <div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5">Professional Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
@@ -324,13 +334,16 @@ const TemplateEngine = {
         `;
     },
     
-    // 17. NEW: RECTOR (Classic C-Suite, strong typography)
+    // 17. NEW: RECTOR
     rector: function(profile, expFormatted) {
         return `
             <div class="mb-5 font-serif">
                 <h1 class="text-4xl font-black text-black tracking-tighter uppercase leading-none">${profile.name.split(' ')[0]}</h1>
                 <h1 class="text-4xl font-black text-black tracking-tighter uppercase leading-none">${profile.name.split(' ').slice(1).join(' ')}</h1>
-                <p class="text-[10px] text-gray-600 mt-3 border-t border-gray-300 pt-1">${profile.title} • ${profile.contact.replace(/ \| /g, ' • ')}</p>
+                <div class="border-t border-gray-300 mt-3 pt-2">
+                    <p class="text-xs font-bold text-gray-800 leading-relaxed">${profile.title}</p>
+                    <p class="text-[10px] text-gray-600 mt-1">${profile.contact.replace(/ \| /g, ' • ')}</p>
+                </div>
             </div>
             <div class="space-y-4 font-serif">
                 <div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2">Executive Profile</h2><p class="text-xs text-gray-900 leading-relaxed text-justify">${profile.summary}</p></div>
@@ -342,12 +355,13 @@ const TemplateEngine = {
         `;
     },
 
-    // 18. NEW: ROSE MODERN (Soft burgundy header, left column)
+    // 18. NEW: ROSE MODERN
     rose_modern: function(profile, expFormatted) {
         return `
             <div class="bg-[#90323D] text-white p-5 mb-4">
                 <h1 class="text-3xl font-bold tracking-wide">${profile.name}</h1>
-                <p class="text-[10px] text-pink-100 mt-1">${profile.title} | ${profile.contact.replace(/ \| /g, ' | ')}</p>
+                <p class="text-xs font-semibold text-pink-50 mt-1.5 leading-relaxed">${profile.title}</p>
+                <p class="text-[10px] text-pink-200 mt-1">${profile.contact.replace(/ \| /g, ' | ')}</p>
             </div>
             <div class="grid grid-cols-12 gap-6 px-2">
                 <div class="col-span-4 space-y-4 bg-pink-50/50 p-3 rounded">
@@ -364,12 +378,12 @@ const TemplateEngine = {
         `;
     },
 
-    // 19. NEW: SIGNAL (Tech, terminal-esque, thick left borders)
+    // 19. NEW: SIGNAL
     signal: function(profile, expFormatted) {
         return `
             <div class="mb-5">
                 <h1 class="text-3xl font-black text-black uppercase tracking-tight">${profile.name}</h1>
-                <p class="text-xs text-gray-600 font-medium mt-1">${profile.title}</p>
+                <p class="text-xs font-bold text-gray-800 mt-1.5 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-gray-500 mt-0.5">${profile.contact.replace(/ \| /g, ' · ')}</p>
             </div>
             <div class="space-y-4">
@@ -383,12 +397,12 @@ const TemplateEngine = {
         `;
     },
 
-    // 20. NEW: SLATE PROFESSIONAL (Grey/Blue block, ultra clean)
+    // 20. NEW: SLATE PROFESSIONAL
     slate_professional: function(profile, expFormatted) {
         return `
             <div class="bg-[#334155] text-white p-5 mb-4">
                 <h1 class="text-3xl font-bold tracking-wide">${profile.name}</h1>
-                <p class="text-[11px] text-slate-300 mt-1 uppercase tracking-wider">${profile.title}</p>
+                <p class="text-[11px] font-bold text-slate-200 mt-1.5 uppercase tracking-wider leading-relaxed">${profile.title}</p>
                 <p class="text-[9px] text-slate-400 mt-1">${profile.contact.replace(/ \| /g, ' | ')}</p>
             </div>
             <div class="space-y-3 px-2">
@@ -402,12 +416,12 @@ const TemplateEngine = {
         `;
     },
 
-    // 21. NEW: ZENITH (Black header, stark contrast)
+    // 21. NEW: ZENITH
     zenith: function(profile, expFormatted) {
         return `
             <div class="bg-[#111111] text-white p-6 mb-4 font-serif">
                 <h1 class="text-4xl font-bold tracking-widest uppercase">${profile.name}</h1>
-                <p class="text-xs text-gray-300 mt-1 border-t border-gray-600 pt-2">${profile.title}</p>
+                <p class="text-xs font-bold text-gray-200 mt-1.5 border-t border-gray-600 pt-2 leading-relaxed">${profile.title}</p>
             </div>
             <div class="text-right text-[9px] text-gray-500 mb-4 px-2">${profile.contact.replace(/ \| /g, '  |  ')}</div>
             <div class="space-y-4 px-2 font-serif">
@@ -420,7 +434,7 @@ const TemplateEngine = {
         `;
     },    
         
-        // --- The Render Router ---
+    // --- The Render Router ---
     renderLayout: function(layoutName, profile, expFormatted) {
         
         // 1. DATA SANITIZER: Prevent JavaScript crashes from missing or malformed AI data
