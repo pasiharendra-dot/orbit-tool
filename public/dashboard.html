@@ -1663,21 +1663,9 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children }] });
         }
 
-        function generateExecutiveTeal(data) {
+function generateExecutiveTeal(data) {
             const { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType } = docx;
             const FONT = "Arial"; const SIZE_BODY = 18; const TEAL = "1A6359";
-
-            const headerTable = new Table({
-                width: { size: 100, type: WidthType.PERCENTAGE },
-                borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
-                rows: [ new TableRow({ children: [
-                    new TableCell({ width: { size: 35, type: WidthType.PERCENTAGE }, children: [new Paragraph({ text: "" })] }), 
-                    new TableCell({ width: { size: 65, type: WidthType.PERCENTAGE }, shading: { fill: TEAL }, margins: { top: 400, bottom: 400, left: 200 }, children: [
-                        new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, color: "FFFFFF", font: FONT })] }),
-                        new Paragraph({ spacing: { before: 100 }, children: [new TextRun({ text: data.optimized_title || "Title", size: 22, color: "E0F2F1", font: FONT })] })
-                    ]})
-                ]})]
-            });
 
             const leftCol = [];
             const addLeftHeader = (title) => leftCol.push(new Paragraph({ spacing: { before: 150, after: 100 }, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 20, color: TEAL, font: FONT })] }));
@@ -1706,6 +1694,25 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             }
 
             const rightCol = [];
+            
+            // Nested table specifically for the Teal header box
+            rightCol.push(new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
+                rows: [new TableRow({ children: [
+                    new TableCell({
+                        shading: { fill: TEAL },
+                        margins: { top: 300, bottom: 300, left: 300, right: 300 },
+                        children: [
+                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, color: "FFFFFF", font: FONT })] }),
+                            new Paragraph({ spacing: { before: 100 }, children: [new TextRun({ text: data.optimized_title || "Title", size: 22, color: "E0F2F1", font: FONT })] })
+                        ]
+                    })
+                ]})]
+            }));
+
+            rightCol.push(new Paragraph({ spacing: { before: 200 } })); // Spacer below the header block
+
             const addRightHeader = (title) => rightCol.push(new Paragraph({ spacing: { before: 150, after: 100 }, border: { bottom: { color: "B2DFDB", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 22, color: TEAL, font: FONT })] }));
             
             addRightHeader("Professional Summary");
@@ -1727,78 +1734,14 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
                 rows: [ new TableRow({ children: [
-                    new TableCell({ width: { size: 35, type: WidthType.PERCENTAGE }, borders: { right: { color: "B2DFDB", style: BorderStyle.SINGLE, size: 12 } }, margins: { right: 200, top: 200 }, children: leftCol }),
-                    new TableCell({ width: { size: 65, type: WidthType.PERCENTAGE }, margins: { left: 200, top: 200 }, children: rightCol })
+                    new TableCell({ width: { size: 35, type: WidthType.PERCENTAGE }, borders: { right: { color: "B2DFDB", style: BorderStyle.SINGLE, size: 12 } }, margins: { right: 200 }, children: leftCol }),
+                    new TableCell({ width: { size: 65, type: WidthType.PERCENTAGE }, margins: { left: 200 }, children: rightCol })
                 ]})]
             });
 
-            return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: [headerTable, bodyTable] }] });
+            return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: [bodyTable] }] });
         }
-
-        function generateMeridian(data) {
-            const { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType } = docx;
-            const FONT = "Arial"; const SIZE_BODY = 19;
-            const children = [];
-
-            children.push(new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 60, color: "111111", font: FONT })] }));
-            const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
-            children.push(new Paragraph({ spacing: { before: 60, after: 300 }, children: [new TextRun({ text: `${data.optimized_title || "Title"} | ${contactLine}`, bold: true, size: 20, color: "555555", font: FONT })] }));
-
-            const addHeader = (title) => {
-                children.push(new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: "111111", space: 1, style: BorderStyle.SINGLE, size: 18 } }, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 22, color: "111111", font: FONT })] }));
-            };
-
-            if (data.improved_summary && data.improved_summary.length) {
-                addHeader("About");
-                data.improved_summary.forEach(p => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 100 }, children: [new TextRun({ text: p, size: SIZE_BODY, font: FONT })] })));
-            }
-            if (data.experience) {
-                addHeader("Experience");
-                data.experience.forEach(job => {
-                    children.push(new Paragraph({ tabStops: [{ type: "right", position: 10000 }], children: [new TextRun({ text: job.title, bold: true, size: 20, font: FONT }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, font: FONT })] }));
-                    children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: job.company, italic: true, size: SIZE_BODY, font: FONT, color: "555555" })] }));
-                    job.bullets.forEach(b => {
-                        const parsed = parseBullet(b);
-                        children.push(new Paragraph({ bullet: { level: 0 }, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 }, children: [ ...(parsed.prefix ? [new TextRun({ text: parsed.prefix, bold: true, size: SIZE_BODY, font: FONT })] : []), new TextRun({ text: parsed.rest, size: SIZE_BODY, font: FONT }) ] }));
-                    });
-                });
-            }
-
-            // Grid for bottom elements
-            const leftGrid = []; const rightGrid = [];
-            
-            if (data.education && data.education.length) {
-                leftGrid.push(new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: "111111", space: 1, style: BorderStyle.SINGLE, size: 18 } }, children: [new TextRun({ text: "EDUCATION", bold: true, size: 22, color: "111111", font: FONT })] }));
-                data.education.forEach(edu => leftGrid.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
-            }
-            if (data.certifications && data.certifications.length) {
-                leftGrid.push(new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: "111111", space: 1, style: BorderStyle.SINGLE, size: 18 } }, children: [new TextRun({ text: "CERTIFICATIONS", bold: true, size: 22, color: "111111", font: FONT })] }));
-                data.certifications.forEach(c => leftGrid.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: c, size: SIZE_BODY, font: FONT })] })));
-            }
-
-            if (data.core_skills && data.core_skills.length) {
-                rightGrid.push(new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: "111111", space: 1, style: BorderStyle.SINGLE, size: 18 } }, children: [new TextRun({ text: "TECHNICAL SKILLS", bold: true, size: 22, color: "111111", font: FONT })] }));
-                rightGrid.push(new Paragraph({ children: [new TextRun({ text: data.core_skills.join(", "), size: SIZE_BODY, font: FONT })] }));
-            }
-            if (data.personal_details && data.personal_details.length) {
-                rightGrid.push(new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: "111111", space: 1, style: BorderStyle.SINGLE, size: 18 } }, children: [new TextRun({ text: "PERSONAL DETAILS", bold: true, size: 22, color: "111111", font: FONT })] }));
-                data.personal_details.forEach(p => rightGrid.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: p.label + ": ", bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: p.value, size: SIZE_BODY, font: FONT })] })));
-            }
-
-            const bottomTable = new Table({
-                width: { size: 100, type: WidthType.PERCENTAGE },
-                borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
-                rows: [ new TableRow({ children: [
-                    new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, margins: { right: 200 }, children: leftGrid }),
-                    new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, margins: { left: 200 }, children: rightGrid })
-                ]})]
-            });
-
-            children.push(bottomTable);
-
-            return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children }] });
-        }
-
+        
         // ==========================================
         // NEW EXPORTERS: BATCH 3
         // ==========================================
