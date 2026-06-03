@@ -418,7 +418,8 @@ const TemplateEngine = {
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Personal Details</h2><ul class="text-xs text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
         `;
-    }    
+    },    
+        
         // --- The Render Router ---
     renderLayout: function(layoutName, profile, expFormatted) {
         if (this[layoutName]) {
