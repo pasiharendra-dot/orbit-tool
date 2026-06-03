@@ -192,32 +192,31 @@ const TemplateEngine = {
         `;
     },
 
-    // 10. NEW: EXECUTIVE TEAL
+// 10. NEW: EXECUTIVE TEAL
     executive_teal: function(profile, expFormatted) {
         return `
-            <div class="grid grid-cols-12 gap-0 mb-4">
-                <div class="col-span-4"></div>
-                <div class="col-span-8 bg-[#1A6359] text-white p-5 rounded-tl-lg rounded-bl-lg">
-                    <h1 class="text-2xl md:text-3xl font-bold uppercase tracking-wider">${profile.name}</h1>
-                    <p class="text-xs font-medium text-teal-50 mt-1.5 leading-relaxed">${profile.title}</p>
-                </div>
-            </div>
             <div class="grid grid-cols-12 gap-6">
-                <div class="col-span-4 space-y-4 border-r-2 border-teal-100 pr-4">
+                <div class="col-span-4 space-y-4 border-r-2 border-teal-100 pr-4 pt-2">
                     <div><h3 class="text-[10px] font-bold text-[#1A6359] uppercase tracking-wider mb-1.5">Contact</h3><p class="text-[10px] text-gray-700 leading-relaxed">${profile.contact.replace(/ \| /g, '<br>')}</p></div>
                     ${profile.education ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] uppercase tracking-wider mb-1.5 mt-3">Education</h3><p class="text-[10px] text-gray-700 whitespace-pre-line">${profile.education}</p></div>` : ''}
                     ${profile.skills && profile.skills.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] uppercase tracking-wider mb-1.5 mt-3">Skills</h3><ul class="text-[10px] text-gray-700 space-y-1">${profile.skills.slice(0,6).map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
                     ${profile.certifications && profile.certifications.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] uppercase tracking-wider mb-1.5 mt-3">Certifications</h3><ul class="text-[10px] text-gray-700 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                     ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] uppercase tracking-wider mb-1.5 mt-3">Personal Details</h3><ul class="text-[10px] text-gray-700 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
                 </div>
-                <div class="col-span-8 space-y-4">
-                    <div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5">Professional Summary</h3><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
-                    <div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Work Experience</h3><div class="text-xs text-gray-800">${expFormatted}</div></div>
+                <div class="col-span-8">
+                    <div class="bg-[#1A6359] text-white p-5 rounded-lg mb-5">
+                        <h1 class="text-2xl md:text-3xl font-bold uppercase tracking-wider">${profile.name}</h1>
+                        <p class="text-xs font-medium text-teal-50 mt-1.5 leading-relaxed">${profile.title}</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5">Professional Summary</h3><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                        <div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Work Experience</h3><div class="text-xs text-gray-800">${expFormatted}</div></div>
+                    </div>
                 </div>
             </div>
         `;
     },
-
+    
     // 11. NEW: MERIDIAN
     meridian: function(profile, expFormatted) {
         return `
