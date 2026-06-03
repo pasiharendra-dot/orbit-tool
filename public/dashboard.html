@@ -361,26 +361,27 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             if (savedData) {
                 const parsed = JSON.parse(savedData);
                 
-                // Map the complex AI JSON into flat strings for the Editor Inputs
+                // Map the complex AI JSON into flat strings for the Editor Inputs (Crash-Proof)
+                const safeArray = (arr) => Array.isArray(arr) ? arr : (typeof arr === 'string' ? [arr] : []);
+                
                 activeProfile = {
                     name: parsed.name || "",
                     title: parsed.optimized_title || "",
-                    summary: parsed.improved_summary?.[0] || "",
+                    summary: Array.isArray(parsed.improved_summary) ? parsed.improved_summary[0] : (parsed.improved_summary || ""),
                     contact: [parsed.phone, parsed.email, parsed.location, parsed.linkedin].filter(Boolean).join(" | "),
-                    skills: parsed.core_skills || [],
-                    achievements: parsed.achievements_and_awards || [],
-                    experience: (parsed.experience || []).map(exp => `${exp.title} - ${exp.company}\n${exp.dates}\n${exp.bullets.map(b=>'• '+b).join('\n')}`).join('\n\n'),
-                    education: (parsed.education || []).map(edu => `${edu.degree} | ${edu.institution} (${edu.date})`).join('\n'),
-                    certifications: parsed.certifications || [],
-                    personal: (parsed.personal_details || []).map(p => `${p.label}: ${p.value}`)
+                    skills: safeArray(parsed.core_skills),
+                    achievements: safeArray(parsed.achievements_and_awards),
+                    experience: Array.isArray(parsed.experience) ? 
+                        parsed.experience.map(exp => `${exp.title || ''} - ${exp.company || ''}\n${exp.dates || ''}\n${safeArray(exp.bullets).map(b=>'• '+b).join('\n')}`).join('\n\n') 
+                        : (typeof parsed.experience === 'string' ? parsed.experience : ""),
+                    education: Array.isArray(parsed.education) ? 
+                        parsed.education.map(edu => `${edu.degree || ''} | ${edu.institution || ''} (${edu.date || ''})`).join('\n') 
+                        : (typeof parsed.education === 'string' ? parsed.education : ""),
+                    certifications: safeArray(parsed.certifications),
+                    personal: Array.isArray(parsed.personal_details) ? 
+                        parsed.personal_details.map(p => `${p.label || ''}: ${p.value || ''}`) 
+                        : []
                 };
-                
-                activeScore = parsed.score || 94;
-
-                // Welcome Header Personalization
-                const firstName = activeProfile.name.split(' ')[0] || 'Candidate';
-                document.getElementById('welcome-text').innerText = `Welcome, ${firstName}`;
-            }
 
             // UNPACK PERSISTENT PHOTO ON LOAD
             const savedPhoto = localStorage.getItem('orbit_resume_photo');
