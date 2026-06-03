@@ -453,3 +453,4 @@ const TemplateEngine = {
         }
     }
 };
+export default TemplateEngine;
