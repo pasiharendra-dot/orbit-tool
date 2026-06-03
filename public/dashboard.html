@@ -291,7 +291,7 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
         </div>
     </div>
     <script>
-        // Supabase Initialization
+// Supabase Initialization
         const supabaseUrl = 'https://vkiitostqcjkiyflcjhu.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraWl0b3N0cWNqa2l5Zmxjamh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MTgyNDEsImV4cCI6MjA5NTI5NDI0MX0.a1vvLGJPEJ9l7v3HgHQQ4dIRs8HLN8IEPuGqnm-lHC4'; 
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
@@ -299,13 +299,9 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
         let currentUserEmail = "";
         let currentActiveTemplate = 'sentinel';
         let saveTimeout;
-        // PAYMENT ACCESS LOCK
-        let paidDownloadToken =
-    localStorage.getItem(
-        'paidDownloadToken'
-    ) || null;
+        let paidDownloadToken = localStorage.getItem('paidDownloadToken') || null;
         
-        // Fallback dummy data just in case localStorage is empty
+        // Fallback dummy data
         let activeProfile = {
             name: "JOHN DOE",
             title: "PROFESSIONAL",
@@ -322,9 +318,6 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
 
         // Initialize dashboard inputs and canvas loop
         document.addEventListener('DOMContentLoaded', async () => {
-                        
-            // --------------------------------------------
-            // 1. Session Auth Check
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) {
                 window.location.href = 'index.html'; 
@@ -333,13 +326,11 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             currentUserEmail = session.user.email;
             document.getElementById('account-email').innerText = currentUserEmail;
 
-            // Optional: Pull user's initial to make the avatar look dynamic
             if(currentUserEmail) {
                 document.getElementById('account-avatar').innerHTML = `<span class="text-sm font-bold">${currentUserEmail.charAt(0).toUpperCase()}</span>`;
             }
 
-// 2. Register user on backend & Sync Credits Visually
-            window.currentCredits = 0; // Global tracker
+            window.currentCredits = 0; 
             fetch('/api/auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -355,12 +346,12 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             })
             .catch(err => console.error("Credit sync failed", err));
 
-            // 3. UNPACK THE RESUME FROM LOCALSTORAGE
             const savedData = localStorage.getItem('orbit_resume_data');
             
             if (savedData) {
                 const parsed = JSON.parse(savedData);
-                // Map the complex AI JSON into flat strings for the Editor Inputs (Crash-Proof)
+                
+                // CRASH-PROOF DATA MAPPER
                 const safeArray = (arr) => Array.isArray(arr) ? arr : (typeof arr === 'string' ? [arr] : []);
                 
                 activeProfile = {
@@ -381,14 +372,18 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
                         parsed.personal_details.map(p => `${p.label || ''}: ${p.value || ''}`) 
                         : []
                 };
+                
+                activeScore = parsed.score || 94;
 
-            // UNPACK PERSISTENT PHOTO ON LOAD
+                const firstName = activeProfile.name.split(' ')[0] || 'Candidate';
+                document.getElementById('welcome-text').innerText = `Welcome, ${firstName}`;
+            }
+
             const savedPhoto = localStorage.getItem('orbit_resume_photo');
             if (savedPhoto) {
                 activeProfile.photo = savedPhoto;
             }
 
-            // 4. Update the UI Elements
             document.getElementById('edit-name').value = activeProfile.name;
             document.getElementById('edit-title').value = activeProfile.title;
             document.getElementById('edit-contact').value = activeProfile.contact;
@@ -400,10 +395,9 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             document.getElementById('edit-certifications').value = activeProfile.certifications.join('\n');
             document.getElementById('edit-personal').value = activeProfile.personal.join('\n');
 
-            // 5. Update Dynamic Analytics (Score & Keywords)
             setTimeout(() => {
                 updateATSScoreUI();
-            }, 300); // small delay for animation effect
+            }, 300); 
 
             const keywordContainer = document.getElementById('keyword-tags');
             if (activeProfile.skills.length > 0) {
@@ -412,11 +406,9 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
                 keywordContainer.innerHTML = `<span class="text-[9px] text-gray-400 italic">No keywords detected</span>`;
             }
 
-            // 6. Wire up instant keystroke rendering & Auto-save simulation
             const fields = ['name', 'title', 'contact', 'summary', 'experience', 'education'];
             const arrayFields = ['skills', 'achievements', 'certifications', 'personal'];
 
-            // Photo Upload Listener with Auto-Resize & Persistent Save
             const photoInput = document.getElementById('edit-photo');
             if (photoInput) {
                 photoInput.addEventListener('change', function(e) {
@@ -429,25 +421,15 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
                         img.onload = function() {
                             const canvas = document.createElement('canvas');
                             const ctx = canvas.getContext('2d');
-                            
-                            // Set standard passport photo size
                             canvas.width = 200;
                             canvas.height = 200;
-                            
-                            // Calculate crop to center the image perfectly
                             const size = Math.min(img.width, img.height);
                             const x = (img.width - size) / 2;
                             const y = (img.height - size) / 2;
-                            
                             ctx.drawImage(img, x, y, size, size, 0, 0, 200, 200);
-                            
-                            // Compress heavily to save memory and prevent lag
                             const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
-                            
-                            // Save to active profile and browser storage
                             activeProfile.photo = compressedBase64;
                             localStorage.setItem('orbit_resume_photo', compressedBase64);
-                            
                             renderCurrentCanvas(); 
                             triggerAutoSave();
                         };
@@ -490,7 +472,6 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
                 });
             });
 
-            // READ THE SAVED TEMPLATE CHOICE FROM HOMEPAGE
             const preSelectedTemplate = localStorage.getItem('orbit_selected_template');
             if (preSelectedTemplate) {
                 currentActiveTemplate = preSelectedTemplate;
@@ -503,120 +484,108 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             renderCurrentCanvas();
         });
 
-async function triggerAI(section, buttonElement) {
-    // NEW: Check credits before doing anything
-    if (window.currentCredits !== undefined && window.currentCredits <= 0) {
-        triggerPurchasePaywall();
-        return;
-    }
-    const mapping = {
-        jd: 'new-jd-input',
-        title: 'edit-title',
-        summary: 'edit-summary',
-        skills: 'edit-skills',
-        bullets: 'edit-experience'
-    };
-
-    const fieldId = mapping[section];
-    if (!fieldId) return;
-
-    const field = document.getElementById(fieldId);
-    const currentText = field.value.trim();
-    const targetJD = document.getElementById('new-jd-input').value.trim();
-
-    // Use the passed button element, fallback safely if missing
-    const button = buttonElement || (event ? event.target : null);
-    let originalText = "";
-    
-    if (button) {
-        originalText = button.innerHTML;
-        button.innerHTML = '⏳ Optimization Active...';
-        button.disabled = true;
-    }
-
-    try {
-        // Post the data to your backend AI orchestration route
-        const response = await fetch('/api/optimize-resume', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: currentUserEmail,
-                section: section,          // 'title', 'summary', 'skills', or 'bullets'
-                currentContent: currentText, // the text currently in the input field
-                jobDescription: targetJD    // contextual target job description to match against
-            })
-        });
-
-if (!response.ok) {
-            let errMessage = `Server Error: ${response.status} ${response.statusText}`;
-            try {
-                // Try to read the error as JSON
-                const errData = await response.json();
-                errMessage = errData.message || errMessage;
-            } catch (e) {
-                // If it fails (because it's an HTML 404 page), fallback gracefully
-                console.warn("Server did not return JSON error.");
+        async function triggerAI(section, buttonElement) {
+            if (window.currentCredits !== undefined && window.currentCredits <= 0) {
+                triggerPurchasePaywall();
+                return;
             }
-            throw new Error(errMessage);
-        }
+            const mapping = {
+                jd: 'new-jd-input',
+                title: 'edit-title',
+                summary: 'edit-summary',
+                skills: 'edit-skills',
+                bullets: 'edit-experience'
+            };
 
-        const result = await response.json();
-        
-        // Expecting backend to return { success: true, optimizedText: "...", remainingCredits: X }
-        if (result.optimizedText) {
-            field.value = result.optimizedText;
+            const fieldId = mapping[section];
+            if (!fieldId) return;
+
+            const field = document.getElementById(fieldId);
+            const currentText = field.value.trim();
+            const targetJD = document.getElementById('new-jd-input').value.trim();
+
+            const button = buttonElement || (event ? event.target : null);
+            let originalText = "";
             
-            // Re-trigger the input event loop to re-render the canvas and simulate auto-save
-            field.dispatchEvent(new Event('input'));
+            if (button) {
+                originalText = button.innerHTML;
+                button.innerHTML = '⏳ Optimization Active...';
+                button.disabled = true;
+            }
+
+            try {
+                const response = await fetch('/api/optimize-resume', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: currentUserEmail,
+                        section: section,
+                        currentContent: currentText,
+                        jobDescription: targetJD
+                    })
+                });
+
+                if (!response.ok) {
+                    let errMessage = `Server Error: ${response.status} ${response.statusText}`;
+                    try {
+                        const errData = await response.json();
+                        errMessage = errData.message || errMessage;
+                    } catch (e) {
+                        console.warn("Server did not return JSON error.");
+                    }
+                    throw new Error(errMessage);
+                }
+
+                const result = await response.json();
+                
+                if (result.optimizedText) {
+                    field.value = result.optimizedText;
+                    field.dispatchEvent(new Event('input'));
+                }
+
+                if (result.remainingCredits !== undefined) {
+                    window.currentCredits = result.remainingCredits;
+                    const creditSpan = document.getElementById('credit-count');
+                    if (creditSpan) creditSpan.innerText = result.remainingCredits;
+                }
+
+                if (!response.ok && response.status === 403) {
+                    triggerPurchasePaywall();
+                    throw new Error("Out of credits. Please choose a plan.");
+                }
+
+                if (section === 'jd') {
+                    alert('Target job requirements successfully contextualized. Use the field-level AI enhancements to align your profile.');
+                }
+
+            } catch (err) {
+                console.error("AI Stitching Error:", err);
+                alert(err.message || 'Enhancement failed. Please verify network access.');
+            } finally {
+                if (button) {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            }
         }
 
-            if (result.remainingCredits !== undefined) {
-            window.currentCredits = result.remainingCredits; // Update global state
-            const creditSpan = document.getElementById('credit-count');
-            if (creditSpan) creditSpan.innerText = result.remainingCredits;
-        }
-
-        // NEW: Catch 403 Out Of Credits from backend specifically
-        if (!response.ok && response.status === 403) {
-            triggerPurchasePaywall();
-            throw new Error("Out of credits. Please choose a plan.");
-        }
-
-        if (section === 'jd') {
-            alert('Target job requirements successfully contextualized. Use the field-level AI enhancements to align your profile.');
-        }
-
-    } catch (err) {
-        console.error("AI Stitching Error:", err);
-        alert(err.message || 'Enhancement failed. Please verify network access.');
-    } finally {
-        if (button) {
-            button.innerHTML = originalText;
-            button.disabled = false;
-        }
-    }
-}// Dynamic ATS Score Engine
         function updateATSScoreUI() {
             let displayedScore = activeScore;
             let statusHTML = '<span class="text-green-600 font-bold">Optimized</span> Framework';
             let ringColor = 'text-green-500';
 
-            // Apply ATS parsing penalties based on layout complexity
             if (currentActiveTemplate === 'vanguard') {
-                displayedScore = Math.max(0, activeScore - 18); // Heavy penalty for Columns + Photo
+                displayedScore = Math.max(0, activeScore - 18);
                 statusHTML = '<span class="text-red-500 font-bold">Low ATS Fit</span> (2-Col + Photo)';
                 ringColor = 'text-red-500';
             } else if (currentActiveTemplate === 'creative') {
-                displayedScore = Math.max(0, activeScore - 12); // Moderate penalty for Columns
+                displayedScore = Math.max(0, activeScore - 12);
                 statusHTML = '<span class="text-orange-500 font-bold">Medium Fit</span> (2-Col Layout)';
                 ringColor = 'text-orange-500';
             } else if (currentActiveTemplate === 'global') {
                 statusHTML = '<span class="text-green-600 font-bold">Optimized</span> (Global Std)';
             }
 
-            // Update the Dial UI
             document.getElementById('ats-score-text').innerText = `${displayedScore}%`;
             
             const ring = document.getElementById('score-ring');
@@ -630,25 +599,17 @@ if (!response.ok) {
             if (statusText) statusText.innerHTML = statusHTML;
         }
 
-// ==========================================
-        // TEMPLATE SELECTION UI (21 Total)
-        // ==========================================
         const templates = [
-            // Standard Four
             { id: 'sentinel', name: 'Sentinel', category: 'Classic' },
             { id: 'vanguard', name: 'Vanguard', category: 'Executive' },
             { id: 'creative', name: 'Creative', category: 'Modern' },
             { id: 'global', name: 'Global', category: 'International' },
-            
-            // New Batch 1
             { id: 'apex', name: 'Apex', category: 'Minimalist' },
             { id: 'axiom', name: 'Axiom', category: 'Professional' },
             { id: 'chronicle', name: 'Chronicle', category: 'Traditional' },
             { id: 'classic_blue', name: 'Classic Blue', category: 'Corporate' },
             { id: 'creative_coral', name: 'Creative Coral', category: 'Design' },
             { id: 'executive_teal', name: 'Executive Teal', category: 'Leadership' },
-            
-            // New Batch 2
             { id: 'meridian', name: 'Meridian', category: 'Engineering' },
             { id: 'minimal_grey', name: 'Minimal Grey', category: 'Clean' },
             { id: 'navy_executive', name: 'Navy Executive', category: 'C-Suite' },
@@ -684,7 +645,6 @@ if (!response.ok) {
             currentActiveTemplate = templateId;
             document.getElementById('active-template-label').innerText = templateId.replace('_', ' ');
             
-            // TOGGLE PHOTO UPLOAD VISIBILITY (Only Vanguard uses photos right now)
             const photoContainer = document.getElementById('photo-upload-container');
             if (photoContainer) {
                 if (templateId === 'vanguard') {
@@ -696,29 +656,20 @@ if (!response.ok) {
 
             closeTemplateModal();
             renderCurrentCanvas();
-            updateATSScoreUI(); // Trigger score recalculation on template switch
+            updateATSScoreUI(); 
         }
 
-        // ==========================================
-        // MASTER LAYOUT RENDER ROUTER
-        // ==========================================
         function renderCurrentCanvas() {
             const canvas = document.getElementById('workspace-canvas');
-            
-            // Format Experience Bullets
             const expFormatted = (activeProfile.experience || '').split('\n').map(line => {
                 if(line.startsWith('•') || line.startsWith('-')) return `<li class="ml-4 list-disc">${line.substring(1).trim()}</li>`;
                 if(line.trim() === '') return `<br>`;
                 return `<p class="font-bold text-gray-800 mt-2">${line}</p>`;
             }).join('');
 
-            // Delegate all rendering to the external Template Engine!
             canvas.innerHTML = TemplateEngine.renderLayout(currentActiveTemplate, activeProfile, expFormatted);
         }
 
-        // ==========================================
-        // BEHAVIORAL PROTECTION CONTROLS (Anti-Theft)
-        // ==========================================
         document.addEventListener('contextmenu', event => event.preventDefault());
 
         document.addEventListener('keydown', function(e) {
@@ -732,304 +683,246 @@ if (!response.ok) {
 
         document.addEventListener('dragstart', event => event.preventDefault());
 
-// ==========================================
-// GATEKEEPER & PAYMENT LOGIC (FINAL VERSION)
-// ==========================================
+        async function handleDownloadClick(event) {
+            const btn = event?.currentTarget;
+            const originalText = btn?.innerHTML;
 
-async function handleDownloadClick(event) {
-    const btn = event?.currentTarget;
-    const originalText = btn?.innerHTML;
-
-    if (btn) {
-        btn.innerHTML =
-            '<span class="animate-pulse">Checking access...</span>';
-    }
-
-    try {
-        // Fetch current plan from Supabase
-        const { data: user, error } = await supabaseClient
-            .from('candidate_profiles')
-            .select('plan_type, plan_expiry, download_used')
-            .eq('email', currentUserEmail)
-            .single();
-
-        if (error) throw error;
-
-        const isAnnualActive =
-            user.plan_type === 'annual' &&
-            user.plan_expiry &&
-            new Date(user.plan_expiry) > new Date();
-
-        const isSingleDownloadValid =
-            user.plan_type === 'single' &&
-            !user.download_used;
-
-// Already paid → allow download
-        if (isAnnualActive || isSingleDownloadValid) {
-            if (currentWorkspace === 'cover-letter') {
-                await downloadCoverLetter();
-            } else {
-                await downloadResume();
+            if (btn) {
+                btn.innerHTML = '<span class="animate-pulse">Checking access...</span>';
             }
 
-            // Mark single plan as used
-            if (user.plan_type === 'single') {
-                await supabaseClient
+            try {
+                const { data: user, error } = await supabaseClient
                     .from('candidate_profiles')
-                    .update({ download_used: true })
-                    .eq('email', currentUserEmail);
-            }
+                    .select('plan_type, plan_expiry, download_used')
+                    .eq('email', currentUserEmail)
+                    .single();
 
-            return;
-        }
+                if (error) throw error;
 
-        // No active plan → open paywall
-        triggerPurchasePaywall();
+                const isAnnualActive = user.plan_type === 'annual' && user.plan_expiry && new Date(user.plan_expiry) > new Date();
+                const isSingleDownloadValid = user.plan_type === 'single' && !user.download_used;
 
-    } catch (err) {
-        console.error("Access Check Error:", err);
-
-        // Fail-safe → open paywall
-        triggerPurchasePaywall();
-
-    } finally {
-        if (btn) {
-            btn.innerHTML = originalText;
-        }
-    }
-}
-
-// ==========================================
-// PAYMENT MODAL
-// ==========================================
-
-function triggerPurchasePaywall() {
-    if (document.getElementById('payment-modal')) return;
-
-    const modalHTML = `
-        <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[100] p-4 backdrop-blur-sm overflow-y-auto">
-            <div class="bg-white p-5 md:p-8 rounded-2xl shadow-2xl w-full max-w-5xl my-8 relative">
-                <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 font-bold text-xl">✕</button>
-                
-                <div class="text-center mb-8">
-                    <h3 class="text-2xl md:text-3xl font-extrabold text-[#0F3B68]">Unlock Your Full Potential</h3>
-                    <p class="text-sm text-gray-600 mt-2">Select a plan to download your ATS-optimized resume and get more AI credits.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    
-                    <!-- 1. Starter Tier -->
-                    <div class="border border-gray-200 rounded-xl p-5 flex flex-col hover:border-blue-500 transition shadow-sm bg-gray-50">
-                        <h4 class="font-bold text-gray-800 text-lg">Starter</h4>
-                        <div class="text-3xl font-extrabold text-[#0F3B68] my-2">₹199</div>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Single Use</p>
-                        <ul class="text-xs text-gray-600 space-y-3 mb-6 flex-grow">
-                            <li class="flex gap-2"><span>✅</span> 1 Word Doc Download</li>
-                            <li class="flex gap-2"><span>✅</span> 50 AI Rewrite Credits</li>
-                            <li class="flex gap-2"><span>✅</span> Standard ATS Check</li>
-                            <li class="flex gap-2 opacity-50"><span>❌</span> No Future Edits</li>
-                        </ul>
-                        <button onclick="processPayment('single')" id="btn-single" class="w-full py-3 border-2 border-[#0F3B68] text-[#0F3B68] hover:bg-blue-50 font-bold rounded-xl transition text-sm">Select Starter</button>
-                    </div>
-                    
-                    <!-- 2. Annual Tier -->
-                    <div class="border-2 border-green-500 rounded-xl p-5 flex flex-col relative shadow-xl transform md:-translate-y-4 bg-white">
-                        <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Most Popular</span>
-                        <h4 class="font-bold text-gray-800 text-lg">Annual Pass</h4>
-                        <div class="flex items-end gap-1 my-2">
-                            <div class="text-3xl font-extrabold text-green-700">₹499</div>
-                            <div class="text-sm text-gray-500 font-normal mb-1">/yr</div>
-                        </div>
-                        <p class="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-4 border-b pb-2">Full Platform Access</p>
-                        <ul class="text-xs text-gray-700 space-y-3 mb-6 flex-grow font-medium">
-                            <li class="flex gap-2"><span>✨</span> Unlimited Word Downloads</li>
-                            <li class="flex gap-2"><span>✨</span> 300 AI Rewrite Credits</li>
-                            <li class="flex gap-2"><span>✨</span> Advanced ATS Analytics</li>
-                            <li class="flex gap-2"><span>✨</span> 1 Year Live Editor Access</li>
-                        </ul>
-                        <button onclick="processPayment('annual')" id="btn-annual" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition text-sm">Select Annual</button>
-                    </div>
-
-                    <!-- 3. Expert Tier -->
-                    <div class="border border-amber-300 rounded-xl p-5 flex flex-col bg-gradient-to-b from-amber-50 to-white hover:border-amber-500 transition relative shadow-sm">
-                        <span class="absolute top-3 right-3 bg-amber-200 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded uppercase">Human Led</span>
-                        <h4 class="font-bold text-gray-800 text-lg">Expert Review</h4>
-                        <div class="flex items-end gap-2 my-2">
-                            <div class="text-3xl font-extrabold text-amber-700">₹2499</div>
-                            <div class="text-sm text-gray-400 line-through mb-1">₹4999</div>
-                        </div>
-                        <p class="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-4 border-b pb-2">Done-For-You Strategy</p>
-                        <ul class="text-xs text-gray-700 space-y-3 mb-6 flex-grow font-medium">
-                            <li class="flex gap-2"><span>🔥</span> 1-on-1 Expert Resume Writer</li>
-                            <li class="flex gap-2"><span>🔥</span> Guaranteed Shortlist Format</li>
-                            <li class="flex gap-2"><span>🔥</span> Priority WhatsApp Support</li>
-                            <li class="flex gap-2"><span>🔥</span> Includes Annual Pass (300 Cr)</li>
-                        </ul>
-                        <button onclick="processPayment('expert')" id="btn-expert" class="w-full py-3 bg-[#0F3B68] hover:bg-blue-900 text-white font-bold rounded-xl shadow transition text-sm">Book Expert</button>
-                    </div>
-
-                </div>
-                
-                <div class="max-w-xs mx-auto">
-                    <input type="text" id="promo-code-input" class="w-full p-2 border border-gray-300 rounded text-xs font-semibold tracking-wide text-center uppercase" placeholder="HAVE A PROMO CODE?">
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-}
-
-function closeModal() {
-    const modal = document.getElementById('payment-modal');
-    if (modal) modal.remove();
-}
-
-// ==========================================
-// PAYMENT PROCESSOR (3-TIER UPGRADE)
-// ==========================================
-
-async function processPayment(selectedPlan) {
-
-    const singleBtn = document.getElementById('btn-single');
-    const annualBtn = document.getElementById('btn-annual');
-    const expertBtn = document.getElementById('btn-expert'); // Added Expert Button
-    const promoCode = document.getElementById('promo-code-input')?.value?.trim() || "";
-
-    // Determine which button was clicked
-    let activeBtn;
-    if (selectedPlan === 'single') activeBtn = singleBtn;
-    else if (selectedPlan === 'annual') activeBtn = annualBtn;
-    else if (selectedPlan === 'expert') activeBtn = expertBtn;
-
-    const originalText = activeBtn ? activeBtn.innerHTML : "Processing...";
-
-    try {
-        // Disable all buttons to prevent double-clicks
-        if (activeBtn) activeBtn.innerHTML = "Processing...";
-        if (singleBtn) singleBtn.disabled = true;
-        if (annualBtn) annualBtn.disabled = true;
-        if (expertBtn) expertBtn.disabled = true;
-
-        // Create order
-        const response = await fetch('/api/create-order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                promoCode,
-                email: currentUserEmail,
-                plan: selectedPlan
-            })
-        });
-
-        const orderData = await response.json();
-
-        if (!response.ok) {
-            throw new Error(orderData.error || 'Failed to create order');
-        }
-
-        // Prefill user details
-        const currentName = document.getElementById('edit-name')?.value || "Candidate";
-        const contactStr = document.getElementById('edit-contact')?.value || "";
-        const currentPhone = contactStr.split('|')[0]?.trim() || "";
-        
-        let planDescription = 'Single Resume Download';
-        if (selectedPlan === 'annual') planDescription = '1-Year Unlimited Access';
-        if (selectedPlan === 'expert') planDescription = 'Expert Review & Strategy';
-
-        // Razorpay config
-        const options = {
-            key: "rzp_live_SgcC4zdgmzFA5L",
-            amount: orderData.amount,
-            currency: "INR",
-            name: "GetPerfectResume.com",
-            description: planDescription,
-            order_id: orderData.id,
-            prefill: {
-                name: currentName,
-                email: currentUserEmail,
-                contact: currentPhone
-            },
-            handler: async function (response) {
-                try {
-                    // VERIFY PAYMENT
-                    const verifyResponse = await fetch('/api/payment/verify', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            razorpay_order_id: response.razorpay_order_id,
-                            razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_signature: response.razorpay_signature,
-                            email: currentUserEmail,
-                            plan: selectedPlan
-                        })
-                    });
-
-                    const verifyData = await verifyResponse.json();
-
-                    if (!verifyResponse.ok) {
-                        throw new Error(verifyData.error || 'Payment verification failed');
-                    }
-
-                    // SUCCESS
-                    alert("Payment successful! Plan activated.");
-                    
-                    // Refresh the visual credits automatically
-                    const creditSpan = document.getElementById('credit-count');
-                    if (creditSpan && selectedPlan === 'single') creditSpan.innerText = parseInt(creditSpan.innerText) + 50;
-                    if (creditSpan && (selectedPlan === 'annual' || selectedPlan === 'expert')) creditSpan.innerText = parseInt(creditSpan.innerText) + 300;
-                    window.currentCredits = parseInt(creditSpan.innerText);
-
-// Proceed to download
+                if (isAnnualActive || isSingleDownloadValid) {
                     if (currentWorkspace === 'cover-letter') {
                         await downloadCoverLetter();
                     } else {
                         await downloadResume();
                     }
-                    closeModal();
-                    document.getElementById('success-modal')?.classList.remove('hidden');
 
-                } catch (verificationError) {
-                    console.error("Verification Error:", verificationError);
-                    alert("Payment received but verification failed. Please contact support.");
+                    if (user.plan_type === 'single') {
+                        await supabaseClient
+                            .from('candidate_profiles')
+                            .update({ download_used: true })
+                            .eq('email', currentUserEmail);
+                    }
+                    return;
                 }
-            },
-            modal: {
-                ondismiss: function () {
-                    // Reset buttons if user closes Razorpay without paying
+
+                triggerPurchasePaywall();
+            } catch (err) {
+                console.error("Access Check Error:", err);
+                triggerPurchasePaywall();
+            } finally {
+                if (btn) {
+                    btn.innerHTML = originalText;
+                }
+            }
+        }
+
+        function triggerPurchasePaywall() {
+            if (document.getElementById('payment-modal')) return;
+
+            const modalHTML = `
+                <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[100] p-4 backdrop-blur-sm overflow-y-auto">
+                    <div class="bg-white p-5 md:p-8 rounded-2xl shadow-2xl w-full max-w-5xl my-8 relative">
+                        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 font-bold text-xl">✕</button>
+                        
+                        <div class="text-center mb-8">
+                            <h3 class="text-2xl md:text-3xl font-extrabold text-[#0F3B68]">Unlock Your Full Potential</h3>
+                            <p class="text-sm text-gray-600 mt-2">Select a plan to download your ATS-optimized resume and get more AI credits.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div class="border border-gray-200 rounded-xl p-5 flex flex-col hover:border-blue-500 transition shadow-sm bg-gray-50">
+                                <h4 class="font-bold text-gray-800 text-lg">Starter</h4>
+                                <div class="text-3xl font-extrabold text-[#0F3B68] my-2">₹199</div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Single Use</p>
+                                <ul class="text-xs text-gray-600 space-y-3 mb-6 flex-grow">
+                                    <li class="flex gap-2"><span>✅</span> 1 Word Doc Download</li>
+                                    <li class="flex gap-2"><span>✅</span> 50 AI Rewrite Credits</li>
+                                    <li class="flex gap-2"><span>✅</span> Standard ATS Check</li>
+                                    <li class="flex gap-2 opacity-50"><span>❌</span> No Future Edits</li>
+                                </ul>
+                                <button onclick="processPayment('single')" id="btn-single" class="w-full py-3 border-2 border-[#0F3B68] text-[#0F3B68] hover:bg-blue-50 font-bold rounded-xl transition text-sm">Select Starter</button>
+                            </div>
+                            
+                            <div class="border-2 border-green-500 rounded-xl p-5 flex flex-col relative shadow-xl transform md:-translate-y-4 bg-white">
+                                <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Most Popular</span>
+                                <h4 class="font-bold text-gray-800 text-lg">Annual Pass</h4>
+                                <div class="flex items-end gap-1 my-2">
+                                    <div class="text-3xl font-extrabold text-green-700">₹499</div>
+                                    <div class="text-sm text-gray-500 font-normal mb-1">/yr</div>
+                                </div>
+                                <p class="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-4 border-b pb-2">Full Platform Access</p>
+                                <ul class="text-xs text-gray-700 space-y-3 mb-6 flex-grow font-medium">
+                                    <li class="flex gap-2"><span>✨</span> Unlimited Word Downloads</li>
+                                    <li class="flex gap-2"><span>✨</span> 300 AI Rewrite Credits</li>
+                                    <li class="flex gap-2"><span>✨</span> Advanced ATS Analytics</li>
+                                    <li class="flex gap-2"><span>✨</span> 1 Year Live Editor Access</li>
+                                </ul>
+                                <button onclick="processPayment('annual')" id="btn-annual" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition text-sm">Select Annual</button>
+                            </div>
+
+                            <div class="border border-amber-300 rounded-xl p-5 flex flex-col bg-gradient-to-b from-amber-50 to-white hover:border-amber-500 transition relative shadow-sm">
+                                <span class="absolute top-3 right-3 bg-amber-200 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded uppercase">Human Led</span>
+                                <h4 class="font-bold text-gray-800 text-lg">Expert Review</h4>
+                                <div class="flex items-end gap-2 my-2">
+                                    <div class="text-3xl font-extrabold text-amber-700">₹2499</div>
+                                    <div class="text-sm text-gray-400 line-through mb-1">₹4999</div>
+                                </div>
+                                <p class="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-4 border-b pb-2">Done-For-You Strategy</p>
+                                <ul class="text-xs text-gray-700 space-y-3 mb-6 flex-grow font-medium">
+                                    <li class="flex gap-2"><span>🔥</span> 1-on-1 Expert Resume Writer</li>
+                                    <li class="flex gap-2"><span>🔥</span> Guaranteed Shortlist Format</li>
+                                    <li class="flex gap-2"><span>🔥</span> Priority WhatsApp Support</li>
+                                    <li class="flex gap-2"><span>🔥</span> Includes Annual Pass (300 Cr)</li>
+                                </ul>
+                                <button onclick="processPayment('expert')" id="btn-expert" class="w-full py-3 bg-[#0F3B68] hover:bg-blue-900 text-white font-bold rounded-xl shadow transition text-sm">Book Expert</button>
+                            </div>
+                        </div>
+                        
+                        <div class="max-w-xs mx-auto">
+                            <input type="text" id="promo-code-input" class="w-full p-2 border border-gray-300 rounded text-xs font-semibold tracking-wide text-center uppercase" placeholder="HAVE A PROMO CODE?">
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('payment-modal');
+            if (modal) modal.remove();
+        }
+
+        async function processPayment(selectedPlan) {
+            const singleBtn = document.getElementById('btn-single');
+            const annualBtn = document.getElementById('btn-annual');
+            const expertBtn = document.getElementById('btn-expert'); 
+            const promoCode = document.getElementById('promo-code-input')?.value?.trim() || "";
+
+            let activeBtn;
+            if (selectedPlan === 'single') activeBtn = singleBtn;
+            else if (selectedPlan === 'annual') activeBtn = annualBtn;
+            else if (selectedPlan === 'expert') activeBtn = expertBtn;
+
+            const originalText = activeBtn ? activeBtn.innerHTML : "Processing...";
+
+            try {
+                if (activeBtn) activeBtn.innerHTML = "Processing...";
+                if (singleBtn) singleBtn.disabled = true;
+                if (annualBtn) annualBtn.disabled = true;
+                if (expertBtn) expertBtn.disabled = true;
+
+                const response = await fetch('/api/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ promoCode, email: currentUserEmail, plan: selectedPlan })
+                });
+
+                const orderData = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(orderData.error || 'Failed to create order');
+                }
+
+                const currentName = document.getElementById('edit-name')?.value || "Candidate";
+                const contactStr = document.getElementById('edit-contact')?.value || "";
+                const currentPhone = contactStr.split('|')[0]?.trim() || "";
+                
+                let planDescription = 'Single Resume Download';
+                if (selectedPlan === 'annual') planDescription = '1-Year Unlimited Access';
+                if (selectedPlan === 'expert') planDescription = 'Expert Review & Strategy';
+
+                const options = {
+                    key: "rzp_live_SgcC4zdgmzFA5L",
+                    amount: orderData.amount,
+                    currency: "INR",
+                    name: "GetPerfectResume.com",
+                    description: planDescription,
+                    order_id: orderData.id,
+                    prefill: { name: currentName, email: currentUserEmail, contact: currentPhone },
+                    handler: async function (response) {
+                        try {
+                            const verifyResponse = await fetch('/api/payment/verify', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                    email: currentUserEmail,
+                                    plan: selectedPlan
+                                })
+                            });
+
+                            const verifyData = await verifyResponse.json();
+                            if (!verifyResponse.ok) throw new Error(verifyData.error || 'Payment verification failed');
+
+                            alert("Payment successful! Plan activated.");
+                            
+                            const creditSpan = document.getElementById('credit-count');
+                            if (creditSpan && selectedPlan === 'single') creditSpan.innerText = parseInt(creditSpan.innerText) + 50;
+                            if (creditSpan && (selectedPlan === 'annual' || selectedPlan === 'expert')) creditSpan.innerText = parseInt(creditSpan.innerText) + 300;
+                            window.currentCredits = parseInt(creditSpan.innerText);
+
+                            if (currentWorkspace === 'cover-letter') {
+                                await downloadCoverLetter();
+                            } else {
+                                await downloadResume();
+                            }
+                            closeModal();
+                            document.getElementById('success-modal')?.classList.remove('hidden');
+
+                        } catch (verificationError) {
+                            console.error("Verification Error:", verificationError);
+                            alert("Payment received but verification failed. Please contact support.");
+                        }
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            if (activeBtn) activeBtn.innerHTML = originalText;
+                            if (singleBtn) singleBtn.disabled = false;
+                            if (annualBtn) annualBtn.disabled = false;
+                            if (expertBtn) expertBtn.disabled = false;
+                        }
+                    },
+                    theme: { color: "#0F3B68" }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+
+                rzp.on('payment.failed', function (response) {
+                    console.error('Payment Failed:', response);
+                    alert("Payment failed. Please try again.");
                     if (activeBtn) activeBtn.innerHTML = originalText;
                     if (singleBtn) singleBtn.disabled = false;
                     if (annualBtn) annualBtn.disabled = false;
                     if (expertBtn) expertBtn.disabled = false;
-                }
-            },
-            theme: { color: "#0F3B68" }
-        };
+                });
 
-        const rzp = new Razorpay(options);
-        rzp.open();
+            } catch (error) {
+                console.error("Payment Error:", error);
+                alert(error.message || "Payment initialization failed. Please try again.");
+                if (activeBtn) activeBtn.innerHTML = originalText;
+                if (singleBtn) singleBtn.disabled = false;
+                if (annualBtn) annualBtn.disabled = false;
+                if (expertBtn) expertBtn.disabled = false;
+            }
+        }
 
-        rzp.on('payment.failed', function (response) {
-            console.error('Payment Failed:', response);
-            alert("Payment failed. Please try again.");
-            if (activeBtn) activeBtn.innerHTML = originalText;
-            if (singleBtn) singleBtn.disabled = false;
-            if (annualBtn) annualBtn.disabled = false;
-            if (expertBtn) expertBtn.disabled = false;
-        });
-
-    } catch (error) {
-        console.error("Payment Error:", error);
-        alert(error.message || "Payment initialization failed. Please try again.");
-        if (activeBtn) activeBtn.innerHTML = originalText;
-        if (singleBtn) singleBtn.disabled = false;
-        if (annualBtn) annualBtn.disabled = false;
-        if (expertBtn) expertBtn.disabled = false;
-    }
-}
-  // ==========================================
-        // PRINT PREVIEW LOGIC
-        // ==========================================
         function openPrintPreview() {
             const previewContent = document.getElementById('workspace-canvas').innerHTML;
             const modalHTML = `
@@ -1086,25 +979,20 @@ async function processPayment(selectedPlan) {
             if (modal) modal.remove();
             document.body.style.overflow = 'auto';
         }
+
         async function logout() {
-            // 1. Scrub ALL sensitive user data from the browser
             localStorage.removeItem('paidDownloadToken');
             localStorage.removeItem('orbit_resume_data');
             localStorage.removeItem('orbit_resume_photo');
             window.currentCredits = 0;
-
-            // 2. Kill the Supabase session
             await supabaseClient.auth.signOut();
-            
-            // 3. Redirect to homepage
             window.location.href = 'index.html';
         }
-function closeSuccessModal() {
+
+        function closeSuccessModal() {
             document.getElementById('success-modal').classList.add('hidden');
         }
-        // ==========================================
-        // DOCUMENT GENERATION ENGINE
-        // ==========================================
+
         function parseBullet(bulletText) {
             let prefix = ""; let rest = bulletText;
             let colonIdx = bulletText.indexOf(": ");
@@ -1121,7 +1009,6 @@ function closeSuccessModal() {
                 
                 let data = JSON.parse(savedData);
                 
-                // Override with current UI text edits
                 data.name = document.getElementById('edit-name').value || data.name;
                 data.optimized_title = document.getElementById('edit-title').value || data.optimized_title;
                 data.improved_summary = [document.getElementById('edit-summary').value || data.improved_summary[0]];
@@ -1195,7 +1082,6 @@ function closeSuccessModal() {
             });
         }
 
-        // Helper to convert Base64 Data URL to ArrayBuffer for docx images
         function base64DataURLToArrayBuffer(dataURL) {
             const base64 = dataURL.split(',')[1];
             const binary_string = window.atob(base64);
@@ -1206,11 +1092,9 @@ function closeSuccessModal() {
         }
 
         function generateVanguard(data) {
-            // ADDED ImageRun to the docx extraction
             const { Document, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle, ImageRun } = docx;
             const FONT = "Calibri"; const SIZE_BODY = 19;
             
-            // Photo Builder Logic
             let photoElement;
             if (activeProfile.photo) {
                 photoElement = new Paragraph({
@@ -1219,7 +1103,7 @@ function closeSuccessModal() {
                     children: [
                         new ImageRun({
                             data: base64DataURLToArrayBuffer(activeProfile.photo),
-                            transformation: { width: 110, height: 110 } // Sets size in the Word doc
+                            transformation: { width: 110, height: 110 } 
                         })
                     ]
                 });
@@ -1369,7 +1253,7 @@ function closeSuccessModal() {
         }
 
         function generateGlobal(data) {
-            const { Document, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle, TableLayoutType } = docx;
+            const { Document, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = docx;
             const FONT = "Calibri"; const SIZE_BODY = 19; const GREEN = "2E7D32";
 
             const headerLeft = [
@@ -1393,23 +1277,20 @@ function closeSuccessModal() {
                 ]})]
             });
 
-function createCenteredHeader(title) {
+            function createCenteredHeader(title) {
                 return new Table({
                     width: { size: 100, type: WidthType.PERCENTAGE },
                     borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
                     margins: { top: 100, bottom: 80 },
                     rows: [ new TableRow({ children: [
-                        // Left Line (Fixed 35%)
                         new TableCell({ 
                             width: { size: 35, type: WidthType.PERCENTAGE }, 
                             children: [ new Paragraph({ children: [new TextRun({ text: "" })], border: { bottom: { color: GREEN, style: BorderStyle.SINGLE, size: 12 } }, spacing: { before: 140 } }) ] 
                         }),
-                        // Center Text (Fixed 30% - Prevents wrapping)
                         new TableCell({ 
                             width: { size: 30, type: WidthType.PERCENTAGE }, 
                             children: [ new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 20, color: GREEN, font: FONT })] }) ] 
                         }),
-                        // Right Line (Fixed 35%)
                         new TableCell({ 
                             width: { size: 35, type: WidthType.PERCENTAGE }, 
                             children: [ new Paragraph({ children: [new TextRun({ text: "" })], border: { bottom: { color: GREEN, style: BorderStyle.SINGLE, size: 12 } }, spacing: { before: 140 } }) ] 
@@ -1420,37 +1301,31 @@ function createCenteredHeader(title) {
 
             const children = [
                 headerTable,
-                // Reduced the gap directly under the main header
                 new Paragraph({ spacing: { before: 60 }, border: { top: { color: GREEN, style: BorderStyle.SINGLE, size: 18 } }, children: [] })
             ];
             
             if (data.improved_summary && data.improved_summary.length > 0) {
                 children.push(createCenteredHeader("Professional Profile"));
-                // Tightened paragraph spacing
                 data.improved_summary.forEach(p => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { before: 20, after: 20 }, children: [ new TextRun({ text: p, size: 20, font: FONT, color: "333333" }) ] })));
             }
 
             if (data.core_skills && data.core_skills.length > 0) {
                 children.push(createCenteredHeader("Competencies"));
-                // Tightened spacing
                 children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 20, after: 20 }, children: [ new TextRun({ text: data.core_skills.join("   •   "), size: 20, font: FONT, color: "333333" }) ] }));
             }
 
             if (data.achievements_and_awards && data.achievements_and_awards.length > 0) {
                 children.push(createCenteredHeader("Achievements"));
-                // Tightened bullet spacing
                 data.achievements_and_awards.forEach(ach => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 15, after: 15 }, children: [ new TextRun({ text: ach, size: 20, font: FONT, color: "333333" }) ] })));
             }
 
             if (data.experience) {
                 children.push(createCenteredHeader("Career Summary"));
                 data.experience.forEach(job => {
-                    // Reduced gap before new jobs
                     children.push(new Paragraph({ spacing: { before: 60, after: 10 }, tabStops: [{ type: "right", position: 10460 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 22, font: FONT }), new TextRun({ text: `\t${job.dates}`, size: 20, font: FONT, color: "000000" }) ] }));
                     children.push(new Paragraph({ spacing: { before: 0, after: 30 }, children: [ new TextRun({ text: `${job.company}`, italic: true, size: 20, font: FONT, color: "666666" }) ] }));
                     job.bullets.forEach(b => {
                         const parsed = parseBullet(b);
-                        // Tightened bullet point spacing
                         children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 15, after: 15 }, children: [ ...(parsed.prefix ? [new TextRun({ text: parsed.prefix, bold: true, size: 20, font: FONT, color: "000000" })] : []), new TextRun({ text: parsed.rest, size: 20, font: FONT, color: "333333" }) ] }));
                     });
                 });
@@ -1458,7 +1333,6 @@ function createCenteredHeader(title) {
 
             if (data.education && data.education.length > 0) {
                 children.push(createCenteredHeader("Education"));
-                // Tightened education gaps
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { before: 40, after: 20 }, children: [ new TextRun({ text: `${edu.institution}`, bold: true, size: 20, font: FONT }), new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: 20, font: FONT, color: "666666" }) ] })));
             }
 
@@ -1472,11 +1346,8 @@ function createCenteredHeader(title) {
             }
 
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: children }] });
-            }
+        }
 
-        // ==========================================
-        // WORKSPACE TOGGLE & COVER LETTER ENGINE
-        // ==========================================
         let currentWorkspace = 'resume';
 
         function switchWorkspace(workspace) {
@@ -1486,7 +1357,6 @@ function createCenteredHeader(title) {
             const panelResume = document.getElementById('resume-editor-panel');
             const panelCL = document.getElementById('cover-letter-panel');
             
-            // Dynamic UI Elements
             const sidebarTitle = document.getElementById('sidebar-title');
             const atsScoreBar = document.getElementById('ats-score-container');
             const downloadBtnText = document.getElementById('download-btn-text');
@@ -1513,7 +1383,7 @@ function createCenteredHeader(title) {
                 
                 if (sidebarTitle) sidebarTitle.innerText = "Cover Letter AI";
                 if (atsScoreBar) {
-                    atsScoreBar.style.opacity = '0'; // Hides it smoothly without breaking flexbox alignment
+                    atsScoreBar.style.opacity = '0'; 
                     atsScoreBar.style.pointerEvents = 'none';
                 }
                 if (downloadBtnText) downloadBtnText.innerText = "Export Letter";
@@ -1521,6 +1391,7 @@ function createCenteredHeader(title) {
                 renderCoverLetterCanvas();
             }
         }
+
         function renderCoverLetterCanvas() {
             const canvas = document.getElementById('workspace-canvas');
             canvas.innerHTML = `
@@ -1550,7 +1421,6 @@ function createCenteredHeader(title) {
                 
                 const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-                // Save data globally so the DOCX builder can grab it
                 window.generatedCoverLetterData = { name, role, company, contactStr, today };
 
                 canvas.innerHTML = `
