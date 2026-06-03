@@ -1420,52 +1420,58 @@ function createCenteredHeader(title) {
 
             const children = [
                 headerTable,
-                new Paragraph({ spacing: { before: 150 }, border: { top: { color: GREEN, style: BorderStyle.SINGLE, size: 18 } }, children: [] })
+                // Reduced the gap directly under the main header
+                new Paragraph({ spacing: { before: 60 }, border: { top: { color: GREEN, style: BorderStyle.SINGLE, size: 18 } }, children: [] })
             ];
             
             if (data.improved_summary && data.improved_summary.length > 0) {
                 children.push(createCenteredHeader("Professional Profile"));
-                data.improved_summary.forEach(p => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: p, size: 20, font: FONT, color: "333333" }) ] })));
+                // Tightened paragraph spacing
+                data.improved_summary.forEach(p => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { before: 20, after: 20 }, children: [ new TextRun({ text: p, size: 20, font: FONT, color: "333333" }) ] })));
             }
 
             if (data.core_skills && data.core_skills.length > 0) {
                 children.push(createCenteredHeader("Competencies"));
-                children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: data.core_skills.join("   •   "), size: 20, font: FONT, color: "333333" }) ] }));
+                // Tightened spacing
+                children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 20, after: 20 }, children: [ new TextRun({ text: data.core_skills.join("   •   "), size: 20, font: FONT, color: "333333" }) ] }));
             }
 
             if (data.achievements_and_awards && data.achievements_and_awards.length > 0) {
                 children.push(createCenteredHeader("Achievements"));
-                data.achievements_and_awards.forEach(ach => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 30, after: 30 }, children: [ new TextRun({ text: ach, size: 20, font: FONT, color: "333333" }) ] })));
+                // Tightened bullet spacing
+                data.achievements_and_awards.forEach(ach => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 15, after: 15 }, children: [ new TextRun({ text: ach, size: 20, font: FONT, color: "333333" }) ] })));
             }
 
             if (data.experience) {
                 children.push(createCenteredHeader("Career Summary"));
                 data.experience.forEach(job => {
-                    children.push(new Paragraph({ spacing: { before: 100, after: 20 }, tabStops: [{ type: "right", position: 10460 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 22, font: FONT }), new TextRun({ text: `\t${job.dates}`, size: 20, font: FONT, color: "000000" }) ] }));
-                    children.push(new Paragraph({ spacing: { before: 0, after: 60 }, children: [ new TextRun({ text: `${job.company}`, italic: true, size: 20, font: FONT, color: "666666" }) ] }));
+                    // Reduced gap before new jobs
+                    children.push(new Paragraph({ spacing: { before: 60, after: 10 }, tabStops: [{ type: "right", position: 10460 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 22, font: FONT }), new TextRun({ text: `\t${job.dates}`, size: 20, font: FONT, color: "000000" }) ] }));
+                    children.push(new Paragraph({ spacing: { before: 0, after: 30 }, children: [ new TextRun({ text: `${job.company}`, italic: true, size: 20, font: FONT, color: "666666" }) ] }));
                     job.bullets.forEach(b => {
                         const parsed = parseBullet(b);
-                        children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 30, after: 30 }, children: [ ...(parsed.prefix ? [new TextRun({ text: parsed.prefix, bold: true, size: 20, font: FONT, color: "000000" })] : []), new TextRun({ text: parsed.rest, size: 20, font: FONT, color: "333333" }) ] }));
+                        // Tightened bullet point spacing
+                        children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 15, after: 15 }, children: [ ...(parsed.prefix ? [new TextRun({ text: parsed.prefix, bold: true, size: 20, font: FONT, color: "000000" })] : []), new TextRun({ text: parsed.rest, size: 20, font: FONT, color: "333333" }) ] }));
                     });
                 });
             }
 
             if (data.education && data.education.length > 0) {
                 children.push(createCenteredHeader("Education"));
-                data.education.forEach(edu => children.push(new Paragraph({ spacing: { before: 80, after: 40 }, children: [ new TextRun({ text: `${edu.institution}`, bold: true, size: 20, font: FONT }), new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: 20, font: FONT, color: "666666" }) ] })));
+                // Tightened education gaps
+                data.education.forEach(edu => children.push(new Paragraph({ spacing: { before: 40, after: 20 }, children: [ new TextRun({ text: `${edu.institution}`, bold: true, size: 20, font: FONT }), new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: 20, font: FONT, color: "666666" }) ] })));
             }
 
             if (data.certifications && data.certifications.length > 0) {
                 children.push(createCenteredHeader("Certifications"));
-                data.certifications.forEach(cert => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { before: 30, after: 30 }, children: [ new TextRun({ text: cert, size: 20, font: FONT }) ] })));
+                data.certifications.forEach(cert => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { before: 15, after: 15 }, children: [ new TextRun({ text: cert, size: 20, font: FONT }) ] })));
             }
             if (data.personal_details && data.personal_details.length > 0) {
                 children.push(createCenteredHeader("Personal Details"));
-                data.personal_details.forEach(pd => children.push(new Paragraph({ spacing: { before: 30, after: 30 }, children: [ new TextRun({ text: `${pd.label}: `, bold: true, size: 20, font: FONT }), new TextRun({ text: pd.value, size: 20, font: FONT }) ] })));
+                data.personal_details.forEach(pd => children.push(new Paragraph({ spacing: { before: 15, after: 15 }, children: [ new TextRun({ text: `${pd.label}: `, bold: true, size: 20, font: FONT }), new TextRun({ text: pd.value, size: 20, font: FONT }) ] })));
             }
 
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: children }] });
-        }
 
         // ==========================================
         // WORKSPACE TOGGLE & COVER LETTER ENGINE
