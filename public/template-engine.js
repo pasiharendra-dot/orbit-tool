@@ -422,6 +422,30 @@ const TemplateEngine = {
         
         // --- The Render Router ---
     renderLayout: function(layoutName, profile, expFormatted) {
+        
+        // 1. DATA SANITIZER: Prevent JavaScript crashes from missing or malformed AI data
+        if (profile) {
+            // Force strings into arrays to prevent .map() and .join() crashes
+            if (typeof profile.skills === 'string') profile.skills = profile.skills.split(',').map(s => s.trim());
+            if (typeof profile.achievements === 'string') profile.achievements = [profile.achievements];
+            if (typeof profile.certifications === 'string') profile.certifications = [profile.certifications];
+            if (typeof profile.personal_details === 'string') profile.personal_details = []; // Failsafe for object arrays
+            
+            // Ensure arrays default to empty arrays instead of undefined
+            profile.skills = profile.skills || [];
+            profile.achievements = profile.achievements || [];
+            profile.certifications = profile.certifications || [];
+            profile.personal_details = Array.isArray(profile.personal_details) ? profile.personal_details : [];
+
+            // Ensure strings default to empty strings to protect .replace() and .split() functions
+            profile.name = profile.name || 'Professional';
+            profile.title = profile.title || '';
+            profile.contact = profile.contact || '';
+            profile.summary = profile.summary || '';
+            profile.education = profile.education || '';
+        }
+
+        // 2. RENDER ROUTER
         if (this[layoutName]) {
             return this[layoutName](profile, expFormatted);
         } else {
