@@ -368,9 +368,7 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
                         parsed.education.map(edu => `${edu.degree || ''} | ${edu.institution || ''} (${edu.date || ''})`).join('\n') 
                         : (typeof parsed.education === 'string' ? parsed.education : ""),
                     certifications: safeArray(parsed.certifications),
-                    personal: Array.isArray(parsed.personal_details) ? 
-                        parsed.personal_details.map(p => `${p.label || ''}: ${p.value || ''}`) 
-                        : []
+                    personal_details: Array.isArray(parsed.personal_details) ? parsed.personal_details : []
                 };
                 
                 activeScore = parsed.score || 94;
@@ -393,7 +391,7 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             document.getElementById('edit-experience').value = activeProfile.experience;
             document.getElementById('edit-education').value = activeProfile.education;
             document.getElementById('edit-certifications').value = activeProfile.certifications.join('\n');
-            document.getElementById('edit-personal').value = activeProfile.personal.join('\n');
+            document.getElementById('edit-personal').value = (activeProfile.personal_details || []).map(p => `${p.label || ''}: ${p.value || ''}`).join('\n');
 
             setTimeout(() => {
                 updateATSScoreUI();
@@ -407,7 +405,25 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             }
 
             const fields = ['name', 'title', 'contact', 'summary', 'experience', 'education'];
-            const arrayFields = ['skills', 'achievements', 'certifications', 'personal'];
+            const arrayFields = ['skills', 'achievements', 'certifications'];
+
+            // Custom listener for Personal Details to split "Label: Value" back into objects
+            document.getElementById('edit-personal').addEventListener('input', (e) => {
+                const lines = e.target.value.split('\n').filter(val => val.trim() !== '');
+                activeProfile.personal_details = lines.map(line => {
+                    const colonIndex = line.indexOf(':');
+                    if (colonIndex !== -1) {
+                        return { 
+                            label: line.substring(0, colonIndex).trim(), 
+                            value: line.substring(colonIndex + 1).trim() 
+                        };
+                    } else {
+                        return { label: line.trim(), value: "" }; // Fallback if no colon is used
+                    }
+                });
+                renderCurrentCanvas();
+                triggerAutoSave();
+            });
 
             const photoInput = document.getElementById('edit-photo');
             if (photoInput) {
@@ -1009,9 +1025,18 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
                 
                 let data = JSON.parse(savedData);
                 
+                // Override with current UI text edits
                 data.name = document.getElementById('edit-name').value || data.name;
                 data.optimized_title = document.getElementById('edit-title').value || data.optimized_title;
                 data.improved_summary = [document.getElementById('edit-summary').value || data.improved_summary[0]];
+                
+                // Sync Array fields from UI directly into the DOCX data
+                data.core_skills = activeProfile.skills || data.core_skills;
+                data.achievements_and_awards = activeProfile.achievements || data.achievements_and_awards;
+                data.certifications = activeProfile.certifications || data.certifications;
+                data.personal_details = activeProfile.personal_details || data.personal_details;
+
+                let contactStr = document.getElementById('edit-contact').value || "";
                 
                 let contactStr = document.getElementById('edit-contact').value || "";
                 let contactParts = contactStr.split('|').map(s=>s.trim());
