@@ -763,7 +763,7 @@ try {
 
         document.addEventListener('dragstart', event => event.preventDefault());
 
-        async function handleDownloadClick(event) {
+async function handleDownloadClick(event) {
             const btn = event?.currentTarget;
             const originalText = btn?.innerHTML;
 
@@ -772,30 +772,27 @@ try {
             }
 
             try {
+                // Notice we no longer need to pull 'download_used'
                 const { data: user, error } = await supabaseClient
                     .from('candidate_profiles')
-                    .select('plan_type, plan_expiry, download_used')
+                    .select('plan_type, plan_expiry')
                     .eq('email', currentUserEmail)
                     .single();
 
                 if (error) throw error;
 
-                const isAnnualActive = user.plan_type === 'annual' && user.plan_expiry && new Date(user.plan_expiry) > new Date();
-                const isSingleDownloadValid = user.plan_type === 'single' && !user.download_used;
+                // Check if they have ANY active plan that hasn't expired yet
+                const isPlanActive = ['single', 'annual', 'expert'].includes(user.plan_type) && 
+                                     user.plan_expiry && 
+                                     new Date(user.plan_expiry) > new Date();
 
-                if (isAnnualActive || isSingleDownloadValid) {
+                if (isPlanActive) {
                     if (currentWorkspace === 'cover-letter') {
                         await downloadCoverLetter();
                     } else {
                         await downloadResume();
                     }
-
-                    if (user.plan_type === 'single') {
-                        await supabaseClient
-                            .from('candidate_profiles')
-                            .update({ download_used: true })
-                            .eq('email', currentUserEmail);
-                    }
+                    // The "download_used = true" lockout code has been entirely deleted from here.
                     return;
                 }
 
@@ -809,30 +806,16 @@ try {
                 }
             }
         }
-
-        function triggerPurchasePaywall() {
-            if (document.getElementById('payment-modal')) return;
-
-            const modalHTML = `
-                <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[100] p-4 backdrop-blur-sm overflow-y-auto">
-                    <div class="bg-white p-5 md:p-8 rounded-2xl shadow-2xl w-full max-w-5xl my-8 relative">
-                        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 font-bold text-xl">✕</button>
-                        
-                        <div class="text-center mb-8">
-                            <h3 class="text-2xl md:text-3xl font-extrabold text-[#0F3B68]">Unlock Your Full Potential</h3>
-                            <p class="text-sm text-gray-600 mt-2">Select a plan to download your ATS-optimized resume and get more AI credits.</p>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                            <div class="border border-gray-200 rounded-xl p-5 flex flex-col hover:border-blue-500 transition shadow-sm bg-gray-50">
+        
+<div class="border border-gray-200 rounded-xl p-5 flex flex-col hover:border-blue-500 transition shadow-sm bg-gray-50">
                                 <h4 class="font-bold text-gray-800 text-lg">Starter</h4>
                                 <div class="text-3xl font-extrabold text-[#0F3B68] my-2">₹199</div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Single Use</p>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">7-Day Access</p>
                                 <ul class="text-xs text-gray-600 space-y-3 mb-6 flex-grow">
-                                    <li class="flex gap-2"><span>✅</span> 1 Word Doc Download</li>
+                                    <li class="flex gap-2"><span>✅</span> Unlimited Word Downloads</li>
                                     <li class="flex gap-2"><span>✅</span> 50 AI Rewrite Credits</li>
                                     <li class="flex gap-2"><span>✅</span> Standard ATS Check</li>
-                                    <li class="flex gap-2 opacity-50"><span>❌</span> No Future Edits</li>
+                                    <li class="flex gap-2"><span>✅</span> 7 Days Live Editor Access</li>
                                 </ul>
                                 <button onclick="processPayment('single')" id="btn-single" class="w-full py-3 border-2 border-[#0F3B68] text-[#0F3B68] hover:bg-blue-50 font-bold rounded-xl transition text-sm">Select Starter</button>
                             </div>
