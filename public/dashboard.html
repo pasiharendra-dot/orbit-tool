@@ -425,12 +425,8 @@ try {
                 triggerAutoSave();
             } 
 
-            const keywordContainer = document.getElementById('keyword-tags');
-            if (activeProfile.skills.length > 0) {
-                keywordContainer.innerHTML = activeProfile.skills.slice(0, 4).map(skill => `<span class="bg-blue-50 border border-blue-100 text-blue-800 text-[9px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">${skill}</span>`).join('');
-            } else {
-                keywordContainer.innerHTML = `<span class="text-[9px] text-gray-400 italic">No keywords detected</span>`;
-            }
+// Use our new dynamic UI updater instead of static HTML
+            updateKeywordsUI();
 
             const fields = ['name', 'title', 'contact', 'summary', 'experience', 'education'];
             const arrayFields = ['skills', 'achievements', 'certifications'];
@@ -541,6 +537,8 @@ function triggerAutoSave() {
                     activeProfile[f] = e.target.value.split('\n').filter(val => val.trim() !== ''); 
                     renderCurrentCanvas(); 
                     triggerAutoSave();
+                    // Instantly update the "+X More" button when they type in the skills box
+                    if (f === 'skills') updateKeywordsUI(); 
                 });
             });
 
@@ -2597,6 +2595,37 @@ async function generateCoverLetter(btn) {
                 alert("Error generating cover letter document.");
             }
         }    
+    function updateKeywordsUI() {
+            const keywordContainer = document.getElementById('keyword-tags');
+            if (!keywordContainer) return;
+
+            if (activeProfile.skills && activeProfile.skills.length > 0) {
+                const displaySkills = activeProfile.skills.slice(0, 4);
+                let html = displaySkills.map(skill => `<span class="bg-blue-50 border border-blue-100 text-blue-800 text-[9px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap">${skill}</span>`).join('');
+                
+                if (activeProfile.skills.length > 4) {
+                    const extraCount = activeProfile.skills.length - 4;
+                    html += `<button onclick="openKeywordsModal()" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 text-[9px] px-1.5 py-0.5 rounded font-bold whitespace-nowrap transition shadow-sm">+${extraCount} More</button>`;
+                }
+                keywordContainer.innerHTML = html;
+            } else {
+                keywordContainer.innerHTML = `<span class="text-[9px] text-gray-400 italic">No keywords detected</span>`;
+            }
+        }
+
+        function openKeywordsModal() {
+            const modal = document.getElementById('keywords-modal');
+            const list = document.getElementById('all-keywords-list');
+            if (modal && list) {
+                list.innerHTML = (activeProfile.skills || []).map(skill => `<span class="bg-blue-50 border border-blue-100 text-blue-800 text-[11px] px-2 py-1 rounded font-bold shadow-sm">${skill}</span>`).join('');
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeKeywordsModal() {
+            const modal = document.getElementById('keywords-modal');
+            if (modal) modal.classList.add('hidden');
+        }
     </script>
 <div id="template-library-modal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-gray-50 w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
@@ -2609,6 +2638,21 @@ async function generateCoverLetter(btn) {
             </div>
             <div class="p-6 overflow-y-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6" id="template-grid">
                 </div>
+        </div>
+    </div>
+<!-- ALL KEYWORDS MODAL -->
+    <div id="keywords-modal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+            <div class="bg-gray-50 px-6 py-4 border-b flex justify-between items-center shrink-0">
+                <div>
+                    <h2 class="text-lg font-bold text-[#0F3B68]">All Injected Keywords</h2>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mt-1">Automatically ATS-Aligned</p>
+                </div>
+                <button onclick="closeKeywordsModal()" class="text-gray-400 hover:text-red-500 text-3xl font-light transition">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[60vh]">
+                <div id="all-keywords-list" class="flex flex-wrap gap-2"></div>
+            </div>
         </div>
     </div>
 </body>
