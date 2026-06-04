@@ -1221,12 +1221,14 @@ if (file.size > maxSize) {
                     // 1. Save the parsed data to browser memory
                     if (window.resumeData) {
                         localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
+                        // NEW: Issue the "Fresh Upload Ticket" to override the cloud!
+                        localStorage.setItem('orbit_fresh_upload', 'true');
                     }
                     // 2. Redirect straight to dashboard
                     window.location.href = 'dashboard.html';
                     return; // Stop the rest of the script
                 }
-
+                    
                 try { fetch(GOOGLE_TRACKER_URL, { method: "POST", body: JSON.stringify({ name: data.after?.name || "Unknown", email: data.after?.email || "Unknown", phone: data.after?.phone || "Unknown", beforeScore: window.beforeScoreTracker, afterScore: data.after?.score || "N/A", action: "Lead Captured" }) }); } catch(e) { }
 
                 event.target.value = '';
