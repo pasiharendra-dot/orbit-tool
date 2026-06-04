@@ -359,7 +359,7 @@ try {
                     body: JSON.stringify({ email: currentUserEmail })
                 });
                 
-                const authData = await authResponse.json();
+const authData = await authResponse.json();
                 let rawData = null;
 
                 if (authData.profile) {
@@ -367,20 +367,28 @@ try {
                     window.currentCredits = authData.profile.credits;
                     const creditSpan = document.getElementById('credit-count');
                     if (creditSpan) creditSpan.innerText = window.currentCredits;
-
-                    // Grab the resume from the secure server response
-                    const cloudResume = authData.profile.master_resume;
-                    if (cloudResume && Object.keys(cloudResume).length > 0) {
-                        rawData = cloudResume;
-                    }
                 }
 
-                // 2. Fallback to LocalStorage if the cloud is truly empty (e.g., right after upload)
-                if (!rawData) {
+                // 2. THE TICKET CHECKER: Did they just upload a new resume?
+                const isFreshUpload = localStorage.getItem('orbit_fresh_upload') === 'true';
+
+                if (isFreshUpload) {
+                    // PRIORITY 1: Force load the new upload and ignore the cloud
+                    const localData = localStorage.getItem('orbit_resume_data');
+                    if (localData) rawData = JSON.parse(localData);
+                    
+                    // Rip up the ticket so normal cloud loading resumes next time
+                    localStorage.removeItem('orbit_fresh_upload');
+                } 
+                else if (authData.profile && authData.profile.master_resume && Object.keys(authData.profile.master_resume).length > 0) {
+                    // PRIORITY 2: Normal login, load data from the Cloud
+                    rawData = authData.profile.master_resume;
+                } 
+                else {
+                    // PRIORITY 3: Fallback if nothing else exists
                     const localData = localStorage.getItem('orbit_resume_data');
                     if (localData) rawData = JSON.parse(localData);
                 }
-
                 // 3. Map Data into UI
                 if (rawData) {
                     const safeArray = (arr) => Array.isArray(arr) ? arr : (typeof arr === 'string' ? [arr] : []);
