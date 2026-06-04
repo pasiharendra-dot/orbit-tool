@@ -351,46 +351,38 @@
                 document.getElementById('account-avatar').innerHTML = `<span class="text-sm font-bold">${currentUserEmail.charAt(0).toUpperCase()}</span>`;
             }
 
-            window.currentCredits = 0; 
-            fetch('/api/auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: currentUserEmail })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.profile) {
-                    window.currentCredits = data.profile.credits;
-                    const creditSpan = document.getElementById('credit-count');
-                    if (creditSpan) creditSpan.innerText = window.currentCredits;
-                }
-            })
-            .catch(err => console.error("Credit sync failed", err));
-
 try {
-                // 1. Pull their specific row from candidate_profiles using their Email
-                const { data: dbData, error } = await supabaseClient
-                    .from('candidate_profiles')
-                    .select('master_resume')
-                    .eq('email', currentUserEmail) 
-                    .maybeSingle();
-
+                // 1. SECURE CLOUD LOAD: Route the read through your backend API to completely bypass RLS blocks
+                const authResponse = await fetch('/api/auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentUserEmail })
+                });
+                
+                const authData = await authResponse.json();
                 let rawData = null;
 
-                // THE FIX: Check if it actually has keys! (Ignores the default '{}')
-                if (dbData && dbData.master_resume && Object.keys(dbData.master_resume).length > 0) {
-                    // 2A. Success! Load from Cloud
-                    rawData = dbData.master_resume;
-                } else {
-                    // 2B. Fallback to local storage (Happens right after a fresh upload)
-                    const localData = localStorage.getItem('orbit_resume_data');
-                    if (localData) {
-                        rawData = JSON.parse(localData);
+                if (authData.profile) {
+                    // Sync credits instantly
+                    window.currentCredits = authData.profile.credits;
+                    const creditSpan = document.getElementById('credit-count');
+                    if (creditSpan) creditSpan.innerText = window.currentCredits;
+
+                    // Grab the resume from the secure server response
+                    const cloudResume = authData.profile.master_resume;
+                    if (cloudResume && Object.keys(cloudResume).length > 0) {
+                        rawData = cloudResume;
                     }
                 }
 
+                // 2. Fallback to LocalStorage if the cloud is truly empty (e.g., right after upload)
+                if (!rawData) {
+                    const localData = localStorage.getItem('orbit_resume_data');
+                    if (localData) rawData = JSON.parse(localData);
+                }
+
+                // 3. Map Data into UI
                 if (rawData) {
-                    // CRASH-PROOF DATA MAPPER
                     const safeArray = (arr) => Array.isArray(arr) ? arr : (typeof arr === 'string' ? [arr] : []);
                     
                     activeProfile = {
@@ -415,21 +407,16 @@ try {
                     const firstName = activeProfile.name.split(' ')[0] || 'Candidate';
                     document.getElementById('welcome-text').innerText = `Welcome, ${firstName}`;
                     
-                    // Backup to local storage for instant loads next time
                     localStorage.setItem('orbit_resume_data', JSON.stringify(activeProfile));
                 }
 
             } catch (err) {
-                console.error("Error loading resume from cloud:", err);
+                console.error("Error loading secure profile data:", err);
             }
 
-            // Load photo from local storage
             const savedPhoto = localStorage.getItem('orbit_resume_photo');
-            if (savedPhoto) {
-                activeProfile.photo = savedPhoto;
-            }
+            if (savedPhoto) activeProfile.photo = savedPhoto;
 
-            // Push data into the UI input fields
             document.getElementById('edit-name').value = activeProfile.name || "";
             document.getElementById('edit-title').value = activeProfile.title || "";
             document.getElementById('edit-contact').value = activeProfile.contact || "";
@@ -441,8 +428,8 @@ try {
             document.getElementById('edit-certifications').value = (activeProfile.certifications || []).join('\n');
             document.getElementById('edit-personal').value = (activeProfile.personal_details || []).map(p => `${p.label || ''}: ${p.value || ''}`).join('\n');
 
-            // NEW: Automatically trigger a cloud save so the database is instantly populated!
-            if (activeProfile && activeProfile.name) {
+            // NEW SAFETY LOCK: Only trigger auto-save if it's NOT the dummy John Doe data
+            if (activeProfile && activeProfile.name && activeProfile.name !== "JOHN DOE") {
                 triggerAutoSave();
             } 
 
