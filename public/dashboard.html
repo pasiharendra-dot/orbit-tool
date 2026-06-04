@@ -352,7 +352,7 @@ try {
                     .from('candidate_profiles')
                     .select('master_resume')
                     .eq('email', currentUserEmail) 
-                    .single();
+                    .maybeSingle();
 
                 let rawData = null;
 
@@ -483,7 +483,7 @@ try {
                 });
             }
 
-const triggerAutoSave = () => {
+function triggerAutoSave() {
                 const saveText = document.getElementById('save-text');
                 const saveIcon = document.getElementById('save-icon');
                 
@@ -780,7 +780,7 @@ async function handleDownloadClick(event) {
                     .from('candidate_profiles')
                     .select('plan_type, plan_expiry')
                     .eq('email', currentUserEmail)
-                    .single();
+                    .maybeSingle();
 
                 if (error) throw error;
 
