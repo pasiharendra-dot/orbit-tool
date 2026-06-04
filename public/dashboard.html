@@ -356,11 +356,12 @@ try {
 
                 let rawData = null;
 
-                if (dbData && dbData.master_resume) {
+                // THE FIX: Check if it actually has keys! (Ignores the default '{}')
+                if (dbData && dbData.master_resume && Object.keys(dbData.master_resume).length > 0) {
                     // 2A. Success! Load from Cloud
                     rawData = dbData.master_resume;
                 } else {
-                    // 2B. Fallback to local storage if Cloud is empty (e.g., first-time users before their first auto-save)
+                    // 2B. Fallback to local storage (Happens right after a fresh upload)
                     const localData = localStorage.getItem('orbit_resume_data');
                     if (localData) {
                         rawData = JSON.parse(localData);
@@ -368,8 +369,7 @@ try {
                 }
 
                 if (rawData) {
-                    
-                    // CRASH-PROOF DATA MAPPER (Handles both Raw AI JSON and Flattened Dashboard JSON)
+                    // CRASH-PROOF DATA MAPPER
                     const safeArray = (arr) => Array.isArray(arr) ? arr : (typeof arr === 'string' ? [arr] : []);
                     
                     activeProfile = {
@@ -402,7 +402,7 @@ try {
                 console.error("Error loading resume from cloud:", err);
             }
 
-            // Load photo from local storage (Since base64 strings are massive, it is standard practice to keep photos local unless using a dedicated image bucket)
+            // Load photo from local storage
             const savedPhoto = localStorage.getItem('orbit_resume_photo');
             if (savedPhoto) {
                 activeProfile.photo = savedPhoto;
@@ -419,10 +419,11 @@ try {
             document.getElementById('edit-education').value = activeProfile.education || "";
             document.getElementById('edit-certifications').value = (activeProfile.certifications || []).join('\n');
             document.getElementById('edit-personal').value = (activeProfile.personal_details || []).map(p => `${p.label || ''}: ${p.value || ''}`).join('\n');
-            
-            setTimeout(() => {
-                updateATSScoreUI();
-            }, 300); 
+
+            // NEW: Automatically trigger a cloud save so the database is instantly populated!
+            if (activeProfile && activeProfile.name) {
+                triggerAutoSave();
+            } 
 
             const keywordContainer = document.getElementById('keyword-tags');
             if (activeProfile.skills.length > 0) {
