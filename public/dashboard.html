@@ -60,7 +60,33 @@
 }
 
 /* LOCKED WATERMARK */
+
+        /* LOCKED WATERMARK */
+
+        /* =========================
+           TRUE-TEXT PDF GENERATION
+        ========================= */
+        @media print {
+            body * { visibility: hidden; }
+            #workspace-canvas, #workspace-canvas * { visibility: visible; }
+            #workspace-canvas {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 210mm;
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+            .watermark-overlay::before { display: none !important; }
+        }
     </style>
+
 </head>
 <body class="bg-gray-50 font-sans protected-zone flex flex-col min-h-screen">
 
@@ -257,13 +283,17 @@
                 </div>
 
                 <div class="flex w-full xl:w-auto gap-2">
-                    <button onclick="openPrintPreview()" class="w-full xl:w-auto bg-[#0F3B68] hover:bg-[#0b2d50] text-white font-bold text-xs md:text-sm px-4 md:px-5 py-2 md:py-2.5 rounded-lg shadow-sm transition flex items-center justify-center whitespace-nowrap shrink-0">
+                    <button onclick="openPrintPreview()" class="hidden md:flex w-full xl:w-auto bg-[#0F3B68] hover:bg-[#0b2d50] text-white font-bold text-xs md:text-sm px-4 md:px-5 py-2 md:py-2.5 rounded-lg shadow-sm transition items-center justify-center whitespace-nowrap shrink-0">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                        Print Preview
+                        Preview
                     </button>
-                    <button onclick="handleDownloadClick()" class="w-full xl:w-auto bg-green-600 hover:bg-green-700 text-white font-bold text-xs md:text-sm px-4 md:px-5 py-2 md:py-2.5 rounded-lg shadow-sm transition flex items-center justify-center whitespace-nowrap shrink-0">
+                    <button onclick="handleDownloadClick(event, 'pdf')" class="w-full xl:w-auto bg-red-600 hover:bg-red-700 text-white font-bold text-xs md:text-sm px-4 md:px-5 py-2 md:py-2.5 rounded-lg shadow-sm transition flex items-center justify-center whitespace-nowrap shrink-0">
+                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 16l4-5h-3V4h-2v7H8l4 5zm9-5v11H3V11h3v2H5v7h14v-7h-1v-2h3z"/></svg>
+                        <span id="download-pdf-text">.pdf</span>
+                    </button>
+                    <button onclick="handleDownloadClick(event, 'docx')" class="w-full xl:w-auto bg-green-600 hover:bg-green-700 text-white font-bold text-xs md:text-sm px-4 md:px-5 py-2 md:py-2.5 rounded-lg shadow-sm transition flex items-center justify-center whitespace-nowrap shrink-0">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span id="download-btn-text">Download .docx</span>
+                        <span id="download-btn-text">.docx</span>
                     </button>
                 </div>
             </div>
@@ -281,10 +311,9 @@
             </div>
             <h3 class="text-3xl font-extrabold text-[#0F3B68] mb-3">Payment Successful!</h3>
             <p class="text-gray-600 mb-8 leading-relaxed text-sm">Your ATS-optimized Word document is downloading now. You now have full access to the live editor.</p>
-            <button onclick="downloadResume()" 
-class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition">
-    Download Again
-</button>
+            <button onclick="retryDownload()" class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition">
+                Download Again
+            </button>
             <button onclick="closeSuccessModal()" class="w-full py-4 bg-[#0F3B68] hover:bg-blue-800 text-white font-bold rounded-xl shadow-lg transition">
                 Return to Dashboard
             </button>
@@ -776,7 +805,9 @@ function updateATSScoreUI() {
 
         document.addEventListener('dragstart', event => event.preventDefault());
 
-async function handleDownloadClick(event) {
+async function handleDownloadClick(event, format = 'docx') {
+            window.pendingDownloadFormat = format; 
+
             const btn = event?.currentTarget;
             const originalText = btn?.innerHTML;
 
@@ -793,16 +824,19 @@ async function handleDownloadClick(event) {
 
                 if (error) throw error;
 
-                // Check if they have ANY active plan that hasn't expired yet
-                const isPlanActive = ['single', 'annual', 'expert'].includes(user.plan_type) && 
-                                     user.plan_expiry && 
+                const isPlanActive = ['single', 'annual', 'expert'].includes(user?.plan_type) && 
+                                     user?.plan_expiry && 
                                      new Date(user.plan_expiry) > new Date();
 
                 if (isPlanActive) {
                     if (currentWorkspace === 'cover-letter') {
                         await downloadCoverLetter();
                     } else {
-                        await downloadResume();
+                        if (format === 'pdf') {
+                            await downloadResumePDF();
+                        } else {
+                            await downloadResume();
+                        }
                     }
                     return;
                 }
@@ -818,6 +852,27 @@ async function handleDownloadClick(event) {
             }
         }
 
+        async function downloadResumePDF() {
+            try {
+                window.print();
+            } catch (err) {
+                console.error(err);
+                alert("An error occurred while opening the PDF generator.");
+            }
+        }
+
+        async function retryDownload() {
+            if (currentWorkspace === 'cover-letter') {
+                await downloadCoverLetter();
+            } else {
+                if (window.pendingDownloadFormat === 'pdf') {
+                    await downloadResumePDF();
+                } else {
+                    await downloadResume();
+                }
+            }
+        }
+        
         function triggerPurchasePaywall() {
             if (document.getElementById('payment-modal')) return;
 
@@ -968,11 +1023,14 @@ async function handleDownloadClick(event) {
                             if (currentWorkspace === 'cover-letter') {
                                 await downloadCoverLetter();
                             } else {
-                                await downloadResume();
+                                if (window.pendingDownloadFormat === 'pdf') {
+                                    await downloadResumePDF();
+                                } else {
+                                    await downloadResume();
+                                }
                             }
                             closeModal();
                             document.getElementById('success-modal')?.classList.remove('hidden');
-
                         } catch (verificationError) {
                             console.error("Verification Error:", verificationError);
                             alert("Payment received but verification failed. Please contact support.");
