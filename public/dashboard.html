@@ -482,7 +482,7 @@ try {
                 });
             }
 
-            const triggerAutoSave = () => {
+const triggerAutoSave = () => {
                 const saveText = document.getElementById('save-text');
                 const saveIcon = document.getElementById('save-icon');
                 
@@ -498,18 +498,21 @@ try {
                 // 2. Clear the previous timer
                 clearTimeout(saveTimeout);
 
-                // 3. Set a new timer to save to Supabase 1 second after typing stops
+                // 3. Send data securely to your backend 1 second after typing stops
                 saveTimeout = setTimeout(async () => {
                     try {
-                        const { data: { user } } = await supabaseClient.auth.getUser();
-                        if (user) {
-                            const { error } = await supabaseClient
-                                .from('candidate_profiles')
-                                .update({ master_resume: activeProfile })
-                                .eq('id', user.id); // Change 'id' to 'user_id' if your table uses user_id
+                        if (currentUserEmail) {
+                            const response = await fetch('/api/save-profile', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ 
+                                    email: currentUserEmail, 
+                                    resumeData: activeProfile 
+                                })
+                            });
 
-                            if (error) {
-                                console.error("Cloud save failed:", error.message);
+                            if (!response.ok) {
+                                console.error("Cloud save failed on the server.");
                             }
                         }
                     } catch (err) {
@@ -523,7 +526,7 @@ try {
                     }
                 }, 1000);
             };
-
+            
             fields.forEach(f => {
                 document.getElementById(`edit-${f}`).addEventListener('input', (e) => { 
                     activeProfile[f] = f === 'name' || f === 'title' ? e.target.value.toUpperCase() : e.target.value; 
