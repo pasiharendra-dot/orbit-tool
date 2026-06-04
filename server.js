@@ -524,3 +524,60 @@ app.post('/api/optimize-resume', async (req, res) => {
     }
 });
 app.listen(port, () => { console.log(`Engine running at port ${port}`); });
+
+// ==========================================
+// NEW: COVER LETTER AI ENDPOINT
+// ==========================================
+app.post('/api/generate-cover-letter', async (req, res) => {
+    const { email, role, company, tone, resumeData } = req.body;
+
+    try {
+        // 1. Verify User & Credits
+        const { data: user, error: userError } = await supabase
+            .from('candidate_profiles')
+            .select('credits')
+            .eq('email', email)
+            .single();
+
+        if (userError || !user) throw new Error("User not found");
+        if (user.credits <= 0) return res.status(403).json({ message: "Out of credits. Please purchase more." });
+
+        // 2. Build the Expert Prompt
+        let toneInstruction = "Traditional, highly professional, and respectful.";
+        if (tone === 'confident') toneInstruction = "Confident, executive, authoritative, and results-driven.";
+        if (tone === 'direct') toneInstruction = "Direct, punchy, startup-ready, modern, and highly actionable.";
+
+        const systemPrompt = `You are an elite executive career coach and expert copywriter. Your goal is to write a highly tailored, compelling cover letter.
+        
+        Strict Guidelines:
+        1. Tone: ${toneInstruction}
+        2. Structure: 3-4 concise paragraphs. Open with a strong hook, use the body to connect their specific resume achievements to the target role, and close with a confident call to action.
+        3. NO FLUFF: Avoid generic, boring phrases like "I am writing to express my interest in..." or "Enclosed is my resume". Start with immediate impact.
+        4. Integration: You MUST weave in 1-2 specific metrics, tools, or achievements from the provided resume data to prove their competence.
+        5. Output Format: Return ONLY the body paragraphs of the cover letter. Do not include the header (name, address, date), the greeting ("Dear Hiring Manager"), or the sign-off ("Sincerely, Name"). Just the core letter content, separated by double line breaks.`;
+
+        const userPrompt = `Target Role: ${role}\nTarget Company: ${company}\n\nCandidate Resume Data:\n${JSON.stringify(resumeData)}\n\nWrite the cover letter body now.`;
+
+        // 3. Generate AI Response
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash", systemInstruction: systemPrompt });
+        const result = await model.generateContent(userPrompt);
+        const coverLetterBody = result.response.text().trim();
+
+        // 4. Deduct 1 Credit
+        await supabase
+            .from('candidate_profiles')
+            .update({ credits: user.credits - 1 })
+            .eq('email', email);
+
+        // 5. Send back to Dashboard
+        res.status(200).json({
+            success: true,
+            coverLetter: coverLetterBody,
+            remainingCredits: user.credits - 1
+        });
+
+    } catch (error) {
+        console.error("Cover Letter AI Error:", error);
+        res.status(500).json({ message: "Cover letter generation failed." });
+    }
+});
