@@ -641,16 +641,26 @@ function triggerAutoSave() {
             }
         }
 
-        function updateATSScoreUI() {
+function updateATSScoreUI() {
             let displayedScore = activeScore;
             let statusHTML = '<span class="text-green-600 font-bold">Optimized</span> Framework';
             let ringColor = 'text-green-500';
 
-            if (currentActiveTemplate === 'vanguard') {
+            // Grouping our templates by layout type
+            const lowFitTemplates = ['vanguard']; // 2-Column + Photo
+            
+            // All templates that use a dense, 2-column structure
+            const mediumFitTemplates = [
+                'creative', 'axiom', 'classic_blue', 'creative_coral', 
+                'executive_teal', 'meridian', 'navy_executive', 'olive_tech', 
+                'pinnacle', 'purple_pro', 'rose_modern', 'slate_professional'
+            ];
+
+            if (lowFitTemplates.includes(currentActiveTemplate)) {
                 displayedScore = Math.max(0, activeScore - 18);
                 statusHTML = '<span class="text-red-500 font-bold">Low ATS Fit</span> (2-Col + Photo)';
                 ringColor = 'text-red-500';
-            } else if (currentActiveTemplate === 'creative') {
+            } else if (mediumFitTemplates.includes(currentActiveTemplate)) {
                 displayedScore = Math.max(0, activeScore - 12);
                 statusHTML = '<span class="text-orange-500 font-bold">Medium Fit</span> (2-Col Layout)';
                 ringColor = 'text-orange-500';
@@ -658,8 +668,10 @@ function triggerAutoSave() {
                 statusHTML = '<span class="text-green-600 font-bold">Optimized</span> (Global Std)';
             }
 
+            // Update the percentage text
             document.getElementById('ats-score-text').innerText = `${displayedScore}%`;
             
+            // Update the circular progress ring
             const ring = document.getElementById('score-ring');
             if (ring) {
                 ring.setAttribute('stroke-dasharray', `${displayedScore}, 100`);
@@ -667,6 +679,7 @@ function triggerAutoSave() {
                 ring.classList.add(ringColor);
             }
 
+            // Update the status text underneath the dial
             const statusText = document.getElementById('ats-status-text');
             if (statusText) statusText.innerHTML = statusHTML;
         }
