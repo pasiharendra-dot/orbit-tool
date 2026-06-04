@@ -568,8 +568,9 @@ function triggerAutoSave() {
             }
 
             renderCurrentCanvas();
+            updateATSScoreUI(); // <-- NEW: Fires the ATS calculation on initial load!
         });
-
+        
         async function triggerAI(section, buttonElement) {
             if (window.currentCredits !== undefined && window.currentCredits <= 0) {
                 triggerPurchasePaywall();
