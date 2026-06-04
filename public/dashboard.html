@@ -772,7 +772,6 @@ async function handleDownloadClick(event) {
             }
 
             try {
-                // Notice we no longer need to pull 'download_used'
                 const { data: user, error } = await supabaseClient
                     .from('candidate_profiles')
                     .select('plan_type, plan_expiry')
@@ -792,7 +791,6 @@ async function handleDownloadClick(event) {
                     } else {
                         await downloadResume();
                     }
-                    // The "download_used = true" lockout code has been entirely deleted from here.
                     return;
                 }
 
@@ -806,8 +804,22 @@ async function handleDownloadClick(event) {
                 }
             }
         }
-        
-<div class="border border-gray-200 rounded-xl p-5 flex flex-col hover:border-blue-500 transition shadow-sm bg-gray-50">
+
+        function triggerPurchasePaywall() {
+            if (document.getElementById('payment-modal')) return;
+
+            const modalHTML = `
+                <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[100] p-4 backdrop-blur-sm overflow-y-auto">
+                    <div class="bg-white p-5 md:p-8 rounded-2xl shadow-2xl w-full max-w-5xl my-8 relative">
+                        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 font-bold text-xl">✕</button>
+                        
+                        <div class="text-center mb-8">
+                            <h3 class="text-2xl md:text-3xl font-extrabold text-[#0F3B68]">Unlock Your Full Potential</h3>
+                            <p class="text-sm text-gray-600 mt-2">Select a plan to download your ATS-optimized resume and get more AI credits.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div class="border border-gray-200 rounded-xl p-5 flex flex-col hover:border-blue-500 transition shadow-sm bg-gray-50">
                                 <h4 class="font-bold text-gray-800 text-lg">Starter</h4>
                                 <div class="text-3xl font-extrabold text-[#0F3B68] my-2">₹199</div>
                                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">7-Day Access</p>
@@ -863,7 +875,7 @@ async function handleDownloadClick(event) {
             `;
             document.body.insertAdjacentHTML('beforeend', modalHTML);
         }
-
+        
         function closeModal() {
             const modal = document.getElementById('payment-modal');
             if (modal) modal.remove();
