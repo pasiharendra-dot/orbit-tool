@@ -88,7 +88,7 @@
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-3 mb-10 flex flex-col gap-3 animate-fade-in-up stagger-2 sticky top-[80px] z-40">
             
             <!-- Experience Filters -->
-            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+            <div class="flex items-center justify-start md:justify-center gap-2 overflow-x-auto no-scrollbar pb-1">
                 <span class="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest whitespace-nowrap px-2">By Experience:</span>
                 <button onclick="filterGallery('All')" class="filter-btn active shrink-0 px-4 py-1.5 rounded-full text-xs font-bold bg-[#0A192F] text-white transition-all shadow-md">All Templates</button>
                 <button onclick="filterGallery('Entry')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 hover:bg-blue-50 hover:text-blue-900 transition-all flex items-center gap-1">
@@ -99,7 +99,7 @@
             </div>
             
             <!-- Style Filters -->
-            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-2 border-t border-gray-100">
+            <div class="flex items-center justify-start md:justify-center gap-2 overflow-x-auto no-scrollbar pt-2 border-t border-gray-100">
                 <span class="text-[11px] font-extrabold text-gray-400 uppercase tracking-widest whitespace-nowrap px-2">By Style:</span>
                 <button onclick="filterGallery('Minimal')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 hover:bg-blue-50 hover:text-blue-900 transition-all">Minimal & Clean</button>
                 <button onclick="filterGallery('Modern')" class="filter-btn shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold text-gray-600 hover:bg-blue-50 hover:text-blue-900 transition-all">Modern & Creative</button>
@@ -111,7 +111,7 @@
                 Showing all premium ATS-optimized templates.
             </div>
         </div>
-
+        
         <!-- TEMPLATE GRID -->
         <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 animate-fade-in-up stagger-3">
             <!-- Templates injected via JS -->
