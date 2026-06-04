@@ -2460,22 +2460,66 @@ function generateExecutiveTeal(data) {
             `;
         }
 
-        function generateCoverLetter(btn) {
+async function generateCoverLetter(btn) {
+            if (window.currentCredits !== undefined && window.currentCredits <= 0) {
+                triggerPurchasePaywall();
+                return;
+            }
+
             const originalText = btn.innerHTML;
-            btn.innerHTML = "⏳ Scanning Resume & Generating...";
+            btn.innerHTML = "⏳ Scanning Resume & Generating AI Letter...";
             btn.disabled = true;
 
-            setTimeout(() => {
-                const canvas = document.getElementById('workspace-canvas');
-                const name = document.getElementById('edit-name').value || "Candidate";
-                const role = document.getElementById('cl-target-role').value || "the open role";
-                const company = document.getElementById('cl-target-company').value || "your organization";
-                const contactStr = document.getElementById('edit-contact').value || "Contact Information";
+            const name = document.getElementById('edit-name').value || "Candidate";
+            const role = document.getElementById('cl-target-role').value || "the open role";
+            const company = document.getElementById('cl-target-company').value || "your organization";
+            const tone = document.getElementById('cl-tone').value || "confident";
+            const contactStr = document.getElementById('edit-contact').value || "Contact Information";
+            const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            try {
+                // Send the request to our new AI backend
+                const response = await fetch('/api/generate-cover-letter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: currentUserEmail,
+                        role: role,
+                        company: company,
+                        tone: tone,
+                        resumeData: {
+                            summary: activeProfile.summary,
+                            experience: activeProfile.experience,
+                            skills: activeProfile.skills
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    if (response.status === 403) {
+                        triggerPurchasePaywall();
+                        throw new Error("Out of credits.");
+                    }
+                    throw new Error("Generation failed.");
+                }
+
+                const result = await response.json();
                 
-                const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                // Sync the UI credits
+                if (result.remainingCredits !== undefined) {
+                    window.currentCredits = result.remainingCredits;
+                    const creditSpan = document.getElementById('credit-count');
+                    if (creditSpan) creditSpan.innerText = result.remainingCredits;
+                }
 
-                window.generatedCoverLetterData = { name, role, company, contactStr, today };
+                // Format the AI plain text into HTML paragraphs
+                const formattedBodyHTML = result.coverLetter.split('\n\n').map(p => `<p class="mb-4 text-justify">${p}</p>`).join('');
 
+                // Save data globally so the Word document exporter can access it
+                window.generatedCoverLetterData = { name, role, company, contactStr, today, body: result.coverLetter };
+
+                // Render to the UI Canvas
+                const canvas = document.getElementById('workspace-canvas');
                 canvas.innerHTML = `
                     <div class="text-left font-serif text-gray-800 p-2 leading-relaxed text-[11px] md:text-xs">
                         <p class="mb-6 font-extrabold text-[#0F3B68] text-base md:text-lg">${name.toUpperCase()}</p>
@@ -2483,31 +2527,35 @@ function generateExecutiveTeal(data) {
                         <p class="mb-8 text-gray-800">${today}</p>
                         <p class="mb-6 font-bold text-gray-800">To the Hiring Team at ${company},</p>
                         
-                        <p class="mb-4 text-justify">I am writing to express my strong interest in the ${role} position. With a proven track record of driving measurable outcomes and aligning cross-functional teams to exceed core business objectives, I am confident in my ability to deliver immediate, strategic value to your organization.</p>
+                        ${formattedBodyHTML}
                         
-                        <p class="mb-4 text-justify">Throughout my career, I have consistently focused on operational excellence and scalable growth. While my attached resume outlines my professional milestones and technical competencies, what it cannot fully capture is my relentless drive for innovation and my commitment to fostering collaborative, high-performing environments.</p>
-                        
-                        <p class="mb-4 text-justify">I welcome the opportunity to discuss how my unique blend of skills, coupled with my deep industry expertise, aligns perfectly with the strategic direction of ${company}. I am excited about the possibility of contributing to your team's ongoing success.</p>
-                        
-                        <p class="mb-10">Thank you for your time and consideration.</p>
-                        <p>Sincerely,<br><br><span class="font-bold">${name}</span></p>
+                        <p class="mt-8">Sincerely,<br><br><span class="font-bold">${name}</span></p>
                     </div>
                 `;
                 
+            } catch (err) {
+                console.error(err);
+                alert(err.message || 'Cover letter generation failed. Please try again.');
+            } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-            }, 2500);
+            }
         }
 
         async function downloadCoverLetter() {
-            if (!window.generatedCoverLetterData) {
-                alert("Please click '✨ Auto-Write Cover Letter' first!");
+            if (!window.generatedCoverLetterData || !window.generatedCoverLetterData.body) {
+                alert("Please click '✨ Auto-Write Cover Letter' to generate your letter first!");
                 return;
             }
             try {
                 const { Document, Paragraph, TextRun } = docx;
                 const data = window.generatedCoverLetterData;
                 
+                // Dynamically map the AI paragraphs into Word document paragraphs
+                const bodyParagraphs = data.body.split('\n\n').map(p => 
+                    new Paragraph({ spacing: { after: 200 }, children: [new TextRun({ text: p, size: 24 })] })
+                );
+
                 const doc = new Document({
                     sections: [{
                         properties: { page: { margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 } } },
@@ -2516,11 +2564,11 @@ function generateExecutiveTeal(data) {
                             new Paragraph({ spacing: { after: 400 }, children: [new TextRun({ text: data.contactStr.replace(/ \| /g, ' | '), size: 20, color: "666666" })] }),
                             new Paragraph({ spacing: { after: 200 }, children: [new TextRun({ text: data.today, size: 24 })] }),
                             new Paragraph({ spacing: { after: 400 }, children: [new TextRun({ text: `To the Hiring Team at ${data.company},`, bold: true, size: 24 })] }),
-                            new Paragraph({ spacing: { after: 200 }, children: [new TextRun({ text: `I am writing to express my strong interest in the ${data.role} position. With a proven track record of driving measurable outcomes and aligning cross-functional teams to exceed core business objectives, I am confident in my ability to deliver immediate, strategic value to your organization.`, size: 24 })] }),
-                            new Paragraph({ spacing: { after: 200 }, children: [new TextRun({ text: `Throughout my career, I have consistently focused on operational excellence and scalable growth. While my attached resume outlines my professional milestones and technical competencies, what it cannot fully capture is my relentless drive for innovation and my commitment to fostering collaborative, high-performing environments.`, size: 24 })] }),
-                            new Paragraph({ spacing: { after: 400 }, children: [new TextRun({ text: `I welcome the opportunity to discuss how my unique blend of skills, coupled with my deep industry expertise, aligns perfectly with the strategic direction of ${data.company}. I am excited about the possibility of contributing to your team's ongoing success.`, size: 24 })] }),
-                            new Paragraph({ spacing: { after: 400 }, children: [new TextRun({ text: `Thank you for your time and consideration.`, size: 24 })] }),
-                            new Paragraph({ children: [new TextRun({ text: `Sincerely,`, size: 24 })] }),
+                            
+                            // Insert the dynamic AI paragraphs here
+                            ...bodyParagraphs,
+                            
+                            new Paragraph({ spacing: { before: 200 }, children: [new TextRun({ text: `Sincerely,`, size: 24 })] }),
                             new Paragraph({ spacing: { before: 400 }, children: [new TextRun({ text: data.name, bold: true, size: 24 })] }),
                         ]
                     }]
