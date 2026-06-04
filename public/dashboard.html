@@ -346,53 +346,80 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             })
             .catch(err => console.error("Credit sync failed", err));
 
-            const savedData = localStorage.getItem('orbit_resume_data');
-            
-            if (savedData) {
-                const parsed = JSON.parse(savedData);
-                
-                // CRASH-PROOF DATA MAPPER
-                const safeArray = (arr) => Array.isArray(arr) ? arr : (typeof arr === 'string' ? [arr] : []);
-                
-                activeProfile = {
-                    name: parsed.name || "",
-                    title: parsed.optimized_title || "",
-                    summary: Array.isArray(parsed.improved_summary) ? parsed.improved_summary[0] : (parsed.improved_summary || ""),
-                    contact: [parsed.phone, parsed.email, parsed.location, parsed.linkedin].filter(Boolean).join(" | "),
-                    skills: safeArray(parsed.core_skills),
-                    achievements: safeArray(parsed.achievements_and_awards),
-                    experience: Array.isArray(parsed.experience) ? 
-                        parsed.experience.map(exp => `${exp.title || ''} - ${exp.company || ''}\n${exp.dates || ''}\n${safeArray(exp.bullets).map(b=>'• '+b).join('\n')}`).join('\n\n') 
-                        : (typeof parsed.experience === 'string' ? parsed.experience : ""),
-                    education: Array.isArray(parsed.education) ? 
-                        parsed.education.map(edu => `${edu.degree || ''} | ${edu.institution || ''} (${edu.date || ''})`).join('\n') 
-                        : (typeof parsed.education === 'string' ? parsed.education : ""),
-                    certifications: safeArray(parsed.certifications),
-                    personal_details: Array.isArray(parsed.personal_details) ? parsed.personal_details : []
-                };
-                
-                activeScore = parsed.score || 94;
+try {
+                // 1. Pull their specific row from candidate_profiles using their Email
+                const { data: dbData, error } = await supabaseClient
+                    .from('candidate_profiles')
+                    .select('master_resume')
+                    .eq('email', currentUserEmail) 
+                    .single();
 
-                const firstName = activeProfile.name.split(' ')[0] || 'Candidate';
-                document.getElementById('welcome-text').innerText = `Welcome, ${firstName}`;
+                let rawData = null;
+
+                if (dbData && dbData.master_resume) {
+                    // 2A. Success! Load from Cloud
+                    rawData = dbData.master_resume;
+                } else {
+                    // 2B. Fallback to local storage if Cloud is empty (e.g., first-time users before their first auto-save)
+                    const localData = localStorage.getItem('orbit_resume_data');
+                    if (localData) {
+                        rawData = JSON.parse(localData);
+                    }
+                }
+
+                if (rawData) {
+                    
+                    // CRASH-PROOF DATA MAPPER (Handles both Raw AI JSON and Flattened Dashboard JSON)
+                    const safeArray = (arr) => Array.isArray(arr) ? arr : (typeof arr === 'string' ? [arr] : []);
+                    
+                    activeProfile = {
+                        name: rawData.name || "",
+                        title: rawData.title || rawData.optimized_title || "",
+                        summary: Array.isArray(rawData.improved_summary) ? rawData.improved_summary[0] : (rawData.summary || rawData.improved_summary || ""),
+                        contact: rawData.contact || [rawData.phone, rawData.email, rawData.location, rawData.linkedin].filter(Boolean).join(" | "),
+                        skills: safeArray(rawData.skills || rawData.core_skills),
+                        achievements: safeArray(rawData.achievements || rawData.achievements_and_awards),
+                        experience: Array.isArray(rawData.experience) ? 
+                            rawData.experience.map(exp => typeof exp === 'string' ? exp : `${exp.title || ''} - ${exp.company || ''}\n${exp.dates || ''}\n${safeArray(exp.bullets).map(b=>'• '+b).join('\n')}`).join('\n\n') 
+                            : (typeof rawData.experience === 'string' ? rawData.experience : ""),
+                        education: Array.isArray(rawData.education) ? 
+                            rawData.education.map(edu => typeof edu === 'string' ? edu : `${edu.degree || ''} | ${edu.institution || ''} (${edu.date || ''})`).join('\n') 
+                            : (typeof rawData.education === 'string' ? rawData.education : ""),
+                        certifications: safeArray(rawData.certifications),
+                        personal_details: Array.isArray(rawData.personal_details) ? rawData.personal_details : []
+                    };
+                    
+                    activeScore = rawData.score || 94;
+
+                    const firstName = activeProfile.name.split(' ')[0] || 'Candidate';
+                    document.getElementById('welcome-text').innerText = `Welcome, ${firstName}`;
+                    
+                    // Backup to local storage for instant loads next time
+                    localStorage.setItem('orbit_resume_data', JSON.stringify(activeProfile));
+                }
+
+            } catch (err) {
+                console.error("Error loading resume from cloud:", err);
             }
 
+            // Load photo from local storage (Since base64 strings are massive, it is standard practice to keep photos local unless using a dedicated image bucket)
             const savedPhoto = localStorage.getItem('orbit_resume_photo');
             if (savedPhoto) {
                 activeProfile.photo = savedPhoto;
             }
 
-            document.getElementById('edit-name').value = activeProfile.name;
-            document.getElementById('edit-title').value = activeProfile.title;
-            document.getElementById('edit-contact').value = activeProfile.contact;
-            document.getElementById('edit-summary').value = activeProfile.summary;
-            document.getElementById('edit-skills').value = activeProfile.skills.join('\n');
-            document.getElementById('edit-achievements').value = activeProfile.achievements.join('\n');
-            document.getElementById('edit-experience').value = activeProfile.experience;
-            document.getElementById('edit-education').value = activeProfile.education;
-            document.getElementById('edit-certifications').value = activeProfile.certifications.join('\n');
+            // Push data into the UI input fields
+            document.getElementById('edit-name').value = activeProfile.name || "";
+            document.getElementById('edit-title').value = activeProfile.title || "";
+            document.getElementById('edit-contact').value = activeProfile.contact || "";
+            document.getElementById('edit-summary').value = activeProfile.summary || "";
+            document.getElementById('edit-skills').value = (activeProfile.skills || []).join('\n');
+            document.getElementById('edit-achievements').value = (activeProfile.achievements || []).join('\n');
+            document.getElementById('edit-experience').value = activeProfile.experience || "";
+            document.getElementById('edit-education').value = activeProfile.education || "";
+            document.getElementById('edit-certifications').value = (activeProfile.certifications || []).join('\n');
             document.getElementById('edit-personal').value = (activeProfile.personal_details || []).map(p => `${p.label || ''}: ${p.value || ''}`).join('\n');
-
+            
             setTimeout(() => {
                 updateATSScoreUI();
             }, 300); 
@@ -458,17 +485,42 @@ class="w-full py-4 mb-3 bg-green-600 hover:bg-green-700 text-white font-bold rou
             const triggerAutoSave = () => {
                 const saveText = document.getElementById('save-text');
                 const saveIcon = document.getElementById('save-icon');
+                
+                // UI Indicator: Saving...
                 saveText.innerText = "Saving...";
                 saveText.classList.remove('text-blue-200');
                 saveText.classList.add('text-yellow-400');
                 saveIcon.classList.replace('text-green-400', 'text-yellow-400');
                 
+                // 1. Instantly save to local browser backup
+                localStorage.setItem('orbit_resume_data', JSON.stringify(activeProfile));
+
+                // 2. Clear the previous timer
                 clearTimeout(saveTimeout);
-                saveTimeout = setTimeout(() => {
-                    saveText.innerText = "Saved to cloud";
-                    saveText.classList.remove('text-yellow-400');
-                    saveText.classList.add('text-blue-200');
-                    saveIcon.classList.replace('text-yellow-400', 'text-green-400');
+
+                // 3. Set a new timer to save to Supabase 1 second after typing stops
+                saveTimeout = setTimeout(async () => {
+                    try {
+                        const { data: { user } } = await supabaseClient.auth.getUser();
+                        if (user) {
+                            const { error } = await supabaseClient
+                                .from('candidate_profiles')
+                                .update({ master_resume: activeProfile })
+                                .eq('id', user.id); // Change 'id' to 'user_id' if your table uses user_id
+
+                            if (error) {
+                                console.error("Cloud save failed:", error.message);
+                            }
+                        }
+                    } catch (err) {
+                        console.error("Auto-save error:", err);
+                    } finally {
+                        // UI Indicator: Saved
+                        saveText.innerText = "Saved to cloud";
+                        saveText.classList.remove('text-yellow-400');
+                        saveText.classList.add('text-blue-200');
+                        saveIcon.classList.replace('text-yellow-400', 'text-green-400');
+                    }
                 }, 1000);
             };
 
