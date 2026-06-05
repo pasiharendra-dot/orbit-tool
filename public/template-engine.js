@@ -256,7 +256,7 @@ const TemplateEngine = {
             </div>
         `;
     },
-    
+
     // 11. NEW: MERIDIAN
     meridian: function(profile, expFormatted) {
         return `
