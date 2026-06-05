@@ -112,11 +112,8 @@ STRICT GUARDRAILS:
 1. The Hybrid Approach: Blend their early-career execution with a strong emphasis on their degree and technical skills. 
 2. No Hallucinations: Do not invent leadership or strategy roles. Focus on collaboration, execution, process adherence, and fast learning.
 3. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "[Target Job Title] | [Degree or Certification] | Focus in [Core Skill 1] & [Core Skill 2]".
-   - CRITICAL ANTI-REPETITION RULE: You MUST NOT repeat any words from the Target Title inside the Core Skills section. Ensure a diverse, highly readable vocabulary.
 4. Core Skills Format: You MUST output EXACTLY 12 core skills. Blend foundational tools with soft skills. Output ONLY the raw skill name. 
-   - ABSOLUTELY NO CATEGORIES OR COLONS.
-5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence explaining daily execution and adherence to goals]". 
-   - DO NOT include bullet point characters (like • or ·) in the JSON string itself.
+5. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array (e.g., "Role/Project Name - Organization (Date)\\n• Action-driven bullet point"). DO NOT invent these if the user didn't provide them.
 
 Output Format: You MUST return a JSON object with this exact structure:
 {
@@ -131,6 +128,10 @@ Output Format: You MUST return a JSON object with this exact structure:
     "experience": [
       { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["..."] }
     ],
+    "internships": ["..."],
+    "projects": ["..."],
+    "volunteer": ["..."],
+    "extracurriculars": ["..."],
     "education": [
       { "degree": "...", "institution": "...", "date": "..." }
     ],
@@ -151,11 +152,8 @@ Your singular goal is to OPTIMIZE a student or recent graduate's resume for ATS 
 STRICT GUARDRAILS:
 1. Zero Experience is Okay: Do NOT invent work history. Focus heavily on academic projects, relevant coursework, thesis work, and extracurricular leadership. Treat major university projects as "Experience" if work history is missing.
 2. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "Aspiring [Target Job Title] | [Degree] | Strong foundation in [Core Skill 1] & [Core Skill 2]".
-   - CRITICAL ANTI-REPETITION RULE: You MUST NOT repeat any words from the Target Title inside the Core Skills section. Ensure a diverse, highly readable vocabulary.
 3. Core Skills Format: You MUST output EXACTLY 12 core skills. Focus on academic skills, fast learning, and foundational tools. Output ONLY the raw skill name. 
-   - ABSOLUTELY NO CATEGORIES OR COLONS.
-4. Experience/Projects Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence explaining what they built, researched, or accomplished]". 
-   - DO NOT include bullet point characters (like • or ·) in the JSON string itself.
+4. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array (e.g., "Role/Project Name - Organization (Date)\\n• Action-driven bullet point"). DO NOT invent these if the user didn't provide them.
 
 Output Format: You MUST return a JSON object with this exact structure:
 {
@@ -170,6 +168,10 @@ Output Format: You MUST return a JSON object with this exact structure:
     "experience": [
       { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["..."] }
     ],
+    "internships": ["..."],
+    "projects": ["..."],
+    "volunteer": ["..."],
+    "extracurriculars": ["..."],
     "education": [
       { "degree": "...", "institution": "...", "date": "..." }
     ],
@@ -338,9 +340,15 @@ app.post('/api/analyze', uploadLimiter, upload.single('resume'), async (req, res
         const jobDescription = req.body.jobDescription || "Optimize for general industry standards.";
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
-        // Extract the new variables from the frontend
+        // Extract the variables from the frontend
         const experienceLevel = req.body.experienceLevel || "mid";
         const targetRole = req.body.targetRole || "";
+        
+        // NEW: Extract Fresher Fields
+        const internships = req.body.internships || "";
+        const projects = req.body.projects || "";
+        const volunteer = req.body.volunteer || "";
+        const extracurriculars = req.body.extracurriculars || "";
         
         // Use req.file.buffer directly from memory storage
         const pdfBase64 = req.file.buffer.toString("base64");
@@ -355,7 +363,14 @@ app.post('/api/analyze', uploadLimiter, upload.single('resume'), async (req, res
             activePrompt = entryLevelPrompt + `\n\nCRITICAL CONTEXT: The user is an Entry-Level professional targeting the exact role of "${targetRole}". You MUST blend their early-career execution with their education to prove they are a perfect fit for this specific position.`;
         }
 
-        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}\n\nAnalyze and optimize this resume according to the JSON format:`;
+        // Build the additional context string for freshers
+        let additionalFresherContext = "";
+        if (internships) additionalFresherContext += `\nCandidate's Internships:\n${internships}\n`;
+        if (projects) additionalFresherContext += `\nCandidate's Projects:\n${projects}\n`;
+        if (volunteer) additionalFresherContext += `\nCandidate's Volunteer Work:\n${volunteer}\n`;
+        if (extracurriculars) additionalFresherContext += `\nCandidate's Extracurriculars:\n${extracurriculars}\n`;
+
+        const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}${additionalFresherContext}\n\nAnalyze and optimize this resume according to the JSON format:`;
         
         // Pass the dynamically selected brain into the AI function
         let aiResponse = await generateAIResponseWithRetry(promptWithJD, filePart, activePrompt);
