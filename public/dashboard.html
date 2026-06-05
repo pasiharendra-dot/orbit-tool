@@ -866,8 +866,13 @@ async function handleDownloadClick(event, format = 'docx') {
                 printContainer.style.cssText = 'width: 210mm; min-height: 297mm; box-sizing: border-box; margin: 0 auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 11pt; line-height: 1.45;';
                 printContainer.innerHTML = canvasHTML;
                 
-                document.body.appendChild(printContainer);
+document.body.appendChild(printContainer);
                 document.body.classList.add('is-printing-pdf');
+                
+                // NEW: Temporarily change the page title to force a clean PDF file name!
+                const originalTitle = document.title;
+                const safeName = (activeProfile.name || "Candidate").trim().replace(/[^a-zA-Z0-9]/g, '_');
+                document.title = `${safeName}_Resume`;
                 
                 // Slight delay to ensure the DOM has fully rendered the invisible clone before printing
                 setTimeout(() => {
@@ -877,6 +882,9 @@ async function handleDownloadClick(event, format = 'docx') {
                         document.body.classList.remove('is-printing-pdf');
                         const containerToRemove = document.getElementById('true-print-container');
                         if (containerToRemove) document.body.removeChild(containerToRemove);
+                        
+                        // NEW: Restore the original page title instantly
+                        document.title = originalTitle;
                     }, 500);
                 }, 100);
 
@@ -1218,14 +1226,16 @@ async function handleDownloadClick(event, format = 'docx') {
                     case 'purple_pro': doc = generatePurplePro(data); break;
                     case 'rector': doc = generateRector(data); break;
                     case 'rose_modern': doc = generateRoseModern(data); break;
-                    case 'signal': doc = generateSignal(data); break;
-                    case 'slate_professional': doc = generateSlateProfessional(data); break;
+                    case 'signal': doc = generateSignal(data); break;case 'slate_professional': doc = generateSlateProfessional(data); break;
                     case 'zenith': doc = generateZenith(data); break;
                     default: doc = generateSentinel(data);
                 }
                 
+                // NEW: Use the candidate's actual name for the Word document
+                const safeName = (data.name || "Candidate").trim().replace(/[^a-zA-Z0-9]/g, '_');
+                
                 docx.Packer.toBlob(doc).then(blob => { 
-                    saveAs(blob, `Orbit_Optimized_${currentActiveTemplate.toUpperCase()}.docx`); 
+                    saveAs(blob, `${safeName}_Resume.docx`); 
                 });
 
             } catch (err) {
