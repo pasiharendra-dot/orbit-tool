@@ -211,6 +211,22 @@
                         <textarea id="edit-experience" rows="6" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
                     </div>
                     <div>
+                        <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Internships</label>
+                        <textarea id="edit-internships" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="List internship details..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Projects</label>
+                        <textarea id="edit-projects" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="List academic or personal projects..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Volunteer Experience</label>
+                        <textarea id="edit-volunteer" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="List volunteer work..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Extracurriculars</label>
+                        <textarea id="edit-extracurriculars" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="List clubs, teams, and leadership..."></textarea>
+                    </div>
+                    <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Education</label>
                         <textarea id="edit-education" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
                     </div>
@@ -403,6 +419,10 @@ const authData = await authResponse.json();
                         experience: Array.isArray(rawData.experience) ? 
                             rawData.experience.map(exp => typeof exp === 'string' ? exp : `${exp.title || ''} - ${exp.company || ''}\n${exp.dates || ''}\n${safeArray(exp.bullets).map(b=>'• '+b).join('\n')}`).join('\n\n') 
                             : (typeof rawData.experience === 'string' ? rawData.experience : ""),
+                        internships: safeArray(rawData.internships),
+                        projects: safeArray(rawData.projects),
+                        volunteer: safeArray(rawData.volunteer),
+                        extracurriculars: safeArray(rawData.extracurriculars),
                         education: Array.isArray(rawData.education) ? 
                             rawData.education.map(edu => typeof edu === 'string' ? edu : `${edu.degree || ''} | ${edu.institution || ''} (${edu.date || ''})`).join('\n') 
                             : (typeof rawData.education === 'string' ? rawData.education : ""),
@@ -432,6 +452,10 @@ const authData = await authResponse.json();
             document.getElementById('edit-skills').value = (activeProfile.skills || []).join('\n');
             document.getElementById('edit-achievements').value = (activeProfile.achievements || []).join('\n');
             document.getElementById('edit-experience').value = activeProfile.experience || "";
+            document.getElementById('edit-internships').value = (activeProfile.internships || []).join('\n');
+            document.getElementById('edit-projects').value = (activeProfile.projects || []).join('\n');
+            document.getElementById('edit-volunteer').value = (activeProfile.volunteer || []).join('\n');
+            document.getElementById('edit-extracurriculars').value = (activeProfile.extracurriculars || []).join('\n');
             document.getElementById('edit-education').value = activeProfile.education || "";
             document.getElementById('edit-certifications').value = (activeProfile.certifications || []).join('\n');
             document.getElementById('edit-personal').value = (activeProfile.personal_details || []).map(p => `${p.label || ''}: ${p.value || ''}`).join('\n');
@@ -445,7 +469,7 @@ const authData = await authResponse.json();
             updateKeywordsUI();
 
             const fields = ['name', 'title', 'contact', 'summary', 'experience', 'education'];
-            const arrayFields = ['skills', 'achievements', 'certifications'];
+            const arrayFields = ['skills', 'achievements', 'certifications', 'internships', 'projects', 'volunteer', 'extracurriculars'];
 
             // Custom listener for Personal Details to split "Label: Value" back into objects
             document.getElementById('edit-personal').addEventListener('input', (e) => {
