@@ -12,8 +12,8 @@ const TemplateEngine = {
                 <h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-2">Professional Summary</h2>
                 <p class="text-gray-600 mt-1.5 leading-relaxed text-justify">${profile.summary}</p>
             </div>
-            ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Achievements & Awards</h2><ul class="list-disc pl-4 mt-1.5 space-y-1 text-gray-600">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
             ${profile.skills && profile.skills.length > 0 ? `<div><h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Professional Skills</h2><p class="text-gray-600 mt-1.5 leading-relaxed">${profile.skills.join('  |  ')}</p></div>` : ''}
+            ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Achievements & Awards</h2><ul class="list-disc pl-4 mt-1.5 space-y-1 text-gray-600">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
             <div>
                 <h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Work Experience</h2>
                 <div class="text-gray-600">${expFormatted}</div>
@@ -43,6 +43,7 @@ const TemplateEngine = {
                 <div class="md:col-span-8 p-2 space-y-3">
                     <div><h1 class="text-xl md:text-2xl font-bold text-[#0F3B68]">${profile.name}</h1><p class="text-[11px] md:text-xs font-bold text-amber-600 mt-1 uppercase leading-relaxed">${profile.title}</p></div>
                     <div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px]">Professional Summary</h3><p class="text-gray-600 mt-1 leading-relaxed text-justify">${profile.summary}</p></div>
+                    ${profile.achievements && profile.achievements.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Achievements</h3><ul class="list-disc pl-4 mt-1 text-gray-600 space-y-1 text-xs">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                     <div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Experience</h3><div class="text-gray-600">${expFormatted}</div></div>
                     ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Internships</h3><div class="text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                     ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Projects</h3><div class="text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -70,6 +71,7 @@ const TemplateEngine = {
                         ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px]">PERSONAL DETAILS</h3><ul class="space-y-1 text-gray-600 text-[10px]">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
                     </div>
                     <div class="md:col-span-8 space-y-3">
+                        ${profile.achievements && profile.achievements.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px]">ACHIEVEMENTS</h3><ul class="list-disc pl-4 text-gray-600 text-[10px] space-y-1 mb-3">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                         <div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px]">EXPERIENCE</h3><div class="text-gray-600">${expFormatted}</div></div>
                         ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">INTERNSHIPS</h3><div class="text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                         ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">PROJECTS</h3><div class="text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -91,7 +93,10 @@ const TemplateEngine = {
             <div class="space-y-4">
                 <div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Professional Profile</span><div class="flex-grow border-b border-green-700"></div></div>
                 <p class="text-gray-600 leading-relaxed text-justify">${profile.summary}</p>
-                <div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Career Summary</span><div class="flex-grow border-b border-green-700"></div></div>
+                <div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Competencies</span><div class="flex-grow border-b border-green-700"></div></div>
+                <p class="text-gray-600 leading-relaxed text-center">${profile.skills.join('   •   ')}</p>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Achievements</span><div class="flex-grow border-b border-green-700"></div></div><ul class="list-disc pl-4 text-gray-600 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul>` : ''}
+                <div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Career Summary</span><div class="flex-grow border-b border-green-700"></div></div>
                 <div class="text-gray-600">${expFormatted}</div>
                 ${profile.internships && profile.internships.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Internships</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Projects</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div>` : ''}
@@ -119,6 +124,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-3" style="font-family: 'Inter', sans-serif;">
                 <div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Achievements</h2><ul class="list-disc list-inside text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -149,6 +155,7 @@ const TemplateEngine = {
                 </div>
                 <div class="col-span-8 space-y-4 border-l border-gray-200 pl-4">
                     <div><h3 class="text-[9px] font-bold tracking-[0.15em] mb-1.5 uppercase">Profile</h3><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                    ${profile.achievements && profile.achievements.length > 0 ? `<div><h3 class="text-[9px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Achievements</h3><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                     <div><h3 class="text-[9px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Experience</h3><div class="text-xs text-gray-800">${expFormatted}</div></div>
                     ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="text-[9px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Internships</h3><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                     ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="text-[9px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Projects</h3><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -169,6 +176,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-3 font-serif">
                 <div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest">Professional Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -192,6 +200,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-3">
                 <div><h2 class="text-[11px] font-bold text-[#235789] border-b-2 border-[#87A8D0] pb-0.5 mb-1.5 uppercase">Professional Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#235789] border-b-2 border-[#87A8D0] pb-0.5 mb-1.5 uppercase mt-2">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-[#235789] border-b-2 border-[#87A8D0] pb-0.5 mb-1.5 uppercase mt-2">Work Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#235789] border-b-2 border-[#87A8D0] pb-0.5 mb-1.5 uppercase mt-2">Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#235789] border-b-2 border-[#87A8D0] pb-0.5 mb-1.5 uppercase mt-2">Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -215,6 +224,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-3 px-2">
                 <div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider">Profile</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -246,6 +256,7 @@ const TemplateEngine = {
                     </div>
                     <div class="space-y-4">
                         <div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5">Professional Summary</h3><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                        ${profile.achievements && profile.achievements.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Achievements</h3><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                         <div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Work Experience</h3><div class="text-xs text-gray-800">${expFormatted}</div></div>
                         ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Internships</h3><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                         ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Projects</h3><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -267,6 +278,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-4">
                 <div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1">About</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -292,6 +304,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-3">
                 <div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 rounded-sm">Summary</h2><p class="text-xs text-gray-600 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 mt-3 rounded-sm">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-600 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 mt-3 rounded-sm">Experience</h2><div class="text-xs text-gray-600">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 mt-3 rounded-sm">Internships</h2><div class="text-xs text-gray-600 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 mt-3 rounded-sm">Projects</h2><div class="text-xs text-gray-600 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -317,6 +330,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-4 px-2">
                 <div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2">Executive Profile</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Professional Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -339,6 +353,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-3 px-1">
                 <div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5">Summary</h2><p class="text-xs text-gray-700 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-700 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Work Experience</h2><div class="text-xs text-gray-700">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Internships</h2><div class="text-xs text-gray-700 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Projects</h2><div class="text-xs text-gray-700 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -362,6 +377,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-4 font-serif px-4">
                 <div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2">Professional Summary</h2><p class="text-xs text-gray-900 leading-relaxed text-justify">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Achievements</h2><ul class="list-disc list-inside text-xs text-gray-900 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Professional Experience</h2><div class="text-xs text-gray-900">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Internships</h2><div class="text-xs text-gray-900 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Projects</h2><div class="text-xs text-gray-900 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -384,6 +400,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-3 px-2">
                 <div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5">Professional Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Work Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -410,6 +427,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-4 font-serif">
                 <div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2">Executive Profile</h2><p class="text-xs text-gray-900 leading-relaxed text-justify">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-900 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Career History</h2><div class="text-xs text-gray-900">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Internships</h2><div class="text-xs text-gray-900 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Projects</h2><div class="text-xs text-gray-900 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -439,6 +457,7 @@ const TemplateEngine = {
                 </div>
                 <div class="col-span-8 space-y-4">
                     <div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2">Professional Summary</h3><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                    ${profile.achievements && profile.achievements.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Achievements</h3><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                     <div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Work Experience</h3><div class="text-xs text-gray-800">${expFormatted}</div></div>
                     ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Internships</h3><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                     ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Projects</h3><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -459,6 +478,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-4">
                 <div class="border-l-4 border-black pl-3"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Profile</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -482,6 +502,7 @@ const TemplateEngine = {
             </div>
             <div class="space-y-3 px-2">
                 <div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase">Executive Summary</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase mt-3">Achievements</h2><ul class="list-disc pl-4 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase mt-3">Professional Experience</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase mt-3">Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase mt-3">Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -505,6 +526,7 @@ const TemplateEngine = {
             <div class="text-right text-[9px] text-gray-500 mb-4 px-2">${profile.contact.replace(/ \| /g, '  |  ')}</div>
             <div class="space-y-4 px-2 font-serif">
                 <div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5">· Profile</h2><p class="text-xs text-gray-800 leading-relaxed">${profile.summary}</p></div>
+                ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Achievements</h2><ul class="list-disc pl-5 text-xs text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Career History</h2><div class="text-xs text-gray-800">${expFormatted}</div></div>
                 ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Internships</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Projects</h2><div class="text-xs text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
@@ -517,7 +539,7 @@ const TemplateEngine = {
         `;
     },    
         
-// --- The Render Router ---
+    // --- The Render Router ---
     renderLayout: function(layoutName, profile, expFormatted) {
         
         // 1. DATA SANITIZER & MASTER SYNC
@@ -532,7 +554,7 @@ const TemplateEngine = {
             if (typeof profile.certifications === 'string') profile.certifications = [profile.certifications];
             if (typeof profile.personal_details === 'string') profile.personal_details = []; 
             
-            // Fresher Fields Sanitization
+            // NEW: Fresher Fields Sanitization
             if (typeof profile.internships === 'string') profile.internships = [profile.internships];
             if (typeof profile.projects === 'string') profile.projects = [profile.projects];
             if (typeof profile.volunteer === 'string') profile.volunteer = [profile.volunteer];
@@ -543,12 +565,13 @@ const TemplateEngine = {
             profile.certifications = profile.certifications || [];
             profile.personal_details = Array.isArray(profile.personal_details) ? profile.personal_details : [];
             
+            // Ensure fresher arrays default to empty arrays
             profile.internships = profile.internships || [];
             profile.projects = profile.projects || [];
             profile.volunteer = profile.volunteer || [];
             profile.extracurriculars = profile.extracurriculars || [];
 
-            // Ensure strings default to empty strings
+            // Ensure strings default to empty strings to protect .replace() and .split() functions
             profile.name = profile.name || 'Professional';
             profile.title = profile.title || '';
             profile.contact = profile.contact || '';
