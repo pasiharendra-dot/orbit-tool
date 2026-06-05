@@ -517,18 +517,22 @@ const TemplateEngine = {
         `;
     },    
         
-    // --- The Render Router ---
+// --- The Render Router ---
     renderLayout: function(layoutName, profile, expFormatted) {
         
-        // 1. DATA SANITIZER: Prevent JavaScript crashes from missing or malformed AI data
+        // 1. DATA SANITIZER & MASTER SYNC
         if (profile) {
+            // MASTER SYNC: This forces both variable names to share the exact same data!
+            const unifiedAchievements = profile.achievements || profile.achievements_and_awards || [];
+            profile.achievements = Array.isArray(unifiedAchievements) ? unifiedAchievements : [unifiedAchievements];
+            profile.achievements_and_awards = profile.achievements; // Mirror the data
+
             // Force strings into arrays to prevent .map() and .join() crashes
             if (typeof profile.skills === 'string') profile.skills = profile.skills.split(',').map(s => s.trim());
-            if (typeof profile.achievements === 'string') profile.achievements = [profile.achievements];
             if (typeof profile.certifications === 'string') profile.certifications = [profile.certifications];
             if (typeof profile.personal_details === 'string') profile.personal_details = []; 
             
-            // NEW: Fresher Fields Sanitization
+            // Fresher Fields Sanitization
             if (typeof profile.internships === 'string') profile.internships = [profile.internships];
             if (typeof profile.projects === 'string') profile.projects = [profile.projects];
             if (typeof profile.volunteer === 'string') profile.volunteer = [profile.volunteer];
@@ -536,17 +540,15 @@ const TemplateEngine = {
 
             // Ensure arrays default to empty arrays instead of undefined
             profile.skills = profile.skills || [];
-            profile.achievements = profile.achievements || [];
             profile.certifications = profile.certifications || [];
             profile.personal_details = Array.isArray(profile.personal_details) ? profile.personal_details : [];
             
-            // Ensure fresher arrays default to empty arrays
             profile.internships = profile.internships || [];
             profile.projects = profile.projects || [];
             profile.volunteer = profile.volunteer || [];
             profile.extracurriculars = profile.extracurriculars || [];
 
-            // Ensure strings default to empty strings to protect .replace() and .split() functions
+            // Ensure strings default to empty strings
             profile.name = profile.name || 'Professional';
             profile.title = profile.title || '';
             profile.contact = profile.contact || '';
