@@ -430,6 +430,7 @@ const authData = await authResponse.json();
                         personal_details: Array.isArray(rawData.personal_details) ? rawData.personal_details : []
                     };
                     
+                    activeProfile.achievements_and_awards = activeProfile.achievements;
                     activeScore = rawData.score || 94;
 
                     const firstName = activeProfile.name.split(' ')[0] || 'Candidate';
@@ -575,6 +576,12 @@ function triggerAutoSave() {
             arrayFields.forEach(f => {
                 document.getElementById(`edit-${f}`).addEventListener('input', (e) => { 
                     activeProfile[f] = e.target.value.split('\n').filter(val => val.trim() !== ''); 
+                    
+                    // NEW: Data Bridge for Achievements
+                    if (f === 'achievements') {
+                        activeProfile.achievements_and_awards = activeProfile.achievements;
+                    }
+                    
                     renderCurrentCanvas(); 
                     triggerAutoSave();
                     // Instantly update the "+X More" button when they type in the skills box
