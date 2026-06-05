@@ -20,7 +20,7 @@ const TemplateEngine = {
             </div>
             ${profile.education ? `<div><h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Education</h2><p class="text-gray-600 mt-1.5 whitespace-pre-line">${profile.education}</p></div>` : ''}
             ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Certifications</h2><ul class="list-disc pl-4 mt-1.5 space-y-1 text-gray-600">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
-            ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Personal Details</h2><ul class="mt-1.5 space-y-1 text-gray-600 text-[10px] md:text-[11px]">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
+            ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[11px] md:text-xs font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Personal Details</h2><ul class="mt-1.5 space-y-1 text-gray-600">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
         `;
     },
 
@@ -83,11 +83,11 @@ const TemplateEngine = {
                 <div class="text-gray-600">${expFormatted}</div>
                 ${profile.certifications && profile.certifications.length > 0 ? `
                 <div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Certifications</span><div class="flex-grow border-b border-green-700"></div></div>
-                <ul class="text-gray-600 text-xs text-center space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul>
+                <ul class="text-gray-600 text-center space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul>
                 ` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `
                 <div class="flex items-center space-x-2 my-2"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Personal Details</span><div class="flex-grow border-b border-green-700"></div></div>
-                <ul class="text-gray-600 text-xs text-center space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul>
+                <ul class="text-gray-600 text-center space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul>
                 ` : ''}
             </div>
         `;
