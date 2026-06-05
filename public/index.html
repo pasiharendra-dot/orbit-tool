@@ -317,6 +317,26 @@
                         <input type="text" id="target-role-input" class="w-full p-3 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm text-gray-900" placeholder="e.g., Marketing Intern">
                     </div>
 
+                        <!-- NEW: FRESHER / ENTRY LEVEL EXTRA FIELDS -->
+                    <div id="fresher-fields-container" class="hidden md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5 fade-in">
+                        <div class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 shadow-sm bento-hover transition-all duration-300">
+                            <label class="block text-gray-800 text-xs font-bold mb-3 uppercase tracking-wider">Internships</label>
+                            <textarea id="internships-input" rows="2" class="w-full p-3 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none text-sm text-gray-700" placeholder="Any internship experience..."></textarea>
+                        </div>
+                        <div class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 shadow-sm bento-hover transition-all duration-300">
+                            <label class="block text-gray-800 text-xs font-bold mb-3 uppercase tracking-wider">Key Projects</label>
+                            <textarea id="projects-input" rows="2" class="w-full p-3 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none text-sm text-gray-700" placeholder="Academic or personal projects..."></textarea>
+                        </div>
+                        <div class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 shadow-sm bento-hover transition-all duration-300">
+                            <label class="block text-gray-800 text-xs font-bold mb-3 uppercase tracking-wider">Volunteer Work</label>
+                            <textarea id="volunteer-input" rows="2" class="w-full p-3 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none text-sm text-gray-700" placeholder="Community service, NGO work..."></textarea>
+                        </div>
+                        <div class="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100 shadow-sm bento-hover transition-all duration-300">
+                            <label class="block text-gray-800 text-xs font-bold mb-3 uppercase tracking-wider">Extracurriculars</label>
+                            <textarea id="extracurriculars-input" rows="2" class="w-full p-3 bg-white border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none text-sm text-gray-700" placeholder="College clubs, leadership, sports..."></textarea>
+                        </div>
+                    </div>
+
                     <div class="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 shadow-sm bento-hover transition-all duration-300 md:col-span-2">
                         <label class="flex items-center text-gray-800 text-xs font-bold mb-3 uppercase tracking-wider">
                             Target Job Description <span class="ml-auto text-[10px] text-gray-400 bg-white border border-gray-200 px-2 py-0.5 rounded shadow-sm">Optional</span>
@@ -1076,11 +1096,15 @@ function showMsg(text, isSuccess) {
         // ==========================================
         function toggleTargetRole() {
             const level = document.getElementById('experience-level').value;
-            const container = document.getElementById('target-role-container');
+            const targetContainer = document.getElementById('target-role-container');
+            const fresherContainer = document.getElementById('fresher-fields-container');
+            
             if (level === 'fresher' || level === 'entry') {
-                container.classList.remove('hidden');
+                targetContainer.classList.remove('hidden');
+                fresherContainer.classList.remove('hidden');
             } else {
-                container.classList.add('hidden');
+                targetContainer.classList.add('hidden');
+                fresherContainer.classList.add('hidden');
             }
         }
         document.addEventListener('DOMContentLoaded', toggleTargetRole);
@@ -1108,13 +1132,19 @@ if (file.size > maxSize) {
                 const extraInfoText = document.getElementById('extra-info-input').value.trim();
                 const expLevel = document.getElementById('experience-level').value;
                 const targetRole = document.getElementById('target-role-input').value.trim();
+                
+                // NEW: Capture Fresher Fields
+                const internshipsText = document.getElementById('internships-input')?.value.trim();
+                const projectsText = document.getElementById('projects-input')?.value.trim();
+                const volunteerText = document.getElementById('volunteer-input')?.value.trim();
+                const extracurricularsText = document.getElementById('extracurriculars-input')?.value.trim();
 
                 if ((expLevel === 'fresher' || expLevel === 'entry') && !targetRole) {
                     alert("Please enter your Target Job Title so we can align your resume perfectly.");
                     event.target.value = ''; 
                     return;
                 }
-
+                    
                 // STEP 1: Hide homepage sections
                 if(document.getElementById('hero-section')) document.getElementById('hero-section').style.display = 'none';
                 if(document.getElementById('upload-section')) document.getElementById('upload-section').style.display = 'none';
@@ -1174,6 +1204,13 @@ if (file.size > maxSize) {
                 if (jdText) formData.append('jobDescription', jdText);
                 if (extraInfoText) formData.append('extraInfo', extraInfoText);
                 if (targetRole) formData.append('targetRole', targetRole);
+                
+                // NEW: Send Fresher Fields to Backend
+                if (internshipsText) formData.append('internships', internshipsText);
+                if (projectsText) formData.append('projects', projectsText);
+                if (volunteerText) formData.append('volunteer', volunteerText);
+                if (extracurricularsText) formData.append('extracurriculars', extracurricularsText);
+
                 const response = await fetch('/api/analyze', { method: 'POST', body: formData });
                 
                 if (!response.ok) {
