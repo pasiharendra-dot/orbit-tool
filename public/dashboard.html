@@ -1663,7 +1663,7 @@ function generateSentinel(data) {
         // NEW EXPORTERS: BATCH 1
         // ==========================================
 
-        function generateApex(data) {
+function generateApex(data) {
             const { Document, Paragraph, TextRun, AlignmentType, BorderStyle } = docx;
             const FONT = "Arial"; const SIZE_BODY = 19; 
             const children = [];
@@ -1718,6 +1718,10 @@ function generateSentinel(data) {
                 addSectionHeader("Skills & Tools");
                 children.push(new Paragraph({ children: [new TextRun({ text: data.core_skills.join(", "), size: SIZE_BODY, font: FONT })] }));
             }
+            if (data.achievements_and_awards && data.achievements_and_awards.length) {
+                addSectionHeader("Achievements");
+                data.achievements_and_awards.forEach(a => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: a, size: SIZE_BODY, font: FONT })] })));
+            }
             if (data.certifications && data.certifications.length) {
                 addSectionHeader("Certifications");
                 data.certifications.forEach(c => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: c, size: SIZE_BODY, font: FONT })] })));
@@ -1758,6 +1762,10 @@ function generateSentinel(data) {
             if (data.certifications && data.certifications.length) {
                 addLeftHeading("Certifications");
                 data.certifications.forEach(c => leftCol.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: c, size: SIZE_BODY, font: FONT })] })));
+            }
+            if (data.achievements_and_awards && data.achievements_and_awards.length) {
+                addLeftHeading("Achievements");
+                data.achievements_and_awards.forEach(a => leftCol.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: "• " + a, size: SIZE_BODY, font: FONT })] })));
             }
             if (data.personal_details && data.personal_details.length) {
                 addLeftHeading("Personal");
@@ -1864,6 +1872,10 @@ function generateSentinel(data) {
                 addHeading("Skills");
                 children.push(new Paragraph({ children: [new TextRun({ text: data.core_skills.join("  •  "), size: SIZE_BODY, font: FONT })] }));
             }
+            if (data.achievements_and_awards && data.achievements_and_awards.length) {
+                addHeading("Achievements");
+                data.achievements_and_awards.forEach(a => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: a, size: SIZE_BODY, font: FONT })] })));
+            }
             if (data.certifications && data.certifications.length) {
                 addHeading("Certifications");
                 data.certifications.forEach(c => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: c, size: SIZE_BODY, font: FONT })] })));
@@ -1874,10 +1886,6 @@ function generateSentinel(data) {
             }
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children }] });
         }
-
-        // ==========================================
-        // NEW EXPORTERS: BATCH 2
-        // ==========================================
 
         function generateClassicBlue(data) {
             const { Document, Paragraph, TextRun, AlignmentType, BorderStyle } = docx;
@@ -1933,6 +1941,10 @@ function generateSentinel(data) {
             if (data.core_skills && data.core_skills.length) {
                 addHeader("Skills");
                 children.push(new Paragraph({ children: [new TextRun({ text: data.core_skills.join(", "), size: SIZE_BODY, font: FONT })] }));
+            }
+            if (data.achievements_and_awards && data.achievements_and_awards.length) {
+                addHeader("Achievements");
+                data.achievements_and_awards.forEach(a => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: a, size: SIZE_BODY, font: FONT })] })));
             }
             if (data.certifications && data.certifications.length) {
                 addHeader("Certifications");
@@ -2015,6 +2027,10 @@ function generateSentinel(data) {
                 addHeader("Skills & Tools");
                 children.push(new Paragraph({ children: [new TextRun({ text: data.core_skills.join(" • "), size: SIZE_BODY, font: FONT })] }));
             }
+            if (data.achievements_and_awards && data.achievements_and_awards.length) {
+                addHeader("Achievements");
+                data.achievements_and_awards.forEach(a => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: a, size: SIZE_BODY, font: FONT })] })));
+            }
             if (data.certifications && data.certifications.length) {
                 addHeader("Certifications");
                 data.certifications.forEach(c => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: c, size: SIZE_BODY, font: FONT })] })));
@@ -2046,6 +2062,10 @@ function generateSentinel(data) {
             if (data.core_skills && data.core_skills.length) {
                 addLeftHeader("Skills");
                 data.core_skills.slice(0, 10).forEach(s => leftCol.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: s, size: SIZE_BODY, font: FONT })] })));
+            }
+            if (data.achievements_and_awards && data.achievements_and_awards.length) {
+                addLeftHeader("Achievements");
+                data.achievements_and_awards.forEach(a => leftCol.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: "• " + a, size: SIZE_BODY, font: FONT })] })));
             }
             if (data.certifications && data.certifications.length) {
                 addLeftHeader("Certifications");
@@ -2123,12 +2143,11 @@ function generateSentinel(data) {
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: [bodyTable] }] });
         }
         
-function generateMeridian(data) {
+        function generateMeridian(data) {
             const { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType } = docx;
             const FONT = "Arial"; const SIZE_BODY = 19; const DARK = "111111";
             const children = [];
 
-            // Header
             children.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, color: DARK, font: FONT })] }));
             children.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: data.optimized_title || "Title", bold: true, size: 22, color: "333333", font: FONT })] }));
             const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
@@ -2138,7 +2157,6 @@ function generateMeridian(data) {
                 children.push(new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: DARK, space: 1, style: BorderStyle.SINGLE, size: 12 } }, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 20, color: DARK, font: FONT })] }));
             };
 
-            // Main Sections
             if (data.improved_summary && data.improved_summary.length) {
                 addHeader("About");
                 data.improved_summary.forEach(p => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 100 }, children: [new TextRun({ text: p, size: SIZE_BODY, font: FONT, color: "333333" })] })));
@@ -2155,7 +2173,6 @@ function generateMeridian(data) {
                 });
             }
 
-            // NEW: Fresher Fields
             const addFresher = (title, arr) => {
                 if (!arr || !arr.length) return;
                 addHeader(title);
@@ -2174,7 +2191,6 @@ function generateMeridian(data) {
             addFresher("Volunteer Work", data.volunteer);
             addFresher("Extracurriculars", data.extracurriculars);
 
-            // Meridian's Bottom 2-Column Grid
             const leftGrid = [];
             const rightGrid = [];
             
@@ -2191,6 +2207,10 @@ function generateMeridian(data) {
                 leftGrid.push(new Paragraph({ children: [new TextRun({ text: data.core_skills.join(", "), size: SIZE_BODY, font: FONT, color: "333333" })] }));
             }
             
+            if (data.achievements_and_awards && data.achievements_and_awards.length) {
+                addGridHeader(rightGrid, "Achievements");
+                data.achievements_and_awards.forEach(a => rightGrid.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: a, size: SIZE_BODY, font: FONT, color: "333333" })] })));
+            }
             if (data.certifications && data.certifications.length) {
                 addGridHeader(rightGrid, "Certifications");
                 data.certifications.forEach(c => rightGrid.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: c, size: SIZE_BODY, font: FONT, color: "333333" })] })));
@@ -2212,73 +2232,6 @@ function generateMeridian(data) {
                 children.push(gridTable);
             }
 
-            return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children }] });
-        }
-
-        function generateMinimalGrey(data) {
-            const { Document, Paragraph, TextRun, AlignmentType, BorderStyle } = docx;
-            const FONT = "Arial"; const SIZE_BODY = 19; const GREY = "555555";
-            const children = [];
-
-            children.push(new Paragraph({ border: { bottom: { color: "DDDDDD", space: 1, style: BorderStyle.SINGLE, size: 6 } }, spacing: { after: 200 }, children: [
-                new TextRun({ text: (data.name || "Name").toUpperCase() + "\n", bold: true, size: 52, font: FONT, color: "333333" }),
-                new TextRun({ text: `${data.optimized_title || "Title"} • ${[data.phone, data.email, data.location, data.linkedin].filter(Boolean).join(" • ")}`, size: 20, font: FONT, color: GREY })
-            ]}));
-
-            const addHeader = (title) => {
-                children.push(new Paragraph({ spacing: { before: 200, after: 100 }, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 20, color: "333333", font: FONT })] }));
-            };
-
-            if (data.improved_summary && data.improved_summary.length) {
-                addHeader("Summary");
-                data.improved_summary.forEach(p => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 100 }, children: [new TextRun({ text: p, size: SIZE_BODY, font: FONT, color: GREY })] })));
-            }
-            if (data.experience) {
-                addHeader("Experience");
-                data.experience.forEach(job => {
-                    children.push(new Paragraph({ tabStops: [{ type: "right", position: 10000 }], children: [new TextRun({ text: job.title, bold: true, size: 20, font: FONT, color: "333333" }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, font: FONT, color: GREY })] }));
-                    children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: job.company, italic: true, size: SIZE_BODY, font: FONT, color: GREY })] }));
-                    job.bullets.forEach(b => {
-                        const parsed = parseBullet(b);
-                        children.push(new Paragraph({ bullet: { level: 0 }, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 }, children: [ ...(parsed.prefix ? [new TextRun({ text: parsed.prefix, bold: true, size: SIZE_BODY, font: FONT, color: "333333" })] : []), new TextRun({ text: parsed.rest, size: SIZE_BODY, font: FONT, color: GREY }) ] }));
-                    });
-                });
-            }
-
-            const addFresher = (title, arr) => {
-                if (!arr || !arr.length) return;
-                addHeader(title);
-                arr.forEach(entry => {
-                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
-                        const isB = line.startsWith('•') || line.startsWith('-');
-                        children.push(new Paragraph({
-                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
-                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT, color: GREY })]
-                        }));
-                    });
-                });
-            };
-            addFresher("Internships", data.internships);
-            addFresher("Projects", data.projects);
-            addFresher("Volunteer Work", data.volunteer);
-            addFresher("Extracurriculars", data.extracurriculars);
-
-            if (data.education) {
-                addHeader("Education");
-                data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT, color: "333333" }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT, color: GREY })] })));
-            }
-            if (data.core_skills && data.core_skills.length) {
-                addHeader("Skills");
-                children.push(new Paragraph({ children: [new TextRun({ text: data.core_skills.join(" | "), size: SIZE_BODY, font: FONT, color: GREY })] }));
-            }
-            if (data.certifications && data.certifications.length) {
-                addHeader("Certifications");
-                data.certifications.forEach(c => children.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: c, size: SIZE_BODY, font: FONT, color: GREY })] })));
-            }
-            if (data.personal_details && data.personal_details.length) {
-                addHeader("Personal Details");
-                data.personal_details.forEach(p => children.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: p.label + ": ", bold: true, size: SIZE_BODY, font: FONT, color: "333333" }), new TextRun({ text: p.value, size: SIZE_BODY, font: FONT, color: GREY })] })));
-            }
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children }] });
         }
 
