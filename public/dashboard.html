@@ -1268,7 +1268,7 @@ document.body.appendChild(printContainer);
             }
         }
 
-        function generateSentinel(data) {
+function generateSentinel(data) {
             const { Document, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle, TableLayoutType } = docx;
             const FONT = "Calibri"; const SIZE_BODY = 19; const SIZE_HEADING = 22;  
             const COLOR_DARK_BLUE = "0F3B68"; const COLOR_LIGHT_BLUE = "5C9CE6"; const COLOR_SUBTEXT = "444444"; 
@@ -1284,6 +1284,21 @@ document.body.appendChild(printContainer);
                     skillsTableRows.push(new TableRow({ children: chunk.map(skill => new TableCell({ width: { size: 33.33, type: WidthType.PERCENTAGE }, borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } }, margins: { top: 40, bottom: 40, left: 0, right: 100 }, children: skill ? [ new Paragraph({ bullet: { level: 0 }, indent: { left: 240, hanging: 240 }, children: [ new TextRun({ text: skill, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] }) ] : [ new Paragraph({ text: "" }) ] })) }));
                 }
             }
+
+            const mapFresher = (title, dataArr) => {
+                if (!dataArr || !dataArr.length) return [];
+                let out = [createHeader(title)];
+                dataArr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        out.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { before: i===0? 80: 0, after: 40, line: 240 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT })]
+                        }));
+                    });
+                });
+                return out;
+            };
 
             return new Document({
                 sections: [{
@@ -1304,6 +1319,10 @@ document.body.appendChild(printContainer);
                                 return new Paragraph({ alignment: AlignmentType.JUSTIFIED, bullet: { level: 0 }, spacing: { before: 40, after: 40, line: 240 }, children: [ new TextRun({ text: bullet, size: SIZE_BODY, font: FONT }) ] }); 
                             }) 
                         ]),
+                        ...mapFresher("Internships", data.internships),
+                        ...mapFresher("Projects", data.projects),
+                        ...mapFresher("Volunteer Work", data.volunteer),
+                        ...mapFresher("Extracurriculars", data.extracurriculars),
                         createHeader("Education"),
                         ...(data.education || []).map(edu => new Paragraph({ spacing: { before: 100, after: 50 }, children: [ new TextRun({ text: `${edu.institution}`, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: SIZE_BODY, font: FONT, color: COLOR_SUBTEXT }) ] })),
                         ...(data.personal_details && data.personal_details.length > 0 ? [ createHeader("Personal Details"), ...data.personal_details.map(d => new Paragraph({ spacing: { before: 40, after: 40 }, children: [ new TextRun({ text: `${d.label}: `, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: d.value, size: SIZE_BODY, font: FONT }) ] })) ] : []),
@@ -1388,6 +1407,24 @@ document.body.appendChild(printContainer);
                 });
             }
 
+            const addFresherRight = (title, arr) => {
+                if (!arr || !arr.length) return;
+                rightChildren.push(new Paragraph({ spacing: { before: 300, after: 100 }, border: { bottom: { color: "0F3B68", space: 1, style: BorderStyle.SINGLE, size: 12 } }, children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: 22, color: "0F3B68" }) ] }));
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        rightChildren.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, color: "444444" })]
+                        }));
+                    });
+                });
+            };
+            addFresherRight("Internships", data.internships);
+            addFresherRight("Projects", data.projects);
+            addFresherRight("Volunteer Work", data.volunteer);
+            addFresherRight("Extracurriculars", data.extracurriculars);
+
             const layoutTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
@@ -1470,6 +1507,24 @@ document.body.appendChild(printContainer);
                     });
                 });
             }
+
+            const addFresherRight = (title, arr) => {
+                if (!arr || !arr.length) return;
+                rightCol.push(new Paragraph({ spacing: { before: 150, after: 50 }, children: [ new TextRun({ text: title.toUpperCase(), bold: true, size: 20, font: FONT }) ] }));
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        rightCol.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { before: 30, after: 30 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT, color: "333333" })]
+                        }));
+                    });
+                });
+            };
+            addFresherRight("Internships", data.internships);
+            addFresherRight("Projects", data.projects);
+            addFresherRight("Volunteer Work", data.volunteer);
+            addFresherRight("Extracurriculars", data.extracurriculars);
 
             const bodyTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1562,6 +1617,24 @@ document.body.appendChild(printContainer);
                 });
             }
 
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                children.push(createCenteredHeader(title));
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { before: 15, after: 15 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: 20, font: FONT, color: "333333" })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education && data.education.length > 0) {
                 children.push(createCenteredHeader("Education"));
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { before: 40, after: 20 }, children: [ new TextRun({ text: `${edu.institution}`, bold: true, size: 20, font: FONT }), new TextRun({ text: ` | ${edu.degree} (${edu.date})`, size: 20, font: FONT, color: "666666" }) ] })));
@@ -1611,6 +1684,25 @@ document.body.appendChild(printContainer);
                     });
                 });
             }
+            
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addSectionHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addSectionHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -1683,6 +1775,24 @@ document.body.appendChild(printContainer);
                 });
             }
 
+            const addFresherRight = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addRightHeading(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        rightCol.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresherRight("Internships", data.internships);
+            addFresherRight("Projects", data.projects);
+            addFresherRight("Volunteer Work", data.volunteer);
+            addFresherRight("Extracurriculars", data.extracurriculars);
+
             const bodyTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
@@ -1720,6 +1830,25 @@ document.body.appendChild(printContainer);
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeading(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeading("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -1771,6 +1900,25 @@ document.body.appendChild(printContainer);
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -1833,6 +1981,25 @@ document.body.appendChild(printContainer);
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -1852,7 +2019,7 @@ document.body.appendChild(printContainer);
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children }] });
         }
 
-function generateExecutiveTeal(data) {
+        function generateExecutiveTeal(data) {
             const { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType } = docx;
             const FONT = "Arial"; const SIZE_BODY = 18; const TEAL = "1A6359";
 
@@ -1884,7 +2051,6 @@ function generateExecutiveTeal(data) {
 
             const rightCol = [];
             
-            // Nested table specifically for the Teal header box
             rightCol.push(new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
@@ -1900,13 +2066,14 @@ function generateExecutiveTeal(data) {
                 ]})]
             }));
 
-            rightCol.push(new Paragraph({ spacing: { before: 200 } })); // Spacer below the header block
+            rightCol.push(new Paragraph({ spacing: { before: 200 } })); 
 
             const addRightHeader = (title) => rightCol.push(new Paragraph({ spacing: { before: 150, after: 100 }, border: { bottom: { color: "B2DFDB", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 22, color: TEAL, font: FONT })] }));
             
-            addRightHeader("Professional Summary");
-            (data.improved_summary || []).forEach(p => rightCol.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 100 }, children: [new TextRun({ text: p, size: SIZE_BODY, font: FONT })] })));
-            
+            if (data.improved_summary && data.improved_summary.length) {
+                addRightHeader("Professional Summary");
+                data.improved_summary.forEach(p => rightCol.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 100 }, children: [new TextRun({ text: p, size: SIZE_BODY, font: FONT })] })));
+            }
             if (data.experience) {
                 addRightHeader("Work Experience");
                 data.experience.forEach(job => {
@@ -1918,6 +2085,24 @@ function generateExecutiveTeal(data) {
                     });
                 });
             }
+
+            const addFresherRight = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addRightHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        rightCol.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresherRight("Internships", data.internships);
+            addFresherRight("Projects", data.projects);
+            addFresherRight("Volunteer Work", data.volunteer);
+            addFresherRight("Extracurriculars", data.extracurriculars);
 
             const bodyTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1931,9 +2116,97 @@ function generateExecutiveTeal(data) {
             return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children: [bodyTable] }] });
         }
         
-        // ==========================================
-        // NEW EXPORTERS: BATCH 3
-        // ==========================================
+function generateMeridian(data) {
+            const { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType } = docx;
+            const FONT = "Arial"; const SIZE_BODY = 19; const DARK = "111111";
+            const children = [];
+
+            // Header
+            children.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, color: DARK, font: FONT })] }));
+            children.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: data.optimized_title || "Title", bold: true, size: 22, color: "333333", font: FONT })] }));
+            const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
+            children.push(new Paragraph({ spacing: { after: 300 }, children: [new TextRun({ text: contactLine, size: 18, font: FONT, color: "555555" })] }));
+
+            const addHeader = (title) => {
+                children.push(new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: DARK, space: 1, style: BorderStyle.SINGLE, size: 12 } }, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 20, color: DARK, font: FONT })] }));
+            };
+
+            // Main Sections
+            if (data.improved_summary && data.improved_summary.length) {
+                addHeader("About");
+                data.improved_summary.forEach(p => children.push(new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { after: 100 }, children: [new TextRun({ text: p, size: SIZE_BODY, font: FONT, color: "333333" })] })));
+            }
+            if (data.experience) {
+                addHeader("Experience");
+                data.experience.forEach(job => {
+                    children.push(new Paragraph({ tabStops: [{ type: "right", position: 10000 }], children: [new TextRun({ text: job.title, bold: true, size: 20, font: FONT }), new TextRun({ text: `\t${job.dates}`, size: SIZE_BODY, font: FONT })] }));
+                    children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: job.company, italic: true, size: SIZE_BODY, font: FONT, color: "555555" })] }));
+                    job.bullets.forEach(b => {
+                        const parsed = parseBullet(b);
+                        children.push(new Paragraph({ bullet: { level: 0 }, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 }, children: [ ...(parsed.prefix ? [new TextRun({ text: parsed.prefix, bold: true, size: SIZE_BODY, font: FONT })] : []), new TextRun({ text: parsed.rest, size: SIZE_BODY, font: FONT, color: "333333" }) ] }));
+                    });
+                });
+            }
+
+            // NEW: Fresher Fields
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT, color: "333333" })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
+            // Meridian's Bottom 2-Column Grid
+            const leftGrid = [];
+            const rightGrid = [];
+            
+            const addGridHeader = (col, title) => {
+                col.push(new Paragraph({ spacing: { before: 150, after: 100 }, border: { bottom: { color: DARK, space: 1, style: BorderStyle.SINGLE, size: 12 } }, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 20, color: DARK, font: FONT })] }));
+            };
+
+            if (data.education) {
+                addGridHeader(leftGrid, "Education");
+                data.education.forEach(edu => leftGrid.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: `\n${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT, color: "555555" })] })));
+            }
+            if (data.core_skills && data.core_skills.length) {
+                addGridHeader(leftGrid, "Technical Skills");
+                leftGrid.push(new Paragraph({ children: [new TextRun({ text: data.core_skills.join(", "), size: SIZE_BODY, font: FONT, color: "333333" })] }));
+            }
+            
+            if (data.certifications && data.certifications.length) {
+                addGridHeader(rightGrid, "Certifications");
+                data.certifications.forEach(c => rightGrid.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: [new TextRun({ text: c, size: SIZE_BODY, font: FONT, color: "333333" })] })));
+            }
+            if (data.personal_details && data.personal_details.length) {
+                addGridHeader(rightGrid, "Personal Details");
+                data.personal_details.forEach(p => rightGrid.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: p.label + ": ", bold: true, size: SIZE_BODY, font: FONT, color: "333333" }), new TextRun({ text: p.value, size: SIZE_BODY, font: FONT, color: "555555" })] })));
+            }
+
+            if (leftGrid.length > 0 || rightGrid.length > 0) {
+                const gridTable = new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
+                    rows: [ new TableRow({ children: [
+                        new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, margins: { right: 200 }, children: leftGrid }),
+                        new TableCell({ width: { size: 50, type: WidthType.PERCENTAGE }, margins: { left: 200 }, children: rightGrid })
+                    ]})]
+                });
+                children.push(gridTable);
+            }
+
+            return new Document({ sections: [{ properties: { page: { margin: { top: 720, right: 720, bottom: 720, left: 720 } } }, children }] });
+        }
 
         function generateMinimalGrey(data) {
             const { Document, Paragraph, TextRun, AlignmentType, BorderStyle } = docx;
@@ -1964,6 +2237,25 @@ function generateExecutiveTeal(data) {
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT, color: GREY })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT, color: "333333" }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT, color: GREY })] })));
@@ -2024,6 +2316,25 @@ function generateExecutiveTeal(data) {
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -2085,6 +2396,25 @@ function generateExecutiveTeal(data) {
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -2133,6 +2463,25 @@ function generateExecutiveTeal(data) {
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -2197,6 +2546,25 @@ function generateExecutiveTeal(data) {
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -2252,6 +2620,25 @@ function generateExecutiveTeal(data) {
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -2333,6 +2720,24 @@ function generateExecutiveTeal(data) {
                 });
             }
 
+            const addFresherRight = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addRightHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        rightCol.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresherRight("Internships", data.internships);
+            addFresherRight("Projects", data.projects);
+            addFresherRight("Volunteer Work", data.volunteer);
+            addFresherRight("Extracurriculars", data.extracurriculars);
+
             const bodyTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
@@ -2387,6 +2792,27 @@ function generateExecutiveTeal(data) {
                 });
                 formatContent(expContent);
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                const content = [];
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        content.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+                formatContent(content);
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 const eduContent = data.education.map(edu => new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] }));
@@ -2453,6 +2879,25 @@ function generateExecutiveTeal(data) {
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
@@ -2512,6 +2957,25 @@ function generateExecutiveTeal(data) {
                     });
                 });
             }
+
+            const addFresher = (title, arr) => {
+                if (!arr || !arr.length) return;
+                addHeader(title);
+                arr.forEach(entry => {
+                    entry.split('\n').map(l=>l.trim()).filter(Boolean).forEach((line, i) => {
+                        const isB = line.startsWith('•') || line.startsWith('-');
+                        children.push(new Paragraph({
+                            bullet: isB ? { level: 0 } : undefined, alignment: AlignmentType.JUSTIFIED, spacing: { after: 40 },
+                            children: [new TextRun({ text: line.replace(/^[•-]\s*/, ''), bold: i === 0 && !isB, size: SIZE_BODY, font: FONT })]
+                        }));
+                    });
+                });
+            };
+            addFresher("Internships", data.internships);
+            addFresher("Projects", data.projects);
+            addFresher("Volunteer Work", data.volunteer);
+            addFresher("Extracurriculars", data.extracurriculars);
+
             if (data.education) {
                 addHeader("Education");
                 data.education.forEach(edu => children.push(new Paragraph({ spacing: { after: 80 }, children: [new TextRun({ text: edu.degree, bold: true, size: SIZE_BODY, font: FONT }), new TextRun({ text: ` | ${edu.institution} (${edu.date})`, size: SIZE_BODY, font: FONT })] })));
