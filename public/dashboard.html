@@ -63,27 +63,25 @@
 
         /* LOCKED WATERMARK */
 
-        /* =========================
+/* =========================
            TRUE-TEXT PDF GENERATION
         ========================= */
         @media print {
-            body * { visibility: hidden; }
-            #workspace-canvas, #workspace-canvas * { visibility: visible; }
-            #workspace-canvas {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 210mm;
-                margin: 0;
-                padding: 0;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+            /* Completely remove the dashboard from the print flow */
+            body.is-printing-pdf > *:not(#true-print-container) {
+                display: none !important;
             }
+            /* Reset the canvas background */
+            body.is-printing-pdf {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            /* Ensure the browser respects the A4 dimensions */
             @page {
                 size: A4 portrait;
                 margin: 0;
             }
-            .watermark-overlay::before { display: none !important; }
         }
     </style>
 
@@ -840,15 +838,40 @@ async function handleDownloadClick(event, format = 'docx') {
             }
         }
 
-        async function downloadResumePDF() {
+async function downloadResumePDF() {
             try {
+                // 1. Grab the perfectly rendered HTML from your canvas
+                const canvasHTML = document.getElementById('workspace-canvas').innerHTML;
+                
+                // 2. Create a temporary, perfectly scaled A4 container
+                const printContainer = document.createElement('div');
+                printContainer.id = 'true-print-container';
+                printContainer.className = 'preview-font bg-white text-gray-900';
+                
+                // 3. Enforce A4 dimensions and the standard 14mm padding the template engine expects
+                printContainer.style.cssText = 'width: 210mm; min-height: 297mm; padding: 14mm; box-sizing: border-box; margin: 0 auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 11pt; line-height: 1.45;';
+                printContainer.innerHTML = canvasHTML;
+                
+                // 4. Append to body and trigger print mode
+                document.body.appendChild(printContainer);
+                document.body.classList.add('is-printing-pdf');
+                
+                // 5. Trigger the browser's native PDF engine
                 window.print();
+                
+                // 6. Cleanup instantly after the print dialog closes
+                setTimeout(() => {
+                    document.body.classList.remove('is-printing-pdf');
+                    const containerToRemove = document.getElementById('true-print-container');
+                    if (containerToRemove) document.body.removeChild(containerToRemove);
+                }, 500);
+
             } catch (err) {
                 console.error(err);
-                alert("An error occurred while opening the PDF generator.");
+                alert("An error occurred while generating the PDF.");
             }
         }
-
+        
         async function retryDownload() {
             if (currentWorkspace === 'cover-letter') {
                 await downloadCoverLetter();
