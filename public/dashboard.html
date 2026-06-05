@@ -63,24 +63,26 @@
 
         /* LOCKED WATERMARK */
 
-/* =========================
+        /* =========================
            TRUE-TEXT PDF GENERATION
         ========================= */
         @media print {
-            /* Completely remove the dashboard from the print flow */
             body.is-printing-pdf > *:not(#true-print-container) {
                 display: none !important;
             }
-            /* Reset the canvas background */
             body.is-printing-pdf {
                 background: white !important;
                 margin: 0 !important;
                 padding: 0 !important;
             }
-            /* Ensure the browser respects the A4 dimensions */
+            /* Remove the inner padding so it doesn't double-up on the first page */
+            #true-print-container {
+                padding: 0 14mm !important; 
+            }
+            /* Apply physical margins to the top and bottom of EVERY page */
             @page {
                 size: A4 portrait;
-                margin: 0;
+                margin: 14mm 0; 
             }
         }
     </style>
