@@ -65,13 +65,6 @@
                 // Hide hero/landing
                 var lc = document.getElementById('landing-content');
                 if (lc) { lc.style.display = 'none'; }
-                // Hide How It Works
-                var hiw = document.getElementById('how-it-works');
-                if (hiw) { hiw.style.display = 'none'; }
-
-                // Hide FAQ
-                var faq = document.getElementById('faq');
-                if (faq) { faq.style.display = 'none'; }
 
                 // Show wizard with maximum specificity
                 var wiz = document.getElementById('resume-wizard');
@@ -498,7 +491,7 @@
             <div class="flex flex-col items-center text-center group">
                 <!-- CSS Illustration -->
                 <div class="relative w-48 h-48 mb-8 flex items-center justify-center">
-                    
+                    <div class="absolute inset-0 border-2 border-dashed border-gray-200 rounded-full animate-[spin_20s_linear_infinite]"></div>
                     
                     <!-- Messy Document (Back) -->
                     <div class="absolute transform -rotate-12 -translate-x-6 bg-white w-24 h-32 shadow-sm border border-gray-200 rounded-lg p-3 opacity-60 transition-transform group-hover:-rotate-18 group-hover:-translate-x-8">
