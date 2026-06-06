@@ -1493,28 +1493,6 @@ function showMsg(text, isSuccess) {
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });                
                 
-                const formData = new FormData();
-                formData.append('resume', file);
-                formData.append('experienceLevel', expLevel);
-                if (jdText) formData.append('jobDescription', jdText);
-                if (extraInfoText) formData.append('extraInfo', extraInfoText);
-                if (targetRole) formData.append('targetRole', targetRole);
-                
-                // NEW: Send Fresher Fields to Backend
-                if (internshipsText) formData.append('internships', internshipsText);
-                if (projectsText) formData.append('projects', projectsText);
-                if (volunteerText) formData.append('volunteer', volunteerText);
-                if (extracurricularsText) formData.append('extracurriculars', extracurricularsText);
-
-                const response = await fetch('/api/analyze', { method: 'POST', body: formData });
-                
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.details || errorData.error || "Unknown Server Crash");
-                }
-                
-                const data = await response.json();
-
                 // Clear interval when API returns
                 if (window.loadingInterval) clearInterval(window.loadingInterval);
 
