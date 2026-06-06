@@ -226,6 +226,41 @@
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Extracurriculars</label>
                         <textarea id="edit-extracurriculars" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="List clubs, teams, and leadership..."></textarea>
                     </div>
+                    <!-- DYNAMIC INDUSTRY SECTIONS (Hidden by default, shown via JS if data exists) -->
+<div id="industry-sections-wrapper" class="space-y-4 border-t-2 border-dashed border-gray-300 pt-4 mt-4 hidden">
+    <h3 class="font-bold text-gray-800 uppercase tracking-wide text-sm">Industry-Specific Sections</h3>
+    
+    <!-- Tech: Technical Skills -->
+    <div id="group-tech" class="hidden">
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Technical Stack</label>
+        <p class="text-[10px] text-gray-500 mb-1">Format as "Category: Skill 1, Skill 2"</p>
+        <textarea id="edit-tech-skills" class="w-full text-sm border-gray-300 rounded-md shadow-sm p-2 bg-gray-50" rows="4" placeholder="Languages: JavaScript, Python&#10;Frameworks: React, Node.js"></textarea>
+    </div>
+
+    <!-- Healthcare: Clinical Rotations -->
+    <div id="group-clinical" class="hidden">
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Clinical Rotations / Patient Care</label>
+        <textarea id="edit-clinical" class="w-full text-sm border-gray-300 rounded-md shadow-sm p-2 bg-gray-50" rows="3"></textarea>
+    </div>
+
+    <!-- Academic: Publications -->
+    <div id="group-academic" class="hidden">
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Publications & Research</label>
+        <textarea id="edit-academic" class="w-full text-sm border-gray-300 rounded-md shadow-sm p-2 bg-gray-50" rows="3"></textarea>
+    </div>
+
+    <!-- Creative: Portfolio Links -->
+    <div id="group-creative" class="hidden">
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Portfolio & Links</label>
+        <textarea id="edit-creative" class="w-full text-sm border-gray-300 rounded-md shadow-sm p-2 bg-gray-50" rows="3"></textarea>
+    </div>
+
+    <!-- Legal: Bar Admissions -->
+    <div id="group-legal" class="hidden">
+        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Bar Admissions</label>
+        <textarea id="edit-legal" class="w-full text-sm border-gray-300 rounded-md shadow-sm p-2 bg-gray-50" rows="2"></textarea>
+    </div>
+</div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Education</label>
                         <textarea id="edit-education" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
@@ -3248,6 +3283,79 @@ async function generateCoverLetter(btn) {
                     if(typeof triggerAutoSave === 'function') triggerAutoSave();
                 });
             }
+        });
+    // ==========================================
+        // INDUSTRY SECTIONS: POPULATE & LIVE SYNC
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Hook into your existing populate function (runs when data loads)
+            const originalPopulate = window.populateEditor;
+            window.populateEditor = function() {
+                if(originalPopulate) originalPopulate();
+                
+                const wrapper = document.getElementById('industry-sections-wrapper');
+                let hasIndustryData = false;
+
+                // 1. TECH SKILLS (Flatten Objects to String: "Category: Skill, Skill")
+                const techBox = document.getElementById('edit-tech-skills');
+                if (activeProfile.technical_skills && activeProfile.technical_skills.length > 0) {
+                    document.getElementById('group-tech').classList.remove('hidden');
+                    techBox.value = activeProfile.technical_skills.map(t => `${t.category}: ${t.skills.join(', ')}`).join('\n');
+                    hasIndustryData = true;
+                } else { document.getElementById('group-tech').classList.add('hidden'); techBox.value = ""; }
+
+                // 2. STANDARD ARRAYS (Clinical, Academic, Creative, Legal)
+                const mapStandardArray = (profileKey, elementId, groupId) => {
+                    const el = document.getElementById(elementId);
+                    if (activeProfile[profileKey] && activeProfile[profileKey].length > 0) {
+                        document.getElementById(groupId).classList.remove('hidden');
+                        el.value = activeProfile[profileKey].join('\n');
+                        hasIndustryData = true;
+                    } else { document.getElementById(groupId).classList.add('hidden'); el.value = ""; }
+                };
+
+                mapStandardArray('clinical_rotations', 'edit-clinical', 'group-clinical');
+                mapStandardArray('publications', 'edit-academic', 'group-academic');
+                mapStandardArray('portfolio_links', 'edit-creative', 'group-creative');
+                mapStandardArray('bar_admissions', 'edit-legal', 'group-legal');
+
+                // Show/Hide the whole wrapper
+                if(hasIndustryData) wrapper.classList.remove('hidden');
+                else wrapper.classList.add('hidden');
+            };
+
+            // LIVE TYPING SYNC - Push edits back into the JSON structure instantly
+            const attachLiveSync = (elementId, profileKey, isTechArray = false) => {
+                const el = document.getElementById(elementId);
+                if(!el) return;
+                el.addEventListener('input', (e) => {
+                    const lines = e.target.value.split('\n').filter(line => line.trim() !== '');
+                    
+                    if (isTechArray) {
+                        // Rebuild Array of Objects for Tech
+                        activeProfile[profileKey] = lines.map(line => {
+                            const parts = line.split(':');
+                            const category = parts[0] ? parts[0].trim() : "Core";
+                            const skills = parts[1] ? parts[1].split(',').map(s => s.trim()).filter(Boolean) : [];
+                            return { category, skills };
+                        });
+                    } else {
+                        // Standard Array
+                        activeProfile[profileKey] = lines;
+                    }
+
+                    // Re-render template instantly
+                    if(typeof renderCurrentCanvas === 'function') renderCurrentCanvas();
+                    if(typeof triggerAutoSave === 'function') triggerAutoSave();
+                });
+            };
+
+            attachLiveSync('edit-tech-skills', 'technical_skills', true);
+            attachLiveSync('edit-clinical', 'clinical_rotations');
+            attachLiveSync('edit-academic', 'publications');
+            attachLiveSync('edit-creative', 'portfolio_links');
+            attachLiveSync('edit-legal', 'bar_admissions');
         });
     </script>
 <div id="template-library-modal" class="fixed inset-0 bg-black/80 z-[9999] hidden flex items-center justify-center p-4 backdrop-blur-sm">
