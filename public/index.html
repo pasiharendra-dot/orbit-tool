@@ -1472,58 +1472,6 @@ function showMsg(text, isSuccess) {
                 try { fetch(GOOGLE_TRACKER_URL, { method: "POST", body: JSON.stringify({ name: data.after?.name || "Unknown", email: data.after?.email || "Unknown", phone: data.after?.phone || "Unknown", beforeScore: window.beforeScoreTracker, afterScore: data.after?.score || "N/A", action: "Lead Captured" }) }); } catch(e) { }
                 event.target.value = '';
                             
-                // STEP 1: Hide homepage sections
-                if(document.getElementById('hero-section')) document.getElementById('hero-section').style.display = 'none';
-                if(document.getElementById('upload-section')) document.getElementById('upload-section').style.display = 'none';
-                if(document.getElementById('template-slider-section')) document.getElementById('template-slider-section').style.display = 'none';
-                if(document.getElementById('testimonials-section')) document.getElementById('testimonials-section').style.display = 'none';
-                if(document.getElementById('how-it-works')) document.getElementById('how-it-works').style.display = 'none';
-                if(document.getElementById('faq')) document.getElementById('faq').style.display = 'none';
-
-                // STEP 2: SHOW loading animation & Start Text Cycle
-                loadingSection = document.getElementById('loading-section');
-                loadingSection.classList.remove('hidden');
-                loadingSection.style.display = 'flex';
-
-
-                // ----------------------------------
-
-                // STEP 3: Hide results until API finishes
-                document.getElementById('results-section').style.display = 'none';
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });                
-                
-                // Clear interval when API returns
-                if (window.loadingInterval) clearInterval(window.loadingInterval);
-
-                // Hide loading animation
-                document.getElementById('loading-section').style.display = 'none';
-
-                // Show final preview page
-                document.getElementById('results-section').style.display = 'block';
-
-                const randomBeforeScore = Math.floor(Math.random() * (62 - 38 + 1)) + 38; 
-                const randomAfterScore = Math.floor(Math.random() * (98 - 89 + 1)) + 89;
-
-                window.resumeData = data.after;
-                window.beforeScoreTracker = randomBeforeScore; 
-                document.getElementById('before-score').innerText = `Score: ${randomBeforeScore}/100`;
-                
-                const failPointsList = document.getElementById('fail-points');
-                failPointsList.innerHTML = '';
-                const fails = data.before?.fail_points || ["Critical ATS Formatting Errors Detected."];
-                fails.forEach(point => { 
-                    failPointsList.innerHTML += `<li class="flex items-start"><span class="text-red-500 font-bold mr-2 mt-0.5">✗</span><span>${point}</span></li>`; 
-                });
-
-                document.getElementById('after-score').innerText = `Score: ${randomAfterScore}/100`;
-                document.getElementById('preview-name').innerText = data.after?.name || "Professional";
-                document.getElementById('preview-title').innerText = data.after?.optimized_title || "Optimized Profile";
-                
-                if (data.after?.improved_summary && data.after.improved_summary.length > 0) {
-                    document.getElementById('preview-summary').innerText = data.after.improved_summary[0];
-                }
-                    
             } catch (error) {
                 console.error("UPLOAD ERROR:", error);
                 alert("CRITICAL ERROR: " + error.message);
@@ -1534,8 +1482,7 @@ function showMsg(text, isSuccess) {
                 event.target.value = '';
             }
             }
-              
-
+            
                 // ==========================================
                 // NEW: BYPASS LOGIN WALL IF ALREADY LOGGED IN
                 // ==========================================
