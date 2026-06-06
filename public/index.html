@@ -405,135 +405,7 @@
             </div>
         </div>
 
-        <div id="loading-section" class="hidden flex-col items-center mt-32 w-full px-4 mb-32">
-            <div class="relative w-20 h-20 mb-6">
-                <div class="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-orbitLightBlue rounded-full border-t-transparent animate-spin"></div>
-            </div>
-            <!-- Added id="loading-title" and transition classes -->
-            <h3 id="loading-title" class="text-2xl font-bold text-orbitDark mb-2 transition-opacity duration-500">Building your ATS optimized Resume...</h3>
-            <p class="text-gray-500 font-medium text-center">Applying recruiter-certified frameworks and structuring the document.</p>
-        </div>
 
-        <div id="results-section" class="hidden max-w-[1200px] w-full mt-10 mb-20 px-4 fade-in">
-            <h3 class="text-3xl font-extrabold text-center text-orbitDark mb-2">Your ATS Makeover is Ready</h3>
-            <p class="text-center text-gray-600 mb-10 font-medium">Review your original audit and select an option below to unlock your new resume.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-16">
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-red-500"></div>
-                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
-                        <div><h4 class="text-lg font-bold text-gray-800 uppercase tracking-wide">Original Match</h4></div>
-                        <span id="before-score" class="bg-red-50 text-red-600 border border-red-200 px-4 py-1.5 rounded-full font-extrabold text-sm shadow-sm">Score: --/100</span>
-                    </div>
-                    <div class="bg-red-50/50 rounded-lg p-4 mb-6">
-                        <p class="text-sm font-bold text-red-700 mb-3">⚠️ Critical Fail Points Identified:</p>
-                        <ul id="fail-points" class="text-sm text-gray-700 space-y-3 leading-relaxed"></ul>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-200 overflow-hidden relative">
-    <div class="absolute top-0 left-0 w-full h-1 bg-green-500"></div>
-    
-    <!-- Top Bar -->
-    <div class="flex justify-between items-center bg-gray-50 px-8 py-5 border-b border-gray-200">
-        <h4 class="text-lg font-bold text-gray-800 uppercase tracking-wide">✅ Optimized Preview</h4>
-        <span id="after-score" class="bg-green-50 text-green-700 border border-green-200 px-4 py-1.5 rounded-full font-extrabold text-sm shadow-sm">Score: --/100</span>
-    </div>
-    
-    <!-- Document Body -->
-    <div class="p-8 pb-12"> 
-        <div class="text-center mb-6">
-            <h1 id="preview-name" class="text-2xl font-bold uppercase tracking-widest text-[#0F3B68] mb-1">[Name]</h1>
-            <p id="preview-title" class="text-sm font-bold uppercase tracking-wider text-gray-600 mb-4">[Optimized Title]</p>
-            <div class="w-full border-t border-[#5C9CE6] mb-4"></div>
-        </div>
-        
-        <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1">Professional Summary</h3>
-        <p id="preview-summary" class="text-sm text-gray-700 leading-relaxed text-justify mb-4"></p>
-        
-        <!-- Blurred Section with Embedded Login Card -->
-        <div class="relative">
-            
-            <!-- Blurred Dummy Content (Extended height to prevent clipping) -->
-            <div class="blur-md select-none opacity-40">
-                <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Achievements & Awards</h3>
-                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
-                <div class="h-2 w-5/6 bg-gray-300 rounded mb-2"></div>
-                <div class="h-2 w-4/5 bg-gray-300 rounded mb-6"></div>
-                
-                <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Work Experience</h3>
-                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
-                <div class="h-2 w-11/12 bg-gray-300 rounded mb-2"></div>
-                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
-                
-                <!-- Added Education block to stretch container naturally -->
-                <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Education</h3>
-                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
-                
-                <!-- The Spacer Guarantee -->
-                <div class="h-64 md:h-72 w-full"></div> 
-            </div>
-            
-            <!-- NEW OVERLAY: Resume Builder Dashboard Card -->
-            <div class="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-sm p-4 z-10 rounded-lg">
-                
-                <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 md:p-8 flex flex-col relative overflow-hidden max-w-md w-full transform transition-all hover:scale-[1.02]">
-                    <div class="absolute top-0 right-0 bg-blue-100 text-[#0F3B68] text-[10px] md:text-xs font-bold px-3 py-1.5 rounded-bl-lg">FREE ACCESS</div>
-                    
-                    <h4 class="text-xl md:text-2xl font-bold text-gray-900 mb-2 mt-2">Resume Builder Dashboard</h4>
-                    <p class="text-gray-600 mb-5 text-xs md:text-sm">Create your free account to unlock your parsed data, switch resume templates, and access the live editor.</p>
-
-                    <ul class="text-sm text-gray-600 text-left space-y-3 mb-6 flex-grow">
-                        <li class="flex items-center"><span class="text-green-500 mr-2">✅</span> View High-Converting ATS Formats</li>
-                        <li class="flex items-center"><span class="text-green-500 mr-2">✅</span> Access the Interactive Live Editor</li>
-                        <li class="flex items-center"><span class="text-green-500 mr-2">✅</span> Re-Tailor against Target Jobs (JD)</li>
-                    </ul>
-
-                  <!-- The Google Login Button (Now safely visible) -->
-                    <button id="google-login-btn" onclick="loginWithGoogle()" class="w-full py-3.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold rounded-xl shadow-sm transition flex justify-center items-center gap-3 text-sm md:text-base">                        <!-- Google G Logo SVG -->
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.66 15.63 16.88 16.79 15.71 17.57V20.34H19.28C21.36 18.42 22.56 15.6 22.56 12.25Z" fill="#4285F4"/>
-                            <path d="M12 23C14.97 23 17.46 22.02 19.28 20.34L15.71 17.57C14.73 18.23 13.48 18.64 12 18.64C9.14 18.64 6.71 16.71 5.84 14.11H2.18V16.95C3.99 20.53 7.7 23 12 23Z" fill="#34A853"/>
-                            <path d="M5.84 14.11C5.62 13.45 5.49 12.74 5.49 12C5.49 11.26 5.62 10.55 5.84 9.89V7.05H2.18C1.43 8.54 1 10.22 1 12C1 13.78 1.43 15.46 2.18 16.95L5.84 14.11Z" fill="#FBBC05"/>
-                            <path d="M12 5.36C13.62 5.36 15.06 5.92 16.21 7.02L19.36 3.87C17.45 2.09 14.97 1 12 1C7.7 1 3.99 3.47 2.18 7.05L5.84 9.89C6.71 7.29 9.14 5.36 12 5.36Z" fill="#EA4335"/>
-                        </svg>
-                        Unlock My ATS Resume
-                    </button>
-                        <!-- NEW EMAIL LOGIN TRIGGER -->
-                    <div class="flex items-center my-4">
-                        <div class="flex-grow border-t border-gray-200"></div>
-                        <span class="px-3 text-xs text-gray-400 font-semibold uppercase">Or</span>
-                        <div class="flex-grow border-t border-gray-200"></div>
-                    </div>
-                    
-                    <button onclick="openLoginModal()" class="w-full py-3.5 bg-[#0F3B68] hover:bg-blue-900 text-white font-bold rounded-xl shadow-sm transition flex justify-center items-center gap-2 text-sm md:text-base">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        Continue with Email
-                    </button>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-</div>
-      </div>
-        
-        </div>
-
-        <div id="success-section" class="hidden w-full max-w-3xl mt-20 mb-32 px-4 mx-auto text-center fade-in">
-            <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 p-12 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-2 bg-green-500"></div>
-                <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-green-100">
-                    <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                </div>
-                <h3 class="text-3xl font-extrabold text-orbitDark mb-4 tracking-tight">Makeover Complete!</h3>
-                <p class="text-lg text-gray-600 mb-8 max-w-lg mx-auto">Your ATS-optimized Word document has been successfully generated and downloaded to your device.</p>
-                <button onclick="window.location.reload()" class="px-8 py-4 bg-orbitBlue hover:bg-blue-800 text-white font-bold rounded-xl shadow-md transition text-lg w-full md:w-auto">
-                    Optimize Another Resume
-                </button>
-            </div>
-        </div>
 
         <!-- LIVE FOMO NOTIFICATION -->
         <div id="live-notification" class="fixed bottom-6 left-6 bg-white border-l-4 border-whatsapp shadow-2xl rounded-r-lg p-4 z-50 transform translate-y-32 opacity-0 transition-all duration-500 flex items-center max-w-[260px] pointer-events-none">
@@ -767,7 +639,7 @@
         
     </div>
 </section>
-</div>
+</div><!-- END #landing-content -->
 
 <!-- ========================================== -->
 <!-- PROGRESSIVE DISCLOSURE WIZARD -->
@@ -964,12 +836,136 @@
         </div>
 
 
+
+    <div id="loading-section" class="hidden flex-col items-center py-20 w-full px-4">
+            <div class="relative w-20 h-20 mb-6">
+                <div class="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
                 <div class="absolute inset-0 border-4 border-orbitLightBlue rounded-full border-t-transparent animate-spin"></div>
             </div>
+            <!-- Added id="loading-title" and transition classes -->
             <h3 id="loading-title" class="text-2xl font-bold text-orbitDark mb-2 transition-opacity duration-500">Building your ATS optimized Resume...</h3>
             <p class="text-gray-500 font-medium text-center">Applying recruiter-certified frameworks and structuring the document.</p>
         </div>
 
+    <div id="results-section" class="hidden max-w-[1200px] w-full mt-10 mb-20 px-4 fade-in">
+            <h3 class="text-3xl font-extrabold text-center text-orbitDark mb-2">Your ATS Makeover is Ready</h3>
+            <p class="text-center text-gray-600 mb-10 font-medium">Review your original audit and select an option below to unlock your new resume.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-16">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-red-500"></div>
+                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                        <div><h4 class="text-lg font-bold text-gray-800 uppercase tracking-wide">Original Match</h4></div>
+                        <span id="before-score" class="bg-red-50 text-red-600 border border-red-200 px-4 py-1.5 rounded-full font-extrabold text-sm shadow-sm">Score: --/100</span>
+                    </div>
+                    <div class="bg-red-50/50 rounded-lg p-4 mb-6">
+                        <p class="text-sm font-bold text-red-700 mb-3">⚠️ Critical Fail Points Identified:</p>
+                        <ul id="fail-points" class="text-sm text-gray-700 space-y-3 leading-relaxed"></ul>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-200 overflow-hidden relative">
+    <div class="absolute top-0 left-0 w-full h-1 bg-green-500"></div>
+    
+    <!-- Top Bar -->
+    <div class="flex justify-between items-center bg-gray-50 px-8 py-5 border-b border-gray-200">
+        <h4 class="text-lg font-bold text-gray-800 uppercase tracking-wide">✅ Optimized Preview</h4>
+        <span id="after-score" class="bg-green-50 text-green-700 border border-green-200 px-4 py-1.5 rounded-full font-extrabold text-sm shadow-sm">Score: --/100</span>
+    </div>
+    
+    <!-- Document Body -->
+    <div class="p-8 pb-12"> 
+        <div class="text-center mb-6">
+            <h1 id="preview-name" class="text-2xl font-bold uppercase tracking-widest text-[#0F3B68] mb-1">[Name]</h1>
+            <p id="preview-title" class="text-sm font-bold uppercase tracking-wider text-gray-600 mb-4">[Optimized Title]</p>
+            <div class="w-full border-t border-[#5C9CE6] mb-4"></div>
+        </div>
+        
+        <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1">Professional Summary</h3>
+        <p id="preview-summary" class="text-sm text-gray-700 leading-relaxed text-justify mb-4"></p>
+        
+        <!-- Blurred Section with Embedded Login Card -->
+        <div class="relative">
+            
+            <!-- Blurred Dummy Content (Extended height to prevent clipping) -->
+            <div class="blur-md select-none opacity-40">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Achievements & Awards</h3>
+                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
+                <div class="h-2 w-5/6 bg-gray-300 rounded mb-2"></div>
+                <div class="h-2 w-4/5 bg-gray-300 rounded mb-6"></div>
+                
+                <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Work Experience</h3>
+                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
+                <div class="h-2 w-11/12 bg-gray-300 rounded mb-2"></div>
+                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
+                
+                <!-- Added Education block to stretch container naturally -->
+                <h3 class="text-xs font-bold uppercase tracking-widest text-[#0F3B68] mb-2 border-b border-[#5C9CE6] pb-1 mt-6">Education</h3>
+                <div class="h-2 w-full bg-gray-300 rounded mb-2"></div>
+                
+                <!-- The Spacer Guarantee -->
+                <div class="h-64 md:h-72 w-full"></div> 
+            </div>
+            
+            <!-- NEW OVERLAY: Resume Builder Dashboard Card -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-sm p-4 z-10 rounded-lg">
+                
+                <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 md:p-8 flex flex-col relative overflow-hidden max-w-md w-full transform transition-all hover:scale-[1.02]">
+                    <div class="absolute top-0 right-0 bg-blue-100 text-[#0F3B68] text-[10px] md:text-xs font-bold px-3 py-1.5 rounded-bl-lg">FREE ACCESS</div>
+                    
+                    <h4 class="text-xl md:text-2xl font-bold text-gray-900 mb-2 mt-2">Resume Builder Dashboard</h4>
+                    <p class="text-gray-600 mb-5 text-xs md:text-sm">Create your free account to unlock your parsed data, switch resume templates, and access the live editor.</p>
+
+                    <ul class="text-sm text-gray-600 text-left space-y-3 mb-6 flex-grow">
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✅</span> View High-Converting ATS Formats</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✅</span> Access the Interactive Live Editor</li>
+                        <li class="flex items-center"><span class="text-green-500 mr-2">✅</span> Re-Tailor against Target Jobs (JD)</li>
+                    </ul>
+
+                  <!-- The Google Login Button (Now safely visible) -->
+                    <button id="google-login-btn" onclick="loginWithGoogle()" class="w-full py-3.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold rounded-xl shadow-sm transition flex justify-center items-center gap-3 text-sm md:text-base">                        <!-- Google G Logo SVG -->
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.66 15.63 16.88 16.79 15.71 17.57V20.34H19.28C21.36 18.42 22.56 15.6 22.56 12.25Z" fill="#4285F4"/>
+                            <path d="M12 23C14.97 23 17.46 22.02 19.28 20.34L15.71 17.57C14.73 18.23 13.48 18.64 12 18.64C9.14 18.64 6.71 16.71 5.84 14.11H2.18V16.95C3.99 20.53 7.7 23 12 23Z" fill="#34A853"/>
+                            <path d="M5.84 14.11C5.62 13.45 5.49 12.74 5.49 12C5.49 11.26 5.62 10.55 5.84 9.89V7.05H2.18C1.43 8.54 1 10.22 1 12C1 13.78 1.43 15.46 2.18 16.95L5.84 14.11Z" fill="#FBBC05"/>
+                            <path d="M12 5.36C13.62 5.36 15.06 5.92 16.21 7.02L19.36 3.87C17.45 2.09 14.97 1 12 1C7.7 1 3.99 3.47 2.18 7.05L5.84 9.89C6.71 7.29 9.14 5.36 12 5.36Z" fill="#EA4335"/>
+                        </svg>
+                        Unlock My ATS Resume
+                    </button>
+                        <!-- NEW EMAIL LOGIN TRIGGER -->
+                    <div class="flex items-center my-4">
+                        <div class="flex-grow border-t border-gray-200"></div>
+                        <span class="px-3 text-xs text-gray-400 font-semibold uppercase">Or</span>
+                        <div class="flex-grow border-t border-gray-200"></div>
+                    </div>
+                    
+                    <button onclick="openLoginModal()" class="w-full py-3.5 bg-[#0F3B68] hover:bg-blue-900 text-white font-bold rounded-xl shadow-sm transition flex justify-center items-center gap-2 text-sm md:text-base">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        Continue with Email
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+      </div>
+        
+        </div>
+
+    <div id="success-section" class="hidden w-full max-w-3xl mt-20 mb-32 px-4 mx-auto text-center fade-in">
+            <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 p-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-green-500"></div>
+                <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-green-100">
+                    <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h3 class="text-3xl font-extrabold text-orbitDark mb-4 tracking-tight">Makeover Complete!</h3>
+                <p class="text-lg text-gray-600 mb-8 max-w-lg mx-auto">Your ATS-optimized Word document has been successfully generated and downloaded to your device.</p>
+                <button onclick="window.location.reload()" class="px-8 py-4 bg-orbitBlue hover:bg-blue-800 text-white font-bold rounded-xl shadow-md transition text-lg w-full md:w-auto">
+                    Optimize Another Resume
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 <!-- ========================================== -->
