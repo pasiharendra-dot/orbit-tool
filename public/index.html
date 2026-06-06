@@ -1485,39 +1485,7 @@ function showMsg(text, isSuccess) {
                 loadingSection.classList.remove('hidden');
                 loadingSection.style.display = 'flex';
 
-                // --- DYNAMIC LOADING TEXT LOGIC ---
-                const loadingPhrases = [
-                    "Scanning resume structure...",
-                    "Identifying ATS blockers...",
-                    "Extracting recruiter keywords...",
-                    "Optimizing formatting...",
-                    "Rewriting bullet points...",
-                    "Improving ATS compatibility...",
-                    "Building recruiter-approved resume...",
-                    "Final quality check..."
-                ];
-                const loadingTitle = document.getElementById('loading-title');
-                let phraseIndex = 0;
-                
-                if (loadingTitle) {
-                    loadingTitle.innerText = loadingPhrases[0];
-                    loadingTitle.style.opacity = 1;
-                }
-                
-                if (window.loadingInterval) clearInterval(window.loadingInterval);
-                
-                window.loadingInterval = setInterval(() => {
-                    phraseIndex++;
-                    if (phraseIndex < loadingPhrases.length && loadingTitle) {
-                        loadingTitle.style.opacity = 0; // Fade out
-                        setTimeout(() => {
-                            loadingTitle.innerText = loadingPhrases[phraseIndex];
-                            loadingTitle.style.opacity = 1; // Fade in
-                        }, 500); 
-                    } else {
-                        clearInterval(window.loadingInterval);
-                    }
-                }, 5000);
+
                 // ----------------------------------
 
                 // STEP 3: Hide results until API finishes
