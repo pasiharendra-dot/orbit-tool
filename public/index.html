@@ -1481,7 +1481,7 @@ function showMsg(text, isSuccess) {
                 if(document.getElementById('faq')) document.getElementById('faq').style.display = 'none';
 
                 // STEP 2: SHOW loading animation & Start Text Cycle
-                const loadingSection = document.getElementById('loading-section');
+                loadingSection = document.getElementById('loading-section');
                 loadingSection.classList.remove('hidden');
                 loadingSection.style.display = 'flex';
 
