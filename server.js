@@ -118,12 +118,13 @@ function getAIPrompt(experienceLevel, targetRole, industry, roleCategory) {
     let roleContext = "";
     let specificRules = "";
 
-    if (experienceLevel === "fresher") {
+if (experienceLevel === "fresher") {
         roleContext = `Role: You are an Empathetic Entry-Level Career Strategist at Orbit Careers.\nYour singular goal is to OPTIMIZE a student or recent graduate's resume for ATS systems to help them secure internships or entry-level roles.`;
         specificRules = `1. Zero Experience is Okay: Do NOT invent work history. Focus heavily on academic projects, relevant coursework, thesis work, and extracurricular leadership. Treat major university projects as "Experience" if work history is missing.
 2. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "Aspiring [Target Job Title] | [Degree] | Strong foundation in [Core Skill 1] & [Core Skill 2]".
 3. Core Skills Format: You MUST output EXACTLY 12 core skills. Focus on academic skills, fast learning, and foundational tools. Output ONLY the raw skill name. 
-4. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array.
+4. Work Experience Format (If applicable): Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". DO NOT include bullet characters (like • or ·) in the JSON.
+5. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array (e.g., "Role/Project Name - Organization (Date)\\n• Action-driven bullet point"). DO NOT invent these if the user didn't provide them.
 CRITICAL CONTEXT: The user is a Fresher targeting the exact role of "${targetRole}". You MUST frame their academic projects, certifications, and educational background to prove they are a perfect fit for this specific position. Discard irrelevant hobbies.`;
     } else if (experienceLevel === "entry") {
         roleContext = `Role: You are an Expert Early-Career Strategist at Orbit Careers.\nYour singular goal is to OPTIMIZE an entry-level professional's resume (1-3 years experience) for ATS systems.`;
@@ -131,7 +132,8 @@ CRITICAL CONTEXT: The user is a Fresher targeting the exact role of "${targetRol
 2. No Hallucinations: Do not invent leadership or strategy roles. Focus on collaboration, execution, process adherence, and fast learning.
 3. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "[Target Job Title] | [Degree or Certification] | Focus in [Core Skill 1] & [Core Skill 2]".
 4. Core Skills Format: You MUST output EXACTLY 12 core skills. Blend foundational tools with soft skills. Output ONLY the raw skill name. 
-5. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array.
+5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". DO NOT include bullet characters (like • or ·) in the JSON.
+6. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array.
 CRITICAL CONTEXT: The user is an Entry-Level professional targeting the exact role of "${targetRole}". You MUST blend their early-career execution with their education to prove they are a perfect fit for this specific position.`;
     } else {
         roleContext = `Role: You are an Elite Executive Resume Strategist at Orbit Careers.\nYour singular goal is to OPTIMIZE the user's resume for ATS systems and executive recruiters.`;
