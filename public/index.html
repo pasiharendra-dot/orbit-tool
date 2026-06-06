@@ -421,7 +421,7 @@
                     </div>
 
                     <!-- Dynamic Container: Senior Fields -->
-                    <div id="wizard-senior-fields" class="space-y-5">
+                    <div id="wizard-senior-fields" class="hidden space-y-5">
                         <div>
                             <label class="flex items-center text-sm font-semibold text-gray-700 mb-2">Target Job Description <span class="ml-auto text-[10px] text-gray-400 font-normal">Optional</span></label>
                             <textarea id="job-description-input" rows="3" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0F3B68] focus:bg-white outline-none transition-all text-sm font-medium resize-none" placeholder="Paste the exact JD so the AI maps your skills to their keywords..."></textarea>
@@ -440,7 +440,7 @@
             </div>
 
             <!-- WIZARD STEP 3: Action -->
-            <div id="wizard-step-3" class="hidden w-full h-full flex-col relative z-10 fade-in">
+            <div id="wizard-step-3" class="hidden w-full h-full relative z-10 fade-in">
                 <button onclick="goToStep(2)" class="absolute top-8 left-8 text-sm font-bold text-gray-400 hover:text-[#0F3B68] flex items-center gap-1 transition-colors z-20">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Back
                 </button>
@@ -477,7 +477,7 @@
         </div>
 
         <!-- The existing Loading and Results sections stay down here, but inside the wizard bounds so they show cleanly -->
-        <div id="loading-section" class="hidden flex flex-col items-center mt-20 w-full px-4 pb-20 fade-in">
+        <div id="loading-section" class="hidden flex-col items-center mt-20 w-full px-4 pb-20 fade-in">
             <!-- (Your existing loading section HTML goes exactly here, untouched) -->
             <div class="relative w-20 h-20 mb-6">
                 <div class="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
@@ -1289,16 +1289,35 @@ function showMsg(text, isSuccess) {
         // ==========================================
         // WIZARD UI LOGIC
         // ==========================================
-        function startWizard() {
-            // Instantly hide the landing page
-            document.getElementById('landing-content').classList.add('opacity-0', 'h-0', 'overflow-hidden');
-            setTimeout(() => { document.getElementById('landing-content').style.display = 'none'; }, 500);
 
-            // Show the Wizard
+        // FIX #2: Define openUploadModal so selectTemplateAndUpload() works from template cards
+        function openUploadModal() {
+            startWizard();
+        }
+
+        function startWizard() {
+            // FIX #1: Hide the landing content properly
+            const landing = document.getElementById('landing-content');
+            landing.classList.add('opacity-0', 'overflow-hidden');
+            landing.style.maxHeight = '0';
+            landing.style.pointerEvents = 'none';
+            setTimeout(() => { landing.style.display = 'none'; }, 500);
+
+            // Show the Wizard (FIX: use flex-col, not flex)
             const wizard = document.getElementById('resume-wizard');
             wizard.classList.remove('hidden');
-            wizard.classList.add('flex');
-            
+            wizard.style.display = 'flex';
+            wizard.style.flexDirection = 'column';
+
+            // Make sure step 1 is visible, others hidden
+            document.getElementById('wizard-step-1').classList.remove('hidden');
+            document.getElementById('wizard-step-2').classList.add('hidden');
+            document.getElementById('wizard-step-3').classList.remove('flex');
+            document.getElementById('wizard-step-3').classList.add('hidden');
+
+            // Reset progress bar to step 1
+            updateProgressBar(1);
+
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1311,7 +1330,7 @@ function showMsg(text, isSuccess) {
                 const exp = document.getElementById('experience-level').value;
                 if (!ind || !role || !exp) { alert("Please complete all fields to proceed."); return; }
                 
-                // Route the branches dynamically
+                // FIX #3: Route the branches dynamically (senior-fields now starts hidden)
                 if (exp === 'fresher' || exp === 'entry') {
                     document.getElementById('wizard-fresher-fields').classList.remove('hidden');
                     document.getElementById('wizard-senior-fields').classList.add('hidden');
@@ -1328,11 +1347,18 @@ function showMsg(text, isSuccess) {
             // Hide all steps
             document.getElementById('wizard-step-1').classList.add('hidden');
             document.getElementById('wizard-step-2').classList.add('hidden');
-            document.getElementById('wizard-step-3').classList.add('hidden');
+            // FIX #4: properly reset step-3 display before toggling
+            const step3 = document.getElementById('wizard-step-3');
+            step3.classList.add('hidden');
+            step3.style.display = '';
             
             // Show target step
             document.getElementById('wizard-step-' + step).classList.remove('hidden');
-            if(step === 3) document.getElementById('wizard-step-3').classList.add('flex');
+            // FIX #4: step-3 needs flex-col layout for its upload zone
+            if (step === 3) {
+                step3.style.display = 'flex';
+                step3.style.flexDirection = 'column';
+            }
 
             // Update Progress Bar
             updateProgressBar(step);
