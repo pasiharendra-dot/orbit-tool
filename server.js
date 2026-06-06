@@ -60,129 +60,101 @@ const razorpay = new Razorpay({
 });
 
 // ==========================================
-// AI PROMPTS
+// DYNAMIC AI PROMPT GENERATOR
 // ==========================================
+function getAIPrompt(experienceLevel, targetRole, industry, roleCategory) {
+    let rolePrompt = "";
+    let roleSchema = "";
 
-// 1. Existing System Prompt (For Mid & Senior Level)
-const systemPrompt = `
-Role: You are an Elite Executive Resume Strategist at Orbit Careers. 
-Your singular goal is to OPTIMIZE the user's resume for ATS systems and executive recruiters.
+    if (roleCategory === 'tech_role') {
+        rolePrompt = "The user is in a Technical/Engineering role. You MUST categorize their skills into a 'technical_skills' array of objects (e.g., Languages, Frameworks, Tools) instead of a flat list.";
+        roleSchema = `
+    "technical_skills": [
+      { "category": "Languages", "skills": ["JavaScript", "Python"] },
+      { "category": "Frameworks", "skills": ["React", "Node.js"] },
+      { "category": "Tools", "skills": ["Git", "Docker"] }
+    ],`;
+    } else if (roleCategory === 'clinical_role') {
+        rolePrompt = "The user is in a Clinical/Healthcare role. Extract or infer any hands-on clinical experience and list it in 'clinical_rotations'.";
+        roleSchema = `\n    "clinical_rotations": ["ICU - 400 hrs", "Pediatrics - 200 hrs"],`;
+    } else if (roleCategory === 'academic_role') {
+        rolePrompt = "The user is in an Academic/Research role. Extract or generate highly professional 'publications' or research focus areas.";
+        roleSchema = `\n    "publications": ["Research Paper Title, Journal of X, 2023", "Conference Presentation on Y"],`;
+    } else if (roleCategory === 'creative_role') {
+        rolePrompt = "The user is in a Creative/Design role. Include a 'portfolio_links' array for digital work samples or repositories.";
+        roleSchema = `\n    "portfolio_links": ["Portfolio: www.design.com", "Behance: behance.net/user"],`;
+    } else if (roleCategory === 'legal') { 
+        rolePrompt = "The user is in a Legal role. Include a 'bar_admissions' array.";
+        roleSchema = `\n    "bar_admissions": ["Admitted to New York State Bar, 2022"],`;
+    }
 
-STRICT GUARDRAILS:
-1. Zero Seniority Hallucination: Do NOT elevate the user's job level.
-2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026. State this in the summary.
-3. Title Format: The "optimized_title" MUST fit on a single line. You MUST use this exact template structure: "[Target Job Title or Current Role] | [Years of Experience]+ years in [Core Domain 1] & [Core Domain 2] | [Secondary Domain or Skill]" (e.g., "Senior Mechanical Design Engineer | 8+ years in Industrial Automation & Rebar Robotic Cells | Production Engineering").
-   - CRITICAL ANTI-REPETITION RULE: You MUST NOT repeat major words (e.g., "Operations", "Management", "Business") across the title. If the Target Role contains a word, use specific, distinct alternative skills for the Domains (e.g., if Role is "Operations Manager", Domains should be "Process Excellence & Strategic Scaling").
-4. Core Skills Format: You MUST output EXACTLY 12 core skills. Output ONLY the raw skill name (e.g., "End-to-End Recruitment", "Candidate Sourcing", "Offer Negotiation"). 
-   - ABSOLUTELY NO CATEGORIES OR COLONS. Do not write "Talent Acquisition: Recruitment". Just write "Recruitment".
-5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". 
-   - DO NOT include bullet point characters (like • or ·) in the JSON string itself.
+    const baseOutputFormat = `{
+    "before": {"score": 45, "fail_points": ["Point 1", "Point 2", "Point 3"]},
+    "after": {
+      "score": 94,
+      "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
+      "optimized_title": "...",
+      "improved_summary": ["..."],
+      "achievements_and_awards": ["..."],
+      ${roleSchema}
+      "core_skills": ["..."],
+      "experience": [
+        { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["..."] }
+      ],
+      "internships": ["..."],
+      "projects": ["..."],
+      "volunteer": ["..."],
+      "extracurriculars": ["..."],
+      "education": [
+        { "degree": "...", "institution": "...", "date": "..." }
+      ],
+      "certifications": ["..."],
+      "personal_details": [
+        { "label": "Date of Birth", "value": "..." }
+      ]
+    }
+  }`;
 
-Output Format: You MUST return a JSON object with this exact structure:
-{
-  "before": {"score": 45, "fail_points": ["Point 1", "Point 2", "Point 3"]},
-  "after": {
-    "score": 94,
-    "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
-    "optimized_title": "...",
-    "improved_summary": ["..."],
-    "achievements_and_awards": ["..."],
-    "core_skills": ["..."],
-    "experience": [
-      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["..."] }
-    ],
-    "education": [
-      { "degree": "...", "institution": "...", "date": "..." }
-    ],
-    "certifications": ["..."],
-    "personal_details": [
-      { "label": "Date of Birth", "value": "..." }
-    ]
-  }
-}
-DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
-`;
+    let roleContext = "";
+    let specificRules = "";
 
-// 2. Entry Level Prompt (1-3 Years)
-const entryLevelPrompt = `
-Role: You are an Expert Early-Career Strategist at Orbit Careers. 
-Your singular goal is to OPTIMIZE an entry-level professional's resume (1-3 years experience) for ATS systems.
-
-STRICT GUARDRAILS:
-1. The Hybrid Approach: Blend their early-career execution with a strong emphasis on their degree and technical skills. 
+    if (experienceLevel === "fresher") {
+        roleContext = `Role: You are an Empathetic Entry-Level Career Strategist at Orbit Careers.\nYour singular goal is to OPTIMIZE a student or recent graduate's resume for ATS systems to help them secure internships or entry-level roles.`;
+        specificRules = `1. Zero Experience is Okay: Do NOT invent work history. Focus heavily on academic projects, relevant coursework, thesis work, and extracurricular leadership. Treat major university projects as "Experience" if work history is missing.
+2. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "Aspiring [Target Job Title] | [Degree] | Strong foundation in [Core Skill 1] & [Core Skill 2]".
+3. Core Skills Format: You MUST output EXACTLY 12 core skills. Focus on academic skills, fast learning, and foundational tools. Output ONLY the raw skill name. 
+4. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array.
+CRITICAL CONTEXT: The user is a Fresher targeting the exact role of "${targetRole}". You MUST frame their academic projects, certifications, and educational background to prove they are a perfect fit for this specific position. Discard irrelevant hobbies.`;
+    } else if (experienceLevel === "entry") {
+        roleContext = `Role: You are an Expert Early-Career Strategist at Orbit Careers.\nYour singular goal is to OPTIMIZE an entry-level professional's resume (1-3 years experience) for ATS systems.`;
+        specificRules = `1. The Hybrid Approach: Blend their early-career execution with a strong emphasis on their degree and technical skills. 
 2. No Hallucinations: Do not invent leadership or strategy roles. Focus on collaboration, execution, process adherence, and fast learning.
 3. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "[Target Job Title] | [Degree or Certification] | Focus in [Core Skill 1] & [Core Skill 2]".
 4. Core Skills Format: You MUST output EXACTLY 12 core skills. Blend foundational tools with soft skills. Output ONLY the raw skill name. 
-5. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array (e.g., "Role/Project Name - Organization (Date)\\n• Action-driven bullet point"). DO NOT invent these if the user didn't provide them.
+5. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array.
+CRITICAL CONTEXT: The user is an Entry-Level professional targeting the exact role of "${targetRole}". You MUST blend their early-career execution with their education to prove they are a perfect fit for this specific position.`;
+    } else {
+        roleContext = `Role: You are an Elite Executive Resume Strategist at Orbit Careers.\nYour singular goal is to OPTIMIZE the user's resume for ATS systems and executive recruiters.`;
+        specificRules = `1. Zero Seniority Hallucination: Do NOT elevate the user's job level.
+2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026. State this in the summary.
+3. Title Format: The "optimized_title" MUST fit on a single line. Use this exact template structure: "[Target Job Title or Current Role] | [Years of Experience]+ years in [Core Domain 1] & [Core Domain 2] | [Secondary Domain or Skill]". CRITICAL ANTI-REPETITION RULE: You MUST NOT repeat major words across the title.
+4. Core Skills Format: You MUST output EXACTLY 12 core skills. Output ONLY the raw skill name. ABSOLUTELY NO CATEGORIES OR COLONS.
+5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". DO NOT include bullet characters (like • or ·) in the JSON.`;
+    }
 
-Output Format: You MUST return a JSON object with this exact structure:
-{
-  "before": {"score": 45, "fail_points": ["Point 1", "Point 2", "Point 3"]},
-  "after": {
-    "score": 94,
-    "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
-    "optimized_title": "...",
-    "improved_summary": ["..."],
-    "achievements_and_awards": ["..."],
-    "core_skills": ["..."],
-    "experience": [
-      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["..."] }
-    ],
-    "internships": ["..."],
-    "projects": ["..."],
-    "volunteer": ["..."],
-    "extracurriculars": ["..."],
-    "education": [
-      { "degree": "...", "institution": "...", "date": "..." }
-    ],
-    "certifications": ["..."],
-    "personal_details": [
-      { "label": "Date of Birth", "value": "..." }
-    ]
-  }
-}
-DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
-`;
-
-// 3. Fresher Prompt (0 Years)
-const fresherPrompt = `
-Role: You are an Empathetic Entry-Level Career Strategist at Orbit Careers. 
-Your singular goal is to OPTIMIZE a student or recent graduate's resume for ATS systems to help them secure internships or entry-level roles.
+    return `${roleContext}
+  
+User's Target Role: ${targetRole}
+User's Macro Industry: ${industry || 'General Professional'}
+${rolePrompt}
 
 STRICT GUARDRAILS:
-1. Zero Experience is Okay: Do NOT invent work history. Focus heavily on academic projects, relevant coursework, thesis work, and extracurricular leadership. Treat major university projects as "Experience" if work history is missing.
-2. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "Aspiring [Target Job Title] | [Degree] | Strong foundation in [Core Skill 1] & [Core Skill 2]".
-3. Core Skills Format: You MUST output EXACTLY 12 core skills. Focus on academic skills, fast learning, and foundational tools. Output ONLY the raw skill name. 
-4. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array (e.g., "Role/Project Name - Organization (Date)\\n• Action-driven bullet point"). DO NOT invent these if the user didn't provide them.
+${specificRules}
 
 Output Format: You MUST return a JSON object with this exact structure:
-{
-  "before": {"score": 45, "fail_points": ["Point 1", "Point 2", "Point 3"]},
-  "after": {
-    "score": 94,
-    "name": "...", "phone": "...", "email": "...", "location": "...", "linkedin": "...",
-    "optimized_title": "...",
-    "improved_summary": ["..."],
-    "achievements_and_awards": ["..."],
-    "core_skills": ["..."],
-    "experience": [
-      { "company": "...", "location": "...", "title": "...", "dates": "...", "bullets": ["..."] }
-    ],
-    "internships": ["..."],
-    "projects": ["..."],
-    "volunteer": ["..."],
-    "extracurriculars": ["..."],
-    "education": [
-      { "degree": "...", "institution": "...", "date": "..." }
-    ],
-    "certifications": ["..."],
-    "personal_details": [
-      { "label": "Date of Birth", "value": "..." }
-    ]
-  }
+${baseOutputFormat}
+DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.`;
 }
-DO NOT wrap in markdown. Output ONLY raw JSON starting with { and ending with }.
-`;
 
 app.post('/api/create-order', async (req, res) => {
     try {
@@ -340,11 +312,13 @@ app.post('/api/analyze', uploadLimiter, upload.single('resume'), async (req, res
         const jobDescription = req.body.jobDescription || "Optimize for general industry standards.";
         const extraInfo = req.body.extraInfo || "No extra information provided.";
         
-        // Extract the variables from the frontend
+        // Extract variables from the frontend
         const experienceLevel = req.body.experienceLevel || "mid";
         const targetRole = req.body.targetRole || "";
+        const industry = req.body.industry || "General";
+        const roleCategory = req.body.roleCategory || "standard_role";
         
-        // NEW: Extract Fresher Fields
+        // Extract Fresher Fields
         const internships = req.body.internships || "";
         const projects = req.body.projects || "";
         const volunteer = req.body.volunteer || "";
@@ -352,16 +326,10 @@ app.post('/api/analyze', uploadLimiter, upload.single('resume'), async (req, res
         
         // Use req.file.buffer directly from memory storage
         const pdfBase64 = req.file.buffer.toString("base64");
-        
         const filePart = { inlineData: { data: pdfBase64, mimeType: "application/pdf" } };
         
-        // Determine which AI Brain to use based on the frontend selection
-        let activePrompt = systemPrompt; // Defaults to Mid/Senior level
-        if (experienceLevel === "fresher") {
-            activePrompt = fresherPrompt + `\n\nCRITICAL CONTEXT: The user is a Fresher targeting the exact role of "${targetRole}". You MUST frame their academic projects, certifications, and educational background to prove they are a perfect fit for this specific position. Discard irrelevant hobbies.`;
-        } else if (experienceLevel === "entry") {
-            activePrompt = entryLevelPrompt + `\n\nCRITICAL CONTEXT: The user is an Entry-Level professional targeting the exact role of "${targetRole}". You MUST blend their early-career execution with their education to prove they are a perfect fit for this specific position.`;
-        }
+        // Pass the dynamically selected brain into the AI function
+        let activePrompt = getAIPrompt(experienceLevel, targetRole, industry, roleCategory);
 
         // Build the additional context string for freshers
         let additionalFresherContext = "";
@@ -372,7 +340,7 @@ app.post('/api/analyze', uploadLimiter, upload.single('resume'), async (req, res
 
         const promptWithJD = `Target JD Context:\n${jobDescription}\n\nUser's Additional Information:\n${extraInfo}${additionalFresherContext}\n\nAnalyze and optimize this resume according to the JSON format:`;
         
-        // Pass the dynamically selected brain into the AI function
+        // Fire the AI call
         let aiResponse = await generateAIResponseWithRetry(promptWithJD, filePart, activePrompt);
         
         const startIndex = aiResponse.indexOf('{');
