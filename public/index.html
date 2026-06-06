@@ -57,6 +57,41 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
     </style>
+
+    <!-- STANDALONE WIZARD TRIGGER - zero dependencies, always works -->
+    <script>
+        function startWizard() {
+            try {
+                // Hide hero/landing
+                var lc = document.getElementById('landing-content');
+                if (lc) { lc.style.display = 'none'; }
+
+                // Show wizard with maximum specificity
+                var wiz = document.getElementById('resume-wizard');
+                if (wiz) {
+                    wiz.style.cssText = 'display:flex!important;flex-direction:column;';
+                    wiz.className = wiz.className.replace(/\bhidden\b/g, '');
+                }
+
+                // Ensure step 1 visible, others hidden
+                var s1 = document.getElementById('wizard-step-1');
+                var s2 = document.getElementById('wizard-step-2');
+                var s3 = document.getElementById('wizard-step-3');
+                if (s1) { s1.style.display = 'block'; s1.className = s1.className.replace(/\bhidden\b/g, ''); }
+                if (s2) { s2.style.display = 'none'; }
+                if (s3) { s3.style.display = 'none'; }
+
+                // Update progress dots
+                var d1 = document.getElementById('step-dot-1');
+                if (d1) d1.className = 'w-10 h-10 rounded-full bg-[#0F3B68] text-white flex items-center justify-center font-bold shadow-lg';
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch(e) {
+                console.error('startWizard error:', e);
+            }
+        }
+        function openUploadModal() { startWizard(); }
+    </script>
 </head>
 <body class="min-h-screen flex flex-col relative pb-10">
 
@@ -1212,38 +1247,13 @@ function showMsg(text, isSuccess) {
         // WIZARD UI LOGIC
         // ==========================================
 
-        // FIX #2: Define openUploadModal so selectTemplateAndUpload() works from template cards
-        function openUploadModal() {
-            startWizard();
-        }
-
+        // Wizard trigger is defined in <head> standalone script.
+        // This extended version adds progress bar reset after DOM is fully loaded.
+        const _origStartWizard = startWizard;
         function startWizard() {
-            // Hide landing content
-            const landing = document.getElementById('landing-content');
-            if (landing) {
-                landing.style.transition = 'opacity 0.4s';
-                landing.style.opacity = '0';
-                setTimeout(() => { landing.style.display = 'none'; }, 400);
-            }
-            // Show wizard - remove hidden class AND set inline style to override any Tailwind !important
-            const wizard = document.getElementById('resume-wizard');
-            if (wizard) {
-                wizard.classList.remove('hidden');
-                wizard.removeAttribute('style');      // clear any stale inline styles
-                wizard.style.cssText = 'display:flex !important; flex-direction:column;';
-            }
-            // Reset to step 1 - null-safe
-            ['wizard-step-2', 'wizard-step-3'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) { el.classList.add('hidden'); el.style.display = ''; }
-            });
-            const step1 = document.getElementById('wizard-step-1');
-            if (step1) step1.classList.remove('hidden');
-            // Reset progress
+            _origStartWizard();
             if (typeof updateProgressBar === 'function') updateProgressBar(1);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
         function openUploadModal() { startWizard(); }
 
         function goToStep(step) {
