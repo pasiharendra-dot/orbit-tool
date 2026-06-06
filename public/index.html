@@ -1205,13 +1205,17 @@ function showMsg(text, isSuccess) {
         }
 
         function startWizard() {
-            // Hide landing content
-            const landing = document.getElementById('landing-content');
-            if (landing) {
-                landing.style.transition = 'opacity 0.4s';
-                landing.style.opacity = '0';
-                setTimeout(() => { landing.style.display = 'none'; }, 400);
-            }
+            // Hide landing content and all page sections
+            const sectionsToHide = [
+                'landing-content', 'how-it-works', 'faq',
+                'template-slider-section', 'testimonials-section', 'hero-section'
+            ];
+            sectionsToHide.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.style.display = 'none'; }
+            });
+            // Also hide by section tag as fallback
+            document.querySelectorAll('section').forEach(s => { s.style.display = 'none'; });
             // Show wizard - remove hidden class AND set inline style to override any Tailwind !important
             const wizard = document.getElementById('resume-wizard');
             if (wizard) {
