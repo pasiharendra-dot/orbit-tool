@@ -1919,8 +1919,10 @@ function generateSentinel(data) {
             addFresherRight("Volunteer Work", data.volunteer);
             addFresherRight("Extracurriculars", data.extracurriculars);
 
-            const layoutTable = new Table({
+                const layoutTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
+                layout: TableLayoutType.FIXED, // <--- THIS FORCES WORD TO STAY IN 2 COLUMNS
+                columnWidths: [3000, 7000],    // <--- THIS LOCKS THE 30/70 SPLIT
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
                 rows: [ new TableRow({ children: [
                     new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, shading: { fill: "0F3B68" }, margins: { top: 200, left: 150, right: 150, bottom: 200 }, children: leftChildren }),
