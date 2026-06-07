@@ -559,9 +559,17 @@ const authData = await authResponse.json();
                             const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
                             activeProfile.photo = compressedBase64;
                             localStorage.setItem('orbit_resume_photo', compressedBase64);
+                            
+                            // Show preview in sidebar
+                            const sidebarImg = document.getElementById('sidebar-photo-img');
+                            const sidebarPreviewBox = document.getElementById('sidebar-photo-preview');
+                            if (sidebarImg && sidebarPreviewBox) {
+                                sidebarImg.src = compressedBase64;
+                                sidebarPreviewBox.classList.remove('hidden');
+                            }
+
                             renderCurrentCanvas(); 
-                            triggerAutoSave();
-                        };
+                            triggerAutoSave();                        };
                         img.src = event.target.result;
                     };
                     reader.readAsDataURL(file);
