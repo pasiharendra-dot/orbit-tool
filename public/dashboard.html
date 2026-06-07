@@ -484,7 +484,15 @@ const authData = await authResponse.json();
             }
 
             const savedPhoto = localStorage.getItem('orbit_resume_photo');
-            if (savedPhoto) activeProfile.photo = savedPhoto;
+            if (savedPhoto) {
+                activeProfile.photo = savedPhoto;
+                const sidebarImg = document.getElementById('sidebar-photo-img');
+                const sidebarPreviewBox = document.getElementById('sidebar-photo-preview');
+                if (sidebarImg && sidebarPreviewBox) {
+                    sidebarImg.src = savedPhoto;
+                    sidebarPreviewBox.classList.remove('hidden');
+                }
+            }
 
             document.getElementById('edit-name').value = activeProfile.name || "";
             document.getElementById('edit-title').value = activeProfile.title || "";
