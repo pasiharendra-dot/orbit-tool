@@ -40,6 +40,7 @@
         
         /* Layout Tuning for Previews */
         .preview-font { font-family: 'Calibri', sans-serif; }
+        .edit-field-font { font-family: 'Calibri', sans-serif; font-size: 11px; }
         /* =========================
    A4 PRINT PREVIEW
 ========================= */
@@ -160,23 +161,18 @@
                         <span>Target Job Alignment</span>
                         <button onclick="triggerAI('jd')" class="text-blue-500 hover:text-blue-700 flex items-center gap-1 transition"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Optimize</button>
                     </label>
-                    <textarea id="new-jd-input" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="Paste target job description here..."></textarea>
+                    <textarea id="new-jd-input" rows="2" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font" placeholder="Paste target job description here..."></textarea>
                 </div>
 
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
-                            <div class="col-span-2 hidden" id="photo-upload-container">
+                        <div class="col-span-2 hidden" id="photo-upload-container">
                             <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Profile Photo (Vanguard Only)</label>
-                            <div class="flex items-center gap-3">
-                                <div id="sidebar-photo-preview" class="w-10 h-10 rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center overflow-hidden shrink-0 hidden">
-                                    <img id="sidebar-photo-img" src="" class="w-full h-full object-cover">
-                                </div>
-                                <input type="file" id="edit-photo" accept="image/png, image/jpeg" class="w-full text-xs p-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
-                            </div>
+                            <input type="file" id="edit-photo" accept="image/png, image/jpeg" class="w-full text-xs p-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
                         </div>
                         <div class="col-span-2">
                             <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Full Name</label>        
-                            <input type="text" id="edit-name" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                            <input type="text" id="edit-name" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font">
                         </div>
                     </div>
                     <div>
@@ -184,52 +180,52 @@
                             <span>Target Profile Title</span>
                             <button onclick="triggerAI('title')" class="text-blue-500 hover:text-blue-700 transition">✨ Generate</button>
                         </label>
-                        <input type="text" id="edit-title" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                        <input type="text" id="edit-title" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Contact Info (Phone | Email | Location)</label>
-                        <input type="text" id="edit-contact" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                        <input type="text" id="edit-contact" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font">
                     </div>
                     <div>
                         <label class="flex justify-between items-center block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">
                             <span>Professional Summary</span>
                             <button onclick="triggerAI('summary')" class="text-blue-500 hover:text-blue-700 transition">✨ Rewrite</button>
                         </label>
-                        <textarea id="edit-summary" rows="4" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
+                        <textarea id="edit-summary" rows="4" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font"></textarea>
                     </div>
                     <div>
                         <label class="flex justify-between items-center block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">
                             <span>Skills & Competencies</span>
                             <button onclick="triggerAI('skills')" class="text-blue-500 hover:text-blue-700 transition">✨ Suggest</button>
                         </label>
-                        <textarea id="edit-skills" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
+                        <textarea id="edit-skills" rows="3" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font"></textarea>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Achievements & Awards</label>
-                        <textarea id="edit-achievements" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
+                        <textarea id="edit-achievements" rows="3" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font"></textarea>
                     </div>
                     <div>
                         <label class="flex justify-between items-center block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">
                             <span>Employment Details</span>
                             <button onclick="triggerAI('bullets')" class="text-blue-500 hover:text-blue-700 transition">✨ Enhance</button>
                         </label>
-                        <textarea id="edit-experience" rows="6" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
+                        <textarea id="edit-experience" rows="6" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font"></textarea>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Internships</label>
-                        <textarea id="edit-internships" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="List internship details..."></textarea>
+                        <textarea id="edit-internships" rows="3" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font" placeholder="List internship details..."></textarea>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Projects</label>
-                        <textarea id="edit-projects" rows="3" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="List academic or personal projects..."></textarea>
+                        <textarea id="edit-projects" rows="3" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font" placeholder="List academic or personal projects..."></textarea>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Volunteer Experience</label>
-                        <textarea id="edit-volunteer" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="List volunteer work..."></textarea>
+                        <textarea id="edit-volunteer" rows="2" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font" placeholder="List volunteer work..."></textarea>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Extracurriculars</label>
-                        <textarea id="edit-extracurriculars" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]" placeholder="List clubs, teams, and leadership..."></textarea>
+                        <textarea id="edit-extracurriculars" rows="2" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font" placeholder="List clubs, teams, and leadership..."></textarea>
                     </div>
                     <!-- DYNAMIC INDUSTRY SECTIONS (Hidden by default, shown via JS if data exists) -->
 <div id="industry-sections-wrapper" class="space-y-4 border-t-2 border-dashed border-gray-300 pt-4 mt-4 hidden">
@@ -268,15 +264,15 @@
 </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Education</label>
-                        <textarea id="edit-education" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
+                        <textarea id="edit-education" rows="2" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font"></textarea>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Certifications</label>
-                        <textarea id="edit-certifications" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
+                        <textarea id="edit-certifications" rows="2" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font"></textarea>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Personal Details</label>
-                        <textarea id="edit-personal" rows="2" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]"></textarea>
+                        <textarea id="edit-personal" rows="2" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font"></textarea>
                     </div>
                 </div>
 
@@ -288,17 +284,17 @@
                 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Target Company / Hiring Manager</label>
-                    <input type="text" id="cl-target-company" placeholder="e.g., Google or John Doe" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                    <input type="text" id="cl-target-company" placeholder="e.g., Google or John Doe" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font">
                 </div>
                 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Target Role</label>
-                    <input type="text" id="cl-target-role" placeholder="e.g., Senior Product Manager" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                    <input type="text" id="cl-target-role" placeholder="e.g., Senior Product Manager" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font">
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Letter Tone</label>
-                    <select id="cl-tone" class="w-full text-xs p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                    <select id="cl-tone" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68] edit-field-font">
                         <option value="confident">Confident & Executive</option>
                         <option value="direct">Direct & Startup-Ready</option>
                         <option value="traditional">Traditional & Corporate</option>
@@ -347,7 +343,7 @@
             </div>
 
             <div class="bg-white rounded-xl shadow-md border border-gray-300 p-6 md:p-10 min-h-[60vh] max-h-[70vh] overflow-y-auto watermark-overlay relative preview-font" id="preview-frame">
-                <div id="workspace-canvas" class="space-y-4 text-[11px] md:text-xs text-gray-800 relative z-10"></div>
+                <div id="workspace-canvas" class="space-y-4 text-gray-800 relative z-10"></div>
             </div>
 
         </div> 
@@ -484,15 +480,7 @@ const authData = await authResponse.json();
             }
 
             const savedPhoto = localStorage.getItem('orbit_resume_photo');
-            if (savedPhoto) {
-                activeProfile.photo = savedPhoto;
-                const sidebarImg = document.getElementById('sidebar-photo-img');
-                const sidebarPreviewBox = document.getElementById('sidebar-photo-preview');
-                if (sidebarImg && sidebarPreviewBox) {
-                    sidebarImg.src = savedPhoto;
-                    sidebarPreviewBox.classList.remove('hidden');
-                }
-            }
+            if (savedPhoto) activeProfile.photo = savedPhoto;
 
             document.getElementById('edit-name').value = activeProfile.name || "";
             document.getElementById('edit-title').value = activeProfile.title || "";
@@ -559,17 +547,9 @@ const authData = await authResponse.json();
                             const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
                             activeProfile.photo = compressedBase64;
                             localStorage.setItem('orbit_resume_photo', compressedBase64);
-                            
-                            // Show preview in sidebar
-                            const sidebarImg = document.getElementById('sidebar-photo-img');
-                            const sidebarPreviewBox = document.getElementById('sidebar-photo-preview');
-                            if (sidebarImg && sidebarPreviewBox) {
-                                sidebarImg.src = compressedBase64;
-                                sidebarPreviewBox.classList.remove('hidden');
-                            }
-
                             renderCurrentCanvas(); 
-                            triggerAutoSave();                        };
+                            triggerAutoSave();
+                        };
                         img.src = event.target.result;
                     };
                     reader.readAsDataURL(file);
@@ -1847,7 +1827,7 @@ function generateSentinel(data) {
                     children: [
                         new ImageRun({
                             data: base64DataURLToArrayBuffer(activeProfile.photo),
-                            transformation: { width: 175, height: 175 } 
+                            transformation: { width: 110, height: 110 } 
                         })
                     ]
                 });
@@ -1919,10 +1899,8 @@ function generateSentinel(data) {
             addFresherRight("Volunteer Work", data.volunteer);
             addFresherRight("Extracurriculars", data.extracurriculars);
 
-                const layoutTable = new Table({
+            const layoutTable = new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
-                layout: TableLayoutType.FIXED, // <--- THIS FORCES WORD TO STAY IN 2 COLUMNS
-                columnWidths: [3000, 7000],    // <--- THIS LOCKS THE 30/70 SPLIT
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
                 rows: [ new TableRow({ children: [
                     new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, shading: { fill: "0F3B68" }, margins: { top: 200, left: 150, right: 150, bottom: 200 }, children: leftChildren }),
