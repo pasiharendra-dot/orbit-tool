@@ -35,37 +35,29 @@ const TemplateEngine = {
         `;
     },
 
-    // 2. ORIGINAL: VANGUARD
+// 2. UPDATED: VANGUARD
     vanguard: function(profile, expFormatted) {
+        // 1. CSS for the Live Preview (adds flex layout and font family)
         return `
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4" style="font-family: Arial, sans-serif;">
-                <div class="md:col-span-4 bg-[#0F3B68] text-white p-4 rounded-lg space-y-4 min-h-[60vh]">
+        <div style="font-family: Calibri, sans-serif;">
+            <div class="flex flex-col md:flex-row">
+                <!-- Sidebar -->
+                <div class="md:w-[30%] bg-[#0F3B68] text-white p-4 space-y-4">
                     ${profile.photo 
-                        ? `<div class="flex justify-center mb-4"><img src="${profile.photo}" style="width: 175px; height: 175px; object-fit: cover;" class="border-2 border-white shadow-md rounded" alt="Profile Photo"></div>` 
-                        : `<div class="text-center text-[10px] text-blue-300 border border-blue-800 py-12 rounded mb-4">Photo Placeholder</div>`
+                        ? `<div class="flex justify-center mb-4"><img src="${profile.photo}" class="w-full aspect-square object-cover border-2 border-white shadow-md" alt="Profile"></div>` 
+                        : `<div class="text-center text-[10px] text-blue-300 border border-blue-800 py-12 rounded mb-4">Photo</div>`
                     }
-                    <div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">CONTACT</h3><p class="text-[10px] space-y-1 opacity-90 leading-relaxed">${profile.contact.replace(/ \| /g, '<br>')}</p></div>
-                    ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">PORTFOLIO</h3><ul class="text-[10px] space-y-1 text-blue-200">${profile.portfolio_links.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.skills && profile.skills.length > 0 ? `<div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">SKILLS</h3><ul class="text-[10px] space-y-1 opacity-90">${profile.skills.map(s => `<li>• ${s}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.education ? `<div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">EDUCATION</h3><p class="text-[10px] opacity-90 whitespace-pre-line">${profile.education}</p></div>` : ''}
-                    ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">BAR ADMISSIONS</h3><ul class="text-[10px] space-y-1 opacity-90">${profile.bar_admissions.map(b => `<li>• ${b}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.publications && profile.publications.length > 0 ? `<div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">PUBLICATIONS</h3><ul class="text-[10px] space-y-1 opacity-90">${profile.publications.map(p => `<li>• ${p}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.certifications && profile.certifications.length > 0 ? `<div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">CERTIFICATIONS</h3><ul class="text-[10px] space-y-1 opacity-90">${profile.certifications.map(c => `<li>• ${c}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">PERSONAL DETAILS</h3><ul class="text-[10px] space-y-1 opacity-90">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
+                    <h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">CONTACT</h3>
+                    <p class="text-[10px] space-y-1 opacity-90">${profile.contact.replace(/ \| /g, '<br>')}</p>
                 </div>
-                <div class="md:col-span-8 p-2 space-y-3">
-                    <div><h1 class="text-xl md:text-2xl font-bold text-[#0F3B68]">${profile.name}</h1><p class="text-[11px] md:text-xs font-bold text-amber-600 mt-1 uppercase leading-relaxed">${profile.title}</p></div>
-                    <div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px]">Professional Summary</h3><p class="text-gray-600 mt-1 leading-relaxed text-justify">${profile.summary}</p></div>
-                    ${profile.achievements && profile.achievements.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Achievements</h3><ul class="list-disc pl-4 mt-1 text-gray-600 space-y-1 text-xs">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Technical Profile</h3><div class="mt-1 text-gray-600 space-y-1 text-[10px] md:text-xs">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
-                    ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Clinical Rotations</h3><ul class="list-disc pl-4 mt-1 text-gray-600 space-y-1 text-xs">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
-                    <div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Experience</h3><div class="text-gray-600">${expFormatted}</div></div>
-                    ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Internships</h3><div class="text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                    ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Projects</h3><div class="text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                    ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Volunteer Work</h3><div class="text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                    ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Extracurriculars</h3><div class="text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                <!-- Main Content -->
+                <div class="md:w-[70%] p-6 space-y-3">
+                    <h1 class="text-2xl font-bold text-[#0F3B68]">${profile.name}</h1>
+                    <p class="text-xs font-bold text-amber-600 uppercase">${profile.title}</p>
+                    <div class="text-gray-800 text-xs">${expFormatted}</div>
                 </div>
             </div>
+        </div>
         `;
     },
 
