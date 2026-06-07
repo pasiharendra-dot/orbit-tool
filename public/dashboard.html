@@ -165,9 +165,14 @@
 
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="col-span-2 hidden" id="photo-upload-container">
+                            <div class="col-span-2 hidden" id="photo-upload-container">
                             <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Profile Photo (Vanguard Only)</label>
-                            <input type="file" id="edit-photo" accept="image/png, image/jpeg" class="w-full text-xs p-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                            <div class="flex items-center gap-3">
+                                <div id="sidebar-photo-preview" class="w-10 h-10 rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center overflow-hidden shrink-0 hidden">
+                                    <img id="sidebar-photo-img" src="" class="w-full h-full object-cover">
+                                </div>
+                                <input type="file" id="edit-photo" accept="image/png, image/jpeg" class="w-full text-xs p-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#0F3B68]">
+                            </div>
                         </div>
                         <div class="col-span-2">
                             <label class="block text-[10px] font-bold text-gray-700 mb-1 uppercase tracking-wider">Full Name</label>        
