@@ -1827,12 +1827,12 @@ function generateSentinel(data) {
                     children: [
                         new ImageRun({
                             data: base64DataURLToArrayBuffer(activeProfile.photo),
-                            transformation: { width: 175, height: 175 } 
+                            transformation: { width: 110, height: 110 } 
                         })
                     ]
                 });
             } else {
-                photoElement = new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200, after: 200 }, children: [ new TextRun({ text: "[INSERT PHOTO HERE]", color: "888888", size: 24 }) ] });
+                photoElement = new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 200, after: 200 }, children: [ new TextRun({ text: "[INSERT PHOTO HERE]", color: "888888", size: 22 }) ] });
             }
 
             const leftChildren = [
@@ -1857,8 +1857,8 @@ function generateSentinel(data) {
             }
 
             const rightChildren = [
-                new Paragraph({ spacing: { before: 100 }, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, color: "0F3B68" }) ] }),
-                new Paragraph({ spacing: { after: 200 }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 24, color: "D4AF37" }) ] }),
+                new Paragraph({ spacing: { before: 100 }, children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: "0F3B68" }) ] }),
+                new Paragraph({ spacing: { after: 200 }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 22, color: "D4AF37" }) ] }),
                 new Paragraph({ spacing: { before: 100, after: 100 }, children: [ new TextRun({ text: "PROFESSIONAL SUMMARY", bold: true, size: 22, color: "0F3B68" }) ] }),
                 ...(data.improved_summary || []).map(p => new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { before: 60, after: 60 }, children: [ new TextRun({ text: p, size: SIZE_BODY, color: "444444" }) ] })),
             ];
@@ -1904,7 +1904,7 @@ function generateSentinel(data) {
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
                 rows: [ new TableRow({ children: [
                     new TableCell({ width: { size: 30, type: WidthType.PERCENTAGE }, shading: { fill: "0F3B68" }, margins: { top: 200, left: 150, right: 150, bottom: 200 }, children: leftChildren }),
-                    new TableCell({ width: { size: 70, type: WidthType.PERCENTAGE }, margins: { left: 300, right: 100, top: 100 }, children: rightChildren })
+                    new TableCell({ width: { size: 44, type: WidthType.PERCENTAGE }, margins: { left: 300, right: 100, top: 100 }, children: rightChildren })
                 ]})]
             });
 
@@ -1921,10 +1921,10 @@ function generateSentinel(data) {
             ];
 
             const headerRight = [
-                data.phone ? new Paragraph({ spacing: { before: 20 }, children: [ new TextRun({ text: data.phone, size: 18, font: FONT }) ] }) : null,
-                data.email ? new Paragraph({ spacing: { before: 20 }, children: [ new TextRun({ text: data.email, size: 18, font: FONT }) ] }) : null,
-                data.linkedin ? new Paragraph({ spacing: { before: 20 }, children: [ new TextRun({ text: data.linkedin, size: 18, font: FONT }) ] }) : null,
-                data.location ? new Paragraph({ spacing: { before: 20 }, children: [ new TextRun({ text: data.location, size: 18, font: FONT }) ] }) : null
+                data.phone ? new Paragraph({ spacing: { before: 20 }, children: [ new TextRun({ text: data.phone, size: 20, font: FONT }) ] }) : null,
+                data.email ? new Paragraph({ spacing: { before: 20 }, children: [ new TextRun({ text: data.email, size: 20, font: FONT }) ] }) : null,
+                data.linkedin ? new Paragraph({ spacing: { before: 20 }, children: [ new TextRun({ text: data.linkedin, size: 20, font: FONT }) ] }) : null,
+                data.location ? new Paragraph({ spacing: { before: 20 }, children: [ new TextRun({ text: data.location, size: 20, font: FONT }) ] }) : null
             ].filter(Boolean);
 
             const headerTable = new Table({
@@ -1973,7 +1973,7 @@ function generateSentinel(data) {
             if (data.experience) {
                 rightCol.push(new Paragraph({ spacing: { before: 50, after: 50 }, children: [ new TextRun({ text: "EXPERIENCE", bold: true, size: 20, font: FONT }) ] }));
                 data.experience.forEach(job => {
-                    rightCol.push(new Paragraph({ spacing: { before: 100, after: 20 }, tabStops: [{ type: "right", position: 7000 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 18, font: FONT }), new TextRun({ text: `\t${job.dates}`, bold: true, size: 18, font: FONT }) ] }));
+                    rightCol.push(new Paragraph({ spacing: { before: 100, after: 20 }, tabStops: [{ type: "right", position: 7000 }], children: [ new TextRun({ text: `${job.title}`, bold: true, size: 20, font: FONT }), new TextRun({ text: `\t${job.dates}`, bold: true, size: 20, font: FONT }) ] }));
                     rightCol.push(new Paragraph({ spacing: { before: 0, after: 40 }, children: [ new TextRun({ text: `${job.company}`, italic: true, size: SIZE_BODY, font: FONT, color: "444444" }) ] }));
                     job.bullets.forEach(b => {
                         const parsed = parseBullet(b);
@@ -2018,14 +2018,14 @@ function generateSentinel(data) {
 
             const headerLeft = [
                 new Paragraph({ children: [ new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 54, color: GREEN, font: FONT }) ] }),
-                new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 24, color: "666666", font: FONT }) ] })
+                new Paragraph({ spacing: { before: 40 }, children: [ new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 22, color: "666666", font: FONT }) ] })
             ];
 
             const headerRight = [
-                data.location ? new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 20 }, children: [ new TextRun({ text: data.location, size: 18, font: FONT }) ] }) : null,
-                data.email ? new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 20 }, children: [ new TextRun({ text: data.email, size: 18, font: FONT }) ] }) : null,
-                data.phone ? new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 20 }, children: [ new TextRun({ text: data.phone, size: 18, font: FONT }) ] }) : null,
-                data.linkedin ? new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 20 }, children: [ new TextRun({ text: data.linkedin, size: 18, font: FONT }) ] }) : null
+                data.location ? new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 20 }, children: [ new TextRun({ text: data.location, size: 20, font: FONT }) ] }) : null,
+                data.email ? new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 20 }, children: [ new TextRun({ text: data.email, size: 20, font: FONT }) ] }) : null,
+                data.phone ? new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 20 }, children: [ new TextRun({ text: data.phone, size: 20, font: FONT }) ] }) : null,
+                data.linkedin ? new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 20 }, children: [ new TextRun({ text: data.linkedin, size: 20, font: FONT }) ] }) : null
             ].filter(Boolean);
 
             const headerTable = new Table({
@@ -2052,7 +2052,7 @@ function generateSentinel(data) {
                             children: [ new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 20, color: GREEN, font: FONT })] }) ] 
                         }),
                         new TableCell({ 
-                            width: { size: 35, type: WidthType.PERCENTAGE }, 
+                            width: { size: 44, type: WidthType.PERCENTAGE }, 
                             children: [ new Paragraph({ children: [new TextRun({ text: "" })], border: { bottom: { color: GREEN, style: BorderStyle.SINGLE, size: 12 } }, spacing: { before: 140 } }) ] 
                         })
                     ]})]
@@ -2359,7 +2359,7 @@ function generateApex(data) {
             const FONT = "Arial"; const SIZE_BODY = 19; const BLUE = "235789"; const LIGHT_BLUE = "87A8D0";
             const children = [];
 
-            children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, color: BLUE, font: FONT })] }));
+            children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: BLUE, font: FONT })] }));
             const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
             children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 60, after: 300 }, children: [new TextRun({ text: `${data.optimized_title || "Title"}  |  ${contactLine}`, size: 20, color: "555555", font: FONT })] }));
 
@@ -2438,9 +2438,9 @@ function generateApex(data) {
                         shading: { fill: CORAL },
                         margins: { top: 400, bottom: 400 },
                         children: [
-                            new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, color: "FFFFFF", font: FONT })] }),
+                            new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: "FFFFFF", font: FONT })] }),
                             new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 100 }, children: [new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), bold: true, size: 22, color: "FFFFFF", font: FONT })] }),
-                            new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 100 }, children: [new TextRun({ text: contactLine, size: 18, color: "EEEEEE", font: FONT })] })
+                            new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 100 }, children: [new TextRun({ text: contactLine, size: 20, color: "EEEEEE", font: FONT })] })
                         ]
                     })
                 ]})]
@@ -2553,7 +2553,7 @@ function generateApex(data) {
                         shading: { fill: TEAL },
                         margins: { top: 300, bottom: 300, left: 300, right: 300 },
                         children: [
-                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, color: "FFFFFF", font: FONT })] }),
+                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: "FFFFFF", font: FONT })] }),
                             new Paragraph({ spacing: { before: 100 }, children: [new TextRun({ text: data.optimized_title || "Title", size: 22, color: "E0F2F1", font: FONT })] })
                         ]
                     })
@@ -2615,10 +2615,10 @@ function generateApex(data) {
             const FONT = "Arial"; const SIZE_BODY = 19; const DARK = "111111";
             const children = [];
 
-            children.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, color: DARK, font: FONT })] }));
+            children.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: DARK, font: FONT })] }));
             children.push(new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: data.optimized_title || "Title", bold: true, size: 22, color: "333333", font: FONT })] }));
             const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
-            children.push(new Paragraph({ spacing: { after: 300 }, children: [new TextRun({ text: contactLine, size: 18, font: FONT, color: "555555" })] }));
+            children.push(new Paragraph({ spacing: { after: 300 }, children: [new TextRun({ text: contactLine, size: 20, font: FONT, color: "555555" })] }));
 
             const addHeader = (title) => {
                 children.push(new Paragraph({ spacing: { before: 200, after: 100 }, border: { bottom: { color: DARK, space: 1, style: BorderStyle.SINGLE, size: 12 } }, children: [new TextRun({ text: title.toUpperCase(), bold: true, size: 20, color: DARK, font: FONT })] }));
@@ -2787,7 +2787,7 @@ function generateMinimalGrey(data) {
                     new TableCell({
                         shading: { fill: NAVY }, margins: { top: 400, bottom: 400, left: 400, right: 400 },
                         children: [
-                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, color: "FFFFFF", font: FONT })] }),
+                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: "FFFFFF", font: FONT })] }),
                             new Paragraph({ spacing: { before: 100 }, border: { top: { color: "5C9CE6", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [new TextRun({ text: `${data.optimized_title || "Title"}  |  ${contactLine}`, size: 18, color: "E2E8F0", font: FONT })] })
                         ]
                     })
@@ -2866,9 +2866,9 @@ function generateMinimalGrey(data) {
                     new TableCell({
                         shading: { fill: OLIVE }, margins: { top: 400, bottom: 400, left: 400, right: 400 },
                         children: [
-                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 54, color: "FFFFFF", font: FONT })] }),
+                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: "FFFFFF", font: FONT })] }),
                             new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: data.optimized_title || "Title", size: 22, color: "C5E1A5", font: FONT })] }),
-                            new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: contactLine, size: 18, color: "EEEEEE", font: FONT })] })
+                            new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: contactLine, size: 20, color: "EEEEEE", font: FONT })] })
                         ]
                     })
                 ]})]
@@ -3013,8 +3013,8 @@ function generateMinimalGrey(data) {
                     new TableCell({
                         shading: { fill: PURPLE }, margins: { top: 300, bottom: 300, left: 300, right: 300 },
                         children: [
-                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, color: "FFFFFF", font: FONT })] }),
-                            new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: `${data.optimized_title || "Title"}  |  ${contactLine}`, size: 18, color: "D1C4E9", font: FONT })] })
+                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: "FFFFFF", font: FONT })] }),
+                            new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: `${data.optimized_title || "Title"}  |  ${contactLine}`, size: 20, color: "D1C4E9", font: FONT })] })
                         ]
                     })
                 ]})]
@@ -3088,9 +3088,9 @@ function generateMinimalGrey(data) {
             const firstName = nameParts[0];
             const lastName = nameParts.slice(1).join(' ');
 
-            children.push(new Paragraph({ spacing: { after: 0 }, children: [new TextRun({ text: firstName.toUpperCase(), bold: true, size: 64, font: FONT })] }));
+            children.push(new Paragraph({ spacing: { after: 0 }, children: [new TextRun({ text: firstName.toUpperCase(), bold: true, size: 44, font: FONT })] }));
             if (lastName) {
-                children.push(new Paragraph({ spacing: { before: 0, after: 100 }, children: [new TextRun({ text: lastName.toUpperCase(), bold: true, size: 64, font: FONT })] }));
+                children.push(new Paragraph({ spacing: { before: 0, after: 100 }, children: [new TextRun({ text: lastName.toUpperCase(), bold: true, size: 44, font: FONT })] }));
             }
 
             const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join(" • ");
@@ -3166,8 +3166,8 @@ function generateMinimalGrey(data) {
                     new TableCell({
                         shading: { fill: ROSE }, margins: { top: 300, bottom: 300, left: 300, right: 300 },
                         children: [
-                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 48, color: "FFFFFF", font: FONT })] }),
-                            new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: `${data.optimized_title || "Title"}  |  ${contactLine}`, size: 18, color: "FFCDD2", font: FONT })] })
+                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: "FFFFFF", font: FONT })] }),
+                            new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: `${data.optimized_title || "Title"}  |  ${contactLine}`, size: 20, color: "FFCDD2", font: FONT })] })
                         ]
                     })
                 ]})]
@@ -3238,7 +3238,7 @@ function generateMinimalGrey(data) {
                 borders: { top: {style: BorderStyle.NONE}, bottom: {style: BorderStyle.NONE}, left: {style: BorderStyle.NONE}, right: {style: BorderStyle.NONE}, insideVertical: {style: BorderStyle.NONE}, insideHorizontal: {style: BorderStyle.NONE} },
                 rows: [ new TableRow({ children: [
                     new TableCell({ width: { size: 35, type: WidthType.PERCENTAGE }, shading: { fill: "FFF0F5" }, margins: { right: 150, left: 150, top: 150, bottom: 150 }, children: leftCol }),
-                    new TableCell({ width: { size: 65, type: WidthType.PERCENTAGE }, margins: { left: 200, top: 150 }, children: rightCol })
+                    new TableCell({ width: { size: 44, type: WidthType.PERCENTAGE }, margins: { left: 200, top: 150 }, children: rightCol })
                 ]})]
             });
 
@@ -3253,7 +3253,7 @@ function generateMinimalGrey(data) {
             children.push(new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, font: FONT })] }));
             children.push(new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: data.optimized_title || "Title", bold: true, size: 20, font: FONT, color: "555555" })] }));
             const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join(" · ");
-            children.push(new Paragraph({ spacing: { before: 80, after: 400 }, children: [new TextRun({ text: contactLine, size: 18, font: FONT, color: "777777" })] }));
+            children.push(new Paragraph({ spacing: { before: 80, after: 400 }, children: [new TextRun({ text: contactLine, size: 20, font: FONT, color: "777777" })] }));
 
             const addHeader = (title) => {
                 children.push(new Paragraph({ 
@@ -3341,9 +3341,9 @@ function generateMinimalGrey(data) {
                     new TableCell({
                         shading: { fill: SLATE }, margins: { top: 300, bottom: 300, left: 300, right: 300 },
                         children: [
-                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 52, color: "FFFFFF", font: FONT })] }),
+                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: "FFFFFF", font: FONT })] }),
                             new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: (data.optimized_title || "Title").toUpperCase(), size: 20, color: "CBD5E1", font: FONT })] }),
-                            new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: contactLine, size: 18, color: "94A3B8", font: FONT })] })
+                            new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: contactLine, size: 20, color: "94A3B8", font: FONT })] })
                         ]
                     })
                 ]})]
@@ -3419,7 +3419,7 @@ function generateMinimalGrey(data) {
                     new TableCell({
                         shading: { fill: BLACK }, margins: { top: 400, bottom: 400, left: 400, right: 400 },
                         children: [
-                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 56, color: "FFFFFF", font: FONT })] }),
+                            new Paragraph({ children: [new TextRun({ text: (data.name || "Name").toUpperCase(), bold: true, size: 44, color: "FFFFFF", font: FONT })] }),
                             new Paragraph({ spacing: { before: 100 }, border: { top: { color: "555555", space: 1, style: BorderStyle.SINGLE, size: 6 } }, children: [new TextRun({ text: data.optimized_title || "Title", size: 20, color: "DDDDDD", font: FONT })] })
                         ]
                     })
@@ -3427,7 +3427,7 @@ function generateMinimalGrey(data) {
             });
 
             const contactLine = [data.phone, data.email, data.location, data.linkedin].filter(Boolean).join("  |  ");
-            const children = [headerTable, new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 100, after: 300 }, children: [new TextRun({ text: contactLine, size: 18, color: "777777", font: FONT })] })];
+            const children = [headerTable, new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 100, after: 300 }, children: [new TextRun({ text: contactLine, size: 20, color: "777777", font: FONT })] })];
 
             const addHeader = (title) => {
                 children.push(new Paragraph({ spacing: { before: 200, after: 100 }, children: [new TextRun({ text: "· " + title.toUpperCase(), bold: true, size: 20, color: BLACK, font: FONT })] }));
