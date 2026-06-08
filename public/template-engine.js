@@ -1,6 +1,6 @@
 const TemplateEngine = {
     
-    // 1. ORIGINAL: SENTINEL (UNTOUCHED)
+    // 1. ORIGINAL: SENTINEL
     sentinel: function(profile, expFormatted) {
         return `
             <div class="text-center border-b pb-3 border-blue-200">
@@ -21,10 +21,10 @@ const TemplateEngine = {
                 <h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Work Experience</h2>
                 <div class="text-[10px] text-gray-600">${expFormatted}</div>
             </div>
-            ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Internships</h2><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-            ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Projects</h2><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-            ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Volunteer Work</h2><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-            ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Extracurriculars</h2><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+            ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Internships</h2><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+            ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Projects</h2><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+            ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Volunteer Work</h2><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+            ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Extracurriculars</h2><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
             ${profile.education ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Education</h2><p class="text-[10px] text-gray-600 mt-1.5 whitespace-pre-line">${profile.education}</p></div>` : ''}
             ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Bar Admissions</h2><ul class="list-disc pl-4 mt-1.5 space-y-1 text-gray-600">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
             ${profile.publications && profile.publications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase tracking-wider mt-3">Publications & Presentations</h2><ul class="list-disc pl-4 mt-1.5 space-y-1 text-gray-600">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
@@ -36,7 +36,6 @@ const TemplateEngine = {
     // 2. ORIGINAL: VANGUARD
     vanguard: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-4 bg-[#0F3B68] text-white p-4 rounded-lg space-y-4 min-h-[60vh]">
                     ${profile.photo ? `<div class="flex justify-center pt-2 pb-4"><img src="${profile.photo}" class="w-36 h-36 rounded-full object-cover object-top border-4 border-blue-300 shadow-lg" /></div>` : `<div class="flex justify-center pt-2 pb-4"><div class="w-36 h-36 rounded-full bg-blue-800 border-4 border-blue-300 flex items-center justify-center text-blue-300 text-[10px] text-center leading-tight">Upload<br>Photo</div></div>`}
@@ -50,28 +49,26 @@ const TemplateEngine = {
                     ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h3 class="font-bold border-b border-blue-400 text-[11px] tracking-wider mb-1.5">PERSONAL DETAILS</h3><ul class="text-[10px] space-y-1 opacity-90">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
                 </div>
                 <div class="col-span-8 p-2 space-y-3 text-[10px]">
-                    <div><h1 class="text-2xl font-normal tracking-widest text-[#0F3B68] uppercase">${profile.name}</h1><p class="text-[11px] font-bold text-amber-600 mt-1 uppercase leading-relaxed">${profile.title}</p></div>
+                    <div><h1 class="text-2xl tracking-tight text-[#0F3B68]"><span class="font-light">${(profile.name||'').split(' ')[0]}</span> <span class="font-black">${(profile.name||'').split(' ').slice(1).join(' ')}</span></h1><p class="text-[11px] font-bold text-amber-600 mt-1 uppercase leading-relaxed">${profile.title}</p></div>
                     <div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px]">Professional Summary</h3><p class="text-[10px] text-gray-600 mt-1 leading-relaxed text-justify">${profile.summary}</p></div>
                     ${profile.achievements && profile.achievements.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Achievements</h3><ul class="list-disc pl-4 mt-1 text-gray-600 space-y-1 text-[10px]">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                     ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Technical Profile</h3><div class="mt-1 text-gray-600 space-y-1 text-[10px]">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                     ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Clinical Rotations</h3><ul class="list-disc pl-4 mt-1 text-gray-600 space-y-1 text-[10px]">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                     <div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Experience</h3><div class="text-[10px] text-gray-600">${expFormatted}</div></div>
-                    ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Internships</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                    ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Projects</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                    ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Volunteer Work</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                    ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Extracurriculars</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                    ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Internships</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                    ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Projects</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                    ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Volunteer Work</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                    ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="font-bold text-[#0F3B68] border-b border-gray-200 pb-0.5 uppercase text-[11px] mt-2">Extracurriculars</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 </div>
             </div>
-        </div>
         `;
     },
 
     // 3. ORIGINAL: CREATIVE
     creative: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="grid grid-cols-12 gap-4 border-b-2 border-[#1F4E79] pb-3 mb-3">
-                <div class="col-span-7"><h1 class="text-3xl font-black text-[#1F4E79] uppercase">${profile.name}</h1><p class="text-[11px] font-bold text-gray-700 mt-1 uppercase leading-relaxed">${profile.title}</p></div>
+                <div class="col-span-7"><h1 class="text-3xl font-black text-[#1F4E79] tracking-tight">${profile.name}</h1><p class="text-[11px] font-bold text-gray-700 mt-1 uppercase leading-relaxed">${profile.title}</p></div>
                 <div class="col-span-5 md:border-l md:border-[#1F4E79] md:pl-3 text-[10px] text-gray-600 leading-relaxed"><p>${profile.contact.replace(/ \| /g, '<br>')}</p>${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<div class="mt-1 font-medium text-[#1F4E79]">${profile.portfolio_links.join('<br>')}</div>` : ''}</div>
             </div>
             <div class="space-y-4">
@@ -90,23 +87,21 @@ const TemplateEngine = {
                         ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px]">TECHNICAL PROFILE</h3><div class="text-gray-600 text-[10px] space-y-1 mb-3">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                         ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px]">CLINICAL ROTATIONS</h3><ul class="list-disc pl-4 text-gray-600 text-[10px] space-y-1 mb-3">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                         <div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px]">EXPERIENCE</h3><div class="text-[10px] text-gray-600">${expFormatted}</div></div>
-                        ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">INTERNSHIPS</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                        ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">PROJECTS</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                        ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">VOLUNTEER WORK</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                        ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">EXTRACURRICULARS</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                        ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">INTERNSHIPS</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                        ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">PROJECTS</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                        ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">VOLUNTEER WORK</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                        ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="font-bold text-[#1F4E79] border-b pb-0.5 mb-1 text-[10px] mt-3">EXTRACURRICULARS</h3><div class="text-[10px] text-gray-600 mt-1 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                     </div>
                 </div>
             </div>
-        </div>
         `;
     },
 
     // 4. ORIGINAL: GLOBAL
     global: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="grid grid-cols-12 gap-4 border-b-2 border-green-800 pb-3 mb-2">
-                <div class="col-span-7"><h1 class="text-3xl font-bold text-green-800">${profile.name}</h1><p class="text-[11px] font-semibold text-gray-700 uppercase mt-1 leading-relaxed">${profile.title}</p></div>
+                <div class="col-span-7"><h1 class="text-2xl font-semibold text-gray-800 tracking-normal">${profile.name}</h1><p class="text-[11px] font-semibold text-gray-700 uppercase mt-1 leading-relaxed">${profile.title}</p></div>
                 <div class="col-span-5 text-[10px] text-gray-500 leading-relaxed"><p>${profile.contact.replace(/ \| /g, '<br>')}</p>${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<div class="mt-1 font-medium text-green-700">${profile.portfolio_links.join('<br>')}</div>` : ''}</div>
             </div>
             <div class="space-y-4">
@@ -127,10 +122,10 @@ const TemplateEngine = {
                 ` : ''}
                 <div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Career Summary</span><div class="flex-grow border-b border-green-700"></div></div>
                 <div class="text-[10px] text-gray-600">${expFormatted}</div>
-                ${profile.internships && profile.internships.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Internships</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Projects</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Volunteer Work</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Extracurriculars</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Internships</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Projects</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Volunteer Work</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Extracurriculars</span><div class="flex-grow border-b border-green-700"></div></div><div class="text-gray-600 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div>` : ''}
                 ${profile.education ? `
                 <div class="flex items-center space-x-2 my-2 mt-4"><div class="flex-grow border-b border-green-700"></div><span class="text-[10px] font-bold text-green-800 uppercase tracking-wider">Education</span><div class="flex-grow border-b border-green-700"></div></div>
                 <p class="text-gray-600 text-center whitespace-pre-line">${profile.education}</p>
@@ -152,30 +147,28 @@ const TemplateEngine = {
                 <ul class="text-gray-600 text-center space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul>
                 ` : ''}
             </div>
-        </div>
         `;
     },
 
     // 5. NEW: APEX
     apex: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="mb-4">
-                <h1 class="text-4xl font-black text-black tracking-tight mb-1 uppercase">${profile.name}</h1>
+                <h1 class="text-3xl tracking-tight mb-1 text-black"><span class="font-light">${(profile.name||'').split(' ')[0]}</span>&nbsp;&nbsp;<span class="font-black">${(profile.name||'').split(' ').slice(1).join(' ')}</span></h1>
                 <p class="text-[10px] font-semibold text-gray-800 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-gray-600 mt-0.5">${profile.contact.replace(/ \| /g, ' • ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-600 mt-0.5">${profile.portfolio_links.join(' • ')}</p>` : ''}
             </div>
-            <div class="space-y-3">
+            <div class="space-y-3" style="font-family: 'Inter', sans-serif;">
                 <div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Summary</h2><p class="text-[10px] text-gray-800 leading-relaxed">${profile.summary}</p></div>
                 ${profile.achievements && profile.achievements.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Achievements</h2><ul class="list-disc list-inside text-[10px] text-gray-800 space-y-1">${profile.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : ''}
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Technical Profile</h2><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Clinical Rotations</h2><ul class="list-disc list-inside text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Experience</h2><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 ${profile.education ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Education</h2><p class="text-[10px] text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
                 ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Bar Admissions</h2><ul class="list-disc list-inside text-[10px] text-gray-800 space-y-1">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
                 ${profile.publications && profile.publications.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Publications</h2><ul class="list-disc list-inside text-[10px] text-gray-800 space-y-1">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
@@ -183,27 +176,25 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Certifications</h2><ul class="list-disc list-inside text-[10px] text-gray-800 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[10px] font-bold bg-gray-100 text-black px-2 py-1 uppercase tracking-[0.2em] mb-2">Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
 
     // 6. NEW: AXIOM
     axiom: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
-            <div class="border-b-[4px] border-black pb-2 mb-3">
-                <h1 class="text-4xl font-black text-black tracking-tighter uppercase">${profile.name}</h1>
+            <div class="border-b-2 border-black pb-2 mb-3">
+                <h1 class="text-3xl font-extrabold text-black tracking-tight uppercase">${profile.name}</h1>
                 <p class="text-[10px] font-semibold text-gray-800 mt-1 leading-relaxed">${profile.title}</p>
             </div>
             <div class="grid grid-cols-12 gap-6">
                 <div class="col-span-4 space-y-4">
-                    <div><h3 class="text-[9px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Contact</h3><p class="text-[10px] text-gray-700 leading-relaxed">${profile.contact.replace(/ \| /g, '<br>')}</p>${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-700 mt-1">${profile.portfolio_links.join('<br>')}</p>` : ''}</div>
-                    ${profile.skills && profile.skills.length > 0 ? `<div><h3 class="text-[9px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Core Skills</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.skills.slice(0,8).map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.education ? `<div><h3 class="text-[9px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Education</h3><p class="text-[10px] text-gray-700 whitespace-pre-line">${profile.education}</p></div>` : ''}
-                    ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h3 class="text-[9px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Bar Admissions</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.publications && profile.publications.length > 0 ? `<div><h3 class="text-[9px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Publications</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.certifications && profile.certifications.length > 0 ? `<div><h3 class="text-[9px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Certifications</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
-                    ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h3 class="text-[9px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Personal Details</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
+                    <div><h3 class="text-[10px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Contact</h3><p class="text-[10px] text-gray-700 leading-relaxed">${profile.contact.replace(/ \| /g, '<br>')}</p>${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-700 mt-1">${profile.portfolio_links.join('<br>')}</p>` : ''}</div>
+                    ${profile.skills && profile.skills.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Core Skills</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.skills.slice(0,8).map(s => `<li>${s}</li>`).join('')}</ul></div>` : ''}
+                    ${profile.education ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Education</h3><p class="text-[10px] text-gray-700 whitespace-pre-line">${profile.education}</p></div>` : ''}
+                    ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Bar Admissions</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
+                    ${profile.publications && profile.publications.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Publications</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
+                    ${profile.certifications && profile.certifications.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Certifications</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
+                    ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] border-b border-gray-300 pb-1 mb-2 uppercase">Personal Details</h3><ul class="text-[10px] text-gray-700 space-y-0.5">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
                 </div>
                 <div class="col-span-8 space-y-4 border-l border-gray-200 pl-4 text-[10px]">
                     <div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase">Profile</h3><p class="text-[10px] text-gray-800 leading-relaxed">${profile.summary}</p></div>
@@ -211,22 +202,20 @@ const TemplateEngine = {
                     ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Technical Profile</h3><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                     ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Clinical Rotations</h3><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                     <div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Experience</h3><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                    ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Internships</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                    ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Projects</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                    ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Volunteer Work</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                    ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Extracurriculars</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                    ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Internships</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                    ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Projects</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                    ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Volunteer Work</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                    ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="text-[10px] font-bold tracking-[0.15em] mb-1.5 uppercase mt-3">Extracurriculars</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 </div>
             </div>
-        </div>
         `;
     },
 
     // 7. NEW: CHRONICLE
     chronicle: function(profile, expFormatted) {
         return `
-        <div style="font-family: Georgia, serif;">
             <div class="border-b-[3px] border-black pb-2 mb-3 font-serif">
-                <h1 class="text-3xl font-bold text-black uppercase tracking-wide">${profile.name}</h1>
+                <h1 class="text-3xl font-black text-black uppercase tracking-tight">${profile.name}</h1>
                 <p class="text-[10px] font-bold text-gray-800 mt-1.5 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-gray-600 mt-0.5">${profile.contact.replace(/ \| /g, ' • ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-700 mt-0.5">${profile.portfolio_links.join(' • ')}</p>` : ''}
@@ -237,10 +226,10 @@ const TemplateEngine = {
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Technical Profile</h2><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Clinical Rotations</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Experience</h2><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 ${profile.education ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Education</h2><p class="text-[10px] text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
                 ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Bar Admissions</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
                 ${profile.publications && profile.publications.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Publications</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
@@ -248,17 +237,15 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Certifications</h2><ul class="list-disc list-inside text-[10px] text-gray-800 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black border-b border-gray-300 pb-0.5 mb-1.5 uppercase tracking-widest mt-2">Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
     
     // 8. NEW: CLASSIC BLUE
     classic_blue: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
-            <div class="text-left mb-3 border-b border-[#235789] pb-3">
+            <div class="text-center mb-3">
                 <h1 class="text-3xl font-bold text-[#235789] uppercase tracking-wide mb-1">${profile.name}</h1>
-                <p class="text-[10px] font-bold text-[#235789] mt-1 leading-relaxed">${profile.title}</p>
+                <p class="text-[10px] font-bold text-gray-800 mt-1 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-gray-600 mt-0.5">${profile.contact.replace(/ \| /g, ' | ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-600 mt-0.5">${profile.portfolio_links.join(' | ')}</p>` : ''}
             </div>
@@ -279,16 +266,14 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#235789] border-b-2 border-[#87A8D0] pb-0.5 mb-1.5 uppercase mt-2">Certifications</h2><ul class="list-disc list-inside text-[10px] text-gray-800 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#235789] border-b-2 border-[#87A8D0] pb-0.5 mb-1.5 uppercase mt-2">Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
 
     // 9. NEW: CREATIVE CORAL
     creative_coral: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="bg-[#C84B31] text-center text-white py-5 px-4 mb-4">
-                <h1 class="text-3xl font-bold uppercase tracking-widest mb-1">${profile.name}</h1>
+                <h1 class="text-3xl font-black uppercase tracking-widest mb-1">${profile.name}</h1>
                 <p class="text-[11px] font-semibold text-orange-50 tracking-wider mb-2 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] opacity-90">${profile.contact.replace(/ \| /g, '  |  ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] opacity-90 mt-1">${profile.portfolio_links.join('  |  ')}</p>` : ''}
@@ -299,10 +284,10 @@ const TemplateEngine = {
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Technical Profile</h2><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Clinical Rotations</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Experience</h2><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 ${profile.education ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Education</h2><p class="text-[10px] text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
                 ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Bar Admissions</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
                 ${profile.publications && profile.publications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Publications</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
@@ -310,14 +295,12 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Certifications</h2><ul class="list-disc list-inside text-[10px] text-gray-800 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#C84B31] border-b border-[#C84B31] pb-0.5 mb-1.5 uppercase tracking-wider mt-2">Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
 
 // 10. NEW: EXECUTIVE TEAL
     executive_teal: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="grid grid-cols-12 gap-6">
                 <div class="col-span-4 space-y-4 border-r-2 border-teal-100 pr-4 pt-2">
                     <div><h3 class="text-[10px] font-bold text-[#1A6359] uppercase tracking-wider mb-1.5">Contact</h3><p class="text-[10px] text-gray-700 leading-relaxed">${profile.contact.replace(/ \| /g, '<br>')}</p>${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<div class="mt-1 text-[10px] text-teal-700 font-medium">${profile.portfolio_links.join('<br>')}</div>` : ''}</div>
@@ -330,7 +313,7 @@ const TemplateEngine = {
                 </div>
                 <div class="col-span-8">
                     <div class="bg-[#1A6359] text-white p-5 rounded-lg mb-5">
-                        <h1 class="text-3xl font-bold uppercase tracking-wider">${profile.name}</h1>
+                        <h1 class="text-3xl font-black uppercase tracking-wider">${profile.name}</h1>
                         <p class="text-[10px] font-medium text-teal-50 mt-1.5 leading-relaxed">${profile.title}</p>
                     </div>
                     <div class="space-y-4">
@@ -339,23 +322,21 @@ const TemplateEngine = {
                         ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Technical Profile</h3><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                         ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Clinical Rotations</h3><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                         <div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Work Experience</h3><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                        ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Internships</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                        ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Projects</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                        ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Volunteer Work</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                        ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Extracurriculars</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                        ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Internships</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                        ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Projects</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                        ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Volunteer Work</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                        ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="text-[10px] font-bold text-[#1A6359] border-b border-teal-200 pb-0.5 uppercase tracking-wider mb-1.5 mt-3">Extracurriculars</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                     </div>
                 </div>
             </div>
-        </div>
         `;
     },
 
     // 11. NEW: MERIDIAN
     meridian: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="mb-4">
-                <h1 class="text-3xl md:text-4xl font-black text-gray-900 tracking-tight uppercase">${profile.name}</h1>
+                <h1 class="text-4xl font-black text-gray-900 tracking-tight uppercase leading-none">${profile.name}</h1>
                 <p class="text-[10px] font-bold text-gray-800 mt-1.5 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-gray-500 mt-0.5 font-medium">${profile.contact.replace(/ \| /g, ' | ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-600 mt-0.5 font-medium">${profile.portfolio_links.join(' | ')}</p>` : ''}
@@ -366,10 +347,10 @@ const TemplateEngine = {
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Technical Profile</h2><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Clinical Rotations</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Experience</h2><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1 mt-3">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 <div class="grid grid-cols-2 gap-4 mt-3">
                     ${profile.education ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1">Education</h2><p class="text-[10px] text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
                     ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1">Bar Admissions</h2><ul class="list-disc list-inside text-[10px] text-gray-800 space-y-1">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
@@ -379,16 +360,14 @@ const TemplateEngine = {
                     ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest mb-2 border-b-2 border-gray-900 pb-1">Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
                 </div>
             </div>
-        </div>
         `;
     },
 
     // 12. NEW: MINIMAL GREY
     minimal_grey: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="border-b border-gray-300 pb-4 mb-4">
-                <h1 class="text-3xl font-bold text-gray-800 tracking-tight uppercase">${profile.name}</h1>
+                <h1 class="text-3xl font-black text-gray-800 uppercase tracking-tight">${profile.name}</h1>
                 <p class="text-[10px] font-bold text-gray-600 mt-1.5 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-gray-500 mt-0.5">${profile.contact.replace(/ \| /g, ' • ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-600 mt-0.5">${profile.portfolio_links.join(' • ')}</p>` : ''}
@@ -410,18 +389,16 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 mt-3 rounded-sm">Certifications</h2><ul class="list-disc list-inside text-[10px] text-gray-600 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[10px] font-bold text-gray-800 uppercase tracking-wider bg-gray-100 py-1 px-2 mb-2 mt-3 rounded-sm">Personal Details</h2><ul class="text-[10px] text-gray-600 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
     
     // 13. NEW: NAVY EXECUTIVE
     navy_executive: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="bg-[#1A365D] text-white p-6 mb-5">
-                <h1 class="text-3xl font-bold uppercase tracking-wider">${profile.name}</h1>
+                <h1 class="text-3xl font-black uppercase tracking-wider">${profile.name}</h1>
                 <div class="border-t border-blue-400 mt-2 pt-2">
-                    <p class="text-[10px] text-white font-semibold tracking-wide leading-relaxed uppercase">${profile.title}</p>
+                    <p class="text-[10px] text-white font-semibold tracking-wide leading-relaxed">${profile.title}</p>
                     <p class="text-[10px] text-blue-200 mt-1">${profile.contact.replace(/ \| /g, ' | ')}</p>
                     ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-100 mt-0.5">${profile.portfolio_links.join(' | ')}</p>` : ''}
                 </div>
@@ -432,26 +409,24 @@ const TemplateEngine = {
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Technical Profile</h2><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Clinical Rotations</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Professional Experience</h2><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 ${profile.education ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Education</h2><p class="text-[10px] text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
                 ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Bar Admissions</h2><ul class="text-[10px] text-gray-800 list-disc pl-4 space-y-1">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
                 ${profile.publications && profile.publications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Publications</h2><ul class="text-[10px] text-gray-800 list-disc pl-4 space-y-1">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Board Roles & Certifications</h2><ul class="text-[10px] text-gray-800 list-disc pl-4 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#1A365D] uppercase tracking-widest border-b-2 border-[#1A365D] pb-1 mb-2 mt-4">Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
 
     // 14. NEW: OLIVE TECH
     olive_tech: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="bg-[#4B5320] text-white p-5 mb-4 rounded-sm">
-                <h1 class="text-3xl font-extrabold uppercase tracking-widest">${profile.name}</h1>
+                <h1 class="text-3xl font-black uppercase tracking-widest">${profile.name}</h1>
                 <p class="text-[11px] font-semibold text-[#C5E1A5] mt-1.5 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-gray-200 mt-1">${profile.contact.replace(/ \| /g, ' • ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-green-200 mt-0.5">${profile.portfolio_links.join(' • ')}</p>` : ''}
@@ -462,10 +437,10 @@ const TemplateEngine = {
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Technical Profile</h2><div class="text-[10px] text-gray-700 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Clinical Rotations</h2><ul class="list-disc pl-4 text-[10px] text-gray-700 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Work Experience</h2><div class="text-[10px] text-gray-700">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Internships</h2><div class="text-[10px] text-gray-700 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Projects</h2><div class="text-[10px] text-gray-700 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Volunteer Work</h2><div class="text-[10px] text-gray-700 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Extracurriculars</h2><div class="text-[10px] text-gray-700 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Internships</h2><div class="text-[10px] text-gray-700 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Projects</h2><div class="text-[10px] text-gray-700 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Volunteer Work</h2><div class="text-[10px] text-gray-700 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Extracurriculars</h2><div class="text-[10px] text-gray-700 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 ${profile.education ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Education</h2><p class="text-[10px] text-gray-700 whitespace-pre-line">${profile.education}</p></div>` : ''}
                 ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Bar Admissions</h2><ul class="text-[10px] text-gray-700 list-disc list-inside space-y-1">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
                 ${profile.publications && profile.publications.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Publications</h2><ul class="text-[10px] text-gray-700 list-disc list-inside space-y-1">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
@@ -473,16 +448,14 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Certifications</h2><ul class="text-[10px] text-gray-700 list-disc list-inside space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[10px] font-bold text-[#4B5320] uppercase tracking-wider border-b border-[#4B5320] pb-0.5 mb-1.5 mt-3">Personal Details</h2><ul class="text-[10px] text-gray-700 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
 
     // 15. NEW: PINNACLE
     pinnacle: function(profile, expFormatted) {
         return `
-        <div style="font-family: Georgia, serif;">
             <div class="text-center border-b-[2px] border-black pb-3 mb-4 font-serif">
-                <h1 class="text-3xl font-bold uppercase tracking-widest mb-2">${profile.name}</h1>
+                <h1 class="text-4xl font-black text-black uppercase leading-none tracking-widest mb-2">${(profile.name||'').split(' ')[0]}<br><span class="font-light">${(profile.name||'').split(' ').slice(1).join(' ')}</span></h1>
                 <p class="text-[11px] font-bold text-gray-800 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-gray-600 mt-1">${profile.contact}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-700 mt-0.5">${profile.portfolio_links.join(' | ')}</p>` : ''}
@@ -493,26 +466,24 @@ const TemplateEngine = {
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Technical Profile</h2><div class="text-[10px] text-gray-900 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase text-right pr-4">${t.category}:</span><span class="w-3/4 text-left">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Clinical Rotations</h2><ul class="list-disc list-inside text-[10px] text-gray-900 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Professional Experience</h2><div class="text-[10px] text-gray-900">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Internships</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Projects</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Volunteer Work</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Extracurriculars</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Internships</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Projects</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Volunteer Work</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Extracurriculars</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 ${profile.education ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Education</h2><p class="text-[10px] text-gray-900 whitespace-pre-line text-center">${profile.education}</p></div>` : ''}
                 ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Bar Admissions</h2><ul class="text-[10px] text-gray-900 list-disc list-inside space-y-1">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
                 ${profile.publications && profile.publications.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Publications</h2><ul class="text-[10px] text-gray-900 list-disc list-inside space-y-1">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Certifications</h2><ul class="text-[10px] text-gray-900 list-disc list-inside space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black text-center uppercase tracking-[0.3em] border-b border-gray-300 pb-1 mb-2 mt-4">Personal Details</h2><ul class="text-[10px] text-gray-900 space-y-1 text-center">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
 
     // 16. NEW: PURPLE PRO
     purple_pro: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="bg-[#5E35B1] text-white p-5 mb-4 shadow-sm">
-                <h1 class="text-3xl font-bold tracking-tight uppercase">${profile.name}</h1>
+                <h1 class="text-3xl font-bold uppercase tracking-tight">${profile.name}</h1>
                 <p class="text-[11px] text-white font-semibold mt-1.5 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-purple-200 mt-1 opacity-90">${profile.contact.replace(/ \| /g, ' | ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-purple-100 mt-0.5 opacity-90">${profile.portfolio_links.join(' | ')}</p>` : ''}
@@ -523,7 +494,7 @@ const TemplateEngine = {
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Technical Profile</h2><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Clinical Rotations</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Work Experience</h2><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
                 ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
                 ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
                 ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
@@ -534,17 +505,15 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Certifications</h2><ul class="text-[10px] text-gray-800 list-disc list-inside space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#5E35B1] uppercase tracking-wide border-b-2 border-purple-100 pb-1 mb-1.5 mt-3">Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
     
     // 17. NEW: RECTOR
     rector: function(profile, expFormatted) {
         return `
-        <div style="font-family: Georgia, serif;">
             <div class="mb-5 font-serif">
-                <h1 class="text-4xl font-black text-black tracking-tighter uppercase leading-none">${profile.name.split(' ')[0]}</h1>
-                <h1 class="text-4xl font-black text-black tracking-tighter uppercase leading-none">${profile.name.split(' ').slice(1).join(' ')}</h1>
+                <h1 class="text-3xl font-black text-black tracking-tight uppercase leading-none">${(profile.name||'').split(' ')[0]}</h1>
+                <h1 class="text-4xl font-light text-black tracking-tight uppercase leading-none">${(profile.name||'').split(' ').slice(1).join(' ')}</h1>
                 <div class="border-t border-gray-300 mt-3 pt-2">
                     <p class="text-[10px] font-bold text-gray-800 leading-relaxed">${profile.title}</p>
                     <p class="text-[10px] text-gray-600 mt-1">${profile.contact.replace(/ \| /g, ' • ')}</p>
@@ -557,26 +526,24 @@ const TemplateEngine = {
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Technical Profile</h2><div class="text-[10px] text-gray-900 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Clinical Rotations</h2><ul class="list-disc pl-4 text-[10px] text-gray-900 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Career History</h2><div class="text-[10px] text-gray-900">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Internships</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Projects</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Volunteer Work</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Extracurriculars</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Internships</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Projects</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Volunteer Work</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Extracurriculars</h2><div class="text-[10px] text-gray-900 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 ${profile.education ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Education</h2><p class="text-[10px] text-gray-900 whitespace-pre-line">${profile.education}</p></div>` : ''}
                 ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Bar Admissions</h2><ul class="text-[10px] text-gray-900 list-disc list-inside space-y-1">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
                 ${profile.publications && profile.publications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Publications</h2><ul class="text-[10px] text-gray-900 list-disc list-inside space-y-1">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Certifications</h2><ul class="text-[10px] text-gray-900 list-disc list-inside space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[11px] font-bold text-black uppercase tracking-[0.2em] border-b-2 border-black pb-1 mb-2 mt-4">Personal Details</h2><ul class="text-[10px] text-gray-900 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
 
     // 18. NEW: ROSE MODERN
     rose_modern: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="bg-[#90323D] text-white p-5 mb-4">
-                <h1 class="text-3xl font-bold tracking-wide uppercase">${profile.name}</h1>
+                <h1 class="text-3xl font-bold uppercase tracking-wide">${profile.name}</h1>
                 <p class="text-[10px] font-semibold text-pink-50 mt-1.5 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-pink-200 mt-1">${profile.contact.replace(/ \| /g, ' | ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-pink-100 mt-0.5">${profile.portfolio_links.join(' | ')}</p>` : ''}
@@ -596,22 +563,20 @@ const TemplateEngine = {
                     ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Technical Profile</h3><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                     ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Clinical Rotations</h3><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                     <div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Work Experience</h3><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                    ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Internships</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                    ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Projects</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                    ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Volunteer Work</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                    ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Extracurriculars</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                    ${profile.internships && profile.internships.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Internships</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                    ${profile.projects && profile.projects.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Projects</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                    ${profile.volunteer && profile.volunteer.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Volunteer Work</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                    ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div><h3 class="text-[11px] font-bold text-[#90323D] uppercase tracking-wider border-b-2 border-pink-100 pb-1 mb-2 mt-4">Extracurriculars</h3><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 </div>
             </div>
-        </div>
         `;
     },
 
     // 19. NEW: SIGNAL
     signal: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="mb-5">
-                <h1 class="text-3xl font-black text-black uppercase tracking-tight">${profile.name}</h1>
+                <h1 class="text-3xl font-black uppercase tracking-tight">${profile.name}</h1>
                 <p class="text-[10px] font-bold text-gray-800 mt-1.5 leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-gray-500 mt-0.5">${profile.contact.replace(/ \| /g, ' · ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-600 mt-0.5">${profile.portfolio_links.join(' · ')}</p>` : ''}
@@ -622,10 +587,10 @@ const TemplateEngine = {
                 ${profile.technical_skills && profile.technical_skills.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Technical Profile</h2><div class="text-[10px] text-gray-800 space-y-1">${profile.technical_skills.map(t => `<div class="flex"><span class="font-bold w-1/4 uppercase">${t.category}:</span><span class="w-3/4">${t.skills.join(', ')}</span></div>`).join('')}</div></div>` : ''}
                 ${profile.clinical_rotations && profile.clinical_rotations.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Clinical Rotations</h2><ul class="list-disc pl-4 text-[10px] text-gray-800 space-y-1">${profile.clinical_rotations.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 <div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Experience</h2><div class="text-[10px] text-gray-800">${expFormatted}</div></div>
-                ${profile.internships && profile.internships.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\n\n')}</div></div>` : ''}
-                ${profile.projects && profile.projects.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\n\n')}</div></div>` : ''}
-                ${profile.volunteer && profile.volunteer.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\n\n')}</div></div>` : ''}
-                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\n\n')}</div></div>` : ''}
+                ${profile.internships && profile.internships.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Internships</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.internships.join('\\n\\n')}</div></div>` : ''}
+                ${profile.projects && profile.projects.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Projects</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.projects.join('\\n\\n')}</div></div>` : ''}
+                ${profile.volunteer && profile.volunteer.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Volunteer Work</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.volunteer.join('\\n\\n')}</div></div>` : ''}
+                ${profile.extracurriculars && profile.extracurriculars.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Extracurriculars</h2><div class="text-[10px] text-gray-800 whitespace-pre-line leading-relaxed">${profile.extracurriculars.join('\\n\\n')}</div></div>` : ''}
                 ${profile.education ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Education</h2><p class="text-[10px] text-gray-800 whitespace-pre-line">${profile.education}</p></div>` : ''}
                 ${profile.bar_admissions && profile.bar_admissions.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Bar Admissions</h2><ul class="text-[10px] text-gray-800 list-disc list-inside space-y-1">${profile.bar_admissions.map(b => `<li>${b}</li>`).join('')}</ul></div>` : ''}
                 ${profile.publications && profile.publications.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Publications</h2><ul class="text-[10px] text-gray-800 list-disc list-inside space-y-1">${profile.publications.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
@@ -633,16 +598,14 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Certifications</h2><ul class="text-[10px] text-gray-800 list-disc list-inside space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div class="border-l-4 border-black pl-3 mt-4"><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.25em] mb-1.5">Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
 
     // 20. NEW: SLATE PROFESSIONAL
     slate_professional: function(profile, expFormatted) {
         return `
-        <div style="font-family: Arial, sans-serif;">
             <div class="bg-[#334155] text-white p-5 mb-4">
-                <h1 class="text-3xl font-bold tracking-wide uppercase">${profile.name}</h1>
+                <h1 class="text-3xl font-bold uppercase tracking-wide">${profile.name}</h1>
                 <p class="text-[11px] font-bold text-slate-200 mt-1.5 uppercase tracking-wider leading-relaxed">${profile.title}</p>
                 <p class="text-[10px] text-slate-400 mt-1">${profile.contact.replace(/ \| /g, ' | ')}</p>
                 ${profile.portfolio_links && profile.portfolio_links.length > 0 ? `<p class="text-[10px] text-blue-300 mt-0.5">${profile.portfolio_links.join(' | ')}</p>` : ''}
@@ -664,16 +627,14 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase mt-3">Certifications</h2><ul class="text-[10px] text-gray-800 list-disc list-inside space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[11px] font-bold text-[#334155] border-b-2 border-slate-200 pb-1 mb-1.5 uppercase mt-3">Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },
 
     // 21. NEW: ZENITH
     zenith: function(profile, expFormatted) {
         return `
-        <div style="font-family: Georgia, serif;">
             <div class="bg-[#111111] text-white p-6 mb-4 font-serif">
-                <h1 class="text-4xl font-bold tracking-widest uppercase">${profile.name}</h1>
+                <h1 class="text-3xl font-black uppercase tracking-widest">${profile.name}</h1>
                 <p class="text-[10px] font-bold text-gray-200 mt-1.5 border-t border-gray-600 pt-2 leading-relaxed">${profile.title}</p>
             </div>
             <div class="text-right text-[10px] text-gray-500 mb-4 px-2">
@@ -696,7 +657,6 @@ const TemplateEngine = {
                 ${profile.certifications && profile.certifications.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Credentials & Certifications</h2><ul class="text-[10px] text-gray-800 list-disc pl-5 space-y-1">${profile.certifications.map(c => `<li>${c}</li>`).join('')}</ul></div>` : ''}
                 ${profile.personal_details && profile.personal_details.length > 0 ? `<div><h2 class="text-[10px] font-bold text-black uppercase tracking-[0.2em] mb-1.5 mt-4">· Personal Details</h2><ul class="text-[10px] text-gray-800 space-y-1">${profile.personal_details.map(p => `<li><strong>${p.label}:</strong> ${p.value}</li>`).join('')}</ul></div>` : ''}
             </div>
-        </div>
         `;
     },    
         
@@ -705,10 +665,6 @@ const TemplateEngine = {
         
         // 1. DATA SANITIZER & MASTER SYNC
         if (profile) {
-            
-            // FIX: Ensure photo persists cleanly to the HTML renderer
-            profile.photo = profile.photo || null;
-
             // MASTER SYNC: Achievements/Awards
             const unifiedAchievements = profile.achievements || profile.achievements_and_awards || [];
             profile.achievements = Array.isArray(unifiedAchievements) ? unifiedAchievements : [unifiedAchievements];
