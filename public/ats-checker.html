@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free AI Resume ATS Score Checker | GetPerfectResume</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        orbit: { dark: '#0F3B68', light: '#5C9CE6', accent: '#D4AF37' }
+                    },
+                    animation: {
+                        'scroll': 'scroll 40s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        scroll: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary ~ * { animation: sweep .4s ease-in-out; }
+        @keyframes sweep {
+            0%    {opacity: 0; transform: translateY(-10px)}
+            100%  {opacity: 1; transform: translateY(0)}
+        }
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 antialiased overflow-x-hidden">
+
+    <!-- NAVIGATION -->
+    <nav class="bg-white/90 backdrop-blur-md border-b border-gray-200 fixed w-full top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.location.href='/'">
+                    <img class="h-10 w-auto" src="/logo.png" alt="GetPerfectResume" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNTAiPjx0ZXh0IHk9IjM1IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMwRjNCNjgiPkdldFBlcmZlY3RSZXN1bWU8L3RleHQ+PC9zdmc+'">
+                </div>
+                <div class="hidden lg:flex space-x-8">
+                    <a href="#features" class="text-gray-600 hover:text-orbit-dark font-semibold px-3 py-2 text-sm transition">The Scanner</a>
+                    <a href="#how-it-works" class="text-gray-600 hover:text-orbit-dark font-semibold px-3 py-2 text-sm transition">How it Works</a>
+                    <a href="/templates.html" class="text-gray-600 hover:text-orbit-dark font-semibold px-3 py-2 text-sm transition">ATS Templates</a>
+                    <a href="#faq" class="text-gray-600 hover:text-orbit-dark font-semibold px-3 py-2 text-sm transition">FAQ</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex flex-col text-right mr-4">
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">100% Free</span>
+                        <span class="text-[10px] text-gray-400">No Signup Required</span>
+                    </div>
+                    <a href="/?action=upload" class="bg-orbit-dark hover:bg-blue-900 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg transition transform hover:-translate-y-0.5 border border-blue-800">Scan My Resume</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-blue-50 via-white to-gray-50 relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-32 -mt-32 w-[600px] h-[600px] rounded-full bg-blue-100 opacity-60 blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -ml-32 -mb-32 w-[500px] h-[500px] rounded-full bg-orbit-light opacity-10 blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-white border border-blue-200 text-orbit-dark px-4 py-2 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-sm">
+                        <span class="relative flex h-2.5 w-2.5">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                        </span>
+                        <span>Live: Enterprise ATS Parsing Engine</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 tracking-tight leading-[1.1]">
+                        Stop guessing if your resume passes the <span class="text-transparent bg-clip-text bg-gradient-to-r from-orbit-dark to-blue-500">ATS robots.</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
+                        75% of resumes are discarded by Applicant Tracking Systems before a human ever sees them. Upload your PDF or DOCX to see exactly what recruiters see—instantly and for free.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                        <a href="/?action=upload" class="bg-orbit-dark hover:bg-blue-900 text-white text-center px-10 py-5 rounded-2xl text-lg font-bold shadow-2xl transition transform hover:scale-105 flex items-center justify-center gap-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            Upload Resume to Score
+                        </a>
+                    </div>
+                    <div class="pt-6 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 text-sm font-semibold text-gray-500">
+                        <div class="flex -space-x-2">
+                            <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=1" alt="User">
+                            <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=2" alt="User">
+                            <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=3" alt="User">
+                            <div class="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[10px] font-bold">+10k</div>
+                        </div>
+                        <p>Scanned over <span class="text-orbit-dark font-bold">50,000+</span> resumes this month.</p>
+                    </div>
+                </div>
+                
+                <!-- Hero Visual Dashboard -->
+                <div class="lg:col-span-5 relative mx-auto w-full max-w-lg perspective-1000">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-orbit-dark to-blue-400 rounded-[2rem] transform rotate-6 opacity-10 blur-xl animate-pulse-slow"></div>
+                    <div class="bg-white rounded-[2rem] shadow-2xl border border-gray-100 p-8 relative z-10 transform transition-all hover:-translate-y-2 duration-500">
+                        <div class="flex justify-between items-center border-b border-gray-100 pb-5 mb-6">
+                            <div>
+                                <h3 class="font-bold text-gray-900 text-lg">Parsing Results</h3>
+                                <p class="text-xs text-gray-500 font-mono mt-1">target_document_v2.pdf</p>
+                            </div>
+                            <span class="bg-green-100 border border-green-200 text-green-700 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span> Analyzed
+                            </span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center mb-8">
+                            <div class="relative w-36 h-36">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                    <path class="text-gray-100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5" />
+                                    <path class="text-[#0F3B68] drop-shadow-md transition-all duration-1000 ease-out" stroke-dasharray="42, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                                </svg>
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                                    <span class="text-4xl font-black text-gray-900">42<span class="text-xl text-gray-400">%</span></span>
+                                </div>
+                            </div>
+                            <p class="text-sm font-extrabold text-red-500 bg-red-50 px-4 py-1.5 rounded-full mt-4 border border-red-100 uppercase tracking-widest">Critical Rejection Risk</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3 p-3 bg-red-50 rounded-xl border border-red-100">
+                                <span class="text-red-500 mt-0.5">⚠️</span>
+                                <div>
+                                    <h4 class="text-sm font-bold text-gray-900">Unreadable Columns Detected</h4>
+                                    <p class="text-xs text-gray-600 mt-0.5">Your layout breaks standard Workday parsers. Experience text is scrambling.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-yellow-50 rounded-xl border border-yellow-100">
+                                <span class="text-yellow-600 mt-0.5">⚡</span>
+                                <div>
+                                    <h4 class="text-sm font-bold text-gray-900">Low Metric Density</h4>
+                                    <p class="text-xs text-gray-600 mt-0.5">Only 12% of your bullet points contain measurable data or numbers.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST LOGOS -->
+    <section class="py-8 bg-white border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Our users have secured interviews at top tier companies</p>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale">
+                <h3 class="text-xl font-black font-serif">Amazon</h3>
+                <h3 class="text-xl font-black tracking-tighter">Microsoft</h3>
+                <h3 class="text-xl font-black font-sans">Deloitte.</h3>
+                <h3 class="text-xl font-black italic">Salesforce</h3>
+                <h3 class="text-xl font-black uppercase tracking-widest">TCS</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE PROBLEM (Why resumes fail) -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">The "Resume Black Hole" isn't a myth. It's an algorithm.</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">Most job seekers apply to hundreds of roles and hear nothing back. It’s not your experience—it’s your formatting. Modern hiring relies on software like Taleo, Greenhouse, and Workday to filter candidates before humans are involved.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Broken Layouts</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Using Canva, heavy graphics, or complex multi-column tables? Parsers scramble this data into a single, unreadable block of text, causing instant rejection.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+                    <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Missing Hard Keywords</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">ATS platforms rank you based on precise keyword density from the Job Description. If you say "managed data" but they want "SQL analytics", you lose.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Weak Action Verbs</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Saying "Responsible for" or "Helped with" triggers low-performer flags. The AI looks for high-impact vocabulary like "Spearheaded", "Architected", or "Scaled".</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEEP DIVE FEATURES -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Image Side -->
+                <div class="relative">
+                    <div class="absolute inset-0 bg-blue-50 rounded-[3rem] transform -rotate-3 scale-105 z-0"></div>
+                    <div class="bg-white border-2 border-gray-100 rounded-[2rem] p-6 shadow-2xl relative z-10">
+                        <div class="space-y-4">
+                            <h3 class="font-bold text-gray-800 border-b pb-2">Your Optimization Report</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1"><span class="font-bold">Structural Formatting</span><span class="text-green-500 font-bold">Pass</span></div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1"><span class="font-bold">Keyword Optimization</span><span class="text-yellow-500 font-bold">Needs Work</span></div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-yellow-400 h-2 rounded-full" style="width: 45%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1"><span class="font-bold">Quantifiable Impact</span><span class="text-red-500 font-bold">Failed</span></div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-red-500 h-2 rounded-full" style="width: 15%"></div></div>
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100 mt-4">
+                                <button class="w-full bg-orbit-dark text-white py-3 rounded-xl font-bold text-sm">✨ Launch AI Fixer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Text Side -->
+                <div class="space-y-8">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">We analyze your resume across 36 critical parameters.</h2>
+                    <p class="text-lg text-gray-600">Our engine acts exactly like a corporate recruiter's software. We tear your document apart and rebuild it for maximum visibility.</p>
+                    
+                    <ul class="space-y-6">
+                        <li class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-blue-100 text-orbit-dark rounded-full flex items-center justify-center font-black text-xl">1</div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-1">Upload & Immediate Extract</h4>
+                                <p class="text-gray-600 text-sm">Drop your PDF. Within seconds, we reveal exactly how a machine reads your name, contact info, and experience timeline. If it looks like gibberish, you know why you're being rejected.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-blue-100 text-orbit-dark rounded-full flex items-center justify-center font-black text-xl">2</div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-1">Semantic AI Scoring</h4>
+                                <p class="text-gray-600 text-sm">We grade your action verbs, check your brevity, flag clichés ("hard worker", "team player"), and measure how heavily you rely on data and metrics.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-orbit-dark text-white rounded-full flex items-center justify-center font-black text-xl">3</div>
+                            <div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-1">Seamless 1-Click Fix</h4>
+                                <p class="text-gray-600 text-sm">Don't just walk away with a bad score. Your parsed data is instantly pushed into our live Interactive Builder. Change into a guaranteed ATS-safe format in one click.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIAL MARQUEE -->
+    <section class="py-20 bg-[#0F3B68] overflow-hidden border-y border-blue-900">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold text-white mb-4">Candidates who beat the bots.</h2>
+            <p class="text-blue-200 text-lg">Real results from professionals who fixed their formatting and got hired.</p>
+        </div>
+        
+        <div class="relative w-full max-w-full overflow-hidden flex">
+            <!-- Fade Masks -->
+            <div class="absolute top-0 left-0 w-32 md:w-64 h-full bg-gradient-to-r from-[#0F3B68] to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-32 md:w-64 h-full bg-gradient-to-l from-[#0F3B68] to-transparent z-10 pointer-events-none"></div>
+            
+            <div class="flex w-max animate-scroll gap-6 px-4 hover:[animation-play-state:paused]">
+                <!-- SET 1 -->
+                <div class="w-80 md:w-96 p-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-left">
+                    <div class="flex text-yellow-400 mb-4 text-lg">★★★★★</div>
+                    <p class="text-white italic mb-6 leading-relaxed">"My initial score was a 42%. I was devastated. I used the analyzer's feedback to rewrite my bullets with metrics and switched to the Sentinel template. Landed 3 interviews the following week."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">SM</div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Sarah M.</p>
+                            <p class="text-xs text-blue-300">Senior Product Manager</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-80 md:w-96 p-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-left">
+                    <div class="flex text-yellow-400 mb-4 text-lg">★★★★★</div>
+                    <p class="text-white italic mb-6 leading-relaxed">"I had a very graphic-heavy resume from Canva. The scanner showed me that the ATS couldn't even read my name. I ported my data to the Axiom layout and finally got a callback from Deloitte."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">DR</div>
+                        <div>
+                            <p class="font-bold text-white text-sm">David R.</p>
+                            <p class="text-xs text-blue-300">Financial Analyst</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-80 md:w-96 p-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-left">
+                    <div class="flex text-yellow-400 mb-4 text-lg">★★★★★</div>
+                    <p class="text-white italic mb-6 leading-relaxed">"The Keyword density check is a game changer. It highlighted exactly which hard skills I was missing from the job description. The AI auto-wrote new bullets to bridge the gap."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">PK</div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Priya K.</p>
+                            <p class="text-xs text-blue-300">VP of Operations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-80 md:w-96 p-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-left">
+                    <div class="flex text-yellow-400 mb-4 text-lg">★★★★★</div>
+                    <p class="text-white italic mb-6 leading-relaxed">"Simple, brutal, and honest. The score checker humbled me, but the integrated builder fixed my formatting in literally one click. Worth its weight in gold."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">JL</div>
+                        <div>
+                            <p class="font-bold text-white text-sm">James L.</p>
+                            <p class="text-xs text-blue-300">Software Engineer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SET 2 (Duplicate for Loop) -->
+                 <div class="w-80 md:w-96 p-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-left">
+                    <div class="flex text-yellow-400 mb-4 text-lg">★★★★★</div>
+                    <p class="text-white italic mb-6 leading-relaxed">"My initial score was a 42%. I was devastated. I used the analyzer's feedback to rewrite my bullets with metrics and switched to the Sentinel template. Landed 3 interviews the following week."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">SM</div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Sarah M.</p>
+                            <p class="text-xs text-blue-300">Senior Product Manager</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-80 md:w-96 p-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-left">
+                    <div class="flex text-yellow-400 mb-4 text-lg">★★★★★</div>
+                    <p class="text-white italic mb-6 leading-relaxed">"I had a very graphic-heavy resume from Canva. The scanner showed me that the ATS couldn't even read my name. I ported my data to the Axiom layout and finally got a callback from Deloitte."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">DR</div>
+                        <div>
+                            <p class="font-bold text-white text-sm">David R.</p>
+                            <p class="text-xs text-blue-300">Financial Analyst</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-80 md:w-96 p-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-left">
+                    <div class="flex text-yellow-400 mb-4 text-lg">★★★★★</div>
+                    <p class="text-white italic mb-6 leading-relaxed">"The Keyword density check is a game changer. It highlighted exactly which hard skills I was missing from the job description. The AI auto-wrote new bullets to bridge the gap."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">PK</div>
+                        <div>
+                            <p class="font-bold text-white text-sm">Priya K.</p>
+                            <p class="text-xs text-blue-300">VP of Operations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-80 md:w-96 p-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-left">
+                    <div class="flex text-yellow-400 mb-4 text-lg">★★★★★</div>
+                    <p class="text-white italic mb-6 leading-relaxed">"Simple, brutal, and honest. The score checker humbled me, but the integrated builder fixed my formatting in literally one click. Worth its weight in gold."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">JL</div>
+                        <div>
+                            <p class="font-bold text-white text-sm">James L.</p>
+                            <p class="text-xs text-blue-300">Software Engineer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEMPLATES SHOWCASE -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Fix your score with 20+ ATS-Native Layouts</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg">Don't guess what the robots want. Our templates are hard-coded to pass parser requirements perfectly.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Template 1 -->
+                <div class="group bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:shadow-xl hover:border-blue-300 transition duration-300 cursor-pointer">
+                    <div class="aspect-[1/1.4] bg-gray-100 rounded-xl mb-4 overflow-hidden border border-gray-100 relative">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center z-10">
+                            <span class="bg-white text-orbit-dark font-bold px-4 py-2 rounded-lg text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition duration-300">Use Template</span>
+                        </div>
+                        <img src="/thumbnails/sentinel.jpg" alt="Sentinel Template" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTRweCIgZmlsbD0iIzkY2EzeSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPlNlbnRpbmVsPC90ZXh0Pjwvc3ZnPg=='">
+                    </div>
+                    <div class="flex justify-between items-center px-1">
+                        <h4 class="font-bold text-gray-900">Sentinel</h4>
+                        <span class="text-[10px] uppercase font-bold text-green-600 bg-green-50 px-2 py-1 rounded">100% Match</span>
+                    </div>
+                </div>
+                <!-- Template 2 -->
+                <div class="group bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:shadow-xl hover:border-blue-300 transition duration-300 cursor-pointer">
+                    <div class="aspect-[1/1.4] bg-gray-100 rounded-xl mb-4 overflow-hidden border border-gray-100 relative">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center z-10">
+                            <span class="bg-white text-orbit-dark font-bold px-4 py-2 rounded-lg text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition duration-300">Use Template</span>
+                        </div>
+                        <img src="/thumbnails/vanguard.jpg" alt="Vanguard Template" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTRweCIgZmlsbD0iIzkY2EzeSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPlZhbmd1YXJkPC90ZXh0Pjwvc3ZnPg=='">
+                    </div>
+                    <div class="flex justify-between items-center px-1">
+                        <h4 class="font-bold text-gray-900">Vanguard</h4>
+                        <span class="text-[10px] uppercase font-bold text-green-600 bg-green-50 px-2 py-1 rounded">94% Match</span>
+                    </div>
+                </div>
+                <!-- Template 3 -->
+                <div class="group bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:shadow-xl hover:border-blue-300 transition duration-300 cursor-pointer">
+                    <div class="aspect-[1/1.4] bg-gray-100 rounded-xl mb-4 overflow-hidden border border-gray-100 relative">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center z-10">
+                            <span class="bg-white text-orbit-dark font-bold px-4 py-2 rounded-lg text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition duration-300">Use Template</span>
+                        </div>
+                        <img src="/thumbnails/axiom.jpg" alt="Axiom Template" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTRweCIgZmlsbD0iIzkY2EzeSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkF4aW9tPC90ZXh0Pjwvc3ZnPg=='">
+                    </div>
+                    <div class="flex justify-between items-center px-1">
+                        <h4 class="font-bold text-gray-900">Axiom</h4>
+                        <span class="text-[10px] uppercase font-bold text-green-600 bg-green-50 px-2 py-1 rounded">98% Match</span>
+                    </div>
+                </div>
+                <!-- Template 4 -->
+                <div class="group bg-white p-4 rounded-2xl shadow-sm border border-gray-200 hover:shadow-xl hover:border-blue-300 transition duration-300 cursor-pointer">
+                    <div class="aspect-[1/1.4] bg-gray-100 rounded-xl mb-4 overflow-hidden border border-gray-100 relative">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center z-10">
+                            <span class="bg-white text-orbit-dark font-bold px-4 py-2 rounded-lg text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition duration-300">Use Template</span>
+                        </div>
+                        <img src="/thumbnails/classic_blue.jpg" alt="Classic Blue Template" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTRweCIgZmlsbD0iIzkY2EzeSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkNsYXNzaWMgQmx1ZTwvdGV4dD48L3N2Zz4='">
+                    </div>
+                    <div class="flex justify-between items-center px-1">
+                        <h4 class="font-bold text-gray-900">Classic Blue</h4>
+                        <span class="text-[10px] uppercase font-bold text-green-600 bg-green-50 px-2 py-1 rounded">100% Match</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="/templates.html" class="inline-block border-2 border-orbit-dark text-orbit-dark hover:bg-blue-50 font-bold px-8 py-4 rounded-xl transition text-lg">View All 20+ Layouts</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="py-24 bg-white border-t border-gray-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mb-12">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <details class="group border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-md transition [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between gap-1.5 rounded-xl p-6 text-gray-900 font-bold text-lg">
+                        What makes a "Good" ATS Score?
+                        <svg class="size-6 shrink-0 transition-transform duration-300 group-open:-rotate-180 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </summary>
+                    <p class="px-6 pb-6 text-gray-600 leading-relaxed">
+                        A score above 80% means your resume format is machine-readable and contains the fundamental sections required by most parsers (Workday, Taleo, Greenhouse). Above 90% indicates strong keyword alignment, lack of formatting errors, and high density of quantifiable achievements.
+                    </p>
+                </details>
+                <details class="group border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-md transition [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between gap-1.5 rounded-xl p-6 text-gray-900 font-bold text-lg">
+                        Is this ATS Checker really free?
+                        <svg class="size-6 shrink-0 transition-transform duration-300 group-open:-rotate-180 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </summary>
+                    <p class="px-6 pb-6 text-gray-600 leading-relaxed">
+                        Yes! You can upload your resume, parse your data, and view your baseline ATS score completely free. You can also preview your data in our templates for free. If you want to download the optimized Word Document or use our premium AI re-writer to fix errors, we offer highly affordable upgrades.
+                    </p>
+                </details>
+                <details class="group border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-md transition [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between gap-1.5 rounded-xl p-6 text-gray-900 font-bold text-lg">
+                        Why is my beautiful Canva resume failing?
+                        <svg class="size-6 shrink-0 transition-transform duration-300 group-open:-rotate-180 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </summary>
+                    <p class="px-6 pb-6 text-gray-600 leading-relaxed">
+                        Graphic design tools often export text as flattened images, nested objects, or use complex floating text boxes. A human can read it perfectly, but a robot parsing the code just sees a blank page or jumbled letters. Our templates solve this: they give you beautiful design layered over clean, 100% parseable code.
+                    </p>
+                </details>
+                <details class="group border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-md transition [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between gap-1.5 rounded-xl p-6 text-gray-900 font-bold text-lg">
+                        Is my data secure?
+                        <svg class="size-6 shrink-0 transition-transform duration-300 group-open:-rotate-180 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </summary>
+                    <p class="px-6 pb-6 text-gray-600 leading-relaxed">
+                        Absolutely. We do not sell your personal data. Your uploaded resume is securely parsed in the cloud via enterprise-grade encryption to generate your score, and is kept strictly confidential within your personal workspace.
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="py-24 bg-gradient-to-br from-orbit-dark via-[#164B80] to-[#0A2645] text-white text-center px-4 relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIi8+PC9zdmc+')] opacity-50 pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto relative z-10">
+            <h2 class="text-4xl md:text-5xl font-black mb-6 tracking-tight">Ready to stop getting ghosted?</h2>
+            <p class="text-xl text-blue-100 mb-10 max-w-2xl mx-auto font-medium">Find out your ATS score right now and let our AI rebuild your resume into an interview-generating machine.</p>
+            <a href="/?action=upload" class="inline-flex bg-white text-orbit-dark px-12 py-5 rounded-2xl text-xl font-extrabold shadow-2xl transition transform hover:scale-105 items-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Scan My Resume Free
+            </a>
+            <p class="mt-6 text-sm text-blue-300 font-bold uppercase tracking-widest">Takes less than 10 seconds</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-400 py-16 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
+            <div class="col-span-1 md:col-span-1">
+                <span class="text-white font-black text-2xl tracking-tight">GetPerfectResume</span>
+                <p class="mt-4 text-sm leading-relaxed">Powered by Orbit Careers. Building the next generation of professional advancement and workflow automation tools.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-wider">Features</h4>
+                <ul class="space-y-3 text-sm font-medium">
+                    <li><a href="/?action=upload" class="hover:text-white transition">ATS Score Checker</a></li>
+                    <li><a href="/" class="hover:text-white transition">AI Resume Builder</a></li>
+                    <li><a href="#" class="hover:text-white transition">Cover Letter Generator</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-wider">Resources</h4>
+                <ul class="space-y-3 text-sm font-medium">
+                    <li><a href="/templates.html" class="hover:text-white transition">Resume Templates</a></li>
+                    <li><a href="#" class="hover:text-white transition">Career Blog</a></li>
+                    <li><a href="#" class="hover:text-white transition">EPF Withdrawal Rules</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-wider">Legal</h4>
+                <ul class="space-y-3 text-sm font-medium">
+                    <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-gray-800 text-sm text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+            <p>&copy; 2026 GetPerfectResume.com. All rights reserved.</p>
+            <p class="mt-4 md:mt-0 font-medium">An Orbit Careers Product.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
