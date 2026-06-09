@@ -57,6 +57,47 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
     </style>
+
+    <!-- SAFETY STUB: startWizard available immediately on parse.
+         The main script block defines a full version that overrides this after load. -->
+    <script>
+        function startWizard() {
+            try {
+                var lc = document.getElementById('landing-content');
+                if (lc) lc.style.display = 'none';
+                var wiz = document.getElementById('resume-wizard');
+                if (wiz) {
+                    wiz.className = wiz.className.replace(/\bhidden\b/g, '').trim();
+                    wiz.style.cssText = 'display:flex!important;flex-direction:column;';
+                }
+                var s1 = document.getElementById('wizard-step-1');
+                var s2 = document.getElementById('wizard-step-2');
+                var s3 = document.getElementById('wizard-step-3');
+                if (s1) { s1.className = s1.className.replace(/\bhidden\b/g, '').trim(); s1.style.display='block'; }
+                if (s2) s2.style.display = 'none';
+                if (s3) s3.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch(e) { console.error('startWizard:', e); }
+        }
+        function openUploadModal() { startWizard(); }
+        // Store wizard session data for post-login restoration
+        window._wizardSession = {};
+        function _saveWizardData() {
+            try {
+                window._wizardSession = {
+                    industry: (document.getElementById('industry')||{}).value,
+                    roleCategory: (document.getElementById('roleCategory')||{}).value,
+                    experience: (document.getElementById('experience-level')||{}).value,
+                    targetRole: (document.getElementById('target-role-input')||{}).value,
+                    jobDescription: (document.getElementById('job-description-input')||{}).value,
+                    extraInfo: (document.getElementById('extra-info-input')||{}).value,
+                    internships: (document.getElementById('internships-input')||{}).value,
+                    projects: (document.getElementById('projects-input')||{}).value,
+                };
+                sessionStorage.setItem('orbit_wizard_data', JSON.stringify(window._wizardSession));
+            } catch(e) {}
+        }
+    </script>
 </head>
 <body class="min-h-screen flex flex-col relative pb-10">
 
@@ -825,7 +866,7 @@
                             Upload PDF
                         </div>
                         <!-- Build from Scratch Option -->
-                        <button onclick="window.location.href='dashboard.html'; event.stopPropagation();" class="flex-1 px-8 py-4 rounded-xl bg-transparent border-2 border-blue-400 text-blue-300 font-bold uppercase tracking-widest hover:bg-blue-900/50 hover:text-white hover:border-blue-300 transition-all duration-300">
+                        <button onclick="_saveWizardData(); openBuildFromScratch(); event.stopPropagation();" class="flex-1 px-8 py-4 rounded-xl bg-transparent border-2 border-blue-400 text-blue-300 font-bold uppercase tracking-widest hover:bg-blue-900/50 hover:text-white hover:border-blue-300 transition-all duration-300">
                             Build from Scratch
                         </button>
                     </div>
@@ -1010,8 +1051,11 @@
     <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
         <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 font-bold text-xl">✕</button>
         
-        <h3 class="text-2xl font-extrabold text-[#0F3B68] mb-1">Welcome Back</h3>
-        <p class="text-sm text-gray-600 mb-6">Log in to access your Resume Builder Dashboard.</p>
+        <div id="login-modal-icon" class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
+            <svg class="w-6 h-6 text-[#0F3B68]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        </div>
+        <h3 id="login-modal-title" class="text-2xl font-extrabold text-[#0F3B68] mb-1">Welcome Back</h3>
+        <p id="login-modal-subtitle" class="text-sm text-gray-600 mb-6">Log in to access your Resume Builder Dashboard.</p>
         
         <!-- Google Login Button -->
         <button onclick="loginWithGoogle()" class="w-full py-3 mb-4 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold rounded-xl shadow-sm transition flex items-center justify-center gap-3 text-sm">
@@ -1049,16 +1093,22 @@
 </div>
 <script>
 
-        // 1. INITIALIZE SUPABASE FIRST
+        // 1. INITIALIZE SUPABASE
         const supabaseUrl = 'https://vkiitostqcjkiyflcjhu.supabase.co';
-        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraWl0b3N0cWNqa2l5Zmxjamh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MTgyNDEsImV4cCI6MjA5NTI5NDI0MX0.a1vvLGJPEJ9l7v3HgHQQ4dIRs8HLN8IEPuGqnm-lHC4'; 
-        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraWl0b3N0cWNqa2l5Zmxjamh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MTgyNDEsImV4cCI6MjA5NTI5NDI0MX0.a1vvLGJPEJ9l7v3HgHQQ4dIRs8HLN8IEPuGqnm-lHC4';
+        let supabaseClient;
+        try {
+            supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+        } catch(e) {
+            console.error('Supabase failed to init:', e);
+        }
 
         // 2. Global tracker for upload flow
         window.isUserLoggedIn = false; 
 
         // Check if user is already logged in on page load
         document.addEventListener('DOMContentLoaded', async () => {
+            if (!supabaseClient) return;
             const { data: { session } } = await supabaseClient.auth.getSession();
             
             if (session) {
@@ -1077,12 +1127,38 @@
 
                 // 3. Only redirect if they didn't explicitly request the upload page
                 if (action !== 'upload') {
-                    window.location.href = 'dashboard.html';
+                    // Save wizard data before redirect
+        _saveWizardData();
+        if (window.resumeData) localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
+        window.location.href = window._loginRedirect || 'dashboard.html';
                 }
             }
         });
         // Modal Controls
 function openLoginModal() {
+    // Generic login - reset title
+    var t = document.getElementById('login-modal-title');
+    var s = document.getElementById('login-modal-subtitle');
+    if (t) t.textContent = 'Welcome Back';
+    if (s) s.textContent = 'Log in to access your Resume Builder Dashboard.';
+    window._loginRedirect = 'dashboard.html';
+    document.getElementById('login-modal').classList.remove('hidden');
+}
+
+function openBuildFromScratch() {
+    // Check if already logged in - go straight to dashboard
+    if (window.isUserLoggedIn) {
+        _saveWizardData();
+        window.location.href = 'dashboard.html';
+        return;
+    }
+    // Not logged in - show login modal with build-from-scratch context
+    _saveWizardData();
+    window._loginRedirect = 'dashboard.html';
+    var t = document.getElementById('login-modal-title');
+    var s = document.getElementById('login-modal-subtitle');
+    if (t) t.textContent = 'One Last Step';
+    if (s) s.textContent = 'Create a free account to start building your resume — your progress is saved.';
     document.getElementById('login-modal').classList.remove('hidden');
 }
 
@@ -1093,13 +1169,15 @@ function closeLoginModal() {
 
 // 1. Google 1-Click Login
 async function loginWithGoogle() {
-    // 🚨 SAVE DATA BEFORE REDIRECTING 🚨
+    if (!supabaseClient) return alert('Authentication service unavailable. Please refresh the page.');
+    _saveWizardData();
     if (window.resumeData) localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
     
+    const redirectTarget = window._loginRedirect || 'dashboard.html';
     const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: window.location.origin + '/dashboard.html'
+            redirectTo: window.location.origin + '/' + redirectTarget
         }
     });
     if (error) showMsg(error.message, false);
@@ -1107,7 +1185,8 @@ async function loginWithGoogle() {
 
 // 2. Standard Email/Password Login
 async function loginWithEmail() {
-    // 🚨 SAVE DATA BEFORE REDIRECTING 🚨
+    if (!supabaseClient) return alert('Authentication service unavailable. Please refresh the page.');
+    _saveWizardData();
     if (window.resumeData) localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
 
     const email = document.getElementById('login-email').value.trim();
@@ -1129,13 +1208,13 @@ async function loginWithEmail() {
         btn.innerText = "Sign In";
         btn.disabled = false;
     } else {
-        window.location.href = 'dashboard.html';
+        window.location.href = window._loginRedirect || 'dashboard.html';
     }
 }
 
 // 3. Set up a password for the first time
 async function signUpWithEmail() {
-    // 🚨 SAVE DATA SO IT SURVIVES THE EMAIL CONFIRMATION CLICK 🚨
+    if (!supabaseClient) return alert('Authentication service unavailable. Please refresh the page.');
     if (window.resumeData) localStorage.setItem('orbit_resume_data', JSON.stringify(window.resumeData));
 
     const email = document.getElementById('login-email').value.trim();
@@ -1184,40 +1263,38 @@ function showMsg(text, isSuccess) {
         // WIZARD UI LOGIC
         // ==========================================
 
-        // FIX #2: Define openUploadModal so selectTemplateAndUpload() works from template cards
-        function openUploadModal() {
-            startWizard();
-        }
 
+        // startWizard - full version with section hiding and progress bar
         function startWizard() {
-            // Hide landing content and all page sections
-            const sectionsToHide = [
-                'landing-content', 'how-it-works', 'faq',
-                'template-slider-section', 'testimonials-section', 'hero-section'
-            ];
-            sectionsToHide.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) { el.style.display = 'none'; }
-            });
-            // Also hide by section tag as fallback
-            document.querySelectorAll('section').forEach(s => { s.style.display = 'none'; });
-            // Show wizard - remove hidden class AND set inline style to override any Tailwind !important
-            const wizard = document.getElementById('resume-wizard');
-            if (wizard) {
-                wizard.classList.remove('hidden');
-                wizard.removeAttribute('style');      // clear any stale inline styles
-                wizard.style.cssText = 'display:flex !important; flex-direction:column;';
-            }
-            // Reset to step 1 - null-safe
-            ['wizard-step-2', 'wizard-step-3'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) { el.classList.add('hidden'); el.style.display = ''; }
-            });
-            const step1 = document.getElementById('wizard-step-1');
-            if (step1) step1.classList.remove('hidden');
-            // Reset progress
-            if (typeof updateProgressBar === 'function') updateProgressBar(1);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            try {
+                // Hide landing content and all page sections
+                const sectionsToHide = [
+                    'landing-content', 'how-it-works', 'faq',
+                    'template-slider-section', 'testimonials-section', 'hero-section'
+                ];
+                sectionsToHide.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.style.display = 'none'; }
+                });
+                // Also hide footer and nav
+                document.querySelectorAll('section, footer, nav').forEach(s => { s.style.display = 'none'; });
+                // Show wizard
+                const wizard = document.getElementById('resume-wizard');
+                if (wizard) {
+                    wizard.classList.remove('hidden');
+                    wizard.style.cssText = 'display:flex!important;flex-direction:column;';
+                }
+                // Reset to step 1
+                ['wizard-step-2', 'wizard-step-3'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.classList.add('hidden'); el.style.display = ''; }
+                });
+                const step1 = document.getElementById('wizard-step-1');
+                if (step1) { step1.classList.remove('hidden'); step1.style.display = 'block'; }
+                // Reset progress bar
+                if (typeof updateProgressBar === 'function') updateProgressBar(1);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch(e) { console.error('startWizard full:', e); }
         }
         
 
@@ -1229,8 +1306,7 @@ function showMsg(text, isSuccess) {
                 const exp = document.getElementById('experience-level').value;
                 if (!ind || !role || !exp) { alert("Please complete all fields to proceed."); return; }
                 
-                // FIX #3: Route the branches dynamically (senior-fields now starts hidden)
-                if (exp === 'fresher' || exp === 'entry') {
+                    if (exp === 'fresher' || exp === 'entry') {
                     document.getElementById('wizard-fresher-fields').classList.remove('hidden');
                     document.getElementById('wizard-senior-fields').classList.add('hidden');
                 } else {
