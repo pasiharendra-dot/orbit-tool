@@ -200,11 +200,12 @@ app.post('/api/create-order', async (req, res) => {
 });
 
 // ==========================================
-// SECURITY ADDITION: Razorpay Payment Verification
+// SECURITY ADDITION: Razorpay Payment Verification & Tracking
 // ==========================================
 app.post('/api/payment/verify', async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, plan, email } = req.body;
+        // ADDED: promoCode extracted from the frontend request
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, plan, email, promoCode } = req.body;
         
         if (!email) return res.status(400).json({ error: "Missing candidate email context." });
 
@@ -213,41 +214,58 @@ app.post('/api/payment/verify', async (req, res) => {
 
         if (generated_signature === razorpay_signature) {
             
-            // 1. Fetch user's current credits so we don't overwrite them
+            // 1. Fetch user's current credits
             const { data: userRecord } = await supabase
                 .from('candidate_profiles')
-                .select('credits')
+                .select('credits, master_resume')
                 .eq('email', email)
                 .single();
                 
             const currentCredits = userRecord ? (userRecord.credits || 0) : 0;
+            // Attempt to get the user's name if saved in the database
+            const userName = userRecord && userRecord.master_resume ? userRecord.master_resume.name : "Unknown User";
 
-// 2. Provision Plan & Credits
+            // 2. Provision Plan & Credits
             let updateData = { plan_type: plan || 'single' };
             let creditsToAdd = 50;
             let expiryDate = new Date();
 
             if (plan === 'annual' || plan === 'expert') {
-                // Premium Plans - 1 Year Access
                 expiryDate.setFullYear(expiryDate.getFullYear() + 1);
                 updateData.plan_expiry = expiryDate.toISOString();
                 creditsToAdd = 300; 
             } else {
-                // Starter (Single) Plan - 7 Days Access
                 expiryDate.setDate(expiryDate.getDate() + 7);
                 updateData.plan_expiry = expiryDate.toISOString();
                 creditsToAdd = 50;
             }
             
-            // Clear download_used for legacy database cleanup
             updateData.download_used = false; 
-
-            // Add the new credits to their existing balance
             updateData.credits = currentCredits + creditsToAdd;
             
             const { error: dbError } = await supabase.from('candidate_profiles').update(updateData).eq('email', email);
-
             if (dbError) throw new Error("Payment verified but failed to provision your plan features.");
+
+            // 3. BACKGROUND TRACKING: Push to Google Sheets
+            // We do this asynchronously (without 'await') so it doesn't slow down the user's success screen
+            try {
+                const GOOGLE_TRACKER_URL = "https://script.google.com/macros/s/AKfycbxq5u9yJhF1j0Sg_Nws0awK3VrvwQGcoumZphjb752GSYUS_4OWeo23tNyhqLAd2rZO/exec";
+                const trackerPayload = {
+                    name: userName,
+                    email: email,
+                    action: `PURCHASE - ${plan.toUpperCase()}`,
+                    promoCode: promoCode ? promoCode.toUpperCase() : "NONE",
+                    paymentId: razorpay_payment_id
+                };
+                
+                fetch(GOOGLE_TRACKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(trackerPayload)
+                }).catch(err => console.error("Non-fatal Google Sheet Tracker Error:", err));
+            } catch (trackerErr) {
+                console.error("Failed to fire Google Sheet Tracker:", trackerErr);
+            }
 
             res.status(200).json({ status: "success", message: "Payment verified and plan activated." });
         } else {
