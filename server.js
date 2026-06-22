@@ -123,27 +123,27 @@ if (experienceLevel === "fresher") {
         specificRules = `1. Zero Experience is Okay: Do NOT invent work history. Focus heavily on academic projects, relevant coursework, thesis work, and extracurricular leadership. Treat major university projects as "Experience" if work history is missing.
 2. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "Aspiring [Target Job Title] | [Degree] | Strong foundation in [Core Skill 1] & [Core Skill 2]".
 3. Core Skills Format: You MUST output EXACTLY 12 core skills. Focus on academic skills, fast learning, and foundational tools. Output ONLY the raw skill name. 
-4. Work Experience Format (If applicable): Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". DO NOT include bullet characters (like • or ·) in the JSON.
-5. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array (e.g., "Role/Project Name - Organization (Date)\\n• Action-driven bullet point"). DO NOT invent these if the user didn't provide them.
-CRITICAL CONTEXT: The user is a Fresher targeting the exact role of "${targetRole}". You MUST frame their academic projects, certifications, and educational background to prove they are a perfect fit for this specific position. Discard irrelevant hobbies.`;
+4. Work Experience & Project Format: Rewrite using the XYZ framework (Accomplished [X] as measured by [Y], by doing [Z]). Replace passive phrases ('helped with', 'responsible for') with strong, direct action verbs. If metrics are missing, use placeholders (e.g., 'achieving a grade of [X]%' or 'saving [X] hours') to make it measurable. Format as: "[Focus Area]: [Action verb-led sentence]". DO NOT include bullet characters.
+5. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array.
+CRITICAL CONTEXT: The user is a Fresher targeting the exact role of "${targetRole}". You MUST frame their academic projects, certifications, and educational background to prove they are a perfect fit.`;
     } else if (experienceLevel === "entry") {
         roleContext = `Role: You are an Expert Early-Career Strategist at Orbit Careers.\nYour singular goal is to OPTIMIZE an entry-level professional's resume (1-3 years experience) for ATS systems.`;
         specificRules = `1. The Hybrid Approach: Blend their early-career execution with a strong emphasis on their degree and technical skills. 
 2. No Hallucinations: Do not invent leadership or strategy roles. Focus on collaboration, execution, process adherence, and fast learning.
 3. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "[Target Job Title] | [Degree or Certification] | Focus in [Core Skill 1] & [Core Skill 2]".
 4. Core Skills Format: You MUST output EXACTLY 12 core skills. Blend foundational tools with soft skills. Output ONLY the raw skill name. 
-5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". DO NOT include bullet characters (like • or ·) in the JSON.
+5. Work Experience Format: Rewrite using the Problem → Action → Result (XYZ) framework. Focus on execution and process improvement rather than basic tasks. Replace passive phrases with strong action verbs. You MUST inject metric placeholders (e.g., 'improving efficiency by [X]%', 'managing [X] client accounts') if exact numbers aren't provided. Format as: "[Focus Area]: [Action verb-led sentence]". DO NOT include bullet characters.
 6. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array.
-CRITICAL CONTEXT: The user is an Entry-Level professional targeting the exact role of "${targetRole}". You MUST blend their early-career execution with their education to prove they are a perfect fit for this specific position.`;
+CRITICAL CONTEXT: The user is an Entry-Level professional targeting the exact role of "${targetRole}". You MUST blend their early-career execution with their education to prove they are a perfect fit.`;
     } else {
         roleContext = `Role: You are an Elite Executive Resume Strategist at Orbit Careers.\nYour singular goal is to OPTIMIZE the user's resume for ATS systems and executive recruiters.`;
         specificRules = `1. Zero Seniority Hallucination: Do NOT elevate the user's job level.
 2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026. State this in the summary.
 3. Title Format: The "optimized_title" MUST fit on a single line. Use this exact template structure: "[Target Job Title or Current Role] | [Years of Experience]+ years in [Core Domain 1] & [Core Domain 2] | [Secondary Domain or Skill]". CRITICAL ANTI-REPETITION RULE: You MUST NOT repeat major words across the title.
 4. Core Skills Format: You MUST output EXACTLY 12 core skills. Output ONLY the raw skill name. ABSOLUTELY NO CATEGORIES OR COLONS.
-5. Work Experience Format: Format EVERY bullet point using this exact structure: "[Focus Area]: [Action verb-led sentence with impact and quantification]". DO NOT include bullet characters (like • or ·) in the JSON.`;
+5. Work Experience Format: Rewrite using the Problem → Action → Result (XYZ) framework. Focus heavily on strategic ownership, business impact, and leadership rather than basic, daily tasks. Replace passive phrases with strong executive action verbs (e.g., Spearheaded, Architected, Directed). You MUST inject high-level metric placeholders (e.g., 'generating $[X]M in revenue', 'scaling team by [X]%', 'reducing costs by $[X]') if exact numbers are missing to force measurable achievements. Format as: "[Focus Area]: [Action verb-led sentence]". DO NOT include bullet characters.`;
     }
-
+    
     return `${roleContext}
   
 User's Target Role: ${targetRole}
