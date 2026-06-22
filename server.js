@@ -560,20 +560,21 @@ app.post('/api/generate-cover-letter', async (req, res) => {
         if (userError || !user) throw new Error("User not found");
         if (user.credits <= 0) return res.status(403).json({ message: "Out of credits. Please purchase more." });
 
-        // 2. Build the Expert Prompt
-        let toneInstruction = "Traditional, highly professional, and respectful.";
-        if (tone === 'confident') toneInstruction = "Confident, executive, authoritative, and results-driven.";
-        if (tone === 'direct') toneInstruction = "Direct, punchy, startup-ready, modern, and highly actionable.";
+// 2. Build the Expert Prompt
+        let toneInstruction = "Traditional, highly professional, and respectful, focusing on reliability and proven execution.";
+        if (tone === 'confident') toneInstruction = "Confident, executive, authoritative, and results-driven. Frame the applicant as a high-ROI strategic asset.";
+        if (tone === 'direct') toneInstruction = "Direct, punchy, startup-ready, modern, and highly actionable. Cut straight to the business impact.";
 
-        const systemPrompt = `You are an elite executive career coach and expert copywriter. Your goal is to write a highly tailored, compelling cover letter.
+        const systemPrompt = `Role: You are an Elite Career Strategist at Orbit Careers and a master copywriter.\nYour singular goal is to write a highly tailored, compelling "Business Case" cover letter that proves the candidate's immediate ROI.
         
         Strict Guidelines:
         1. Tone: ${toneInstruction}
-        2. Structure: 3-4 concise paragraphs. Open with a strong hook, use the body to connect their specific resume achievements to the target role, and close with a confident call to action.
-        3. NO FLUFF: Avoid generic, boring phrases like "I am writing to express my interest in..." or "Enclosed is my resume". Start with immediate impact.
-        4. Integration: You MUST weave in 1-2 specific metrics, tools, or achievements from the provided resume data to prove their competence.
-        5. Output Format: Return ONLY the body paragraphs of the cover letter. Do not include the header (name, address, date), the greeting ("Dear Hiring Manager"), or the sign-off ("Sincerely, Name"). Just the core letter content, separated by double line breaks.`;
-
+        2. Structure: Exactly 3 concise paragraphs following a "Hook -> Proof -> Value" framework.
+           - Paragraph 1 (The Hook): NEVER use generic openers like "I am writing to apply for..." or "Enclosed is my resume." Start with a powerful, immediate statement aligning the candidate's core expertise with the target role's strategic demands.
+           - Paragraph 2 (The Proof): Weave in 2-3 specific, metric-driven achievements from the provided resume data. Frame these using the Problem -> Action -> Result (XYZ) methodology. If exact metrics are missing in the resume data, you MUST inject placeholders (e.g., '[X]% increase', '$[X]M in revenue', 'saving [X] hours') to force a measurable business case.
+           - Paragraph 3 (The Value & CTA): Summarize how their specific toolkit will solve immediate problems for the employer. Close with a confident, proactive call to action for an interview.
+        3. NO FLUFF: Eliminate all passive language, clichés, and biography-style storytelling. Every sentence must demonstrate strategic value, leadership, or execution capability.
+        4. Output Format: Return ONLY the raw body paragraphs of the cover letter. Do NOT include the header (name, address, date), the greeting ("Dear Hiring Manager,"), or the sign-off ("Sincerely, [Name]"). Output the paragraphs separated by double line breaks.`;
         const userPrompt = `Target Role: ${role}\nTarget Company: ${company}\n\nCandidate Resume Data:\n${JSON.stringify(resumeData)}\n\nWrite the cover letter body now.`;
 
         // 3. Generate AI Response
