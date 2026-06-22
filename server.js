@@ -587,11 +587,6 @@ app.post('/api/generate-cover-letter', async (req, res) => {
         if (tone === 'confident') toneInstruction = "Confident, executive, authoritative, and results-driven. Frame the applicant as a high-ROI strategic asset.";
         if (tone === 'direct') toneInstruction = "Direct, punchy, startup-ready, modern, and highly actionable. Cut straight to the business impact.";
 
-// 2. Build the Expert Prompt
-        let toneInstruction = "Traditional, highly professional, and respectful, focusing on reliability and proven execution.";
-        if (tone === 'confident') toneInstruction = "Confident, executive, authoritative, and results-driven. Frame the applicant as a high-ROI strategic asset.";
-        if (tone === 'direct') toneInstruction = "Direct, punchy, startup-ready, modern, and highly actionable. Cut straight to the business impact.";
-
         const systemPrompt = `Role: You are an Elite Career Strategist at Orbit Careers and a master copywriter.\nYour singular goal is to write a highly tailored, compelling "Business Case" cover letter that proves the candidate's immediate ROI.
         
         Strict Guidelines:
