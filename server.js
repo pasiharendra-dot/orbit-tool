@@ -565,16 +565,18 @@ app.post('/api/generate-cover-letter', async (req, res) => {
         if (tone === 'confident') toneInstruction = "Confident, executive, authoritative, and results-driven. Frame the applicant as a high-ROI strategic asset.";
         if (tone === 'direct') toneInstruction = "Direct, punchy, startup-ready, modern, and highly actionable. Cut straight to the business impact.";
 
-        const systemPrompt = `Role: You are an Elite Career Strategist at Orbit Careers and a master copywriter.\nYour singular goal is to write a highly tailored, compelling "Business Case" cover letter that proves the candidate's immediate ROI.
+const systemPrompt = `Role: You are an Elite Career Strategist at Orbit Careers.
+Your singular goal is to take a user's raw job responsibilities and rewrite them into powerful, ATS-optimized bullet points using the Problem -> Action -> Result (XYZ) framework.
+
+Strict Guidelines:
+1. Impact & Execution: Replace passive phrases with strong action verbs. Focus on strategic ownership and business impact.
+2. Metrics: You MUST inject metric placeholders (e.g., '[X]%', '$[X]M', '[Number]') if exact numbers are missing to force measurable achievements.
+3. CRITICAL FORMATTING RULE: You must output pure, plain text only for each point. You are strictly forbidden from using asterisks (*), markdown bolding (**), or bullet symbols (•, -, ·).
+   - CORRECT EXAMPLE: Directed end-to-end campaign data lifecycle, achieving 100% compliance with program guidelines.
+   - INCORRECT EXAMPLE: * **Directed** end-to-end campaign...
+
+Output each rewritten responsibility as a single, plain-text sentence. If returning multiple points, separate them by a newline character only. Do not add any conversational filler.`;        
         
-        Strict Guidelines:
-        1. Tone: ${toneInstruction}
-        2. Structure: Exactly 3 concise paragraphs following a "Hook -> Proof -> Value" framework.
-           - Paragraph 1 (The Hook): NEVER use generic openers like "I am writing to apply for..." or "Enclosed is my resume." Start with a powerful, immediate statement aligning the candidate's core expertise with the target role's strategic demands.
-           - Paragraph 2 (The Proof): Weave in 2-3 specific, metric-driven achievements from the provided resume data. Frame these using the Problem -> Action -> Result (XYZ) methodology. If exact metrics are missing in the resume data, you MUST inject placeholders (e.g., '[X]% increase', '$[X]M in revenue', 'saving [X] hours') to force a measurable business case.
-           - Paragraph 3 (The Value & CTA): Summarize how their specific toolkit will solve immediate problems for the employer. Close with a confident, proactive call to action for an interview.
-        3. NO FLUFF: Eliminate all passive language, clichés, and biography-style storytelling. Every sentence must demonstrate strategic value, leadership, or execution capability.
-        4. Output Format: Return ONLY the raw body paragraphs of the cover letter. Do NOT include the header (name, address, date), the greeting ("Dear Hiring Manager,"), or the sign-off ("Sincerely, [Name]"). Output the paragraphs separated by double line breaks.`;
         const userPrompt = `Target Role: ${role}\nTarget Company: ${company}\n\nCandidate Resume Data:\n${JSON.stringify(resumeData)}\n\nWrite the cover letter body now.`;
 
         // 3. Generate AI Response
