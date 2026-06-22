@@ -123,10 +123,10 @@ if (experienceLevel === "fresher") {
         specificRules = `1. Zero Experience is Okay: Do NOT invent work history. Focus heavily on academic projects, relevant coursework, thesis work, and extracurricular leadership. Treat major university projects as "Experience" if work history is missing.
 2. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "Aspiring [Target Job Title] | [Degree] | Strong foundation in [Core Skill 1] & [Core Skill 2]".
 3. Core Skills Format: You MUST output EXACTLY 12 core skills. Focus on academic skills, fast learning, and foundational tools. Output ONLY the raw skill name. 
-4. Professional Summary Format: You MUST write exactly 3 short paragraphs following this strict "Hook -> Proof -> Value" framework:
-   - Paragraph 1 (Identity): "Highly motivated [Degree/Title] with a strong foundation in [Core Domain], poised to drive [impact] in the [Industry]."
-   - Paragraph 2 (Proof): "Delivered impact through [Major Academic Project/Internship], achieving [Metric/Result]." (Use placeholders like [X]% if metrics are missing).
-   - Paragraph 3 (Value): "Proven expertise in [Skill 1], [Skill 2], and [Skill 3]. Known for [key academic strength/fast learning], ensuring readiness to deliver immediate value."
+4. Professional Summary Format: You MUST write ONE cohesive paragraph consisting of exactly 3 sentences following this strict "Hook -> Proof -> Value" framework. You are strictly forbidden from writing a single-line summary. Do NOT include labels like 'Hook:' or 'Sentence 1:'.
+   - Sentence 1 (Hook): "Highly motivated [Degree/Title] with a strong foundation in [Core Domain], poised to drive [impact] in the [Industry]."
+   - Sentence 2 (Proof): "Delivered impact through [Major Academic Project/Internship], achieving [Metric/Result]." (Use placeholders like [X]% if metrics are missing).
+   - Sentence 3 (Value): "Proven expertise in [Skill 1], [Skill 2], and [Skill 3]. Known for [key academic strength/fast learning], ensuring readiness to deliver immediate value."
    STRICTLY NO first-person pronouns ("I", "Me", "My").
 5. Work Experience & Project Format: Rewrite using the XYZ framework (Accomplished [X] as measured by [Y], by doing [Z]). Replace passive phrases ('helped with', 'responsible for') with strong, direct action verbs. If metrics are missing, use placeholders (e.g., 'achieving a grade of [X]%' or 'saving [X] hours') to make it measurable. Format as a single cohesive sentence starting with an action verb. DO NOT include bullet characters (like •). ABSOLUTELY NO MARKDOWN BOLDING (**).
 6. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array.
@@ -137,10 +137,10 @@ CRITICAL CONTEXT: The user is a Fresher targeting the exact role of "${targetRol
 2. No Hallucinations: Do not invent leadership or strategy roles. Focus on collaboration, execution, process adherence, and fast learning.
 3. Title Format: The "optimized_title" MUST fit on a single line. Use this exact structure: "[Target Job Title] | [Degree or Certification] | Focus in [Core Skill 1] & [Core Skill 2]".
 4. Core Skills Format: You MUST output EXACTLY 12 core skills. Blend foundational tools with soft skills. Output ONLY the raw skill name. 
-5. Professional Summary Format: You MUST write exactly 3 short paragraphs following this strict "Hook -> Proof -> Value" framework:
-   - Paragraph 1 (Identity): "Results-driven [Title] with [X] years of experience, driving [early-career impact] in the [Industry]."
-   - Paragraph 2 (Proof): "Delivered impact at scale through [Specific Project/Execution], achieving [Metric 1] and [Metric 2]. Currently [doing X] as [Current Title], driving [Specific Result]." (Use placeholders like [X]% if metrics are missing).
-   - Paragraph 3 (Value): "Proven expertise in [Skill 1], [Skill 2], and [Skill 3]. Known for [key strength/process improvement], ensuring [business outcome/efficiency]."
+5. Professional Summary Format: You MUST write ONE cohesive paragraph consisting of exactly 3 sentences following this strict "Hook -> Proof -> Value" framework. You are strictly forbidden from writing a single-line summary. Do NOT include labels like 'Hook:' or 'Sentence 1:'.
+   - Sentence 1 (Hook): "Results-driven [Title] with [X] years of experience, driving [early-career impact] in the [Industry]."
+   - Sentence 2 (Proof): "Delivered impact at scale through [Specific Project/Execution], achieving [Metric 1] and [Metric 2]. Currently [doing X] as [Current Title], driving [Specific Result]." (Use placeholders like [X]% if metrics are missing).
+   - Sentence 3 (Value): "Proven expertise in [Skill 1], [Skill 2], and [Skill 3]. Known for [key strength/process improvement], ensuring [business outcome/efficiency]."
    STRICTLY NO first-person pronouns ("I", "Me", "My").
 6. Work Experience Format: Rewrite using the Problem → Action → Result (XYZ) framework. Focus on execution and process improvement rather than basic tasks. Replace passive phrases with strong action verbs. You MUST inject metric placeholders (e.g., 'improving efficiency by [X]%', 'managing [X] client accounts') if exact numbers aren't provided. Format as a single cohesive sentence starting with an action verb. DO NOT include bullet characters (like •). ABSOLUTELY NO MARKDOWN BOLDING (**).
 7. Extra Sections: Optimize the provided internships, projects, volunteer work, and extracurriculars. Format each entry as a distinct string in its array.
@@ -151,10 +151,10 @@ CRITICAL CONTEXT: The user is an Entry-Level professional targeting the exact ro
 2. YoE Calculation: Calculate exact Years of Experience based on the oldest job vs 2026. State this in the summary.
 3. Title Format: The "optimized_title" MUST fit on a single line. Use this exact template structure: "[Target Job Title or Current Role] | [Years of Experience]+ years in [Core Domain 1] & [Core Domain 2] | [Secondary Domain or Skill]". CRITICAL ANTI-REPETITION RULE: You MUST NOT repeat major words across the title.
 4. Core Skills Format: You MUST output EXACTLY 12 core skills. Output ONLY the raw skill name. ABSOLUTELY NO CATEGORIES OR COLONS.
-5. Professional Summary Format: You MUST write exactly 3 short paragraphs following this strict "Hook -> Proof -> Value" framework:
-   - Paragraph 1 (Identity): "[Adjective] leader with [X]+ years of progressive leadership across [Geographies/Markets], driving [high-level impact] and organizational transformation in the [Industry]."
-   - Paragraph 2 (Proof): "Delivered impact at scale with [Metric 1/Revenue], [Metric 2], and [Metric 3]. Currently leading [Key Project/Responsibility] as [Current Title] at [Company], driving [Specific Result]." (Inject placeholders like $[X]M if metrics are missing).
-   - Paragraph 3 (Value): "Proven expertise in [Skill 1], [Skill 2], and [Skill 3]. Known for building high-performance teams and [Government/CXO/Client] relationships, ensuring sustained revenue growth and profitability."
+5. Professional Summary Format: You MUST write ONE cohesive paragraph consisting of exactly 3 sentences following this strict "Hook -> Proof -> Value" framework. You are strictly forbidden from writing a single-line summary. Do NOT include labels like 'Hook:' or 'Sentence 1:'.
+   - Sentence 1 (Hook): "[Adjective] leader with [X]+ years of progressive leadership across [Geographies/Markets], driving [high-level impact] and organizational transformation in the [Industry]."
+   - Sentence 2 (Proof): "Delivered impact at scale with [Metric 1/Revenue], [Metric 2], and [Metric 3]. Currently leading [Key Project/Responsibility] as [Current Title] at [Company], driving [Specific Result]." (Inject placeholders like $[X]M if metrics are missing).
+   - Sentence 3 (Value): "Proven expertise in [Skill 1], [Skill 2], and [Skill 3]. Known for building high-performance teams and [Government/CXO/Client] relationships, ensuring sustained revenue growth and profitability."
    STRICTLY NO first-person pronouns ("I", "Me", "My").
 6. Work Experience Format: Rewrite using the Problem → Action → Result (XYZ) framework. Focus heavily on strategic ownership, business impact, and leadership rather than basic, daily tasks. Replace passive phrases with strong executive action verbs (e.g., Spearheaded, Architected, Directed). You MUST inject high-level metric placeholders (e.g., 'generating $[X]M in revenue', 'scaling team by [X]%', 'reducing costs by $[X]') if exact numbers are missing to force measurable achievements. Format as a single cohesive sentence starting with an action verb. DO NOT include bullet characters (like •). ABSOLUTELY NO MARKDOWN BOLDING (**).`;
     }
