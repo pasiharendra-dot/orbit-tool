@@ -525,16 +525,23 @@ app.post('/api/optimize-resume', async (req, res) => {
             CRITICAL: Output pure plain text only. You are strictly forbidden from using markdown bolding (**).`;
         }
         
-        if (section === 'bullets') {
-            promptInstruction = `Rewrite these work experience responsibilities into powerful, ATS-optimized sentences using the Problem -> Action -> Result (XYZ) framework. 
+if (section === 'bullets') {
+            promptInstruction = `Rewrite the provided work experience entry. 
             
             Strict Guidelines:
-            1. Replace passive phrases with strong action verbs. Focus on results achieved.
-            2. Inject metric placeholders (e.g., '[X]%', '$[X]M', '[Number]') if exact numbers are missing.
-            3. CRITICAL FORMATTING RULE: You must output pure, plain text only. You are strictly forbidden from using asterisks (*), markdown bolding (**), or bullet symbols (•, -, ·).
-               - CORRECT EXAMPLE: Directed end-to-end campaign data lifecycle, achieving 100% compliance with program guidelines.
-               - INCORRECT EXAMPLE: * **Directed** end-to-end campaign...
-               
+            1. METADATA RETENTION: You MUST extract and print the original Job Title, Company Name, and Dates at the very top of your response exactly as provided. Do not alter or delete them.
+            2. BULLET REWRITE: Below the metadata, rewrite the work experience responsibilities into powerful, ATS-optimized sentences using the Problem -> Action -> Result (XYZ) framework.
+            3. Replace passive phrases with strong action verbs. Focus on results achieved. Inject metric placeholders (e.g., '[X]%', '$[X]M') if numbers are missing.
+            4. CRITICAL FORMATTING RULE: You must output pure, plain text only. You are strictly forbidden from using asterisks (*), markdown bolding (**), or bullet symbols (•, -, ·).
+            
+            Output format MUST look exactly like this:
+            [Original Job Title]
+            [Original Company Name]
+            [Original Dates]
+            
+            [Rewritten bullet point 1]
+            [Rewritten bullet point 2]`;
+                      
             Output each rewritten responsibility on a new line. Do not include introductory filler text.`;
         }
 
