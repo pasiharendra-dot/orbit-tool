@@ -540,11 +540,11 @@ if (section === 'bullets') {
             [Original Dates]
             
             [Rewritten bullet point 1]
-            [Rewritten bullet point 2]`;
-                      
+            [Rewritten bullet point 2]
+            
             Output each rewritten responsibility on a new line. Do not include introductory filler text.`;
         }
-
+        
         const fullPrompt = `${promptInstruction}\n\nContext:\nTarget Job Description: ${jobDescription}\n\nCurrent Content: ${currentContent}\n\nReturn ONLY the optimized text.`;
 
         // 3. Generate AI Response
